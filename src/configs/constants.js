@@ -1,0 +1,20 @@
+export const LOCAL_STORAGE_KEYS = {
+    user: 'user',
+    accessToken: 'accessToken',
+    refreshToken: 'refreshToken',
+    courses: 'courses',
+    i18nextLng: 'i18nextLng',
+    shopIndex: 'shopIndex',
+};
+
+export const ERROR_CODE =
+{
+    success: 'Success',
+    error: 'Error'
+}
+export const MODAL =
+{
+    open: 'OPEN',
+    close: 'CLOSE',
+    change_title: 'CHANGE_TITLE'
+}

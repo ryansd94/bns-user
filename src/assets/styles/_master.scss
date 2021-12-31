@@ -1,0 +1,99 @@
+$font_size_normal: 14px;
+
+button {
+    text-transform: none !important;
+}
+
+@mixin dataTitleBefore($title, $translateX) {
+    content: $title;
+    position: absolute;
+    bottom: -36px;
+    z-index: 1;
+    padding: 3px 6px;
+    left: 50%;
+    border-radius: 5px;
+    background: #343a40;
+    color: #fff;
+    font-size: $font_size_normal;
+    font-family: sans-serif;
+    white-space: nowrap;
+    -webkit-transform: translateX($translateX);
+    -moz-transform: translateX($translateX);
+    -ms-transform: translateX($translateX);
+    -o-transform: translateX($translateX);
+    transform: translateX($translateX);
+}
+
+@mixin dataTitleAfter( $translateX) {
+    position: absolute;
+    bottom: -10px;
+    left: 50%;
+    color: #fff;
+    border: 8px solid transparent;
+    border-bottom: 8px solid #000;
+    -webkit-transform: translateX($translateX);
+    -moz-transform: translateX($translateX);
+    -ms-transform: translateX($translateX);
+    -o-transform: translateX($translateX);
+    transform: translateX($translateX);
+}
+
+[data-title]:hover::before {
+    @include dataTitleBefore(attr(data-title),-50%);
+}
+
+[data-title]:hover::after {
+
+    @include dataTitleAfter(-50%);
+}
+
+[data-title-right]:hover::before {
+    @include dataTitleBefore(attr(data-title-right),-70%);
+}
+
+[data-title-right]:hover::after {
+
+    @include dataTitleAfter(-70%);
+}
+
+[data-title] {
+    position: relative;
+}
+
+.btn-circle {
+    width: 40px !important;
+    min-width: 40px !important;
+    height: 40px !important;
+    padding: 10px 10px !important;
+    font-size: 18px !important;
+    line-height: 1.33 !important;
+    border-radius: 20px !important;
+    font-weight: 400 !important;
+    text-align: center !important;
+    vertical-align: middle !important;
+    margin: 0 0 0 10px !important;
+
+    .MuiButton-startIcon {
+        margin: 0 !important
+    }
+}
+
+body {
+    padding-right: 0 !important
+}
+
+.MuiDataGrid-columnHeader:focus, .MuiDataGrid-columnHeader:focus-within {
+    outline: none !important
+}
+
+.MuiCircularProgress-root {
+    z-index: 1
+}
+
+.MuiTablePagination-displayedRows {
+    margin-bottom: 0 !important;
+}
+.MuiDialogActions-root
+{
+    padding:16px !important;
+}
