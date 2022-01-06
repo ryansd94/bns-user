@@ -1,19 +1,17 @@
 ﻿import React, { useState, useEffect, useCallback } from 'react';
 import ToolBar from '../../../components/toolbar/ToolBar';
-import AreaPopup from './AreaPopup';
-import AreaPopupNew from './AreaPopupNew';
-import AreaDataGrid from './AreaDataGrid'
+import TeamPopup from './TeamPopup';
+import TeamDataGrid from './TeamDataGrid'
 import { getShopIndex } from 'helpers'
 import { createInstance } from 'services/base';
 import { useTranslation } from 'react-i18next';
+const services = createInstance('/api');
 import { open, change_title } from 'components/popup/popupSlice';
 
-import { openSuccess as success, openError as error } from 'components/snackbar/CustomizedSnackbarSlice';
 import { useDispatch, useSelector } from 'react-redux';
-const services = createInstance('/api');
-const Area = React.memo(() => {
-    console.log("render AREA");
-    const baseUrl = '/cf_area';
+const Team = React.memo(() => {
+    console.log("render Team");
+    const baseUrl = '/jm_team';
     const { t } = useTranslation();
     const url = `${baseUrl}/GetAllData`;
     const [data, setData] = useState(null);
@@ -22,13 +20,12 @@ const Area = React.memo(() => {
     const dispatch = useDispatch();
 
     const handleClickOpen = () => {
-        //const action = error();
-        //dispatch(action);
- 
+        const action = open();
+        dispatch(action);
     }
 
     useEffect(() => {
-        const actionTitle = change_title(t('Thêm mới khu vực'));
+        const actionTitle = change_title(t('Thêm mới Nhóm'));
         dispatch(actionTitle);
     }, []);
     useEffect(() => {
@@ -49,11 +46,11 @@ const Area = React.memo(() => {
     return (
         <div>
             <ToolBar onAddClick={handleClickOpen} />
-            <AreaDataGrid />
-            <AreaPopup   branchData={data}   />
+            <TeamDataGrid />
+            <TeamPopup   branchData={data}   />
         </div>
     );
 
 })
 
-export default Area;
+export default Team;

@@ -19,3 +19,20 @@ export const login = async data => {
         return error;
     }
 };
+
+export const loginGoogle = async data => {
+    try {
+        console.log(process.env);
+        const res = await axios.post(`${baseUrl}/login-google`, data);
+        return res;
+    } catch (error) {
+        const { request, response } = error;
+        if (request) {
+            return request;
+        }
+        if (response) {
+            return response;
+        }
+        return error;
+    }
+};

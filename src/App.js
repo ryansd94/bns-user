@@ -15,6 +15,7 @@ import SettingsPanel from './components/shared/SettingsPanel';
 import { withTranslation } from "react-i18next";
 import AppRoutes from './AppRoutes';
 import Progress from "react-progress-2";
+import CustomizedSnackbar from 'components/snackbar/CustomizedSnackbar';
 
 
 
@@ -34,6 +35,7 @@ class App extends Component {
         return (
             <div className="container-scroller">
                 <Progress.Component />
+                <CustomizedSnackbar />
                 { navbarComponent}
                 <div className="container-fluid page-body-wrapper">
                     {sidebarComponent}

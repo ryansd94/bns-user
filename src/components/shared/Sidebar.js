@@ -75,6 +75,7 @@ class Sidebar extends Component {
                             <ul className="nav flex-column sub-menu">
                                 <li className="nav-item"> <Link className={this.isPathActive('/category/area') ? 'nav-link active' : 'nav-link'} to="/category/area"><Trans>Khu vực</Trans></Link></li>
                                 <li className="nav-item"> <Link className={this.isPathActive('/category/branch') ? 'nav-link active' : 'nav-link'} to="/category/branch"><Trans>Chi nhánh</Trans></Link></li>
+                                <li className="nav-item"> <Link className={this.isPathActive('/category/team') ? 'nav-link active' : 'nav-link'} to="/category/team"><Trans>Nhóm</Trans></Link></li>
                                 <li className="nav-item"> <Link className={this.isPathActive('/basic-ui/typography') ? 'nav-link active' : 'nav-link'} to="/basic-ui/typography"><Trans>Typography</Trans></Link></li>
                             </ul>
                         </Collapse>

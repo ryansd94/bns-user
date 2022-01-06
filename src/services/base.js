@@ -1,7 +1,9 @@
 import axios from 'axios';
 import httpStatus from 'http-status';
 import { getAccessToken, setRefreshTokenSucceeded, resetRefreshTokenFailure } from './../helpers';
+import { useDispatch, useSelector } from 'react-redux';
 
+import { openSuccess as success, openError as error } from 'components/snackbar/CustomizedSnackbarSlice';
 export const createInstance = path => {
     // const { origin } = window && window.location;
     const instance = axios.create({
@@ -16,6 +18,14 @@ export const createInstance = path => {
 
     instance.interceptors.response.use(
         response => {
+            if (response.status === httpStatus[200]) {
+                if (response.data.status === httpStatus[200]) {
+                     
+                }
+                else {
+                     
+                }
+            }
             return response;
         },
         async error => {

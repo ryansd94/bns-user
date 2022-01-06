@@ -10,18 +10,21 @@ import FormControl from '@mui/material/FormControl';
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import { resetUserToken, setTokenLoginSucceeded, getAccessToken } from '../../helpers';
-import { login } from '../../services';
+import { login ,loginGoogle} from 'services';
 import httpStatus from 'http-status';
 import Button from '@mui/material/Button';
-import { ERROR_CODE} from '../../configs'
+import { ERROR_CODE } from 'configs'
+import firebase from 'firebase/compat/app';
+import StyledFirebaseAuth from 'react-firebaseui/StyledFirebaseAuth';
 import { message, ROLE, routeUrls } from '../../configs';
+import 'firebase/compat/auth';
 export default function Login() {
     const history = useHistory();
     const [values, setValues] = React.useState({
         amount: '',
         password: '',
         weight: '',
-        shopcode:'',
+        shopcode: '',
         username: '',
         weightRange: '',
         showPassword: false,
@@ -51,6 +54,74 @@ export default function Login() {
         let valid = true;
         return valid;
     }
+    useEffect(() => {
+        const unregisterAuthObserver = firebase.auth().onAuthStateChanged(async (user) => {
+            if (!user) {
+                // user logs out, handle something here
+                console.log('User is not logged in');
+                return;
+            }
+
+            console.log('Logged in user: ', user.displayName);
+
+            const token = await user.getIdToken();
+            const res = await loginGoogle({
+                token: token
+            });
+            switch (res.status) {
+                case httpStatus.OK: {
+                    const { data } = res && res;
+                    if (data.errorCode != ERROR_CODE.success) {
+                        setError({
+                            dirty: true,
+                            msg: 'tài hkoản hoặc mật khẩu sai',
+                        });
+                        break;
+                    } else {
+                        debugger
+                        const { data } = res && res.data;
+                        const token = {
+                            accessToken: data.token,
+                            refreshToken: data.token,
+                            shopIndex: data.shopIndex
+                        };
+                        const user = { ...data, isAdmin: true, acceptScreen: [] };
+                        setTokenLoginSucceeded({ token, user });
+                        setError({
+                            dirty: false,
+                            msg: '',
+                        });
+                        history.push(`/dashboard`);
+
+                    }
+                    break;
+                }
+                default: {
+                    setError({
+                        dirty: true,
+                        msg: 'Đã có lỗi xảy ra. Vui lòng thử lại sau',
+                    });
+                    resetUserToken();
+                    break;
+                }
+            }
+        });
+
+        return () => unregisterAuthObserver();
+    }, []);
+    // Configure Firebase.
+    const config = {
+        apiKey: process.env.REACT_APP_FIREBASE_API_KEY,
+        authDomain: process.env.REACT_APP_FIREBASE_AUTH_DOMAIN,
+    };
+    firebase.initializeApp(config);
+    const uiConfig = {
+        signInFlow: 'redirect',
+        signInSuccessUrl: '/login',
+        signInOptions: [
+            firebase.auth.GoogleAuthProvider.PROVIDER_ID
+        ],
+    };
     async function handleSubmit() {
         const valid = validate();
         if (valid) {
@@ -59,7 +130,7 @@ export default function Login() {
                 userName: values.username,
                 passWord: values.password,
                 shopCode: values.shopcode,
-                remember:true
+                remember: true
             });
             setIsSubmitting(false);
             switch (res.status) {
@@ -191,7 +262,7 @@ export default function Login() {
                                 <Button variant="contained" onClick={handleSubmit}>Sign in</Button>
                             </Box>
                             <Form className="pt-3">
-                                
+
                                 <div className="my-2 d-flex justify-content-between align-items-center">
                                     <div className="form-check">
                                         <label className="form-check-label text-muted">
@@ -203,9 +274,10 @@ export default function Login() {
                                     <a href="!#" onClick={event => event.preventDefault()} className="auth-link text-black">Forgot password?</a>
                                 </div>
                                 <div className="mb-2">
-                                    <button type="button" className="btn btn-block btn-facebook auth-form-btn">
-                                        <i className="mdi mdi-facebook mr-2"></i>Connect using facebook
-                    </button>
+                                    <StyledFirebaseAuth
+                                        uiConfig={uiConfig}
+                                        firebaseAuth={firebase.auth()}
+                                    />
                                 </div>
                                 <div className="text-center mt-4 font-weight-light">
                                     Don't have an account? <Link to="/user-pages/register" className="text-primary">Create</Link>
