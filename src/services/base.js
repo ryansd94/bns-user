@@ -1,13 +1,16 @@
 import axios from 'axios';
 import httpStatus from 'http-status';
 import { getAccessToken, setRefreshTokenSucceeded, resetRefreshTokenFailure } from './../helpers';
-import { useDispatch, useSelector } from 'react-redux';
 
-import { openSuccess as success, openError as error } from 'components/snackbar/CustomizedSnackbarSlice';
-export const createInstance = path => {
+import queryString from 'query-string';
+export const createInstance = () => {
     // const { origin } = window && window.location;
     const instance = axios.create({
-        baseURL: `${process.env.REACT_APP_API_URL}${path}`,
+        baseURL: `${process.env.REACT_APP_API_URL}/api`,
+        headers: {
+            'content-type': 'application/json',
+        },
+        paramsSerializer: params => queryString.stringify(params),
     });
 
     instance.interceptors.request.use(request => {
@@ -20,13 +23,13 @@ export const createInstance = path => {
         response => {
             if (response.status === httpStatus[200]) {
                 if (response.data.status === httpStatus[200]) {
-                     
+
                 }
                 else {
-                     
+
                 }
             }
-            return response;
+            return response.data;
         },
         async error => {
             const originalRequest = error.config;

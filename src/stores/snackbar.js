@@ -4,7 +4,7 @@ const initialState = {
     open: false,
     title: '',
     severity: '',
-    status
+    errorCode: 'success'
 }
 
 
@@ -12,19 +12,8 @@ const slice = createSlice({
     name: 'snackbar',
     initialState: initialState,
     reducers: {
-        openSuccess: (state, action) => {
-            // const newPhoto = action.payload;
-            state.open = true;
-            state.severity = "success";
-        },
-        openError: (state, action) => {
-            // const newPhoto = action.payload;
-            state.open = true;
-            state.severity = "error";
-        },
         openMessage: (state, action) => {
-            // const newPhoto = action.payload;
-            if (action.payload.status === '200') {
+            if (action.payload.errorCode == 'Success') {
                 state.open = true;
                 state.severity = "success";
             }
@@ -32,6 +21,7 @@ const slice = createSlice({
 
                 state.open = true;
                 state.severity = "error";
+                state.title = action.payload.title;
             }
         },
         close: (state, action) => {
@@ -43,5 +33,5 @@ const slice = createSlice({
     }
 });
 const { reducer, actions } = slice;
-export const { openMessage,openSuccess, openError, close, change_title } = actions;
+export const { openMessage, close, change_title } = actions;
 export default reducer;

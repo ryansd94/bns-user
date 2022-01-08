@@ -1,21 +1,22 @@
 ﻿import React, {
-    useEffect, useState, useMemo, useCallback
+    useEffect, useState
 } from 'react';
-import { getShopIndex } from '../../../helpers'
-import { createInstance } from '../../../services/base';
-import Table from '../../../components/table/Table';
+import { getShopIndex } from 'helpers'
+import Table from 'components/table/Table';
 import { useTranslation } from 'react-i18next';
-import { getArea } from '../../../services'
+import { getTeam } from 'services'
+import PropTypes from 'prop-types';
 
-const services = createInstance('/api');
+
 
 const TeamDataGrid = React.memo((props) => {
     console.log("render AREA GRID");
     const { t } = useTranslation();
-    const baseUrl = '/cf_area';
-    const url = `${baseUrl}/GetAllData`;
+    const baseUrl = '/jm_team';
+    const url = `${baseUrl}`;
+    const { data } = props;
     const [page, setPage] = useState(0);
-    const [data, setData] = useState([]);
+
     const [loading, setLoading] = useState(false);
     const [sortModel, setSortModel] = useState([
     ]);
@@ -42,28 +43,27 @@ const TeamDataGrid = React.memo((props) => {
 
     //const onSortModel = useCallback(() => setSortModel(sortModel), [sortModel])
 
-    useEffect(() => {
-        async function fetchData() {
-            setLoading(true);
-            const res = await getArea({
-                draw: page,
-                start: page == 0 ? 0 : (page * 10),
-                length: 10,
-                shopIndex: getShopIndex(),
-                sortModel: sortModel
-            });
-            setData(res.data && res.data);
-            setLoading(false);
-        }
-        fetchData();
-    }, [page, sortModel]);
+    //useEffect(() => {
+    //    async function fetchData() {
+    //        setLoading(true);
+    //        const res = await getTeam({
+    //            draw: page,
+    //            start: page == 0 ? 0 : (page * 10),
+    //            length: 10,
+    //        });
+    //        setData(res);
+    //        console.log(res.data);
+    //        setLoading(false);
+    //    }
+    //    fetchData();
+    //}, [page, sortModel]);
 
     return (
 
         <Table
             rowsCount={data && data.recordsTotal}
             columns={columns}
-            rows={data && data.data}
+            rows={data.data && data.data.items}
             sortModel={sortModel}
             onPageChange={(newPage) => setPage(newPage)}
             onSortModelChange={(model) => setSortModel(model)}
@@ -74,4 +74,7 @@ const TeamDataGrid = React.memo((props) => {
 });
 
 
+TeamDataGrid.propTypes = {
+    data: PropTypes.object
+}
 export default TeamDataGrid;

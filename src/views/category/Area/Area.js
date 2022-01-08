@@ -8,7 +8,7 @@ import { createInstance } from 'services/base';
 import { useTranslation } from 'react-i18next';
 import { open, change_title } from 'components/popup/popupSlice';
 
-import { openSuccess as success, openError as error } from 'components/snackbar/CustomizedSnackbarSlice';
+import { openSuccess as success, openError as error } from 'stores/snackbar';
 import { useDispatch, useSelector } from 'react-redux';
 const services = createInstance('/api');
 const Area = React.memo(() => {

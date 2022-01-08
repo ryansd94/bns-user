@@ -1,6 +1,6 @@
 import { configureStore } from "@reduxjs/toolkit";
 import popupReducer from 'components/popup/popupSlice';
-import snackbarReducer from 'components/snackbar/CustomizedSnackbarSlice';
+import snackbarReducer from 'stores/snackbar';
 
 const rootReducer = {
     popup: popupReducer,
