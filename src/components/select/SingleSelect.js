@@ -20,6 +20,7 @@ const SingleSelect = React.memo(
               <Autocomplete
                 {...field}
                 options={data}
+                isOptionEqualToValue={(option, value) => option != null && value != null? option.id === value.id:""}
                 getOptionLabel={(option) => option.name}
                 renderInput={(params) => (
                   <TextField
@@ -38,7 +39,7 @@ const SingleSelect = React.memo(
             <Autocomplete
               {...field}
               options={data}
-              isOptionEqualToValue={(option, value) => option.id === value.id}
+              isOptionEqualToValue={(option, value) => option != null && value != null? option.id === value.id:""}
               getOptionLabel={(option) => option.name}
               onChange={(event, value) => {
                 field.onChange(value);
@@ -56,7 +57,6 @@ const SingleSelect = React.memo(
             />
           )
         }
-        onChange={([, obj]) => getOpObj(obj)}
         control={control}
       />
     );

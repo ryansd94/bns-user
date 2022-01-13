@@ -22,3 +22,7 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 package-lock.json
+.vs/bns-user/v16/.suo
+.vs/VSWorkspaceState.json
+.vscode/launch.json
+.vs/bns-user/config/applicationhost.config

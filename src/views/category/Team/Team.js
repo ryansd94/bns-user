@@ -30,13 +30,14 @@ const Team = React.memo(() => {
   const page = useSelector((state) => state.master.page);
   const sortModel = useSelector((state) => state.master.sortModel);
   const isReload = useSelector((state) => state.master.isReload);
+  const editData = useSelector((state) => state.master.editData);
 
   const validationSchema = Yup.object().shape({
     name: Yup.string().required(t(message.error.fieldNotEmpty)),
   });
   const defaultValues = {
     name: "",
-    note: "",
+    description: "",
     parentId: null,
   };
   const {
@@ -51,12 +52,12 @@ const Team = React.memo(() => {
   });
   const onSubmit = async (data) => {
     var postData = data;
-    alert(JSON.stringify(data));
+    postData.id=editData?.id;
+    alert(JSON.stringify(postData));
     return;
     if (data.parentId) postData.parentId = data.parentId.id;
     const res = await services.post(baseUrl, postData);
-    const action = openMessage({ ...res });
-    dispatch(action);
+    dispatch(openMessage({ ...res }));
     if (res.errorCode == "Success") {
       dispatch(setReload());
       reset();
@@ -100,10 +101,10 @@ const Team = React.memo(() => {
     dispatch(setLoadingPopup(true));
     dispatch(open());
     await getTeamByID(params).then((res) => {
-      setValue("name", res.data.name);
-      setValue("description", res.data.description);
-      setValue("parentId",data && data.data && data.data.items.find((e) => e.id === res.data.parentId)
-     );
+      dispatch(setEditData(res.data));
+      setValue("name", res.data.name || "");
+      setValue("description", res.data.description || "");
+      setValue("parentId",res.data.parentId != null? data && data.data && data.data.items.find((e) => e.id === res.data.parentId):null);
       dispatch(setLoadingPopup(false));
     });
   };
