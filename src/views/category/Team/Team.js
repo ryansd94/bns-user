@@ -101,7 +101,8 @@ const Team = React.memo(() => {
     dispatch(open());
     await getTeamByID(params).then((res) => {
       setValue("name", res.data.name);
-      setValue("parentId",data && data.data && data.data.items.filter((e) => e.id === res.data.parrentId).map(e => e)
+      setValue("description", res.data.description);
+      setValue("parentId",data && data.data && data.data.items.find((e) => e.id === res.data.parentId)
      );
       dispatch(setLoadingPopup(false));
     });
