@@ -4,7 +4,7 @@ import Button from '@mui/material/Button';
 import Snackbar from '@mui/material/Snackbar';
 import MuiAlert from '@mui/material/Alert';
 import { useSelector, useDispatch } from 'react-redux';
-import { close } from 'stores/snackbar';
+import { close } from 'stores/components/snackbar';
 import { useTranslation } from 'react-i18next';
 
 const Alert = React.forwardRef(function Alert(props, ref) {

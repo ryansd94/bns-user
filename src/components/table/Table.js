@@ -3,17 +3,27 @@ import { DataGrid } from '@mui/x-data-grid';
 import PropTypes from 'prop-types';
 import { useTranslation } from 'react-i18next';
 const Table = React.memo((props) => {
-    const { rows, columns, rowsCount, onPageChange, loading, onSortModelChange, sortModel } = props;
+    const { rows, columns, rowsCount, onPageChange, loading, onSortModelChange, sortModel, onCellClick } = props;
+    const currentlySelected = (params) => {
+        const value = params.colDef.field;
 
+        if (!(value === "edit" || value === "delete")) {
+            return;
+        }
+        return params.id;
+    }
     const { t } = useTranslation();
     return (
-        <div className="card" style={{ width: '100%' }}>
+        <div className="card" style={{ width: '100%'  }}>
             <div className="card-body">
                 <DataGrid
+                    
                     autoHeight={true}
                     autoPageSize={true}
                     rows={rows}
+                    disableColumnResize={true}
                     rowCount={rowsCount}
+                    disableSelectionOnClick={true}
                     columns={columns}
                     pageSize={10}
                     localeText={{
@@ -31,6 +41,7 @@ const Table = React.memo((props) => {
                         footerRowSelected: (count) => `${count.toLocaleString()} ` + t('dòng được chọn'),
                     }}
 
+                    onCellClick={param => onCellClick(currentlySelected(param))}
                     sortModel={sortModel}
                     sortingMode="server"
                     paginationMode="server"
@@ -45,15 +56,19 @@ const Table = React.memo((props) => {
 });
 
 Table.propTypes = {
-    rows: PropTypes.array,
+    rows: PropTypes.array.isRequired,
     columns: PropTypes.array,
     rowsCount: PropTypes.number,
     onPageChange: PropTypes.func,
+    onCellClick: PropTypes.func,
     onSortModelChange: PropTypes.func,
     loading: PropTypes.bool,
     sortModel: PropTypes.array,
 }
 
+Table.defaultProps = {
+    rows: []
+};
 
 export default Table;
 

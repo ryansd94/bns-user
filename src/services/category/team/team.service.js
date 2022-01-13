@@ -23,6 +23,23 @@ export const getTeam = async param => {
         return error;
     }
 };
+export const getTeamByID = async id => {
+    try {
+        let query = `${baseUrl}/${id}`;
+        const res = await services.get(query);
+        return res;
+    }
+    catch (error) {
+        const { request, response } = error;
+        if (request) {
+            return request;
+        }
+        if (response) {
+            return response;
+        }
+        return error;
+    }
+};
 export const postTeam = async param => {
     try {
         const query = `${baseUrl}`;
