@@ -12,6 +12,8 @@ import Draggable from 'react-draggable';
 import ButtonDetail from '../../components/button/ButtonDetail';
 import { useSelector, useDispatch } from 'react-redux';
 import {   close } from 'components/popup/popupSlice';
+import {  
+  setEditData } from "stores/views/master";
 
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
     '& .MuiDialogContent-root': {
@@ -66,6 +68,7 @@ const Popup = React.memo(props => {
     const handleClose = () => {
         const action = close( );
         dispatch(action);
+        dispatch(setEditData(null));
     };
     const open = useSelector(state => state.popup.open);
     const title = useSelector(state => state.popup.title);

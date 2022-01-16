@@ -2,11 +2,11 @@
 
 .card {
   border: 0;
-  border-radius: 10px;
+  // border-radius: 10px;
   .card-body {
-    padding: $card-padding-y $card-padding-x;
+    padding: 0;
     @media(max-width: 767px) {
-      padding: 2rem 2rem;
+      padding: 0;
     }
     + .card-body {
       padding-top: 1rem;

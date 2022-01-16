@@ -7,7 +7,10 @@ import { getTeam, getTeamByID } from "services";
 import { useSelector, useDispatch } from "react-redux";
 import IconButton from "@mui/material/IconButton";
 import EditIcon from "@mui/icons-material/Edit";
-import { setPage, setSort } from "stores/views/master";
+import { setPage, setSort,
+  setLoadingPopup,
+  setEditData } from "stores/views/master";
+import { open, change_title } from "components/popup/popupSlice";
 
 const TeamDataGrid = React.memo((props) => {
   console.log("render AREA GRID");
@@ -29,8 +32,10 @@ const TeamDataGrid = React.memo((props) => {
       </strong>
     );
   };
-  const onEditClick = (id) => {
-    console.log(id);
+  const onEditClick = async (params) => {
+    if (!params) return;
+    dispatch(open());
+    dispatch(setEditData(params));
   };
   const columns = [
     { field: "id", hide: true },
@@ -67,7 +72,7 @@ const TeamDataGrid = React.memo((props) => {
       columns={columns}
       rows={data && data.data && data.data.items}
       sortModel={sortModel}
-      onCellClick={onCellClick}
+      onCellClick={onEditClick}
       onPageChange={(newPage) => dispatch(setPage(newPage))}
       onSortModelChange={(model) => dispatch(setSort(model))}
       loading={loading}

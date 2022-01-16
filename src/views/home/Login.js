@@ -78,7 +78,6 @@ export default function Login() {
                         });
                         break;
                     } else {
-                        debugger
                         const { data } = res && res.data;
                         const token = {
                             accessToken: data.token,
@@ -143,7 +142,6 @@ export default function Login() {
                         });
                         break;
                     } else {
-                        debugger
                         const { data } = res && res.data;
                         const token = {
                             accessToken: data.token,

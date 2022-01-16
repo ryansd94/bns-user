@@ -14,8 +14,8 @@ const Table = React.memo((props) => {
     }
     const { t } = useTranslation();
     return (
-        <div className="card" style={{ width: '100%'  }}>
-            <div className="card-body">
+        // <div className="card" style={{ width: '100%'  }}>
+        //     <div className="card-body">
                 <DataGrid
                     
                     autoHeight={true}
@@ -50,8 +50,9 @@ const Table = React.memo((props) => {
                     onSortModelChange={onSortModelChange}
                     checkboxSelection
                     loading={loading}
-                /> </div>
-        </div>
+                /> 
+        //         </div>
+        // </div>
     );
 });
 

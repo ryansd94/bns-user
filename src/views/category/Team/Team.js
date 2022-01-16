@@ -5,7 +5,7 @@ import TeamDataGrid from "./TeamDataGrid";
 import { getShopIndex } from "helpers";
 import { useTranslation } from "react-i18next";
 import { open, change_title } from "components/popup/popupSlice";
-import { getTeam, getTeamByID } from "services";
+import { getTeam, getTeamByID, save } from "services";
 import { message } from "configs";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -15,7 +15,6 @@ import {
   setLoading,
   setReload,
   setLoadingPopup,
-  setEditData,
 } from "stores/views/master";
 import { createInstance } from "services/base";
 import { useSelector, useDispatch } from "react-redux";
@@ -30,52 +29,34 @@ const Team = React.memo(() => {
   const page = useSelector((state) => state.master.page);
   const sortModel = useSelector((state) => state.master.sortModel);
   const isReload = useSelector((state) => state.master.isReload);
-  const editData = useSelector((state) => state.master.editData);
+  const [dataTeam, setDataTeam] = React.useState([]);
 
-  const validationSchema = Yup.object().shape({
-    name: Yup.string().required(t(message.error.fieldNotEmpty)),
-  });
-  const defaultValues = {
-    name: "",
-    description: "",
-    parentId: null,
-  };
-  const {
-    control,
-    handleSubmit,
-    reset,
-    setValue,
-    formState: { errors },
-  } = useForm({
-    resolver: yupResolver(validationSchema),
-    defaultValues: defaultValues,
-  });
-  const onSubmit = async (data) => {
-    var postData = data;
-    postData.id=editData?.id;
-    alert(JSON.stringify(postData));
-    return;
-    if (data.parentId) postData.parentId = data.parentId.id;
-    const res = await services.post(baseUrl, postData);
-    dispatch(openMessage({ ...res }));
-    if (res.errorCode == "Success") {
-      dispatch(setReload());
-      reset();
-    }
-  };
   const dispatch = useDispatch();
 
   const handleClickOpen = () => {
-    reset();
+    //reset();
     dispatch(change_title(t("Thêm mới Nhóm")));
     dispatch(setLoadingPopup(false));
-    dispatch(setEditData(null));
+    //dispatch(setEditData(null));
     dispatch(open());
   };
 
+  const fetchDataTeam = async () => {
+    await getTeam({
+      draw: 0,
+      start: 0,
+      length: 10000,
+    }).then((data) => {
+      setDataTeam(data && data.data && data.data.items);
+    });
+  };
   useEffect(() => {
     fetchData();
   }, [page, sortModel, isReload]);
+
+  useEffect(() => {
+    fetchDataTeam();
+  }, [isReload]);
 
   const fetchData = async () => {
     dispatch(setLoading(true));
@@ -92,32 +73,11 @@ const Team = React.memo(() => {
     });
     //setData(res);
   };
-  const onParentTeamChange = async (value) => {
-    alert(JSON.stringify(value));
-  };
-  const onEditClick = async (params) => {
-    if (!params) return;
-    dispatch(change_title(t("Chỉnh sửa Nhóm")));
-    dispatch(setLoadingPopup(true));
-    dispatch(open());
-    await getTeamByID(params).then((res) => {
-      dispatch(setEditData(res.data));
-      setValue("name", res.data.name || "");
-      setValue("description", res.data.description || "");
-      setValue("parentId",res.data.parentId != null? data && data.data && data.data.items.find((e) => e.id === res.data.parentId):null);
-      dispatch(setLoadingPopup(false));
-    });
-  };
   return (
     <div>
       <ToolBar onAddClick={handleClickOpen} />
-      <TeamDataGrid onCellClick={onEditClick} />
-      <TeamPopup
-        control={control}
-        onSubmit={handleSubmit(onSubmit)}
-        dataTeam={data && data.data && data.data.items}
-        onChange={onParentTeamChange}
-      />{" "}
+      <TeamDataGrid  />
+      <TeamPopup dataTeam={dataTeam} />{" "}
     </div>
   );
 });

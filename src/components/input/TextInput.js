@@ -10,6 +10,7 @@ export default function TextInput({
   label,
   name,
   autoFocus,
+  hidden
 }) {
   const loadingPopup = useSelector((state) => state.master.loadingPopup);
   return (
@@ -34,6 +35,7 @@ export default function TextInput({
             error={!!error}
             helperText={error?.message}
             label={label}
+            hidden={hidden?true:false}
             autoFocus={autoFocus}
             {...field}
           />

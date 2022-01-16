@@ -7,7 +7,7 @@ const initialState = {
   data: [],
   isReload: false,
   loadingPopup:false,
-  editData:null
+  editData:""
 };
 
 const slice = createSlice({
@@ -34,9 +34,9 @@ const slice = createSlice({
     },
     setEditData: (state, action) => {
       state.editData = action.payload;
-    }
+    },
   },
 });
 const { reducer, actions } = slice;
-export const { setData, setLoading, setPage,setReload, setSort,setLoadingPopup ,setEditData} = actions;
+export const { setData, setLoading, setPage,setReload, setSort,setLoadingPopup,setEditData } = actions;
 export default reducer;
