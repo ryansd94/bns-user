@@ -1,0 +1,131 @@
+body {
+    margin: 0px;
+}
+.containerNew {
+    width: 100%;
+    display: flex;
+    flex-flow: nowrap column;
+    overflow:hidden;
+    background: white;
+}
+
+.panelNew {    
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.headerNew {
+    background: lightblue;
+    min-height: 50px;
+    height: 100%;
+}
+.footerNew {
+    background: lightblue;
+    height: 100%;
+    display:flex;
+    flex-flow: column nowrap;
+    align-items: stretch;
+    text-align: center;
+    justify-content: flex-start;
+    overflow: hidden;
+}
+.footerArea{
+    flex-grow: 1;
+    display: flex;
+    min-height: 100px;
+    flex-flow: column;
+    overflow-y: auto;
+} 
+.body {
+    flex-grow: 3;
+    display: flex;
+    flex-flow: row nowrap;
+}
+
+.sideBarResizeContainer {
+    width: 30%;
+}
+.sidebarNew {
+    background: white;
+    min-width: 200px;
+    width: 400px;
+    width:100%;
+    box-sizing: border-box;
+    text-align: center;
+    flex-grow: 1;
+}
+
+
+.withMargin {
+    margin: 10px;
+    box-sizing: border-box;
+}
+
+.content {
+    flex-grow: 2;  
+    background: white; 
+}
+
+.customHandle {
+    cursor: col-resize;
+    width: 10px;
+    height: 100px;
+    margin: 0px -5px;
+    background: rgb(212, 23, 23);
+    border: 2px solid gray;
+    border-radius: 2px;
+    text-align: center;
+    z-index: 99999;
+    overflow: hidden;
+    display: flex;
+    align-items: center ;
+}
+
+.customResizeBorder {
+    cursor: col-resize;
+    width: 5px;
+    background: gray;
+    display: flex;
+    z-index: 99999;
+    align-items: center ;
+    align-content: center ;
+    justify-content: center;
+    overflow: visible;
+
+}
+.ResizePanel-module_ResizeHandleHorizontal__PkS9u
+{
+    border-radius: 0px !important;
+    width: 2px !important;
+    height: 20px !important;
+    border: none !important;
+    transform: translateY(-50%) !important;
+    transition: background 0.2s ease 0s !important;
+    position: absolute !important;
+    background: rgb(235, 236, 240) !important;
+}
+.ResizePanel-module_ResizeHandleHorizontal__PkS9u>span::after
+{ 
+    content: "" !important;
+    width: 2px !important;
+    height: 20px !important;
+    transform: translateY(-50%) !important;
+    transition: background 0.2s ease 0s !important;
+    position: absolute !important;
+    background: rgb(235, 236, 240) !important;
+}
+.ResizePanel-module_ResizeBarHorizontal__3TBZ5
+{
+    flex-grow: 0;
+    flex-shrink: 0; 
+    z-index: 3;
+    border: none !important;
+    justify-self: flex-start !important;
+    cursor: col-resize !important;
+    resize: horizontal !important;
+    margin-left: 4px !important;
+    margin-right: 4px !important;
+    background: white !important;
+    width:   4px !important;
+}

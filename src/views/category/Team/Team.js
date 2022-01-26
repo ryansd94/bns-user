@@ -19,6 +19,12 @@ import {
 import { createInstance } from "services/base";
 import { useSelector, useDispatch } from "react-redux";
 import * as Yup from "yup";
+
+import style from "components/resizable/ResizableNew.scss";
+import ResizePanel from "react-resize-panel";
+import classNames from "classnames/bind";
+let cx = classNames.bind(style);
+
 const Team = React.memo(() => {
   console.log("render Team");
   const services = createInstance("/api");
@@ -73,11 +79,34 @@ const Team = React.memo(() => {
     });
     //setData(res);
   };
+  function GenderLeftContent() {
+    return <TeamDataGrid />;
+  }
   return (
     <div>
       <ToolBar onAddClick={handleClickOpen} />
-      <TeamDataGrid  />
-      <TeamPopup dataTeam={dataTeam} />{" "}
+      
+      <div className={cx("containerNew")}>
+      <div className={cx("body")}>
+        <div className={cx("content", "panelNew")}><TeamDataGrid /></div>
+        <ResizePanel
+          direction="w"
+          style={{ width: "400px" }}
+          handleClass={style.customHandle}
+          borderClass={style.customResizeBorder}
+          
+        >
+          <div className={cx("sidebarNew", "panelNew")}>
+            right panel
+            <br /> with custom handle
+            <br /> default 400px
+          </div>
+        </ResizePanel>
+      </div>
+
+    </div>
+
+      <TeamPopup dataTeam={dataTeam} />
     </div>
   );
 });

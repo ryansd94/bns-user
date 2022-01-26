@@ -10,7 +10,7 @@ const Table = React.memo((props) => {
         if (!(value === "edit" || value === "delete")) {
             return;
         }
-        return params.id;
+        return params;
     }
     const { t } = useTranslation();
     return (
@@ -19,7 +19,7 @@ const Table = React.memo((props) => {
                 <DataGrid
                     
                     autoHeight={true}
-                    autoPageSize={true}
+                    autoPageSize={false}
                     rows={rows}
                     disableColumnResize={true}
                     rowCount={rowsCount}
@@ -41,7 +41,7 @@ const Table = React.memo((props) => {
                         footerRowSelected: (count) => `${count.toLocaleString()} ` + t('dòng được chọn'),
                     }}
 
-                    onCellClick={param => onCellClick(currentlySelected(param))}
+                    // onCellClick={param => onCellClick(currentlySelected(param))}
                     sortModel={sortModel}
                     sortingMode="server"
                     paginationMode="server"

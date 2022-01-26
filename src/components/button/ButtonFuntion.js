@@ -29,7 +29,7 @@ const ButtonFuntion = React.memo(props => {
     }, []);
     let button;
     if (visible) {
-        button = <Button onClick={onClick} data-title={text} className="btn-circle"
+        button = <Button onClick={onClick} button-title={text} className="btn-circle"
             startIcon={
                 <i className={icon} />
             } variant="contained" ></Button >;

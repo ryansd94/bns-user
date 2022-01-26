@@ -1,40 +1,81 @@
-﻿import React, { useState, useEffect, useStateIfMounted } from 'react';
-import Button from '@mui/material/Button';
-import { useTranslation } from 'react-i18next';
-import PropTypes from 'prop-types';
+﻿import React, { useState, useEffect, useStateIfMounted } from "react";
+import Button from "@mui/material/Button";
+import { useTranslation } from "react-i18next";
+import PropTypes from "prop-types";
+import { IconSave, IconCancel } from "components/icon/icon";
+import { createTheme, ThemeProvider } from "@mui/material/styles";
+const ButtonDetail = (props) => {
+  const theme = createTheme({
+    palette: {
+      neutral: {
+        main: "#64748B",
+        contrastText: "#fff",
+      },
+    },
+  });
+  const { t } = useTranslation();
+  const { type, onClick, autoFocus, disabled } = props;
+  const [icon, setIcon] = useState("");
+  const [text, setText] = useState("");
+  const [color, setColor] = useState(null);
+  console.log("render AREA BUTTON " + text);
+  useEffect(() => {
+    switch (type) {
+      case "Save":
+        setIcon(<IconSave />);
+        setText(t("Lưu"));
+        break;
+      case "Undo":
+        setIcon(<IconCancel></IconCancel>);
+        setText(t("Hủy bỏ"));
+        setColor("neutral");
+        break;
+      case "Accpet":
+        setIcon(<IconSave />);
+        setText(t("Xác nhận"));
+        break;
+      default:
+        break;
+    }
+  }, []);
+  let button;
+  if (type != "Undo") {
+    button = (
+      <Button
+        onClick={onClick}
+        color={color != null ? color : "primary"}
+        autoFocus={autoFocus}
+        variant="contained"
+        disabled={disabled}
+      >
+        {text}
+      </Button>
+    );
+  } else {
+    button = (
+      <ThemeProvider theme={theme}>
+        <Button
+          onClick={onClick}
+          color={color != null ? color : "primary"}
+          autoFocus={autoFocus}
+          // startIcon={icon}
+          variant="outlined"
+        >
+          {text}
+        </Button>
+      </ThemeProvider>
+    );
+  }
 
-
-const ButtonDetail = props => {
-    const { t } = useTranslation();
-    const { type, onClick } = props;
-    const [icon, setIcon] = useState('');
-    const [text, setText] = useState('');
-    console.log("render AREA BUTTON " + text);
-    useEffect(() => {
-        switch (type) {
-            case 'Save':
-                setIcon('fal fa-save');
-                setText(t('Lưu'));
-                break;
-            case 'Undo':
-                setIcon('far fa-ban');
-                setText(t('Hủy'));
-                break;
-            default:
-                break;
-        }
-    }, []);
-    let button;
-    button = <Button onClick={onClick}
-        startIcon={
-            <i className={icon} />
-        } variant="contained" >{text}</Button >;
-
-    return (button
-    )
+  return button;
 };
 ButtonDetail.propTypes = {
-    type: PropTypes.string.isRequired,
-    onClick: PropTypes.func.isRequired,
-}
+  type: PropTypes.string.isRequired,
+  onClick: PropTypes.func.isRequired,
+  autoFocus: PropTypes.bool,
+  disabled: PropTypes.bool,
+};
+ButtonDetail.defaultProps = {
+  disabled: false,
+};
 export default ButtonDetail;

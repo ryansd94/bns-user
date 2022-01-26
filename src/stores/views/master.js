@@ -16,6 +16,7 @@ const slice = createSlice({
   reducers: {
     setData: (state, action) => {
       state.data = action.payload;
+      state.loading = false;
     },
     setLoading: (state, action) => {
       state.loading = action.payload;

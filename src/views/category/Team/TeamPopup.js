@@ -22,6 +22,7 @@ import {
   setEditData,
 } from "stores/views/master";
 import { getTeam, getTeamByID, save } from "services";
+import { ERROR_CODE } from "configs";
 
 import { message } from "configs";
 const TeamPopup = React.memo((props) => {
@@ -84,9 +85,9 @@ const TeamPopup = React.memo((props) => {
     alert(JSON.stringify( postData.id));
     // return;
     if (data.parentId) postData.parentId = data.parentId.id;
-    const res = await save(postData, baseUrl);
+    const res = await save(postData);
     dispatch(openMessage({ ...res }));
-    if (res.errorCode == "Success") {
+    if (res.errorCode == ERROR_CODE.success) {
       dispatch(setEditData(null));
       dispatch(setReload());
       dispatch(close());

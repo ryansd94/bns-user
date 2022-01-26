@@ -4,11 +4,11 @@ button {
     text-transform: none !important;
 }
 
-@mixin dataTitleBefore($title, $translateX) {
+@mixin buttonTitleBefore($title, $translateX) {
     content: $title;
     position: absolute;
     bottom: -36px;
-    z-index: 5;
+    z-index: 7;
     padding: 3px 6px;
     left: 50%;
     border-radius: 5px;
@@ -24,10 +24,11 @@ button {
     transform: translateX($translateX);
 }
 
-@mixin dataTitleAfter( $translateX) {
+@mixin buttonTitleAfter( $translateX) {
     position: absolute;
     bottom: -10px;
     left: 50%;
+    z-index: 7;
     color: #fff;
     border: 8px solid transparent;
     border-bottom: 8px solid #000;
@@ -38,25 +39,25 @@ button {
     transform: translateX($translateX);
 }
 
-[data-title]:hover::before {
-    @include dataTitleBefore(attr(data-title),-50%);
+[button-title]:hover::before {
+    @include buttonTitleBefore(attr(button-title),-50%);
 }
 
-[data-title]:hover::after {
+[button-title]:hover::after {
 
-    @include dataTitleAfter(-50%);
+    @include buttonTitleAfter(-50%);
 }
 
-[data-title-right]:hover::before {
-    @include dataTitleBefore(attr(data-title-right),-70%);
+[button-title-right]:hover::before {
+    @include buttonTitleBefore(attr(button-title-right),-70%);
 }
 
-[data-title-right]:hover::after {
+[button-title-right]:hover::after {
 
-    @include dataTitleAfter(-70%);
+    @include buttonTitleAfter(-70%);
 }
 
-[data-title] {
+[button-title] {
     position: relative;
 }
 
@@ -101,4 +102,66 @@ body {
 {
     height: auto !important;
     min-height: 52px !important;
+}
+
+
+@mixin iconTitleBefore($title, $translateX) {
+    content: $title;
+    position: absolute;
+    bottom: -56px;
+    z-index: 77777;
+    padding: 3px 6px;
+    left: 50%;
+    border-radius: 5px;
+    background: #343a40;
+    color: #fff;
+    font-size: $font_size_normal;
+    font-family: sans-serif;
+    white-space: nowrap;
+    -webkit-transform: translateX($translateX);
+    -moz-transform: translateX($translateX);
+    -ms-transform: translateX($translateX);
+    -o-transform: translateX($translateX);
+    transform: translateX($translateX);
+}
+
+@mixin iconTitleAfter( $translateX) {
+    position: absolute;
+    bottom: -10px;
+    left: 50%;
+    z-index: 77777;
+    color: #fff;
+    border: 8px solid transparent;
+    border-bottom: 8px solid #000;
+    -webkit-transform: translateX($translateX);
+    -moz-transform: translateX($translateX);
+    -ms-transform: translateX($translateX);
+    -o-transform: translateX($translateX);
+    transform: translateX($translateX);
+}
+
+[icon-title]:hover::before {
+    @include iconTitleBefore(attr(icon-title),-50%);
+}
+
+[icon-title]:hover::after {
+
+    @include iconTitleAfter(-50%);
+}
+
+[icon-title-right]:hover::before {
+    @include iconTitleBefore(attr(icon-title-right),-70%);
+}
+
+[icon-title-right]:hover::after {
+
+    @include iconTitleAfter(-70%);
+}
+
+[icon-title] {
+    // position: absolute;
+    z-index: 77777;
+}
+.MuiDataGrid-root .MuiDataGrid-cell:focus-within {
+    outline: none !important;
 }
