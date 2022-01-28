@@ -82,8 +82,6 @@ const TeamPopup = React.memo((props) => {
   const onSubmit = async (data) => {
     var postData = data;
     if (!editData) postData.id = editData;
-    alert(JSON.stringify( postData.id));
-    // return;
     if (data.parentId) postData.parentId = data.parentId.id;
     const res = await save(postData);
     dispatch(openMessage({ ...res }));

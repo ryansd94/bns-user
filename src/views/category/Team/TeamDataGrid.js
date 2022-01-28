@@ -57,7 +57,7 @@ const TeamDataGrid = React.memo((props) => {
       flex: 2,
     },
     {
-      field: "parentId",
+      field: "parentName",
       headerName: t("Nhóm cha"),
       width: 400,
       flex: 2,
