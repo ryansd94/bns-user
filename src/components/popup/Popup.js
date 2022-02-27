@@ -13,6 +13,7 @@ import ButtonDetail from "components/button/ButtonDetail";
 import { useSelector, useDispatch } from "react-redux";
 import { close } from "components/popup/popupSlice";
 import { setEditData } from "stores/views/master";
+import { SpinningCircles } from "react-loading-icons";
 
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
   "& .MuiDialogContent-root": {
@@ -71,6 +72,7 @@ const Popup = React.memo((props) => {
   };
   const open = useSelector((state) => state.popup.open);
   const title = useSelector((state) => state.popup.title);
+  const loading = useSelector((state) => state.button.loading);
   const style = {};
   return (
     <div>
@@ -92,7 +94,22 @@ const Popup = React.memo((props) => {
           <ModalBody />
         </DialogContent>
         <DialogActions>
-          <ButtonDetail onClick={onSave} type={"Save"} />
+          <IconButton
+            hidden={!loading}
+            style={{ padding: 0 }}
+            aria-label="delete"
+          >
+            <SpinningCircles
+              speed={1}
+              width={24}
+              height={24}
+              fill="#1976d2"
+              stroke="#1976d2"
+            />
+          </IconButton>
+          <ButtonDetail onClick={handleClose} type="Undo" />
+          <ButtonDetail 
+            disabled={loading} onClick={onSave} type={"Save"} />
         </DialogActions>
       </BootstrapDialog>
     </div>

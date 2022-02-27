@@ -85,26 +85,24 @@ const Team = React.memo(() => {
   return (
     <div>
       <ToolBar onAddClick={handleClickOpen} />
-      
-      <div className={cx("containerNew")}>
-      <div className={cx("body")}>
-        <div className={cx("content", "panelNew")}><TeamDataGrid /></div>
-        <ResizePanel
-          direction="w"
-          style={{ width: "400px" }}
-          handleClass={style.customHandle}
-          borderClass={style.customResizeBorder}
-          
-        >
-          <div className={cx("sidebarNew", "panelNew")}>
-            right panel
-            <br /> with custom handle
-            <br /> default 400px
-          </div>
-        </ResizePanel>
-      </div>
 
-    </div>
+      <div className={cx("containerNew")}>
+        <div className={cx("body")}>
+          <div className={cx("content", "panelNew")}>
+            <TeamDataGrid />
+          </div>
+          <div hidden={true}>
+            <ResizePanel
+              direction="w"
+              style={{ width: "400px" }}
+              handleClass={style.customHandle}
+              borderClass={style.customResizeBorder}
+            >
+              <div className={cx("sidebarNew", "panelNew")}></div>
+            </ResizePanel>
+          </div>
+        </div>
+      </div>
 
       <TeamPopup dataTeam={dataTeam} />
     </div>

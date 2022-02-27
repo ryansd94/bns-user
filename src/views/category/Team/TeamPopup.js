@@ -23,6 +23,7 @@ import {
 } from "stores/views/master";
 import { getTeam, getTeamByID, save } from "services";
 import { ERROR_CODE } from "configs";
+import { loading as loadingButton} from "stores/components/button";
 
 import { message } from "configs";
 const TeamPopup = React.memo((props) => {
@@ -80,10 +81,14 @@ const TeamPopup = React.memo((props) => {
     defaultValues: defaultValues,
   });
   const onSubmit = async (data) => {
+    // alert (JSON.stringify( data))
+    // return
+    dispatch(loadingButton(true));
     var postData = data;
     if (!editData) postData.id = editData;
     if (data.parentId) postData.parentId = data.parentId.id;
     const res = await save(postData);
+    dispatch(loadingButton(false));
     dispatch(openMessage({ ...res }));
     if (res.errorCode == ERROR_CODE.success) {
       dispatch(setEditData(null));

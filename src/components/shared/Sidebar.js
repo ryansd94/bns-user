@@ -104,18 +104,12 @@ class Sidebar extends Component {
                             </ul>
                         </Collapse>
                     </li>
-                    <li className="nav-item nav-category"><Trans>Data Representation</Trans></li>
-                    <li className={this.isPathActive('/charts') ? 'nav-item active' : 'nav-item'}>
-                        <div className={this.state.chartsMenuOpen ? 'nav-link menu-expanded' : 'nav-link'} onClick={() => this.toggleMenuState('chartsMenuOpen')} data-toggle="collapse">
-                            <span className="icon-bg"><i className="mdi mdi-chart-bar menu-icon"></i></span>
-                            <span className="menu-title"><Trans>Charts</Trans></span>
-                            <i className="menu-arrow"></i>
-                        </div>
-                        <Collapse in={this.state.chartsMenuOpen}>
-                            <ul className="nav flex-column sub-menu">
-                                <li className="nav-item"> <Link className={this.isPathActive('/charts/chart-js') ? 'nav-link active' : 'nav-link'} to="/charts/chart-js"><Trans>Chart Js</Trans></Link></li>
-                            </ul>
-                        </Collapse>
+                    <li className="nav-item nav-category"><Trans>Người dùng</Trans></li>
+                    <li className={this.isPathActive('/user') ? 'nav-item active' : 'nav-item'}>
+                        <Link className="nav-link" to="/user">
+                            <span className="icon-bg"><i className="mdi mdi-cube menu-icon"></i></span>
+                            <span className="menu-title"><Trans>Người dùng</Trans></span>
+                        </Link>
                     </li>
                     <li className={this.isPathActive('/tables') ? 'nav-item active' : 'nav-item'}>
                         <div className={this.state.tablesMenuOpen ? 'nav-link menu-expanded' : 'nav-link'} onClick={() => this.toggleMenuState('tablesMenuOpen')} data-toggle="collapse">
