@@ -27,3 +27,6 @@ package-lock.json
 .vs/VSWorkspaceState.json
 .vscode/launch.json
 .vs/bns-user/config/applicationhost.config
+
+# Local Netlify folder
+.netlify
