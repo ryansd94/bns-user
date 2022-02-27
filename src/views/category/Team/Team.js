@@ -21,7 +21,7 @@ import { useSelector, useDispatch } from "react-redux";
 import * as Yup from "yup";
 
 import style from "components/resizable/ResizableNew.scss";
-import ResizePanel from "react-resize-panel";
+// import ResizePanel from "react-resize-panel";
 import classNames from "classnames/bind";
 let cx = classNames.bind(style);
 
@@ -91,7 +91,7 @@ const Team = React.memo(() => {
           <div className={cx("content", "panelNew")}>
             <TeamDataGrid />
           </div>
-          <div hidden={true}>
+          {/* <div hidden={true}>
             <ResizePanel
               direction="w"
               style={{ width: "400px" }}
@@ -100,7 +100,7 @@ const Team = React.memo(() => {
             >
               <div className={cx("sidebarNew", "panelNew")}></div>
             </ResizePanel>
-          </div>
+          </div> */}
         </div>
       </div>
 
