@@ -2,7 +2,7 @@
   "name": "bns-user",
   "version": "0.1.0",
   "engines": {
-    "node": "14.x",
+    "node": "16.x",
     "npm": "8.x"
   },
   "dependencies": {
@@ -55,7 +55,7 @@
     "styled-icons": "^10.45.0",
     "web-vitals": "^1.0.1",
     "yup": "^0.32.11",
-    "node-sass": "^4.14.1"
+    "node-sass": "^6.0.1"
 
   },
   "scripts": {
