@@ -10,7 +10,10 @@ export default function TextInput({
   label,
   name,
   autoFocus,
-  hidden
+  hidden,
+  inputProps,
+  type,
+  onChange,
 }) {
   const loadingPopup = useSelector((state) => state.master.loadingPopup);
   return (
@@ -30,14 +33,20 @@ export default function TextInput({
           </Skeleton>
         ) : (
           <TextField
+            {...field}
             fullWidth
+            type={type || "text"}
+            inputProps={inputProps}
             required={required}
             error={!!error}
             helperText={error?.message}
             label={label}
-            hidden={hidden?true:false}
+            hidden={hidden ? true : false}
+            onChange={(e) => {
+              field.onChange(e.target.value);
+              onChange && onChange(e.target.value);
+            }}
             autoFocus={autoFocus}
-            {...field}
           />
         )
       }
