@@ -30,7 +30,6 @@
     "http-status": "^1.5.0",
     "i18next": "^21.5.2",
     "i18next-browser-languagedetector": "^6.1.2",
-    "node-sass": "^5.0.0",
     "prop-types": "^15.7.2",
     "query-string": "^7.0.1",
     "react": "^17.0.0",
