@@ -2,7 +2,7 @@
   "name": "bns-user",
   "version": "0.1.0",
   "engines": {
-    "node": "16.x",
+    "node": "14.x",
     "npm": "8.x"
   },
   "dependencies": {
