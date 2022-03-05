@@ -18,3 +18,10 @@ export const MODAL =
     close: 'CLOSE',
     change_title: 'CHANGE_TITLE'
 }
+export const EUserStatus = 
+{
+    ACTIVE: 1,
+    IN_ACTIVE: 2,
+    WAILTING_CONFIRM_MAIL: 3,
+    BLOCK: 4
+}

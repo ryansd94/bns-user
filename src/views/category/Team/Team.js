@@ -31,7 +31,7 @@ const Team = React.memo(() => {
   const baseUrl = "/jm_team";
   const { t } = useTranslation();
   const url = `${baseUrl}`;
-  const data = useSelector((state) => state.master.data);
+  const [data, setData] = React.useState({});
   const page = useSelector((state) => state.master.page);
   const sortModel = useSelector((state) => state.master.sortModel);
   const isReload = useSelector((state) => state.master.isReload);
@@ -74,7 +74,7 @@ const Team = React.memo(() => {
         sortModel != null && sortModel.length > 0 ? sortModel[0].field : "",
       sort: sortModel != null && sortModel.length > 0 ? sortModel[0].sort : "",
     }).then((data) => {
-      dispatch(setData(data));
+       setData(data);
       dispatch(setLoading(false));
     });
     //setData(res);
@@ -89,7 +89,7 @@ const Team = React.memo(() => {
       <div className={cx("containerNew")}>
         <div className={cx("body")}>
           <div className={cx("content", "panelNew")}>
-            <TeamDataGrid />
+            <TeamDataGrid data={data}/>
           </div>
           <div hidden={true}>
             <ResizePanel

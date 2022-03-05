@@ -31,7 +31,7 @@ const TeamDataGrid = React.memo((props) => {
   const { t } = useTranslation();
   const baseUrl = "/jm_team";
   const url = `${baseUrl}`;
-  const data = useSelector((state) => state.master.data);
+  const { data } = props;
   const page = useSelector((state) => state.master.page);
   const loading = useSelector((state) => state.master.loading);
   const sortModel = useSelector((state) => state.master.sortModel);
