@@ -80,7 +80,7 @@ const TeamDataGrid = React.memo((props) => {
           e.stopPropagation(); // don't select this row after clicking
           dispatch(openAlert(true));
           setId(params.id);
-          // dispatch(onSubmit(onAcceptDelete))
+          dispatch(onSubmit(onAcceptDelete))
         };
 
         return (

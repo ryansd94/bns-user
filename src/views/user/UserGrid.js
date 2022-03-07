@@ -4,13 +4,14 @@ import PropTypes from "prop-types";
 import Table from "components/table/Table";
 import GridIconButton from "components/button/GridIconButton";
 import { useTranslation } from "react-i18next";
-import { getTeam, getTeamByID, deleteTeam } from "services";
+import { getTeam, getTeamByID, deleteUser } from "services";
 import { useSelector, useDispatch } from "react-redux";
 import IconButton from "@mui/material/IconButton";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { red } from "@mui/material/colors";
 import AlertDialog from "components/popup/AlertDialog";
+import UserStatus from "components/chip/UserStatus";
 import { openMessage } from "stores/components/snackbar";
 import { ERROR_CODE, EUserStatus } from "configs";
 import {
@@ -39,7 +40,7 @@ const UserGrid = React.memo((props) => {
 
   const onAcceptDelete = async () => {
     dispatch(loadingButton(true));
-    const res = await deleteTeam(id);
+    const res = await deleteUser(id);
     if (res.errorCode == ERROR_CODE.success) {
       dispatch(setReload());
     }
@@ -49,51 +50,25 @@ const UserGrid = React.memo((props) => {
   };
   const columns = [
     { field: "id", hide: true },
-    { field: "email", headerName: t("Email"), width: 350, flex: 2 },
+    { field: "email", headerName: t("Email"), flex: 2 },
     {
       field: "fullName",
       headerName: t("Họ tên"),
-      width: 450,
       flex: 2,
     },
     {
       field: "status",
       headerName: t("Trạng thái"),
-      width: 400,
-      flex: 2,
+      flex: 1,
       renderCell: (params) => {
-        let statusStr = "";
-        let userStatusClassName;
-        if (params.value == EUserStatus.ACTIVE) {
-          statusStr = t("Kích hoạt");
-          userStatusClassName = "text-active";
-        } else if (params.value == EUserStatus.WAILTING_CONFIRM_MAIL) {
-          statusStr = t("Chờ kích hoạt");
-          userStatusClassName = "text-wait-confirm-mail";
-        } else if (params.value == EUserStatus.BLOCK) {
-          statusStr = t("Đã khóa");
-          userStatusClassName = "text-block";
-        }
-        return <span className={userStatusClassName}>{statusStr}</span>;
+        return <UserStatus status={params.value} />;
       },
     },
     {
       field: "edit",
+      width: 150,
       headerName: "",
       renderCell: (params) => {
-        const _status = params.row.status;
-        const myData = [
-          { type: "Edit" },
-          { type: "Delete" },
-          { type: "Email" },
-        ];
-        const deleteElement = <GridIconButton type="Delete" />;
-        const editElement = <GridIconButton type="Edit"></GridIconButton>;
-        const emailElement = <GridIconButton type="Email" />;
-        const helloElement = React.createElement("span", null, "Hello");
-        const children = myData.map((val) => {
-          React.createElement("div", { type:"Delete" }, GridIconButton);
-        });
         const onEditClick = (e) => {
           e.stopPropagation(); // don't select this row after clicking
           if (!params) return;
@@ -105,9 +80,32 @@ const UserGrid = React.memo((props) => {
           e.stopPropagation(); // don't select this row after clicking
           dispatch(openAlert(true));
           setId(params.id);
-          // dispatch(onSubmit(onAcceptDelete))
+          dispatch(onSubmit(onAcceptDelete))
         };
-        return React.createElement("div", {}, children);
+        const _status = params.row.status;
+        const myData = [
+          { type: "Edit" },
+          { type: "Delete" },
+          { type: "Email" },
+        ];
+        const deleteElement = <GridIconButton   onClick={onDeleteClick} type="Delete"></GridIconButton>;
+        // const editElement = <GridIconButton type="Edit"></GridIconButton>;
+        const emailElement = (
+          <GridIconButton
+            disabled={
+              _status == EUserStatus.WAILTING_CONFIRM_MAIL ?false  : true
+            }
+            title={t("Gửi mail xác nhận")}
+            type="Email"
+          />
+        );
+
+        return React.createElement(
+          "div",
+          {},
+          deleteElement,
+          emailElement
+        );
       },
       disableClickEventBubbling: true,
       sortable: false,
