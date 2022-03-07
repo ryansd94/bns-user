@@ -4,7 +4,7 @@ import PropTypes from "prop-types";
 import Table from "components/table/Table";
 import GridIconButton from "components/button/GridIconButton";
 import { useTranslation } from "react-i18next";
-import { getTeam, getTeamByID, deleteUser } from "services";
+import { sendMailUser, getTeamByID, deleteUser } from "services";
 import { useSelector, useDispatch } from "react-redux";
 import IconButton from "@mui/material/IconButton";
 import EditIcon from "@mui/icons-material/Edit";
@@ -48,18 +48,24 @@ const UserGrid = React.memo((props) => {
     dispatch(openAlert(false));
     dispatch(loadingButton(false));
   };
+  const onSendMail = async (email) => {
+    const res = await sendMailUser({ emails: [email] });
+    if (res.errorCode == ERROR_CODE.success) {
+      //dispatch(setReload());
+    }
+    dispatch(openMessage({ ...res }));
+  };
   const columns = [
     { field: "id", hide: true },
     { field: "email", headerName: t("Email"), flex: 2 },
     {
       field: "fullName",
       headerName: t("Họ tên"),
-      flex: 2,
     },
     {
       field: "status",
       headerName: t("Trạng thái"),
-      flex: 1,
+      width: 180,
       renderCell: (params) => {
         return <UserStatus status={params.value} />;
       },
@@ -69,43 +75,44 @@ const UserGrid = React.memo((props) => {
       width: 150,
       headerName: "",
       renderCell: (params) => {
-        const onEditClick = (e) => {
+        const onSendMailClick = (e) => {
           e.stopPropagation(); // don't select this row after clicking
           if (!params) return;
-          dispatch(open());
-          dispatch(setEditData(params.id));
+          onSendMail(params.row.email);
         };
-
         const onDeleteClick = (e) => {
           e.stopPropagation(); // don't select this row after clicking
           dispatch(openAlert(true));
           setId(params.id);
-          dispatch(onSubmit(onAcceptDelete))
+          dispatch(onSubmit(onAcceptDelete));
         };
         const _status = params.row.status;
+        const _isMainAccount = params.row.isMainAccount;
         const myData = [
           { type: "Edit" },
           { type: "Delete" },
           { type: "Email" },
         ];
-        const deleteElement = <GridIconButton   onClick={onDeleteClick} type="Delete"></GridIconButton>;
+        const deleteElement = (
+          <GridIconButton
+            disabled={_isMainAccount}
+            onClick={onDeleteClick}
+            type="Delete"
+          ></GridIconButton>
+        );
         // const editElement = <GridIconButton type="Edit"></GridIconButton>;
         const emailElement = (
           <GridIconButton
+            onClick={onSendMailClick}
             disabled={
-              _status == EUserStatus.WAILTING_CONFIRM_MAIL ?false  : true
+              _status == EUserStatus.WAILTING_CONFIRM_MAIL ? false : true
             }
             title={t("Gửi mail xác nhận")}
             type="Email"
           />
         );
 
-        return React.createElement(
-          "div",
-          {},
-          deleteElement,
-          emailElement
-        );
+        return React.createElement("div", {}, deleteElement, emailElement);
       },
       disableClickEventBubbling: true,
       sortable: false,

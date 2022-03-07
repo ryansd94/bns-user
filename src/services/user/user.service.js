@@ -75,3 +75,19 @@ export const deleteUser = async (id) => {
     return error;
   }
 };
+export const sendMailUser = async (param) => {
+  try {
+    const query = `${baseUrl}/add-user`;
+    const res = await services.post(query, param);
+    return res;
+  } catch (error) {
+    const { request, response } = error;
+    if (request) {
+      return request;
+    }
+    if (response) {
+      return response;
+    }
+    return error;
+  }
+};
