@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback } from "react";
 import ToolBar from "components/toolbar/ToolBar";
-// import TeamPopup from "./TeamPopup";
+import UserPopup from "./UserPopup";
 import UserGrid from "./UserGrid";
 import { getShopIndex } from "helpers";
 import { useTranslation } from "react-i18next";
@@ -103,8 +103,8 @@ const User = React.memo(() => {
           </div>
         </div>
       </div>
-{/* 
-      <TeamPopup dataTeam={dataTeam} /> */}
+
+      <UserPopup  /> 
     </div>
   );
 });
