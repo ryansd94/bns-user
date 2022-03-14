@@ -36,3 +36,20 @@ export const loginGoogle = async data => {
         return error;
     }
 };
+
+export const registerGoogle = async (param) => {
+    try {
+      const query = `${baseUrl}/register-google`;
+      const res = await axios.post(query, param);
+      return res;
+    } catch (error) {
+      const { request, response } = error;
+      if (request) {
+        return request;
+      }
+      if (response) {
+        return response;
+      }
+      return error;
+    }
+  };

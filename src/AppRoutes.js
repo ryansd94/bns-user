@@ -11,6 +11,7 @@ const Login = lazy(() => import('./views/home/Login'));
 
 const User = lazy(() => import('./views/user/User'));
 const JoinTeam = lazy(() => import('./views/signup/JoinTeam/JoinTeam'));
+const Signup = lazy(() => import('./views/signup/Signup/Signup'));
 
 const AppRoutes = React.memo(() => {
     return (
@@ -22,6 +23,7 @@ const AppRoutes = React.memo(() => {
                 <Route exact path="/category/team" component={Team} />
                 <Route exact path="/login" component={Login} />
                 <Route exact path="/user" component={User} />
+                <Route exact path="/signup"  render={(props) => (<Signup {...props} />)}  component={Signup} />
                 <Route exact path="/signup/jointeam"  render={(props) => (<JoinTeam {...props} />)} component={JoinTeam} />
 
                 <Redirect to="/login" />

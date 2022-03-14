@@ -41,7 +41,7 @@ const User = React.memo(() => {
 
   const handleClickOpen = () => {
     //reset();
-    dispatch(change_title(t("Thêm mới Nhóm")));
+    dispatch(change_title(t("Thêm mới người dùng")));
     dispatch(setLoadingPopup(false));
     //dispatch(setEditData(null));
     dispatch(open());

@@ -59,6 +59,25 @@ export const saveUser = async (param) => {
     return error;
   }
 };
+
+
+
+export const signup = async (param) => {
+  try {
+    const query = `${baseUrl}/signup`;
+    const res = await services.post(query, param);
+    return res;
+  } catch (error) {
+    const { request, response } = error;
+    if (request) {
+      return request;
+    }
+    if (response) {
+      return response;
+    }
+    return error;
+  }
+};
 export const deleteUser = async (id) => {
   try {
     let query = `${baseUrl}/${id}`;
@@ -78,6 +97,22 @@ export const deleteUser = async (id) => {
 export const sendMailUser = async (param) => {
   try {
     const query = `${baseUrl}/add-user`;
+    const res = await services.post(query, param);
+    return res;
+  } catch (error) {
+    const { request, response } = error;
+    if (request) {
+      return request;
+    }
+    if (response) {
+      return response;
+    }
+    return error;
+  }
+};
+export const validateTokenSignup = async (param) => {
+  try {
+    const query = `${baseUrl}/validate-signup`;
     const res = await services.post(query, param);
     return res;
   } catch (error) {

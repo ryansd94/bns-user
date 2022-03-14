@@ -71,7 +71,11 @@ export default function Login() {
             switch (res.status) {
                 case httpStatus.OK: {
                     const { data } = res && res;
-                    if (data.errorCode != ERROR_CODE.success) {
+                    if (data.errorCode == ERROR_CODE.userNotRegister) {
+                        history.push(`/signup?token=${token}`);
+                        break;
+                    }
+                   else if (data.errorCode != ERROR_CODE.success) {
                         setError({
                             dirty: true,
                             msg: 'tài hkoản hoặc mật khẩu sai',

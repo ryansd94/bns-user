@@ -1,13 +1,16 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import Autocomplete from "@mui/material/Autocomplete";
 import TextField from "@mui/material/TextField";
 import { Controller } from "react-hook-form";
 import Skeleton from "@mui/material/Skeleton";
 import { useSelector } from "react-redux";
+import Email from "react-email-autocomplete";
 const MultiSelectText = React.memo(
-  ({ control, field, required, data, label, name }) => {
+  ({ control, field, required, data, label, name, placeholder }) => {
     const loadingPopup = useSelector((state) => state.master.loadingPopup);
     const [value, setValue] = React.useState([top100Films[13]]);
+    const [text, setText] = React.useState("");
+    const inputRef = useRef(null);
     const handleKeyDown = (event) => {
       switch (event.key) {
         case ",":
@@ -22,6 +25,31 @@ const MultiSelectText = React.memo(
         default:
       }
     };
+
+    const onTextChange = (e) => {
+      if (e.target.value.indexOf("@") >= 0) {
+        let bbbbb = e.target.value + "aaaaaaaa";
+        
+        setText(bbbbb);
+      }
+      setText(e.target.value);
+      console.log(e.target.value);
+      console.log("text:" + text);
+    };
+
+    const onTextKeypress = (e) => {
+      if (e.key == "@" && e.target.value.indexOf("@") < 0) {
+        e.target.value = e.target.value + "@gmail.com";
+        // e.select();
+        setText(e.target.value + "aaaaaaaa");
+        //console.log(inputRef.current.text);
+        e.preventDefault();
+      }
+    };
+    const handleFocus = (e) => {
+      inputRef.target.select();
+    };
+
     return (
       <Controller
         name={name}
@@ -65,11 +93,15 @@ const MultiSelectText = React.memo(
                   <TextField
                     {...params}
                     variant="outlined"
-                    label="filterSelectedOptions"
-                    placeholder="Favorites"
+                    label={label}
+                    placeholder={placeholder}
                     margin="normal"
                     fullWidth
-                  />
+                    // value={text}
+                    // onFocus={handleFocus}
+                    // ref={inputRef}
+                    // onKeyDown={onTextKeypress}
+                  ></TextField>
                 );
               }}
             />

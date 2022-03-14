@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useLocation } from "react-router-dom";
+import { useLocation, useHistory } from "react-router-dom";
 import queryString from "query-string";
 import TextInput from "components/input/TextInput";
 import Grid from "@mui/material/Grid";
@@ -20,25 +20,31 @@ import { message } from "configs";
 import { yupResolver } from "@hookform/resolvers/yup";
 import AccountCircle from "@mui/icons-material/AccountCircle";
 import Alert from "@mui/material/Alert";
-import { validateTokenSignup, signup } from "services";
+import { validateTokenSignup, registerGoogle } from "services";
 import { ERROR_CODE } from "configs";
 
+import {
+  resetUserToken,
+  setTokenLoginSucceeded,
+  getAccessToken,
+} from "helpers";
 import PasswordChecklist from "react-password-checklist";
 import Spinner from "components/shared/Spinner";
 import { openMessage } from "stores/components/snackbar";
 
-export default function JoinTeam() {
+export default function Signup() {
   const { search } = useLocation();
   const { t } = useTranslation();
   const { token } = queryString.parse(search);
   const dispatch = useDispatch();
+  const history = useHistory();
 
-  const [error, setError] = useState(t("Token không hợp lệ"));
+  const [error, setError] = useState("");
   const [password, setPassword] = useState("");
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const [passwordAgain, setPasswordAgain] = useState("");
   const [passwordIsvalid, setPasswordIsvalid] = useState(false);
-  const [tokenIsvalid, setTokenIsvalid] = useState(false);
+  const [tokenIsvalid, setTokenIsvalid] = useState(true);
   const [values, setValues] = React.useState({
     password: "",
     confirmPassword: "",
@@ -51,14 +57,12 @@ export default function JoinTeam() {
   function replaceAll(str, find, replace) {
     return str.replace(new RegExp(escapeRegExp(find), "g"), replace);
   }
-  useEffect(() => {
-    if (token) {
-      const data = replaceAll(token, " ", "+");
-      validateToken(data);
-    }
-    else
-    setLoading(false);
-  }, []);
+  //   useEffect(() => {
+  //     if (token) {
+  //       const data = replaceAll(token, " ", "+");
+  //       validateToken(data);
+  //     }
+  //   }, []);
   const validateToken = async (token) => {
     const res = await validateTokenSignup({ token: token });
     if (res.errorCode == ERROR_CODE.success) {
@@ -80,16 +84,6 @@ export default function JoinTeam() {
 
   const validationSchema = Yup.object().shape({
     fullName: Yup.string().required(t(message.error.fieldNotEmpty)),
-    // password: Yup.string()
-    //   .required(t(message.error.fieldNotEmpty))
-    //   .min(6, t("Mật khẩu tối thiểu 6 ký tự"))
-    //   .matches(
-    //     /^(?=.*[a-z])(?=.*[0-9])(?=.{6,})/,
-    //     t("Mật khẩu phải chứa ít nhất 6 ký tự, bao gồm cả chữ và số")
-    //   ),
-    // confirmPassword: Yup.string()
-    //   .required(t(message.error.fieldNotEmpty))
-    //   .oneOf([Yup.ref("password")], t("Nhập lại mật khẩu không đúng")),
   });
   const defaultValues = {
     fullName: "",
@@ -119,9 +113,18 @@ export default function JoinTeam() {
 
     const dataToken = replaceAll(token, " ", "+");
     data.token = dataToken;
-    const res = await signup(data);
-    if (res.errorCode == ERROR_CODE.success) {
-      //setTokenIsvalid(true);
+    const res = await registerGoogle(data);
+    const dataResult = res && res.data;
+    if (dataResult.errorCode == ERROR_CODE.success) {
+      const userInfo = dataResult.data;
+      const token = {
+        accessToken: userInfo.token,
+        refreshToken: userInfo.token,
+        shopIndex: userInfo.shopIndex,
+      };
+      const user = { ...userInfo, isAdmin: true, acceptScreen: [] };
+      setTokenLoginSucceeded({ token, user });
+      history.push(`/dashboard`);
     }
     // dispatch(openMessage({ ...res }));
   };
@@ -154,7 +157,7 @@ export default function JoinTeam() {
                     <h3>{t("Tạo tài khoản BNS")}</h3>
                   </Grid>
                   {tokenIsvalid ? (
-                    <Grid container rowSpacing={2}>
+                    <div>
                       <Grid item xs={12}>
                         <span className="text-note">
                           {t("Nhập Họ và tên bạn muốn hiển thị")}
@@ -244,7 +247,7 @@ export default function JoinTeam() {
                           }}
                         />
                       </Grid>
-                    </Grid>
+                    </div>
                   ) : (
                     <Alert severity="error">{error}</Alert>
                   )}
