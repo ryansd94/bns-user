@@ -99,7 +99,7 @@ const UserGrid = React.memo((props) => {
           dispatch(
             openAlert({
               open: true,
-              title: sta==EUserStatus.BLOCK? t("Bạn có chắc khóa người dùng này"): t("Bạn có chắc mở khóa người dùng này"),
+              title: sta==EUserStatus.BLOCK? t("Bạn có chắc khóa người dùng này?"): t("Bạn có chắc mở khóa người dùng này?"),
             })
           );
         };
