@@ -29,7 +29,7 @@ const Table = React.memo((props) => {
         autoPageSize={false}
         rows={rows}
         disableColumnResize={true}
-        rowCount={rowsCount}
+        rowCount={rowsCount ? rowsCount:0}
         disableSelectionOnClick={true}
         columns={columns}
         pageSize={10}

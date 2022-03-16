@@ -9,7 +9,7 @@ import InputAdornment from '@mui/material/InputAdornment';
 import FormControl from '@mui/material/FormControl';
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
-import { resetUserToken, setTokenLoginSucceeded, getAccessToken } from '../../helpers';
+import { resetUserToken, setTokenLoginSucceeded, getAccessToken } from 'helpers';
 import { login ,loginGoogle} from 'services';
 import httpStatus from 'http-status';
 import Button from '@mui/material/Button';
@@ -124,6 +124,13 @@ export default function Login() {
         signInOptions: [
             firebase.auth.GoogleAuthProvider.PROVIDER_ID
         ],
+        callbacks: {
+            // Avoid redirects after sign-in.
+            signInSuccessWithAuthResult: () => {
+                
+                console.log("aaaaaaaaaaaaa")
+            },
+          },
     };
     async function handleSubmit() {
         const valid = validate();

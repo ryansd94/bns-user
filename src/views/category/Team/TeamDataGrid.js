@@ -22,7 +22,6 @@ import {
 } from "stores/views/master";
 import { open, change_title } from "components/popup/popupSlice";
 import { Edit } from "styled-icons/fluentui-system-filled";
-import Tooltip from "@mui/material/Tooltip";
 import { open as openAlert, onSubmit } from "stores/components/alert-dialog";
 import { loading as loadingButton} from "stores/components/button";
 const TeamDataGrid = React.memo((props) => {
@@ -80,7 +79,6 @@ const TeamDataGrid = React.memo((props) => {
           e.stopPropagation(); // don't select this row after clicking
           dispatch(openAlert(true));
           setId(params.id);
-          dispatch(onSubmit(onAcceptDelete))
         };
 
         return (

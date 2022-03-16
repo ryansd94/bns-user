@@ -15,13 +15,14 @@ import { SpinningCircles } from "react-loading-icons";
 
 const AlertDialog = (props) => {
   const open = useSelector((state) => state.alertDialog.open);
+  const title = useSelector((state) => state.alertDialog.title);
   const loading = useSelector((state) => state.button.loading);
   const dispatch = useDispatch();
   const { t } = useTranslation();
   const { onSubmit } = props;
 
   const handleClose = () => {
-    dispatch(openAlert(false));
+    dispatch(openAlert({open :false, title:title ? title : t("Bạn có chắc muốn xóa dữ liệu này?")}));
   };
 
   return (
@@ -33,7 +34,7 @@ const AlertDialog = (props) => {
         aria-describedby="alert-dialog-description"
       >
         <DialogTitle id="alert-dialog-title">
-          {t("Bạn có chắc chắn muốn xóa dữ liệu này?")}
+          {title ? title : t("Bạn có chắc muốn xóa dữ liệu này?")}
         </DialogTitle>
         <DialogActions>
           <IconButton

@@ -62,6 +62,22 @@ export const saveUser = async (param) => {
 
 
 
+export const updateUserStatus = async (param) => {
+  try {
+    const query = `${baseUrl}/status`;
+    const res = await services.put(query, param);
+    return res;
+  } catch (error) {
+    const { request, response } = error;
+    if (request) {
+      return request;
+    }
+    if (response) {
+      return response;
+    }
+    return error;
+  }
+};
 export const signup = async (param) => {
   try {
     const query = `${baseUrl}/signup`;

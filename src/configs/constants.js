@@ -24,3 +24,12 @@ export const EUserStatus = {
   WAILTING_CONFIRM_MAIL: 3,
   BLOCK: 4,
 };
+
+export const EUserValidate = {
+  OK: 1,
+  IS_HAS_ACCOUNT: 2,
+};
+export const EAlertPopupType = {
+  DELETE: 1,
+  UPDATE_STATUS: 2,
+};

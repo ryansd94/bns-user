@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useLocation } from "react-router-dom";
+import { useLocation,useHistory } from "react-router-dom";
 import queryString from "query-string";
 import TextInput from "components/input/TextInput";
 import Grid from "@mui/material/Grid";
@@ -14,7 +14,6 @@ import * as Yup from "yup";
 import AccountCircle from "@mui/icons-material/AccountCircle";
 import { validateTokenSignup, signup } from "services";
 import { ERROR_CODE, EUserValidate } from "configs";
-import Alert from "@mui/material/Alert";
 
 import PasswordChecklist from "react-password-checklist";
 import Spinner from "components/shared/Spinner";
@@ -22,10 +21,10 @@ import { message } from "configs";
 import { yupResolver } from "@hookform/resolvers/yup";
 import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
-import JointeamHasAccount from "./components/JointeamHasAccount"
-import JoinTeamNoAccount from "./components/JoinTeamNoAccount"
+import { setTokenLoginSucceeded } from "helpers";
 
-export default function JoinTeam() {
+const JoinTeamNoAccount = (props) =>  {
+  const history = useHistory();
   const { search } = useLocation();
   const { t } = useTranslation();
   const { token } = queryString.parse(search);
@@ -118,8 +117,17 @@ export default function JoinTeam() {
 
     const dataToken = replaceAll(token, " ", "+");
     data.token = dataToken;
+    data.isHasAccount=false;
     const res = await signup(data);
     if (res.errorCode == ERROR_CODE.success) {
+      const userInfo =  res.data;
+      const token = {
+        accessToken: userInfo.token,
+        refreshToken: userInfo.token,
+        shopIndex: userInfo.shopIndex,
+      };
+      const user = { ...userInfo, isAdmin: true, acceptScreen: [] };
+      setTokenLoginSucceeded({ token, user });
       setTokenIsvalid(true);
       history.push(`/dashboard`);
     } else {
@@ -129,7 +137,6 @@ export default function JoinTeam() {
         msg: res.title,
       });
     }
-    // dispatch(openMessage({ ...res }));
   };
   const onChangePasswordAgain = (text) => {
     setPasswordAgain(text.toLowerCase());
@@ -139,41 +146,92 @@ export default function JoinTeam() {
     setPassword(text.toLowerCase());
   };
 
-  return loading ? (
-    <Spinner className={"spinnerWrapperMaster"}></Spinner>
-  ) : (
-    <div>
-      <div className="d-flex align-items-center auth px-0">
-        <div className="row w-100 mx-0">
-          <div className="col-lg-4 mx-auto">
-            <div className="auth-form-light text-left py-5 px-4 px-sm-5">
-              <Box
-                component="form"
-                sx={{
-                  "& > :not(style)": { m: 1 },
-                }}
-                noValidate
-                autoComplete="off"
-              >
-                <Grid container rowSpacing={2}>
-                  <Grid item xs={12}>
-                    <h3>{t("Tạo tài khoản BNS")}</h3>
-                  </Grid>
-                  {tokenIsvalid ? (
-                    !hasMainAccount ? (
-                      <JoinTeamNoAccount></JoinTeamNoAccount>
-                    ) : (
-                      <JointeamHasAccount />
-                    )
-                  ) : (
-                    <Alert severity="error">{error}</Alert>
-                  )}
-                </Grid>
-              </Box>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
+  return (
+    <Grid container rowSpacing={2}>
+      <Grid item xs={12}>
+        <span className="text-note">
+          {t("Nhập Họ và tên bạn muốn hiển thị")}
+        </span>
+        <TextInput
+          autoFocus={true}
+          required={true}
+          control={control}
+          label={t("Họ tên đầy đủ")}
+          name="fullName"
+        />
+      </Grid>
+      <Grid item xs={12}>
+        <TextInput
+          required={true}
+          control={control}
+          label={t("Mật khẩu")}
+          name="password"
+          type={"password"}
+          onChange={onChangePassword}
+          inputProps={{
+            autocomplete: "new-password",
+            form: {
+              autocomplete: "off",
+            },
+            startAdornment: (
+              <InputAdornment position="start">
+                <AccountCircle />
+              </InputAdornment>
+            ),
+            endAdornment: (
+              <InputAdornment position="end">
+                <IconButton
+                  aria-label="toggle password visibility"
+                  onClick={handleClickShowPassword}
+                  onMouseDown={handleMouseDownPassword}
+                  edge="end"
+                >
+                  {values.showPassword ? <VisibilityOff /> : <Visibility />}
+                </IconButton>
+              </InputAdornment>
+            ),
+          }}
+        />
+      </Grid>
+      <Grid item xs={12}>
+        <TextInput
+          required={true}
+          control={control}
+          label={t("Nhập lại mật khẩu")}
+          name="confirmPassword"
+          type={"password"}
+          onChange={onChangePasswordAgain}
+          InputProps={{
+            autocomplete: "new-password",
+            form: {
+              autocomplete: "off",
+            },
+          }}
+        />
+      </Grid>
+      <Grid item xs={12}>
+        <PasswordChecklist
+          rules={["notEmpty", "minLength", "number", "lowercase", "match"]}
+          minLength={6}
+          value={password}
+          valueAgain={passwordAgain}
+          onChange={(isValid) => setPasswordIsvalid(isValid)}
+          messages={{
+            minLength: t("Mật khẩu tối thiểu 6 ký tự"),
+            notEmpty: t("Mật khẩu và nhập lại mật khẩu không được trống"),
+            number: t("Mật khẩu phải chứa 1 chữ số"),
+            lowercase: t("Mật khẩu phải chứa 1 ký tự"),
+            match: t("Nhập lại mật khẩu không trùng khớp"),
+          }}
+        />
+      </Grid>
+      <Grid item xs={12}>
+        <Button onClick={handleSubmit(onSubmit)} variant="contained">
+          {t("Tham gia")}
+        </Button>
+      </Grid>
+    </Grid>
   );
 }
+
+export default JoinTeamNoAccount;

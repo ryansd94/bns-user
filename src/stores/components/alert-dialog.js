@@ -1,8 +1,9 @@
 import { createSlice } from "@reduxjs/toolkit";
+import { EAlertPopupType } from "configs";
 
 const initialState = {
   open: false,
-  onSubmit: null,
+  title: null,
 };
 
 const popup = createSlice({
@@ -10,14 +11,11 @@ const popup = createSlice({
   initialState: initialState,
   reducers: {
     open: (state, action) => {
-      // const newPhoto = action.payload;
-      state.open = action.payload;
-    },
-    onSubmit: (state, action) => {
-      state.onSubmit = action.payload;
+      state.open = action.payload.open;
+      state.title = action.payload.title;
     },
   },
 });
 const { reducer, actions } = popup;
-export const { open, onSubmit } = actions;
+export const { open } = actions;
 export default reducer;

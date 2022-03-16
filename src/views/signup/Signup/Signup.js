@@ -157,7 +157,7 @@ export default function Signup() {
                     <h3>{t("Tạo tài khoản BNS")}</h3>
                   </Grid>
                   {tokenIsvalid ? (
-                    <div>
+                <Grid container rowSpacing={2}>
                       <Grid item xs={12}>
                         <span className="text-note">
                           {t("Nhập Họ và tên bạn muốn hiển thị")}
@@ -247,7 +247,7 @@ export default function Signup() {
                           }}
                         />
                       </Grid>
-                    </div>
+                      </Grid>
                   ) : (
                     <Alert severity="error">{error}</Alert>
                   )}
