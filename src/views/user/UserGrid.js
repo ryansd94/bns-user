@@ -12,7 +12,7 @@ import {
   setData,
   setLoading,
   setReload,
-  setLoadingPopup,
+  setSort,
 } from "stores/views/master";
 import { open as openAlert } from "stores/components/alert-dialog";
 import { loading as loadingButton } from "stores/components/button";
