@@ -33,8 +33,6 @@ const MultiSelectText = React.memo(
         setText(bbbbb);
       }
       setText(e.target.value);
-      console.log(e.target.value);
-      console.log("text:" + text);
     };
 
     const onTextKeypress = (e) => {
@@ -42,7 +40,6 @@ const MultiSelectText = React.memo(
         e.target.value = e.target.value + "@gmail.com";
         // e.select();
         setText(e.target.value + "aaaaaaaa");
-        //console.log(inputRef.current.text);
         e.preventDefault();
       }
     };

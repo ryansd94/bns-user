@@ -6,12 +6,17 @@ export const LOCAL_STORAGE_KEYS = {
   i18nextLng: "i18nextLng",
   shopIndex: "shopIndex",
 };
-
+export const VisibleDefault = {
+  add: true,
+  column: true,
+  function: false,
+  delete: false
+}
 export const ERROR_CODE = {
   success: "Success",
   error: "Failed",
   isExistsData: "IsExistsData",
-  userNotRegister:"UserNotRegister"
+  userNotRegister: "UserNotRegister"
 };
 export const MODAL = {
   open: "OPEN",
@@ -32,4 +37,11 @@ export const EUserValidate = {
 export const EAlertPopupType = {
   DELETE: 1,
   UPDATE_STATUS: 2,
+};
+
+export const EButtonType = {
+  add: "Add",
+  delete: "Delete",
+  columnConfig: "COLUMN_CONFIG",
+  function: "FUNCTION",
 };

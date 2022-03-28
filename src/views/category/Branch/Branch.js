@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from 'react';
-import ToolBar from '../../../components/toolbar/ToolBar';
+import ToolBar from 'components/toolbar/ToolBar';
 import { DataGrid } from '@mui/x-data-grid';
-import Table from '../../../components/table/Table';
+import Table from 'components/table/Table';
 import BranchDataGrid from './BranchDataGrid'
+import { VisibleDefault } from 'configs/constants';
 export default function Branch() {
 
-    console.log("render BRANCH");
     const [open, setOpen] = useState(false);
-
+    const visible = VisibleDefault;
     const handleClickOpen = () => {
         setOpen(true);
     };
@@ -17,7 +17,7 @@ export default function Branch() {
 
     return (
         <div>
-            <ToolBar onAddClick={handleClickOpen} />
+            <ToolBar visible={visible} onAddClick={handleClickOpen} />
             <BranchDataGrid />
         </div>
     );

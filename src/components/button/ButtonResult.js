@@ -3,10 +3,6 @@ import Button from '@mui/material/Button';
 
 export default ({ data, reset, defaultValues }) => (
     <>
-        { 
-            console.log(data)
-        }
-
         <Button
             className="button buttonBlack"
             type="button"

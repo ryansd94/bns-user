@@ -18,7 +18,6 @@ import { InputField } from 'components/input'
 import { FastField, Form, Formik } from 'formik';
 
 const AreaPopupNew = React.memo(props => {
-    console.log("render AREA popup");
     const { t } = useTranslation();
     const validationSchema = Yup.object().shape({
         name: Yup.string().required(t(message.error.fieldNotEmpty)),
@@ -34,7 +33,6 @@ const AreaPopupNew = React.memo(props => {
     };
 
     const handleSubmit = (values) => {
-        console.log(values);
 
     };
     const onSubmit2 = () => {
@@ -57,7 +55,6 @@ const AreaPopupNew = React.memo(props => {
                 onSubmit={handleSubmit}
             >
                 {formikProps => {
-                    console.log({ values, errors, touched });
 
                     return (
                         <Form>

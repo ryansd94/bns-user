@@ -22,7 +22,6 @@ const columns = [
     //},
 ];
 const BranchDataGrid = React.memo((props) => {
-    console.log("render BRANCH GRID");
     const baseUrl = '/cf_branch';
     const url = `${baseUrl}/GetAllData`;
     const [page, setPage] = useState(0);
@@ -41,7 +40,6 @@ const BranchDataGrid = React.memo((props) => {
             length: 10,
             shopIndex: getShopIndex()
         });
-        console.log(res.data.data);
         setData(res.data && res.data.data);
         setRowsCount(res.data && res.data.recordsTotal);
         setLoading(false);

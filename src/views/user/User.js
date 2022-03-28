@@ -2,6 +2,7 @@ import React, { useState, useEffect, useCallback } from "react";
 import ToolBar from "components/toolbar/ToolBar";
 import UserPopup from "./UserPopup";
 import UserGrid from "./UserGrid";
+import UserToolbar from "./UserToolbar";
 import { getShopIndex } from "helpers";
 import { useTranslation } from "react-i18next";
 import { open, change_title } from "components/popup/popupSlice";
@@ -16,6 +17,9 @@ import {
   setReload,
   setLoadingPopup,
 } from "stores/views/master";
+import {
+  setColumnVisibility,
+} from "stores/views/user";
 import { createInstance } from "services/base";
 import { useSelector, useDispatch } from "react-redux";
 import * as Yup from "yup";
@@ -26,16 +30,9 @@ import classNames from "classnames/bind";
 let cx = classNames.bind(style);
 
 const User = React.memo(() => {
-  console.log("render User");
-  const services = createInstance("/api");
-  const baseUrl = "/jm_team";
+  console.log("render user");
   const { t } = useTranslation();
-  const url = `${baseUrl}`;
-  const [data, setData] = React.useState({});
-  const page = useSelector((state) => state.master.page);
-  const sortModel = useSelector((state) => state.master.sortModel);
-  const isReload = useSelector((state) => state.master.isReload);
-  const [dataTeam, setDataTeam] = React.useState([]);
+
 
   const dispatch = useDispatch();
 
@@ -47,54 +44,19 @@ const User = React.memo(() => {
     dispatch(open());
   };
 
-  // const fetchDataTeam = async () => {
-  //   await getUser({
-  //     draw: 0,
-  //     start: 0,
-  //     length: 10000,
-  //   }).then((data) => {
-  //     setDataTeam(data && data.data && data.data.items);
-  //   });
-  // };
-  useEffect(() => {
-    fetchData();
-  }, [page, sortModel, isReload]);
-
-  // useEffect(() => {
-  //   fetchDataTeam();
-  // }, [isReload]);
-
-  const fetchData = async () => {
-    dispatch(setLoading(true));
-    await getUser({
-      draw: page,
-      start: page == 0 ? 0 : page * 10,
-      length: 10,
-      fieldSort:
-        sortModel != null && sortModel.length > 0 ? sortModel[0].field : "",
-      sort: sortModel != null && sortModel.length > 0 ? sortModel[0].sort : "",
-    }).then((data) => {
-      setData(data);
-      dispatch(setLoading(false));
-    });
-    //setData(res);
-  };
-  function GenderLeftContent() {
-    return <UserGrid />;
-  }
   return (
     <div>
-      <ToolBar onAddClick={handleClickOpen} />
+      <UserToolbar onAddClick={handleClickOpen} />
 
       <div className={cx("containerNew")}>
         <div className={cx("body")}>
           <div className={cx("content", "panelNew")}>
-            <UserGrid data={data} />
+            <UserGrid />
           </div>
-          <div hidden={true}>
+          <div hidden={false}>
             <ResizePanel
               direction="w"
-              style={{ width: "400px" }}
+              style={{ width: "400px", height: "100%" }}
               handleClass={style.customHandle}
               borderClass={style.customResizeBorder}
             >
@@ -104,7 +66,7 @@ const User = React.memo(() => {
         </div>
       </div>
 
-      <UserPopup  /> 
+      <UserPopup />
     </div>
   );
 });

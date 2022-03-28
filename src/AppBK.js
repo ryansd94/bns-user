@@ -21,7 +21,6 @@ function App() {
     });
 
     const onRouteChanged = () => {
-        console.log("ROUTE CHANGED");
         Progress.show();
         const { i18n } = this.props;
         const body = document.querySelector('body');
@@ -50,7 +49,6 @@ function App() {
             }
         }
     }
-    console.log("render app");
     let navbarComponent = !this.state.isFullPageLayout ? <Navbar /> : '';
     let sidebarComponent = !this.state.isFullPageLayout ? <Sidebar /> : '';
     let SettingsPanelComponent = !this.state.isFullPageLayout ? <SettingsPanel /> : '';

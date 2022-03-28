@@ -27,7 +27,6 @@ import { loading as loadingButton} from "stores/components/button";
 
 import { message } from "configs";
 const TeamPopup = React.memo((props) => {
-  console.log("render team popup");
   const { t } = useTranslation();
   const dispatch = useDispatch();
   const baseUrl = "/jm_team";

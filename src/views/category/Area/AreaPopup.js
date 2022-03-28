@@ -21,7 +21,6 @@ import { useTranslation } from 'react-i18next';
 import { get as getBranch}  from 'services/category/branch'
 
 const AreaPopup = React.memo(props => {
-    console.log("render AREA popup");
     const { t } = useTranslation();
     const validationSchema = Yup.object().shape({
         name: Yup.string().required(t(message.error.fieldNotEmpty)),

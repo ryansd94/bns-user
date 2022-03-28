@@ -25,7 +25,6 @@ import { Edit } from "styled-icons/fluentui-system-filled";
 import { open as openAlert, onSubmit } from "stores/components/alert-dialog";
 import { loading as loadingButton} from "stores/components/button";
 const TeamDataGrid = React.memo((props) => {
-  console.log("render team GRID");
   const dispatch = useDispatch();
   const { t } = useTranslation();
   const baseUrl = "/jm_team";

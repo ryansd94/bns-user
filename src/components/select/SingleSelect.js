@@ -8,7 +8,6 @@ const SingleSelect = React.memo(
   ({ control, field, required, data, label, name }) => {
     const loadingPopup = useSelector((state) => state.master.loadingPopup);
     const getOpObj = (option) => {
-      console.log(option.id);
       return option.id;
     };
     return (
