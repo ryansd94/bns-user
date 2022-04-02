@@ -18,7 +18,6 @@ const ButtonDetail = (props) => {
   const [icon, setIcon] = useState("");
   const [text, setText] = useState("");
   const [color, setColor] = useState(null);
-  console.log("render AREA BUTTON " + text);
   useEffect(() => {
     switch (type) {
       case "Save":

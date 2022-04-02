@@ -113,7 +113,6 @@ export default function JoinTeam() {
   const onSubmit = async (data) => {
     // alert(passwordIsvalid);
     // return;
-    // console.log(passwordIsvalid);
     if (!passwordIsvalid) return;
 
     const dataToken = replaceAll(token, " ", "+");

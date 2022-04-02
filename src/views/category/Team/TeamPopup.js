@@ -5,6 +5,7 @@ import SkeletonLoading from "components/loader/SkeletonLoading";
 import Grid from "@mui/material/Grid";
 import SingleSelect from "components/select/SingleSelect";
 import PropTypes from "prop-types";
+import MultiSelect from "components/select/MultiSelect";
 
 import TextInput from "components/input/TextInput";
 import { useTranslation } from "react-i18next";
@@ -12,7 +13,7 @@ import { useSelector, useDispatch } from "react-redux";
 import * as Yup from "yup";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { open, change_title ,close} from "components/popup/popupSlice";
+import { open, change_title, close } from "components/popup/popupSlice";
 import { openMessage } from "stores/components/snackbar";
 import {
   setPage,
@@ -21,13 +22,12 @@ import {
   setReload,
   setEditData,
 } from "stores/views/master";
-import { getTeam, getTeamByID, save } from "services";
+import { getTeam, getTeamByID, save, getUser } from "services";
 import { ERROR_CODE } from "configs";
-import { loading as loadingButton} from "stores/components/button";
+import { loading as loadingButton } from "stores/components/button";
 
 import { message } from "configs";
 const TeamPopup = React.memo((props) => {
-  console.log("render team popup");
   const { t } = useTranslation();
   const dispatch = useDispatch();
   const baseUrl = "/jm_team";
@@ -36,6 +36,8 @@ const TeamPopup = React.memo((props) => {
   const editData = useSelector((state) => state.master.editData);
   const openPopup = useSelector((state) => state.popup.open);
 
+  const [dataUser, setDataUser] = React.useState([]);
+
   const validationSchema = Yup.object().shape({
     name: Yup.string().required(t(message.error.fieldNotEmpty)),
   });
@@ -43,12 +45,33 @@ const TeamPopup = React.memo((props) => {
     name: "",
     description: "",
     parentId: null,
-    id:""
+    id: "",
+    members: [],
   };
   useEffect(() => {
     reset();
     onEditClick();
   }, [openPopup]);
+
+  const fetchDataUser = async () => {
+    await getUser({
+      draw: 0,
+      start: 0,
+      length: 10000,
+    }).then((data) => {
+      const users =
+        data &&
+        data.data &&
+        data.data.items.map((item, index) => ({
+          title: item.fullName,
+          id: item.userId,
+        }));
+      setDataUser(users);
+    });
+  };
+  useEffect(() => {
+    fetchDataUser();
+  }, []);
 
   const onEditClick = async () => {
     if (!editData) return;
@@ -66,6 +89,14 @@ const TeamPopup = React.memo((props) => {
           ? dataTeam && dataTeam.find((e) => e.id === res.data.parentId)
           : null
       );
+      if (res.data.teamMembers != null) {
+        var teamMembers = [];
+        res.data.teamMembers.map((item, index) => {
+          teamMembers.push(dataUser.find((d) => d.id == item));
+        });
+        setValue("members", teamMembers );
+        //setValue("members2", teamMembers );
+      }
       dispatch(setLoadingPopup(false));
     });
   };
@@ -81,12 +112,14 @@ const TeamPopup = React.memo((props) => {
     defaultValues: defaultValues,
   });
   const onSubmit = async (data) => {
-    // alert (JSON.stringify( data))
-    // return
     dispatch(loadingButton(true));
     var postData = data;
     if (!editData) postData.id = editData;
     if (data.parentId) postData.parentId = data.parentId.id;
+    if (data.members)
+      postData.members = data.members.map((item, index) => item.id);
+    // alert(JSON.stringify(postData));
+    // return;
     const res = await save(postData);
     dispatch(loadingButton(false));
     dispatch(openMessage({ ...res }));
@@ -99,7 +132,6 @@ const TeamPopup = React.memo((props) => {
   function ModalBody() {
     return (
       <Grid container rowSpacing={2}>
-       
         <Grid item xs={12}>
           <TextInput
             autoFocus={true}
@@ -124,6 +156,22 @@ const TeamPopup = React.memo((props) => {
             label={t("Nhóm cha")}
           />
         </Grid>
+        <Grid item xs={12}>
+          <span className="text-note">
+            {t(
+              "Nhập Email người dùng bạn muốn thêm vào nhóm, bấm Enter để thêm nhiều người dùng"
+            )}
+          </span>
+          <MultiSelect
+            control={control}
+            name="members"
+            data={dataUser}
+            label={t("Email người dùng")}
+            placeholder={t("Nhập Email người dùng")}
+          />
+          
+        </Grid>
+
       </Grid>
     );
   }

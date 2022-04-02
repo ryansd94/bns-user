@@ -5,7 +5,6 @@ import PropTypes from 'prop-types';
 
 
 const TableTest = React.memo(({ rows, columns, rowsCount, onPageChange, loading }) => {
-    console.log('Checkbox is renderd!');
     return (
         <div className="card" style={{ width: '100%' }}>
             <div className="card-body">

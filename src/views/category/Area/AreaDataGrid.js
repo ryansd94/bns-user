@@ -10,7 +10,6 @@ import { getArea } from '../../../services'
 const services = createInstance('/api');
 
 const AreaDataGrid = React.memo((props) => {
-    console.log("render AREA GRID");
     const { t } = useTranslation();
     const baseUrl = '/cf_area';
     const url = `${baseUrl}/GetAllData`;

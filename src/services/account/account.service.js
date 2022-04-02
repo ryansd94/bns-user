@@ -5,7 +5,6 @@ const baseUrl = `${process.env.REACT_APP_API_URL}/api/account`;
 
 export const login = async data => {
     try {
-        console.log(process.env);
         const res = await axios.post(`${baseUrl}/authenticate`, data);
         return res;
     } catch (error) {
@@ -22,7 +21,6 @@ export const login = async data => {
 
 export const loginGoogle = async data => {
     try {
-        console.log(process.env);
         const res = await axios.post(`${baseUrl}/login-google`, data);
         return res;
     } catch (error) {
