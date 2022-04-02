@@ -23,11 +23,9 @@ class App extends Component {
     state = {}
     componentDidMount() {
         //Progress.hide();
-        console.log("rendered app");
         this.onRouteChanged();
     }
     render() {
-        console.log("render app");
         let navbarComponent = !this.state.isFullPageLayout ? <Navbar /> : '';
         let sidebarComponent = !this.state.isFullPageLayout ? <Sidebar /> : '';
         let SettingsPanelComponent = !this.state.isFullPageLayout ? <SettingsPanel /> : '';
@@ -52,7 +50,6 @@ class App extends Component {
     }
 
     componentDidUpdate(prevProps) {
-        console.log("componentDidUpdate app");
         Progress.hide();
         if (this.props.location !== prevProps.location) {
             this.onRouteChanged();
@@ -61,7 +58,6 @@ class App extends Component {
     }
 
     onRouteChanged() {
-        console.log("ROUTE CHANGED");
         Progress.show();
         const { i18n } = this.props;
         const body = document.querySelector('body');

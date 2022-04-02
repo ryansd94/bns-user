@@ -61,7 +61,6 @@ function PaperComponent(props) {
     );
 }
 const PopupNew = React.memo(props => {
-    console.log("render popup new");
     const dispatch = useDispatch();
     const { ModalBody, onSave, widthSize, initialValues, validationSchema } = props;
     const handleClose = () => {

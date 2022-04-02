@@ -26,7 +26,6 @@ import { Edit } from "styled-icons/fluentui-system-filled";
 import { open as openAlert, onSubmit } from "stores/components/alert-dialog";
 import { loading as loadingButton } from "stores/components/button";
 const UserGrid = React.memo((props) => {
-  console.log("render team GRID");
   const dispatch = useDispatch();
   const { t } = useTranslation();
   const baseUrl = "/jm_team";
@@ -128,6 +127,7 @@ const UserGrid = React.memo((props) => {
             onClick={() => onBlockClick(EUserStatus.BLOCK)}
             disabled={_isMainAccount}
             type= "Lock"
+            title={t("Khóa")}
           />
         );
         const unBlockElement = (
@@ -135,6 +135,7 @@ const UserGrid = React.memo((props) => {
             onClick={() => onBlockClick(EUserStatus.ACTIVE)}
             disabled={_isMainAccount}
             type= "UnLock"
+            title={t("Mở khóa")}
           />
         );
         return React.createElement(
@@ -157,7 +158,7 @@ const UserGrid = React.memo((props) => {
       <Table
         rowsCount={data && data.recordsTotal}
         columns={columns}
-        rows={data && data.data && data.data.items}
+        rows={data && data.data ? data.data.items : []}
         sortModel={sortModel}
         onPageChange={(newPage) => dispatch(setPage(newPage))}
         onSortModelChange={(model) => dispatch(setSort(model))}

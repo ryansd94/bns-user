@@ -26,7 +26,6 @@ import classNames from "classnames/bind";
 let cx = classNames.bind(style);
 
 const Team = React.memo(() => {
-  console.log("render Team");
   const services = createInstance("/api");
   const baseUrl = "/jm_team";
   const { t } = useTranslation();

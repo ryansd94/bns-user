@@ -9,7 +9,6 @@ const ButtonFuntion = React.memo(props => {
     const { type, onClick, visible } = props;
     const [icon, setIcon] = useState('far fa-plus');
     const [text, setText] = useState(t('Thêm mới'));
-    console.log("render AREA BUTTON " + text);
     const setButton = async () => {
         switch (type) {
             case 'Add':
