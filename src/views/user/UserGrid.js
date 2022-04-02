@@ -1,59 +1,77 @@
 import React, { useEffect, useState } from "react";
-import { getShopIndex } from "helpers";
-import PropTypes from "prop-types";
 import Table from "components/table/Table";
 import GridIconButton from "components/button/GridIconButton";
 import { useTranslation } from "react-i18next";
-import { sendMailUser, updateUserStatus, deleteUser } from "services";
+import { sendMailUser, updateUserStatus, deleteUser,getUser } from "services";
 import { useSelector, useDispatch } from "react-redux";
-import IconButton from "@mui/material/IconButton";
-import EditIcon from "@mui/icons-material/Edit";
-import DeleteIcon from "@mui/icons-material/Delete";
-import { red } from "@mui/material/colors";
 import AlertDialog from "components/popup/AlertDialog";
 import UserStatus from "components/chip/UserStatus";
 import { openMessage } from "stores/components/snackbar";
 import { ERROR_CODE, EUserStatus, EAlertPopupType } from "configs";
 import {
-  setPage,
-  setSort,
-  setLoadingPopup,
-  setEditData,
+  setData,
+  setLoading,
   setReload,
+  setSort,
 } from "stores/views/master";
-import { open, change_title } from "components/popup/popupSlice";
-import { Edit } from "styled-icons/fluentui-system-filled";
-import { open as openAlert, onSubmit } from "stores/components/alert-dialog";
+import { open as openAlert } from "stores/components/alert-dialog";
 import { loading as loadingButton } from "stores/components/button";
+import { formatDate } from "helpers/commonFunction"
+import {
+  setToolbarVisibility,
+} from "stores/views/user";
 const UserGrid = React.memo((props) => {
+  console.log("render user grid");
   const dispatch = useDispatch();
   const { t } = useTranslation();
   const baseUrl = "/jm_team";
   const url = `${baseUrl}`;
-  const { data } = props;
   const page = useSelector((state) => state.master.page);
   const loading = useSelector((state) => state.master.loading);
   const sortModel = useSelector((state) => state.master.sortModel);
+  const columnVisibility = { ...useSelector((state) => state.user.columnVisibility) };
+  const toolbarVisible = { ...useSelector((state) => state.user.toolbarVisible) };
   const [alertType, setAlertType] = useState(0);
   const [id, setId] = useState(null);
   const [status, setStatus] = useState(null);
 
+  const isReload = useSelector((state) => state.master.isReload);
+  const [data, setData] = React.useState({});
+
+  useEffect(() => {
+    fetchData();
+  }, [page, sortModel, isReload]);
+
+
+  const fetchData = async () => {
+    dispatch(setLoading(true));
+    await getUser({
+      draw: page,
+      start: page == 0 ? 0 : page * 10,
+      length: 10,
+      fieldSort:
+        sortModel != null && sortModel.length > 0 ? sortModel[0].field : "",
+      sort: sortModel != null && sortModel.length > 0 ? sortModel[0].sort : "",
+    }).then((data) => {
+      setData(data);
+      dispatch(setLoading(false));
+    });
+  };
   const onAcceptDelete = async () => {
     dispatch(loadingButton(true));
     var res = null;
-    if (alertType == 1) 
+    if (alertType == 1)
       res = await deleteUser(id);
     else if (alertType == EAlertPopupType.UPDATE_STATUS)
-      res = await updateUserStatus({ id: id ,status:status});
-      
+      res = await updateUserStatus({ id: id, status: status });
+
     if (res.errorCode == ERROR_CODE.success) {
       dispatch(setReload());
     }
     dispatch(openMessage({ ...res }));
-    dispatch(openAlert({ open: false}));
+    dispatch(openAlert({ open: false }));
     dispatch(loadingButton(false));
   };
-
   const onSendMail = async (email) => {
     const res = await sendMailUser({ emails: [email] });
     if (res.errorCode == ERROR_CODE.success) {
@@ -61,13 +79,22 @@ const UserGrid = React.memo((props) => {
     }
     dispatch(openMessage({ ...res }));
   };
+  const onSelectionModelChange = (newSelection) => {
+    if (newSelection.length > 0) {
+      toolbarVisible.function = true;
+    }
+    else {
+      toolbarVisible.function = false;
+    }
+    dispatch(setToolbarVisibility({ ...toolbarVisible }));
+  }
   const columns = [
     { field: "id", hide: true },
     { field: "email", headerName: t("Email"), flex: 1 },
     {
       field: "fullName",
       headerName: t("Họ tên"),
-      flex:1
+      flex: 1
     },
     {
       field: "status",
@@ -75,6 +102,15 @@ const UserGrid = React.memo((props) => {
       width: 180,
       renderCell: (params) => {
         return <UserStatus status={params.value} />;
+      },
+    },
+    {
+      field: "createdDate",
+      headerName: t("Ngày tạo"),
+      flex: 0,
+      minWidth: 140,
+      renderCell: (params) => {
+        return formatDate(params.value);
       },
     },
     {
@@ -89,7 +125,7 @@ const UserGrid = React.memo((props) => {
         const onDeleteClick = (e) => {
           setAlertType(EAlertPopupType.DELETE);
           setId(params.id);
-          dispatch(openAlert({ open: true}));
+          dispatch(openAlert({ open: true }));
         };
         const onBlockClick = (sta) => {
           setAlertType(EAlertPopupType.UPDATE_STATUS);
@@ -98,7 +134,7 @@ const UserGrid = React.memo((props) => {
           dispatch(
             openAlert({
               open: true,
-              title: sta==EUserStatus.BLOCK? t("Bạn có chắc khóa người dùng này?"): t("Bạn có chắc mở khóa người dùng này?"),
+              title: sta == EUserStatus.BLOCK ? t("Bạn có chắc khóa người dùng này?") : t("Bạn có chắc mở khóa người dùng này?"),
             })
           );
         };
@@ -143,7 +179,7 @@ const UserGrid = React.memo((props) => {
           {},
           deleteElement,
           emailElement,
-           _status == EUserStatus.ACTIVE ? blockElement : unBlockElement  
+          _status == EUserStatus.ACTIVE ? blockElement : unBlockElement
         );
       },
       disableClickEventBubbling: true,
@@ -156,6 +192,7 @@ const UserGrid = React.memo((props) => {
     <div style={{ width: "100%", height: "100%" }}>
       <AlertDialog onSubmit={onAcceptDelete} />
       <Table
+        columnVisibility={columnVisibility}
         rowsCount={data && data.recordsTotal}
         columns={columns}
         rows={data && data.data ? data.data.items : []}
@@ -163,6 +200,7 @@ const UserGrid = React.memo((props) => {
         onPageChange={(newPage) => dispatch(setPage(newPage))}
         onSortModelChange={(model) => dispatch(setSort(model))}
         loading={loading}
+        onSelectionModelChange={onSelectionModelChange}
       />
     </div>
   );

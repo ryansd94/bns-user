@@ -2,6 +2,7 @@
 import { DataGrid } from "@mui/x-data-grid";
 import PropTypes from "prop-types";
 import { useTranslation } from "react-i18next";
+import Switch from '@mui/material/Switch';
 const Table = React.memo((props) => {
   const {
     rows,
@@ -12,6 +13,8 @@ const Table = React.memo((props) => {
     onSortModelChange,
     sortModel,
     onCellClick,
+    columnVisibility,
+    onSelectionModelChange
   } = props;
   const currentlySelected = (params) => {
     const value = params.colDef.field;
@@ -21,6 +24,10 @@ const Table = React.memo((props) => {
     }
     return params;
   };
+  const label = { inputProps: { 'aria-label': 'Switch demo' } };
+  function SwitchCUstom() {
+    return (<Switch {...label} defaultChecked color="warning" />)
+  }
   const { t } = useTranslation();
   return (
     <div style={{ width: "100%" }}>
@@ -28,8 +35,8 @@ const Table = React.memo((props) => {
         autoHeight={true}
         autoPageSize={false}
         rows={rows}
-        disableColumnResize={true}
-        rowCount={rowsCount ? rowsCount:0}
+        disableColumnResize
+        rowCount={rowsCount ? rowsCount : 0}
         disableSelectionOnClick={true}
         columns={columns}
         pageSize={10}
@@ -57,6 +64,25 @@ const Table = React.memo((props) => {
         onSortModelChange={onSortModelChange}
         checkboxSelection
         loading={loading}
+        disableColumnSelector
+        columnVisibilityModel={columnVisibility}
+        onSelectionModelChange={onSelectionModelChange}
+        // componentsProps={{
+        //   panel: {
+        //     sx: {
+        //       '& .MuiTypography-root': {
+        //         color: 'dodgerblue',
+        //         fontSize: 20,
+        //       },
+        //       '& .MuiDataGrid-filterForm': {
+        //         bgcolor: 'lightblue',
+        //       },
+        //     },
+        //   },
+        // }}
+        // components={{
+        //   ColumnMenu: SwitchCUstom,
+        // }}
       />
     </div>
     // </div>
@@ -72,6 +98,8 @@ Table.propTypes = {
   onSortModelChange: PropTypes.func,
   loading: PropTypes.bool,
   sortModel: PropTypes.array,
+  columnVisibility: PropTypes.object,
+  onSelectionModelChange: PropTypes.func,
 };
 
 Table.defaultProps = {

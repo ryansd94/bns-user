@@ -24,7 +24,7 @@ button {
     transform: translateX($translateX);
 }
 
-@mixin buttonTitleAfter( $translateX) {
+@mixin buttonTitleAfter($translateX) {
     position: absolute;
     bottom: -10px;
     left: 50%;
@@ -40,20 +40,18 @@ button {
 }
 
 [button-title]:hover::before {
-    @include buttonTitleBefore(attr(button-title),-50%);
+    @include buttonTitleBefore(attr(button-title), -50%);
 }
 
 [button-title]:hover::after {
-
     @include buttonTitleAfter(-50%);
 }
 
 [button-title-right]:hover::before {
-    @include buttonTitleBefore(attr(button-title-right),-70%);
+    @include buttonTitleBefore(attr(button-title-right), -70%);
 }
 
 [button-title-right]:hover::after {
-
     @include buttonTitleAfter(-70%);
 }
 
@@ -75,35 +73,33 @@ button {
     margin: 0 0 0 10px !important;
 
     .MuiButton-startIcon {
-        margin: 0 !important
+        margin: 0 !important;
     }
 }
 
 body {
-    padding-right: 0 !important
+    padding-right: 0 !important;
 }
 
-.MuiDataGrid-columnHeader:focus, .MuiDataGrid-columnHeader:focus-within {
-    outline: none !important
+.MuiDataGrid-columnHeader:focus,
+.MuiDataGrid-columnHeader:focus-within {
+    outline: none !important;
 }
 
 .MuiCircularProgress-root {
-    z-index: 1
+    z-index: 1;
 }
 
 .MuiTablePagination-displayedRows {
     margin-bottom: 0 !important;
 }
-.MuiDialogActions-root
-{
-    padding:16px !important;
+.MuiDialogActions-root {
+    padding: 16px !important;
 }
-.MuiDataGrid-overlay
-{
+.MuiDataGrid-overlay {
     height: auto !important;
     min-height: 52px !important;
 }
-
 
 @mixin iconTitleBefore($title, $translateX) {
     content: $title;
@@ -125,7 +121,7 @@ body {
     transform: translateX($translateX);
 }
 
-@mixin iconTitleAfter( $translateX) {
+@mixin iconTitleAfter($translateX) {
     position: absolute;
     bottom: -10px;
     left: 50%;
@@ -141,20 +137,18 @@ body {
 }
 
 [icon-title]:hover::before {
-    @include iconTitleBefore(attr(icon-title),-50%);
+    @include iconTitleBefore(attr(icon-title), -50%);
 }
 
 [icon-title]:hover::after {
-
     @include iconTitleAfter(-50%);
 }
 
 [icon-title-right]:hover::before {
-    @include iconTitleBefore(attr(icon-title-right),-70%);
+    @include iconTitleBefore(attr(icon-title-right), -70%);
 }
 
 [icon-title-right]:hover::after {
-
     @include iconTitleAfter(-70%);
 }
 
@@ -165,26 +159,37 @@ body {
 .MuiDataGrid-root .MuiDataGrid-cell:focus-within {
     outline: none !important;
 }
-body , h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6{
-    
+body,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+.h1,
+.h2,
+.h3,
+.h4,
+.h5,
+.h6 {
     font-family: sans-serif !important;
 }
-.text-note{
+.text-note {
     color: #5f6368;
     // margin-top:  10px !important;
     // padding-bottom:6px !important;
     display: flex;
-    font: 400 13px Roboto,RobotoDraft,Helvetica,Arial,sans-serif;
+    font: 400 13px Roboto, RobotoDraft, Helvetica, Arial, sans-serif;
 }
-.text-active
-{
+.text-active {
     color: rgb(0, 177, 0) !important;
 }
-.text-block
-{
+.text-block {
     color: rgb(243, 29, 22) !important;
 }
-.text-wait-confirm-mail
-{
+.text-wait-confirm-mail {
     color: rgb(77, 77, 77) !important;
+}
+.MuiDataGrid-columnSeparator {
+    display: none !important;
 }

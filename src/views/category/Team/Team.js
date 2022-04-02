@@ -2,14 +2,9 @@
 import ToolBar from "../../../components/toolbar/ToolBar";
 import TeamPopup from "./TeamPopup";
 import TeamDataGrid from "./TeamDataGrid";
-import { getShopIndex } from "helpers";
 import { useTranslation } from "react-i18next";
 import { open, change_title } from "components/popup/popupSlice";
 import { getTeam, getTeamByID, save } from "services";
-import { message } from "configs";
-import { useForm } from "react-hook-form";
-import { yupResolver } from "@hookform/resolvers/yup";
-import { openMessage } from "stores/components/snackbar";
 import {
   setData,
   setLoading,
@@ -23,6 +18,7 @@ import * as Yup from "yup";
 import style from "components/resizable/ResizableNew.scss";
 import ResizePanel from "react-resize-panel";
 import classNames from "classnames/bind";
+import { VisibleDefault } from 'configs/constants';
 let cx = classNames.bind(style);
 
 const Team = React.memo(() => {
@@ -83,7 +79,7 @@ const Team = React.memo(() => {
   }
   return (
     <div>
-      <ToolBar onAddClick={handleClickOpen} />
+      <ToolBar  visible={VisibleDefault} onAddClick={handleClickOpen} />
 
       <div className={cx("containerNew")}>
         <div className={cx("body")}>
