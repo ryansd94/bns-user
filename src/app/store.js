@@ -6,6 +6,7 @@ import alertDialogReducer from "stores/components/alert-dialog";
 import masterReducer from "stores/views/master";
 import buttonReducer from "stores/components/button";
 import userReducer from "stores/views/user";
+import newReducer from "stores/views/new";
 
 const rootReducer = {
   popup: popupReducer,
@@ -14,7 +15,8 @@ const rootReducer = {
   master: masterReducer,
   alertDialog: alertDialogReducer,
   button: buttonReducer,
-  user:userReducer
+  user:userReducer,
+  new:newReducer
 };
 
 const store = configureStore({

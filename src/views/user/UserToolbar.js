@@ -5,13 +5,19 @@ import { useDispatch, useSelector } from "react-redux";
 import {
     setColumnVisibility,
 } from "stores/views/user";
+import {
+  setConfig,
+} from "stores/views/new";
 import { useTranslation } from "react-i18next";
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import { IconDelete } from "components/icon/icon";
+import UserPopup from "./UserPopup";
+import { open, change_title } from "components/popup/popupSlice";
 const UserToolbar = (props) => {
 
     console.log("render user toolbar");
+    const config = { ...useSelector((state) => state.new.config) };
     const { onAddClick } = props;
     const { t } = useTranslation();
     const dispatch = useDispatch();
@@ -37,7 +43,21 @@ const UserToolbar = (props) => {
             Edit
         </MenuItem>
     );
-    return <ToolBar dropdownItem={a} visible={visible} onColumnConfigChange={handleColumnConfigChange} columnModel={columnModel} onAddClick={onAddClick} />
+    const handleClickOpen = () => {
+        //reset();
+        dispatch(change_title(t("Thêm mới người dùng")));
+        config.loading = false
+        dispatch(setConfig({ ...config }));
+        //dispatch(setEditData(null));
+        dispatch(open());
+      };
+    
+    return <div>
+        <ToolBar dropdownItem={a} visible={visible} 
+        onColumnConfigChange={handleColumnConfigChange} columnModel={columnModel} 
+        onAddClick={handleClickOpen} />
+        <UserPopup />
+    </div>
 
 }
 UserToolbar.propTypes = {

@@ -45,3 +45,7 @@ export const EButtonType = {
   columnConfig: "COLUMN_CONFIG",
   function: "FUNCTION",
 };
+export const EColumnType = {
+  checkbox: "Checkbox",
+  text: "Text"
+}

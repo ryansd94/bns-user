@@ -15,12 +15,8 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { open, change_title, close } from "components/popup/popupSlice";
 import { openMessage } from "stores/components/snackbar";
 import {
-  setPage,
-  setSort,
-  setLoadingPopup,
-  setReload,
-  setEditData,
-} from "stores/views/master";
+  setConfig,
+} from "stores/views/new";
 import { sendMailUser } from "services";
 import { ERROR_CODE } from "configs";
 import { loading as loadingButton } from "stores/components/button";
@@ -31,8 +27,8 @@ const UserPopup = React.memo((props) => {
   const dispatch = useDispatch();
   const baseUrl = "/jm_team";
 
-  const editData = useSelector((state) => state.master.editData);
   const openPopup = useSelector((state) => state.popup.open);
+  const config = { ...useSelector((state) => state.new.config) };
 
   const validationSchema = Yup.object().shape({
     // name: Yup.string().required(t(message.error.fieldNotEmpty)),
@@ -62,8 +58,9 @@ const UserPopup = React.memo((props) => {
     dispatch(loadingButton(false));
     dispatch(openMessage({ ...res }));
     if (res.errorCode == ERROR_CODE.success) {
-      dispatch(setEditData(null));
-      dispatch(setReload());
+      config.editData =null;
+      config.isReload = !config.isReload;
+      dispatch(setConfig({ ...config }));
       dispatch(close());
     }
   };

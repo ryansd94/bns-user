@@ -35,6 +35,7 @@ const Table = React.memo((props) => {
         autoHeight={true}
         autoPageSize={false}
         rows={rows}
+        initialState={{ pinnedColumns: { left: ['__check_','email'] } }}
         disableColumnResize
         rowCount={rowsCount ? rowsCount : 0}
         disableSelectionOnClick={true}

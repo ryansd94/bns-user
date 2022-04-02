@@ -12,11 +12,8 @@ import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { openMessage } from "stores/components/snackbar";
 import {
-  setData,
-  setLoading,
-  setReload,
-  setLoadingPopup,
-} from "stores/views/master";
+  setConfig,
+} from "stores/views/new";
 import {
   setColumnVisibility,
 } from "stores/views/user";
@@ -31,24 +28,11 @@ let cx = classNames.bind(style);
 
 const User = React.memo(() => {
   console.log("render user");
-  const { t } = useTranslation();
-
-
-  const dispatch = useDispatch();
-
-  const handleClickOpen = () => {
-    //reset();
-    dispatch(change_title(t("Thêm mới người dùng")));
-    dispatch(setLoadingPopup(false));
-    //dispatch(setEditData(null));
-    dispatch(open());
-  };
-
   return (
     <div>
-      <UserToolbar onAddClick={handleClickOpen} />
-
-      <div className={cx("containerNew")}>
+      <UserToolbar />
+      <UserGrid />
+      {/* <div className={cx("containerNew")}>
         <div className={cx("body")}>
           <div className={cx("content", "panelNew")}>
             <UserGrid />
@@ -64,9 +48,8 @@ const User = React.memo(() => {
             </ResizePanel>
           </div>
         </div>
-      </div>
+      </div> */}
 
-      <UserPopup />
     </div>
   );
 });
