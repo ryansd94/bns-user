@@ -1,44 +1,37 @@
-import React, { useEffect, useState, useMemo, useCallback } from "react";
-
-import Popup from "components/popup/Popup";
-import SkeletonLoading from "components/loader/SkeletonLoading";
-import Grid from "@mui/material/Grid";
-import MultiSelectNoOption from "components/select/MultiSelectNoOption";
-import PropTypes from "prop-types";
-
-import TextInput from "components/input/TextInput";
-import { useTranslation } from "react-i18next";
-import { useSelector, useDispatch } from "react-redux";
-import * as Yup from "yup";
-import { useForm } from "react-hook-form";
-import { yupResolver } from "@hookform/resolvers/yup";
-import { open, change_title, close } from "components/popup/popupSlice";
-import { openMessage } from "stores/components/snackbar";
+import React, { useEffect, useState, useMemo, useCallback } from "react"
+import Popup from "components/popup/Popup"
+import Grid from "@mui/material/Grid"
+import MultiSelectText from "components/select/MultiSelectText"
+import { useTranslation } from "react-i18next"
+import { useSelector, useDispatch } from "react-redux"
+import * as Yup from "yup"
+import { useForm } from "react-hook-form"
+import { yupResolver } from "@hookform/resolvers/yup"
+import { close } from "components/popup/popupSlice"
+import { openMessage } from "stores/components/snackbar"
 import {
-  setConfig,
-} from "stores/views/new";
-import { sendMailUser } from "services";
-import { ERROR_CODE } from "configs";
-import { loading as loadingButton } from "stores/components/button";
+  setReload,
+  setEditData,
+} from "stores/views/master"
+import { sendMailUser } from "services"
+import { ERROR_CODE } from "configs"
+import { loading as loadingButton } from "stores/components/button"
 
-import { message } from "configs";
 const UserPopup = React.memo((props) => {
-  const { t } = useTranslation();
-  const dispatch = useDispatch();
-  const baseUrl = "/jm_team";
+  const { t } = useTranslation()
+  const dispatch = useDispatch()
 
-  const openPopup = useSelector((state) => state.popup.open);
-  const config = { ...useSelector((state) => state.new.config) };
+  const openPopup = useSelector((state) => state.popup.open)
 
   const validationSchema = Yup.object().shape({
     // name: Yup.string().required(t(message.error.fieldNotEmpty)),
-  });
+  })
   const defaultValues = {
     emails: [],
-  };
+  }
   useEffect(() => {
-    reset();
-  }, [openPopup]);
+    reset()
+  }, [openPopup])
 
   const {
     control,
@@ -49,21 +42,20 @@ const UserPopup = React.memo((props) => {
   } = useForm({
     resolver: yupResolver(validationSchema),
     defaultValues: defaultValues,
-  });
+  })
   const onSubmit = async (data) => {
-    // alert(JSON.stringify(data));
-    // return;
-    dispatch(loadingButton(true));
-    const res = await sendMailUser(data);
-    dispatch(loadingButton(false));
-    dispatch(openMessage({ ...res }));
+    // alert(JSON.stringify(data))
+    // return
+    dispatch(loadingButton(true))
+    const res = await sendMailUser(data)
+    dispatch(loadingButton(false))
+    dispatch(openMessage({ ...res }))
     if (res.errorCode == ERROR_CODE.success) {
-      config.editData =null;
-      config.isReload = !config.isReload;
-      dispatch(setConfig({ ...config }));
-      dispatch(close());
+      dispatch(setEditData(null))
+      dispatch(setReload())
+      dispatch(close())
     }
-  };
+  }
   function ModalBody() {
     return (
       <Grid container rowSpacing={2}>
@@ -73,8 +65,7 @@ const UserPopup = React.memo((props) => {
               "Nhập Email người dùng bạn muốn thêm vào hệ thống, bấm Enter để thêm nhiều người dùng. Hệ thống sẽ gửi email xác nhận đến email của người dùng"
             )}
           </span>
-          <MultiSelectNoOption
-            freeSolo={true}
+          <MultiSelectText
             control={control}
             name="emails"
             label={t("Email người dùng")}
@@ -82,7 +73,7 @@ const UserPopup = React.memo((props) => {
           />
         </Grid>
       </Grid>
-    );
+    )
   }
   return (
     <div>
@@ -92,7 +83,7 @@ const UserPopup = React.memo((props) => {
         onSave={handleSubmit(onSubmit)}
       />
     </div>
-  );
-});
+  )
+})
 
-export default UserPopup;
+export default UserPopup

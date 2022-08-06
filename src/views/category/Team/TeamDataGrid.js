@@ -2,7 +2,7 @@
 import { getShopIndex } from "helpers";
 import PropTypes from "prop-types";
 import Table from "components/table/Table";
-import GridIconButton from "components/button/GridIconButton";
+import ButtonIcon from "components/button/ButtonIcon";
 import { useTranslation } from "react-i18next";
 import { getTeam, getTeamByID, deleteTeam } from "services";
 import { useSelector, useDispatch } from "react-redux";
@@ -79,17 +79,15 @@ const TeamDataGrid = React.memo((props) => {
 
         return (
           <strong>
-            <GridIconButton onClick={onEditClick} type="Edit"></GridIconButton>
-            <GridIconButton
+            <ButtonIcon onClick={onEditClick} type="Edit"></ButtonIcon>
+            <ButtonIcon
               onClick={onDeleteClick}
               type="Delete"
-            ></GridIconButton>
+            ></ButtonIcon>
           </strong>
         );
       },
-      disableClickEventBubbling: true,
       sortable: false,
-      disableColumnMenu: true,
     },
   ];
 

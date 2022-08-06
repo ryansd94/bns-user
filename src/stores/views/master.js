@@ -2,12 +2,14 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
   page: 0,
+  pageSize: 4,
   sortModel: [],
   loading: false,
   data: [],
   isReload: false,
   loadingPopup:false,
-  editData:""
+  editData:"",
+  filterModel: [],
 };
 
 const slice = createSlice({
@@ -24,8 +26,14 @@ const slice = createSlice({
     setPage: (state, action) => {
       state.page = action.payload;
     },
+    setPageSize: (state, action) => {
+      state.pageSize = action.payload;
+    },
     setSort: (state, action) => {
       state.sortModel = action.payload;
+    },
+    setFilter: (state, action) => {
+      state.filterModel = action.payload;
     },
     setReload: (state, action) => {
       state.isReload = !state.isReload;
@@ -39,5 +47,5 @@ const slice = createSlice({
   },
 });
 const { reducer, actions } = slice;
-export const { setData, setLoading, setPage,setReload, setSort,setLoadingPopup,setEditData } = actions;
+export const { setData, setLoading, setPage,setReload, setSort,setLoadingPopup,setEditData,setPageSize,setFilter } = actions;
 export default reducer;

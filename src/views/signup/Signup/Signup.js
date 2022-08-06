@@ -22,7 +22,6 @@ import AccountCircle from "@mui/icons-material/AccountCircle";
 import Alert from "@mui/material/Alert";
 import { validateTokenSignup, registerGoogle } from "services";
 import { ERROR_CODE } from "configs";
-
 import {
   resetUserToken,
   setTokenLoginSucceeded,
@@ -156,7 +155,8 @@ export default function Signup() {
                     <h3>{t("Tạo tài khoản BNS")}</h3>
                   </Grid>
                   {tokenIsvalid ? (
-                <Grid container rowSpacing={2}>
+                    <Grid container rowSpacing={2}>
+                      
                       <Grid item xs={12}>
                         <span className="text-note">
                           {t("Nhập Họ và tên bạn muốn hiển thị")}
@@ -246,7 +246,7 @@ export default function Signup() {
                           }}
                         />
                       </Grid>
-                      </Grid>
+                    </Grid>
                   ) : (
                     <Alert severity="error">{error}</Alert>
                   )}

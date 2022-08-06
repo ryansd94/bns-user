@@ -4,11 +4,13 @@ import { useTranslation } from "react-i18next";
 import PropTypes from "prop-types";
 import { IconSave, IconCancel } from "components/icon/icon";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
+import { EColor, EButtonDetailType } from "configs";
+
 const ButtonDetail = (props) => {
   const theme = createTheme({
     palette: {
       neutral: {
-        main: "#64748B",
+        main: EColor.cancel,
         contrastText: "#fff",
       },
     },
@@ -20,16 +22,16 @@ const ButtonDetail = (props) => {
   const [color, setColor] = useState(null);
   useEffect(() => {
     switch (type) {
-      case "Save":
+      case EButtonDetailType.save:
         setIcon(<IconSave />);
         setText(t("Lưu"));
         break;
-      case "Undo":
+      case EButtonDetailType.undo:
         setIcon(<IconCancel></IconCancel>);
         setText(t("Hủy bỏ"));
         setColor("neutral");
         break;
-      case "Accpet":
+      case EButtonDetailType.accpet:
         setIcon(<IconSave />);
         setText(t("Xác nhận"));
         break;

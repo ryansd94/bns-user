@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from "react";
-import { useLocation,useHistory } from "react-router-dom";
+import { useLocation, useHistory } from "react-router-dom";
 import queryString from "query-string";
 import TextInput from "components/input/TextInput";
 import Grid from "@mui/material/Grid";
-import Box from "@mui/material/Box";
 import { useTranslation } from "react-i18next";
 import Button from "@mui/material/Button";
 import { useForm } from "react-hook-form";
@@ -13,7 +12,7 @@ import IconButton from "@mui/material/IconButton";
 import * as Yup from "yup";
 import AccountCircle from "@mui/icons-material/AccountCircle";
 import { validateTokenSignup, signup } from "services";
-import { ERROR_CODE, EUserValidate } from "configs";
+import { ERROR_CODE, EUserValidate, ESize } from "configs";
 
 import PasswordChecklist from "react-password-checklist";
 import Spinner from "components/shared/Spinner";
@@ -22,8 +21,9 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
 import { setTokenLoginSucceeded } from "helpers";
+import { UploadAvatarControl } from 'components/avatar'
 
-const JoinTeamNoAccount = (props) =>  {
+const JoinTeamNoAccount = (props) => {
   const history = useHistory();
   const { search } = useLocation();
   const { t } = useTranslation();
@@ -37,10 +37,12 @@ const JoinTeamNoAccount = (props) =>  {
   const [passwordAgain, setPasswordAgain] = useState("");
   const [passwordIsvalid, setPasswordIsvalid] = useState(false);
   const [tokenIsvalid, setTokenIsvalid] = useState(false);
+  const [selectedFile, setSelectedFile] = useState(null);
   const [values, setValues] = React.useState({
     password: "",
     confirmPassword: "",
     fullName: "",
+    image: ''
   });
   function escapeRegExp(string) {
     return string.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"); // $& means the whole matched string
@@ -49,12 +51,14 @@ const JoinTeamNoAccount = (props) =>  {
   function replaceAll(str, find, replace) {
     return str.replace(new RegExp(escapeRegExp(find), "g"), replace);
   }
+
   useEffect(() => {
     if (token) {
       const data = replaceAll(token, " ", "+");
       validateToken(data);
     } else setLoading(false);
   }, []);
+
   const validateToken = async (token) => {
     const res = await validateTokenSignup({ token: token });
     if (res.errorCode == ERROR_CODE.success) {
@@ -66,9 +70,11 @@ const JoinTeamNoAccount = (props) =>  {
     }
     setLoading(false);
   };
+
   const handleChange = (prop) => (event) => {
     setValues({ ...values, [prop]: event.target.value });
   };
+
   const handleClickShowPassword = () => {
     setValues({
       ...values,
@@ -78,6 +84,8 @@ const JoinTeamNoAccount = (props) =>  {
 
   const validationSchema = Yup.object().shape({
     fullName: Yup.string().required(t(message.error.fieldNotEmpty)),
+    password: Yup.string().required(t(message.error.fieldNotEmpty)),
+    confirmPassword: Yup.string().required(t(message.error.fieldNotEmpty)),
     // password: Yup.string()
     //   .required(t(message.error.fieldNotEmpty))
     //   .min(6, t("Mật khẩu tối thiểu 6 ký tự"))
@@ -93,6 +101,7 @@ const JoinTeamNoAccount = (props) =>  {
     fullName: "",
     password: "",
     confirmPassword: "",
+    image: ''
   };
   const handleMouseDownPassword = (event) => {
     event.preventDefault();
@@ -110,16 +119,16 @@ const JoinTeamNoAccount = (props) =>  {
     defaultValues: defaultValues,
   });
   const onSubmit = async (data) => {
-    // alert(passwordIsvalid);
+    // alert(JSON.stringify(data));
     // return;
     if (!passwordIsvalid) return;
 
     const dataToken = replaceAll(token, " ", "+");
     data.token = dataToken;
-    data.isHasAccount=false;
+    data.isHasAccount = false;
     const res = await signup(data);
     if (res.errorCode == ERROR_CODE.success) {
-      const userInfo =  res.data;
+      const userInfo = res.data;
       const token = {
         accessToken: userInfo.token,
         refreshToken: userInfo.token,
@@ -136,21 +145,35 @@ const JoinTeamNoAccount = (props) =>  {
         msg: res.title,
       });
     }
-  };
+  }
+
   const onChangePasswordAgain = (text) => {
     setPasswordAgain(text.toLowerCase());
-  };
+  }
 
   const onChangePassword = (text) => {
-    setPassword(text.toLowerCase());
-  };
+    setPassword(text.toLowerCase())
+  }
+
+  const onFileChange = (src) => {
+    setValue('image', src)
+  }
 
   return (
     <Grid container rowSpacing={2}>
+      <Grid item xs={12} className="flex-container">
+        <UploadAvatarControl
+          onFileChange={onFileChange}
+          control={control}
+          name="image"
+        />
+      </Grid>
       <Grid item xs={12}>
         <span className="text-note">
           {t("Nhập Họ và tên bạn muốn hiển thị")}
         </span>
+      </Grid>
+      <Grid item xs={12}>
         <TextInput
           autoFocus={true}
           required={true}
@@ -168,16 +191,16 @@ const JoinTeamNoAccount = (props) =>  {
           type={"password"}
           onChange={onChangePassword}
           inputProps={{
-            autocomplete: "new-password",
+            autoComplete: "new-password",
             form: {
-              autocomplete: "off",
+              autoComplete: "off",
             },
-            startAdornment: (
+            startadornment: (
               <InputAdornment position="start">
                 <AccountCircle />
               </InputAdornment>
             ),
-            endAdornment: (
+            endadornment: (
               <InputAdornment position="end">
                 <IconButton
                   aria-label="toggle password visibility"
@@ -201,9 +224,9 @@ const JoinTeamNoAccount = (props) =>  {
           type={"password"}
           onChange={onChangePasswordAgain}
           InputProps={{
-            autocomplete: "new-password",
+            autoComplete: "new-password",
             form: {
-              autocomplete: "off",
+              autoComplete: "off",
             },
           }}
         />

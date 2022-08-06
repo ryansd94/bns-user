@@ -7,11 +7,13 @@ const initialState = {
         edit: true,
         email: true,
         fullName: true,
+        teamName: true,
         id: false,
         status: true,
         __check__: true,
     },
-    toolbarVisible: {...VisibleDefault}
+    toolbarVisible: {...VisibleDefault},
+    filters:[]
 };
 
 const slice = createSlice({
@@ -24,8 +26,11 @@ const slice = createSlice({
         setToolbarVisibility: (state, action) => {
             state.toolbarVisible = action.payload;
         },
+        setFilter: (state, action) => {
+            state.filters = action.payload;
+        },
     },
 });
 const { reducer, actions } = slice;
-export const { setColumnVisibility ,setToolbarVisibility} = actions;
+export const { setColumnVisibility ,setToolbarVisibility, setFilter} = actions;
 export default reducer;

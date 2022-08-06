@@ -36,6 +36,7 @@ export const setRefreshTokenSucceeded = data => {
 };
 
 export const resetUserToken = () => {
+    localStorage.setItem(LOCAL_STORAGE_KEYS.user, '');
     localStorage.setItem(LOCAL_STORAGE_KEYS.accessToken, '');
     localStorage.setItem(LOCAL_STORAGE_KEYS.refreshToken, '');
 };

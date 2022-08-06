@@ -36,13 +36,24 @@ const styles = theme => ({
     root: {
         width: "100%",
         overflowX: "auto",
+        display:"flex"
     },
     table: {
         minWidth: 700,
-        width: "auto"
+        width: "auto",
+        display:"flex",
+        flexDirection:"column",
     },
     cell: {
-        padding: "10px"
+        padding: "10px",
+        display:"flex",
+    },
+    row:{
+        display:"flex",
+    },
+    thead:{
+        display:"flex",
+        flexDirection:"column",
     }
 });
 
@@ -85,8 +96,8 @@ function EnhancedTableHead(props) {
     };
 
     return (
-        <TableHead>
-            <TableRow key={"header"}>
+        <TableHead className={classes.thead}>
+            <TableRow className={classes.row} key={"header"}>
                 {columns.map((headCell) => {
                     if (headCell.options && !headCell.options.display) {
                         return (<TableCell className={classes.cell}
@@ -340,7 +351,7 @@ const TableTest = (props) => {
                     rowCount={rows.length}
                     {...props}
                 />
-                <TableBody>
+                <TableBody className={classes.thead}>
                     {/* if you don't need to support IE11, you can replace the `stableSort` call with:
                  rows.slice().sort(getComparator(order, orderBy)) */}
                     {stableSort(rows, getComparator(order, orderBy))
@@ -350,6 +361,7 @@ const TableTest = (props) => {
                             const labelId = `enhanced-table-checkbox-${index}`;
                             return (
                                 <TableRow
+                                    className={classes.row}
                                     hover
                                     // onClick={(event) => handleClick(event, row.name)}
                                     role="checkbox"
@@ -367,7 +379,7 @@ const TableTest = (props) => {
                                             align = headCell.align;
                                         if (!headCell.renderCell) {
                                             if (headCell.type && headCell.type == EColumnType.checkbox)
-                                                return (<TableCell className={classes.cell} key={headCell.field} padding="checkbox">
+                                                return (<TableCell style={{ width: "auto" }} className={classes.cell} key={headCell.field} padding="checkbox">
                                                     <Checkbox
                                                         onChange={(event) => handleClick(event, row.id)}
                                                         color="primary"

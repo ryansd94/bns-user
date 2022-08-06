@@ -1,57 +1,57 @@
-﻿import React, { useEffect, useState, useMemo, useCallback } from "react";
+﻿import React, { useEffect, useState, useMemo, useCallback } from "react"
 
-import Popup from "components/popup/Popup";
-import SkeletonLoading from "components/loader/SkeletonLoading";
-import Grid from "@mui/material/Grid";
-import SingleSelect from "components/select/SingleSelect";
-import PropTypes from "prop-types";
-import MultiSelect from "components/select/MultiSelect";
+import Popup from "components/popup/Popup"
+import SkeletonLoading from "components/loader/SkeletonLoading"
+import Grid from "@mui/material/Grid"
+import SingleSelect from "components/select/SingleSelect"
+import PropTypes from "prop-types"
+import MultiSelect from "components/select/MultiSelect"
 
-import TextInput from "components/input/TextInput";
-import { useTranslation } from "react-i18next";
-import { useSelector, useDispatch } from "react-redux";
-import * as Yup from "yup";
-import { useForm } from "react-hook-form";
-import { yupResolver } from "@hookform/resolvers/yup";
-import { open, change_title, close } from "components/popup/popupSlice";
-import { openMessage } from "stores/components/snackbar";
+import TextInput from "components/input/TextInput"
+import { useTranslation } from "react-i18next"
+import { useSelector, useDispatch } from "react-redux"
+import * as Yup from "yup"
+import { useForm } from "react-hook-form"
+import { yupResolver } from "@hookform/resolvers/yup"
+import { open, change_title, close } from "components/popup/popupSlice"
+import { openMessage } from "stores/components/snackbar"
 import {
   setPage,
   setSort,
   setLoadingPopup,
   setReload,
   setEditData,
-} from "stores/views/master";
-import { getTeam, getTeamByID, save, getUser } from "services";
-import { ERROR_CODE } from "configs";
-import { loading as loadingButton } from "stores/components/button";
+} from "stores/views/master"
+import { getTeam, getTeamByID, saveTeam, getUser } from "services"
+import { ERROR_CODE } from "configs"
+import { loading as loadingButton } from "stores/components/button"
 
-import { message } from "configs";
+import { message } from "configs"
 const TeamPopup = React.memo((props) => {
-  const { t } = useTranslation();
-  const dispatch = useDispatch();
-  const baseUrl = "/jm_team";
+  const { t } = useTranslation()
+  const dispatch = useDispatch()
+  const baseUrl = "/jm_team"
 
-  const { dataTeam } = props;
-  const editData = useSelector((state) => state.master.editData);
-  const openPopup = useSelector((state) => state.popup.open);
+  const { dataTeam } = props
+  const editData = useSelector((state) => state.master.editData)
+  const openPopup = useSelector((state) => state.popup.open)
 
-  const [dataUser, setDataUser] = React.useState([]);
+  const [dataUser, setDataUser] = React.useState([])
 
   const validationSchema = Yup.object().shape({
     name: Yup.string().required(t(message.error.fieldNotEmpty)),
-  });
+  })
   const defaultValues = {
     name: "",
     description: "",
     parentId: null,
     id: "",
     members: [],
-  };
+  }
   useEffect(() => {
-    reset();
-    onEditClick();
-  }, [openPopup]);
+    reset()
+    onEditClick()
+  }, [openPopup])
 
   const fetchDataUser = async () => {
     await getUser({
@@ -63,72 +63,71 @@ const TeamPopup = React.memo((props) => {
         data &&
         data.data &&
         data.data.items.map((item, index) => ({
-          title: item.fullName,
-          id: item.userId,
-        }));
-      setDataUser(users);
-    });
-  };
+          name: item.email,
+          id: item.id,
+        }))
+      setDataUser(users)
+    })
+  }
   useEffect(() => {
-    fetchDataUser();
-  }, []);
+    fetchDataUser()
+  }, [])
 
   const onEditClick = async () => {
-    if (!editData) return;
-    dispatch(change_title(t("Chỉnh sửa Nhóm")));
-    dispatch(setLoadingPopup(true));
-    dispatch(open());
+    if (!editData) return
+    dispatch(change_title(t("Chỉnh sửa Nhóm")))
+    dispatch(setLoadingPopup(true))
+    dispatch(open())
     await getTeamByID(editData).then((res) => {
-      //dispatch(setEditData(res.data));
-      setValue("id", res.data.id || "");
-      setValue("name", res.data.name || "");
-      setValue("description", res.data.description || "");
+      //dispatch(setEditData(res.data))
+      setValue("id", res.data.id || "")
+      setValue("name", res.data.name || "")
+      setValue("description", res.data.description || "")
       setValue(
         "parentId",
         res.data.parentId != null
           ? dataTeam && dataTeam.find((e) => e.id === res.data.parentId)
           : null
-      );
+      )
       if (res.data.teamMembers != null) {
-        var teamMembers = [];
+        var teamMembers = []
         res.data.teamMembers.map((item, index) => {
-          teamMembers.push(dataUser.find((d) => d.id == item));
-        });
-        setValue("members", teamMembers );
-        //setValue("members2", teamMembers );
+          teamMembers.push(dataUser.find((d) => d.id == item))
+        })
+        setValue("members", teamMembers)
+        //setValue("members2", teamMembers )
       }
-      dispatch(setLoadingPopup(false));
-    });
-  };
+      dispatch(setLoadingPopup(false))
+    })
+  }
 
   const {
     control,
     handleSubmit,
     reset,
     setValue,
-    formState: { errors },
   } = useForm({
     resolver: yupResolver(validationSchema),
     defaultValues: defaultValues,
-  });
+  })
   const onSubmit = async (data) => {
-    dispatch(loadingButton(true));
-    var postData = data;
-    if (!editData) postData.id = editData;
-    if (data.parentId) postData.parentId = data.parentId.id;
+    dispatch(loadingButton(true))
+    var postData = data
+    if (!editData) postData.id = editData
+    if (data.parentId) postData.parentId = data.parentId
     if (data.members)
-      postData.members = data.members.map((item, index) => item.id);
-    // alert(JSON.stringify(postData));
-    // return;
-    const res = await save(postData);
-    dispatch(loadingButton(false));
-    dispatch(openMessage({ ...res }));
+      postData.members = data.members.map((item, index) => item.id)
+    // alert(JSON.stringify(postData))
+    // return
+    const res = await saveTeam(postData)
+    dispatch(loadingButton(false))
+    dispatch(openMessage({ ...res }))
     if (res.errorCode == ERROR_CODE.success) {
-      dispatch(setEditData(null));
-      dispatch(setReload());
-      dispatch(close());
+      dispatch(setEditData(null))
+      dispatch(setReload())
+      //dispatch(close())
     }
-  };
+  }
   function ModalBody() {
     return (
       <Grid container rowSpacing={2}>
@@ -162,6 +161,8 @@ const TeamPopup = React.memo((props) => {
               "Nhập Email người dùng bạn muốn thêm vào nhóm, bấm Enter để thêm nhiều người dùng"
             )}
           </span>
+        </Grid>
+        <Grid item xs={12}>
           <MultiSelect
             control={control}
             name="members"
@@ -169,11 +170,11 @@ const TeamPopup = React.memo((props) => {
             label={t("Email người dùng")}
             placeholder={t("Nhập Email người dùng")}
           />
-          
+
         </Grid>
 
       </Grid>
-    );
+    )
   }
   return (
     <div>
@@ -183,14 +184,14 @@ const TeamPopup = React.memo((props) => {
         onSave={handleSubmit(onSubmit)}
       />
     </div>
-  );
-});
+  )
+})
 
 TeamPopup.propTypes = {
   dataTeam: PropTypes.array,
-};
+}
 
 TeamPopup.defaultProps = {
   dataTeam: [],
-};
-export default TeamPopup;
+}
+export default TeamPopup

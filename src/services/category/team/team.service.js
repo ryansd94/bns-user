@@ -38,7 +38,7 @@ export const getTeamByID = async (id) => {
     return error;
   }
 };
-export const save = async (param) => {
+export const saveTeam = async (param) => {
   try {
     const query = `${baseUrl}`;
     if (!param.id) {

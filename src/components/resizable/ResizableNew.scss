@@ -1,13 +1,6 @@
 body {
     margin: 0px;
 }
-.containerNew {
-    width: 100%;
-    display: flex;
-    flex-flow: nowrap column;
-    overflow:hidden;
-    background: white;
-}
 
 .panelNew {    
     display: flex;
@@ -138,6 +131,6 @@ body {
 }
 .content.panelNew
 {
-    max-width: 70%;
+    // max-width: 70%;
     min-width: 40%;
 }

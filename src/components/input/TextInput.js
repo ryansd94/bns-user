@@ -1,8 +1,10 @@
-﻿import React from "react";
-import TextField from "@mui/material/TextField";
-import { Controller } from "react-hook-form";
-import { useSelector } from "react-redux";
-import Skeleton from "@mui/material/Skeleton";
+﻿import React from "react"
+import TextField from "@mui/material/TextField"
+import { Controller } from "react-hook-form"
+import { useSelector } from "react-redux"
+import Skeleton from "@mui/material/Skeleton"
+import { _TemplateVariant, EVariant, _ControlSizeDefault } from "configs"
+import { LabelControl } from 'components/label'
 
 export default function TextInput({
   control,
@@ -14,15 +16,20 @@ export default function TextInput({
   inputProps,
   type,
   onChange,
+  size,
+  disabled,
+  variant,
+  fullWidth,
+  multiline
 }) {
-  const loadingPopup = useSelector((state) => state.master.loadingPopup);
+  const loadingPopup = useSelector((state) => state.master.loadingPopup)
   return (
     <Controller
       render={({ field, fieldState: { error } }) =>
         loadingPopup ? (
           <Skeleton width={"100%"} height={"56px"} variant="text">
             <TextField
-              fullWidth
+              fullWidth={fullWidth || true}
               required={required}
               error={!!error}
               helperText={error?.message}
@@ -32,27 +39,37 @@ export default function TextInput({
             />
           </Skeleton>
         ) : (
-          <TextField
-            {...field}
-            fullWidth
-            type={type || "text"}
-            inputProps={inputProps}
-            required={required}
-            error={!!error}
-            helperText={error?.message}
-            label={label}
-            autoComplete="new-password"
-            hidden={hidden ? true : false}
-            onChange={(e) => {
-              field.onChange(e.target.value);
-              onChange && onChange(e.target.value);
-            }}
-            autoFocus={autoFocus}
-          />
+          <div className="containerControl">
+            {_TemplateVariant === EVariant.normal ? (label ? <LabelControl required={required} label={label} /> : '') : ''}
+            <TextField
+              {...field}
+              fullWidth={fullWidth || true}
+              type={type || "text"}
+              inputProps={inputProps}
+              required={required}
+              variant={variant || EVariant.outlined}
+              error={!!error}
+              name={name}
+              multiline={multiline}
+              rows={multiline ? 2 : 1}
+              maxRows={multiline ? 4 : 1}
+              size={size ? size : _ControlSizeDefault}
+              helperText={error?.message}
+              label={_TemplateVariant === EVariant.outlined ? label : ''}
+              disabled={disabled ? disabled : false}
+              autoComplete="new-password"
+              hidden={hidden ? true : false}
+              onChange={(e) => {
+                field.onChange(e.target.value)
+                onChange && onChange(e.target.value)
+              }}
+              autoFocus={autoFocus}
+            />
+          </div>
         )
       }
       name={name}
-      control={control}
+      control={control && control}
     />
-  );
+  )
 }

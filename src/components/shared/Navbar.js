@@ -1,11 +1,22 @@
 import React, { Component, useState } from 'react';
 import { Dropdown } from 'react-bootstrap';
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 import { Trans } from 'react-i18next';
 import i18n from '../../i18n';
+import { AvatarControl } from 'components/avatar'
+import {
+    resetUserToken,
+    getUserInfo
+} from "helpers"
+import firebase from "firebase/compat/app"
+import { ESize } from "configs";
+// import { getAuth, signOut } from "firebase/auth";
 function MyComponent() {
     const [languageIcon, setLanguageIcon] = useState('flag-icon flag-icon-vn');
     const [language, setLanguage] = useState('Vietnamese');
+    const history = useHistory();
+    const user = getUserInfo();
+    // const auth = getAuth();
     function toggleOffcanvas() {
         document.querySelector('.sidebar-offcanvas').classList.toggle('active');
     }
@@ -23,6 +34,16 @@ function MyComponent() {
             setLanguage('English');
         }
         i18n.changeLanguage(lng);
+    }
+    const onLogOut = () => {
+        resetUserToken()
+        // signOut(auth).then(() => {
+
+        // }).catch((error) => {
+        //     // An error happened.
+        // });
+        firebase.auth().signOut()
+        history.push(`/login`)
     }
     return (
         <nav className="navbar default-layout-navbar col-lg-12 col-12 p-0 fixed-top d-flex flex-row">
@@ -116,11 +137,9 @@ function MyComponent() {
                     <li className="nav-item nav-profile nav-language">
                         <Dropdown alignRight>
                             <Dropdown.Toggle className="nav-link count-indicator">
-                                <div className="nav-profile-img">
-                                    <img src={require("../../assets/images/faces/face28.png")} alt="profile" />
-                                </div>
+                                <AvatarControl size={ESize.small} name={user?.fullName} image={user?.image} />
                                 <div className="nav-profile-text">
-                                    <p className="mb-1 text-black"><Trans>Henry Klein</Trans></p>
+                                    <p className="mb-1 text-black"><Trans>{user?.fullName}</Trans></p>
                                 </div>
                             </Dropdown.Toggle>
                             <Dropdown.Menu className="preview-list navbar-dropdown">
@@ -153,7 +172,7 @@ function MyComponent() {
                                         <span><Trans>Lock Account</Trans></span>
                                         <i className="mdi mdi-lock ml-1"></i>
                                     </Dropdown.Item>
-                                    <Dropdown.Item className="dropdown-item d-flex align-items-center justify-content-between" href="!#" onClick={evt => evt.preventDefault()}>
+                                    <Dropdown.Item onClick={onLogOut} className="dropdown-item d-flex align-items-center justify-content-between" href="!#">
                                         <span><Trans>Log Out</Trans></span>
                                         <i className="mdi mdi-logout ml-1"></i>
                                     </Dropdown.Item>

@@ -90,7 +90,8 @@ body {
     z-index: 1;
 }
 
-.MuiTablePagination-displayedRows, .MuiTablePagination-selectLabel {
+.MuiTablePagination-displayedRows,
+.MuiTablePagination-selectLabel {
     margin-bottom: 0 !important;
 }
 .MuiDialogActions-root {
@@ -179,6 +180,7 @@ h6,
     // margin-top:  10px !important;
     // padding-bottom:6px !important;
     display: flex;
+    align-items: center;
     font: 400 13px Roboto, RobotoDraft, Helvetica, Arial, sans-serif;
 }
 .text-active {
@@ -192,4 +194,103 @@ h6,
 }
 .MuiDataGrid-columnSeparator {
     display: none !important;
+}
+// ::-webkit-scrollbar {
+//     width: 10px;
+// }
+// ::-webkit-scrollbar-button {
+//     background: #ccc
+// }
+// ::-webkit-scrollbar-track-piece {
+//     background: #888
+// }
+// ::-webkit-scrollbar-thumb {
+//     background: #eee
+// }
+
+.avatar,
+.icon-button-file {
+    margin: auto;
+}
+
+.flex-container {
+    display: flex;
+    // align-items: center;
+}
+
+.full-width {
+    width: 100%;
+}
+.Mui-error {
+    margin-right: 0 !important;
+    margin-left: 0 !important;
+}
+.f-left {
+    float: left;
+}
+
+.containerNew {
+    width: 100%;
+    display: flex;
+    flex-flow: nowrap column;
+    overflow: hidden;
+    background: white;
+    // padding: 1rem;
+    margin-bottom: 1rem;
+    box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 1px 3px 1px;
+}
+.box-container {
+    width: 100%;
+    padding: 1rem;
+}
+legend {
+    width: auto;
+}
+.MuiAutocomplete-root {
+    .MuiFormControl-root {
+        // min-width: 200px;
+        .MuiOutlinedInput-root {
+            gap: 10px;
+        }
+    }
+}
+.select-item {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+.chip-container {
+    padding: 10px;
+    max-width: 250px;
+}
+.select-container {
+    min-width: 150px !important;
+}
+div[data-rbd-draggable-context-id] {
+    padding: 1rem 0 0 1rem !important;
+    cursor: move !important;
+}
+.ql-toolbar.ql-snow {
+    border-radius: 4px 4px 0px 0px;
+}
+.ql-container.ql-snow {
+    border-radius: 0px 0px 4px 4px;
+}
+.label-title {
+    color: #0000006b;
+}
+.containerControl {
+    width: 100%;
+}
+.MuiAccordion-rounded {
+    .Mui-focusVisible{
+        background-color: transparent !important;
+    }
+}
+.MuiFormControlLabel-root{
+    margin-bottom: 0!important;
+    .MuiRadio-root{
+        padding-bottom: 0 !important;
+        padding-top: 0 !important;
+    }
 }

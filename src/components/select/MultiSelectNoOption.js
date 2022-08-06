@@ -83,6 +83,7 @@ const MultiSelectNoOption = React.memo(
               onChange={(event, newValue) => {
                 field.onChange(newValue);
               }}
+              fullWidth
               filterSelectedOptions
               renderInput={(params) => {
                 params.inputProps.onKeyDown = handleKeyDown;

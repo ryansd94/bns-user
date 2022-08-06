@@ -1,10 +1,3 @@
-
-
-
-
-
-
-
 import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
 import './App.scss';
@@ -70,7 +63,7 @@ class App extends Component {
             i18n.changeLanguage('en');
         }
         window.scrollTo(0, 0);
-        const fullPageLayoutRoutes = ['/login','/signup/jointeam','/signup'];
+        const fullPageLayoutRoutes = ['/login','/signup/jointeam','/signup','/grid'];
         for (let i = 0; i < fullPageLayoutRoutes.length; i++) {
             if (this.props.location.pathname === fullPageLayoutRoutes[i]) {
                 this.setState({

@@ -1,4 +1,4 @@
-﻿import React, { useState, useEffect,useLayoutEffect } from "react";
+﻿import React, { useState, useEffect, useLayoutEffect } from "react";
 import { Link, useHistory } from "react-router-dom";
 import { Form } from "react-bootstrap";
 import Box from "@mui/material/Box";
@@ -54,22 +54,13 @@ export default function Login() {
     event.preventDefault();
   };
 
-  function validate() {
-    let valid = true;
-    return valid;
-  }
-  useLayoutEffect(() => {
-    const tokenWeb = getAccessToken();
-    if (tokenWeb) history.push(`/dashboard`);
-    else {
-      const unregisterAuthObserver = firebase
+  const onLoginGoogleSuccess = () => { 
+    const unregisterAuthObserver = firebase
         .auth()
         .onAuthStateChanged(async (user) => {
           if (!user) {
             return;
           }
-
-
           const token = await user.getIdToken();
           const res = await loginGoogle({
             token: token,
@@ -114,6 +105,66 @@ export default function Login() {
           }
         });
         return () => unregisterAuthObserver();
+  }
+
+  function validate() {
+    let valid = true;
+    return valid;
+  }
+  useLayoutEffect(() => {
+    const tokenWeb = getAccessToken();
+    if (tokenWeb) history.push(`/dashboard`);
+    else {
+      // const unregisterAuthObserver = firebase
+      //   .auth()
+      //   .onAuthStateChanged(async (user) => {
+      //     if (!user) {
+      //       return;
+      //     }
+      //     const token = await user.getIdToken();
+      //     const res = await loginGoogle({
+      //       token: token,
+      //     });
+      //     switch (res.status) {
+      //       case httpStatus.OK: {
+      //         const { data } = res && res;
+      //         if (data.errorCode == ERROR_CODE.userNotRegister) {
+      //           history.push(`/signup?token=${token}`);
+      //           break;
+      //         } else if (data.errorCode != ERROR_CODE.success) {
+      //           setError({
+      //             dirty: true,
+      //             msg: "tài hkoản hoặc mật khẩu sai",
+      //           });
+      //           break;
+      //         } else {
+      //           const { data } = res && res.data;
+      //           const token = {
+      //             accessToken: data.token,
+      //             refreshToken: data.token,
+      //             shopIndex: data.shopIndex,
+      //           };
+      //           const user = { ...data, isAdmin: true, acceptScreen: [] };
+      //           setTokenLoginSucceeded({ token, user });
+      //           setError({
+      //             dirty: false,
+      //             msg: "",
+      //           });
+      //           history.push(`/dashboard`);
+      //         }
+      //         break;
+      //       }
+      //       default: {
+      //         setError({
+      //           dirty: true,
+      //           msg: "Đã có lỗi xảy ra. Vui lòng thử lại sau",
+      //         });
+      //         resetUserToken();
+      //         break;
+      //       }
+      //     }
+      //   });
+      //   return () => unregisterAuthObserver();
     }
 
   }, []);
@@ -130,6 +181,7 @@ export default function Login() {
     callbacks: {
       // Avoid redirects after sign-in.
       signInSuccessWithAuthResult: () => {
+        onLoginGoogleSuccess()
       },
     },
   };

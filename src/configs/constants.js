@@ -44,8 +44,85 @@ export const EButtonType = {
   delete: "Delete",
   columnConfig: "COLUMN_CONFIG",
   function: "FUNCTION",
+  filter: "FILTER",
+  addFilter: "Add_Filter",
+  clearFilter: "Clear_Filter",
+  save: "Save",
+  apply: "Apply"
 };
 export const EColumnType = {
   checkbox: "Checkbox",
   text: "Text"
 }
+
+export const EFilterType = {
+  select: "Select",
+  multiSelect: "MultiSelect",
+  text: "Text",
+  datetime: "Datetime"
+}
+
+export const EColor =
+{
+  cancel: '#64748B'
+}
+
+export const EFormatDate =
+{
+  ddmmyyyy: "dd/MM/yyyy"
+}
+
+export const EButtonIconType = {
+  save: "Save",
+  apply: "Apply",
+  cancel: "Cancel",
+  back: "Back",
+  more: " More",
+  add: "Add",
+  delete: "Delete",
+  up: "Up",
+  down: "Down"
+}
+
+export const EButtonDetailType = {
+  save: "Save",
+  undo: "Undo",
+  accpet: "Accpet",
+}
+
+export const ESize = {
+  miniSmall: "miniSmall",
+  small: "small",
+  medium: "medium",
+  large: "large"
+}
+
+export const EWidth = {
+  xs: "xs",
+  sm: "sm",
+  md: "md",
+  lg: "lg",
+  xl: "xl"
+}
+
+export const EVariant = {
+  outlined: "outlined",
+  standard: "standard",
+  normal: "normal"
+}
+
+export const EControlType = {
+  typography: "Typography",
+  textField: "TextField",
+  editor: "Editor",
+  select: "Select",
+  group: "Group",
+  datePicker: "DatePicker"
+}
+
+export const baseUrl = {
+  jm_template: '/jm_template'
+}
+
+export const _TemplateVariant = EVariant.normal
+export const _ControlSizeDefault = ESize.small

@@ -1,0 +1,21 @@
+.MuiAccordionSummary-content {
+    margin: 0 !important;
+    // padding-left: 1rem;
+}
+.MuiAccordionSummary-root.Mui-expanded {
+    min-height: 48px !important;
+}
+.MuiAccordion-root {
+    box-shadow: none;
+    display: flex;
+    flex-direction: column;
+    // gap: 1rem;
+}
+.MuiAccordionSummary-root {
+    border-bottom: 1px solid #8f8f8f52;
+    padding: 0;
+    // margin: 1rem;
+}
+.MuiAccordionDetails-root {
+    padding: 0;
+}

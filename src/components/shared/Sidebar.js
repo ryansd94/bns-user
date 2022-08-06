@@ -44,6 +44,7 @@ class Sidebar extends Component {
             { path: '/error-pages', state: 'errorPagesMenuOpen' },
             { path: '/general-pages', state: 'generalPagesMenuOpen' },
             { path: '/ecommerce', state: 'ecommercePagesMenuOpen' },
+            { path: '/template', state: 'templatePagesMenuOpen' },
         ];
 
         dropdownPaths.forEach((obj => {
@@ -123,19 +124,12 @@ class Sidebar extends Component {
                             </ul>
                         </Collapse>
                     </li>
-                    <li className="nav-item nav-category">Sample Pages</li>
-                    <li className={this.isPathActive('/user-pages') ? 'nav-item active' : 'nav-item'}>
-                        <div className={this.state.userPagesMenuOpen ? 'nav-link menu-expanded' : 'nav-link'} onClick={() => this.toggleMenuState('userPagesMenuOpen')} data-toggle="collapse">
-                            <span className="icon-bg"><i className="mdi mdi-lock menu-icon"></i></span>
-                            <span className="menu-title"><Trans>User Pages</Trans></span>
-                            <i className="menu-arrow"></i>
-                        </div>
-                        <Collapse in={this.state.userPagesMenuOpen}>
-                            <ul className="nav flex-column sub-menu">
-                                <li className="nav-item"> <Link className={this.isPathActive('/user-pages/login-1') ? 'nav-link active' : 'nav-link'} to="/user-pages/login-1"><Trans>Login</Trans></Link></li>
-                                <li className="nav-item"> <Link className={this.isPathActive('/user-pages/register-1') ? 'nav-link active' : 'nav-link'} to="/user-pages/register-1"><Trans>Register</Trans></Link></li>
-                            </ul>
-                        </Collapse>
+                    <li className="nav-item nav-category"><Trans>Dự án</Trans></li>
+                    <li className={this.isPathActive('/template') ? 'nav-item active' : 'nav-item'}>
+                        <Link className="nav-link" to="/template">
+                            <span className="icon-bg"><i className="mdi mdi-cube menu-icon"></i></span>
+                            <span className="menu-title"><Trans>Mẫu công việc</Trans></span>
+                        </Link>
                     </li>
                     <li className={this.isPathActive('/error-pages') ? 'nav-item active' : 'nav-item'}>
                         <div className={this.state.errorPagesMenuOpen ? 'nav-link menu-expanded' : 'nav-link'} onClick={() => this.toggleMenuState('errorPagesMenuOpen')} data-toggle="collapse">
