@@ -23,7 +23,7 @@ import {
 import { open, change_title } from "components/popup/popupSlice";
 import { Edit } from "styled-icons/fluentui-system-filled";
 import { open as openAlert, onSubmit } from "stores/components/alert-dialog";
-import { loading as loadingButton} from "stores/components/button";
+import { loading as loadingButton } from "stores/components/button";
 const TeamDataGrid = React.memo((props) => {
   const dispatch = useDispatch();
   const { t } = useTranslation();
@@ -59,9 +59,6 @@ const TeamDataGrid = React.memo((props) => {
       headerName: t("Nhóm cha"),
       width: 400,
       flex: 2,
-      valueGetter: (params) => {
-        return params && params.row.teamParent && params.row.teamParent.name;
-      },
     },
     {
       field: "edit",
@@ -97,12 +94,12 @@ const TeamDataGrid = React.memo((props) => {
   ];
 
   return (
-    <div style={{ width: "100%", height:"100%" }}>
+    <div style={{ width: "100%", height: "100%" }}>
       <AlertDialog onSubmit={onAcceptDelete} />
       <Table
         rowsCount={data && data.recordsTotal}
         columns={columns}
-        rows={data && data.data && data.data.items}
+        rows={data && data.data ? data.data.items : []}
         sortModel={sortModel}
         onPageChange={(newPage) => dispatch(setPage(newPage))}
         onSortModelChange={(model) => dispatch(setSort(model))}

@@ -162,14 +162,16 @@ const UserGrid = React.memo((props) => {
           <GridIconButton
             onClick={() => onBlockClick(EUserStatus.BLOCK)}
             disabled={_isMainAccount}
-            type="Lock"
+            type= "Lock"
+            title={t("Khóa")}
           />
         );
         const unBlockElement = (
           <GridIconButton
             onClick={() => onBlockClick(EUserStatus.ACTIVE)}
             disabled={_isMainAccount}
-            type="UnLock"
+            type= "UnLock"
+            title={t("Mở khóa")}
           />
         );
         return React.createElement(

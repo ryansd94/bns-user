@@ -3,7 +3,7 @@ import React, { useEffect, useState, useMemo, useCallback } from "react";
 import Popup from "components/popup/Popup";
 import SkeletonLoading from "components/loader/SkeletonLoading";
 import Grid from "@mui/material/Grid";
-import MultiSelectText from "components/select/MultiSelectText";
+import MultiSelectNoOption from "components/select/MultiSelectNoOption";
 import PropTypes from "prop-types";
 
 import TextInput from "components/input/TextInput";
@@ -73,7 +73,8 @@ const UserPopup = React.memo((props) => {
               "Nhập Email người dùng bạn muốn thêm vào hệ thống, bấm Enter để thêm nhiều người dùng. Hệ thống sẽ gửi email xác nhận đến email của người dùng"
             )}
           </span>
-          <MultiSelectText
+          <MultiSelectNoOption
+            freeSolo={true}
             control={control}
             name="emails"
             label={t("Email người dùng")}
