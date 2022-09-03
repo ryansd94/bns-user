@@ -1,37 +1,52 @@
-import React from 'react';
-import ButtonFuntion from 'components/button/ButtonFuntion';
-import PropTypes from 'prop-types';
-import { EButtonType } from 'configs/constants';
-import { ConfigColumn, DropdownMenu } from 'components/dropdown';
-import {Filter} from 'components/filter';
+import React from 'react'
+import ButtonFuntion from 'components/button/ButtonFuntion'
+import PropTypes from 'prop-types'
+import { EButtonType } from 'configs/constants'
+import { ConfigColumn, DropdownMenu } from 'components/dropdown'
+import { Filter } from 'components/filter'
+import MenuItem from '@mui/material/MenuItem'
+import { IconDelete } from "components/icon/icon"
+
 const ToolBar = React.memo(props => {
 
-    const { onAddClick, visible, onDeleteClick, columnModel, onColumnConfigChange, dropdownItem,onApplyFilter } = props;
-    const [anchorElColumn, setAnchorElColumn] = React.useState(null);
-    const [anchorElFilter, setAnchorElFilter] = React.useState(false);
-    const [anchorElFunction, setAnchorElFunction] = React.useState(null);
+    const { onAddClick, visible, onDeleteClick, columnModel, onColumnConfigChange, dropdownItem, onApplyFilter } = props
+    const [anchorElColumn, setAnchorElColumn] = React.useState(null)
+    const [anchorElFilter, setAnchorElFilter] = React.useState(false)
+    const [anchorElFunction, setAnchorElFunction] = React.useState(null)
+
     const handleClickColumn = (event) => {
-        setAnchorElColumn(event.currentTarget);
-    };
+        setAnchorElColumn(event.currentTarget)
+    }
+
     const handleCloseColumn = () => {
-        setAnchorElColumn(null);
-    };
+        setAnchorElColumn(null)
+    }
+
     const handleClickFilter = () => {
-        setAnchorElFilter(!anchorElFilter);
-    };
+        setAnchorElFilter(!anchorElFilter)
+    }
+
     const handleClickFunction = (event) => {
-        setAnchorElFunction(event.currentTarget);
-    };
+        setAnchorElFunction(event.currentTarget)
+    }
+
     const handleCloseFunction = () => {
-        setAnchorElFunction(null);
-    };
+        setAnchorElFunction(null)
+    }
+
+    const genderDropdownItem = () => {
+        return <MenuItem disableRipple>
+            <IconDelete size={18} />
+        </MenuItem>
+    }
+
     return (
         <div>
             <div className="row">
                 <div className="col-md-12 grid-margin  justify-content-end">
                     <ConfigColumn onColumnConfigChange={onColumnConfigChange} columnModel={columnModel} anchorEl={anchorElColumn} handleClose={handleCloseColumn}></ConfigColumn>
 
-                    <DropdownMenu dropdownItem={dropdownItem} onColumnConfigChange={onColumnConfigChange} anchorEl={anchorElFunction} handleClose={handleCloseFunction} />
+                    <DropdownMenu dropdownItem={dropdownItem ? dropdownItem : genderDropdownItem()} onColumnConfigChange={onColumnConfigChange} anchorEl={anchorElFunction} handleClose={handleCloseFunction} />
                     <ButtonFuntion spacingLeft={0} visible={visible.column} onClick={handleClickColumn} type={EButtonType.columnConfig} />
                     <ButtonFuntion spacingLeft={1} visible={visible.column} open={anchorElFilter} onClick={handleClickFilter} type={EButtonType.filter} />
                     <ButtonFuntion spacingLeft={1} visible={visible.function} onClick={handleClickFunction} type={EButtonType.function} />
@@ -42,9 +57,9 @@ const ToolBar = React.memo(props => {
             <Filter onApplyFilter={onApplyFilter} onColumnConfigChange={onColumnConfigChange} columnModel={columnModel} anchorEl={anchorElFilter}></Filter>
 
         </div>
-    );
+    )
 
-});
+})
 ToolBar.propTypes = {
     onAddClick: PropTypes.func,
     onDeleteClick: PropTypes.func,
@@ -57,5 +72,5 @@ ToolBar.propTypes = {
 ToolBar.defaultProps = {
     addVisible: true,
     deleteVisible: false
-};
-export default ToolBar;
+}
+export default ToolBar

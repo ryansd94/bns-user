@@ -58,13 +58,13 @@ const MultiSelect = React.memo(
           loadingPopup ? (
             <Skeleton
               width={"100%"}
-              // height={"56px"} 
+              size={size ? size : _ControlSizeDefault}
               variant="text"
             >
               <Autocomplete
                 multiple={true}
                 options={data}
-                size={size ? size : "medium"}
+                size={size ? size : _ControlSizeDefault}
                 disabled={disabled}
                 fullWidth={fullWidth || false}
                 isOptionEqualToValue={(option, value) =>
@@ -84,7 +84,7 @@ const MultiSelect = React.memo(
                       variant="outlined"
                       label={label}
                       placeholder={placeholder}
-                      margin="normal"
+                      size={size ? size : _ControlSizeDefault}
                       fullWidth
                     ></TextField>
                   )
@@ -132,6 +132,7 @@ const MultiSelect = React.memo(
                       placeholder={placeholder}
                       margin="normal"
                       fullWidth={fullWidth || true}
+                      size={size ? size : _ControlSizeDefault}
 
                     ></TextField>
                   )

@@ -5,18 +5,17 @@ const initialState = {
     columnVisibility: {
         createdDate: true,
         edit: true,
-        email: true,
-        fullName: true,
-        teamName: true,
+        name: true,
+        color: true,
         id: false,
-        status: true,
+        description: true,
         __check__: true,
     },
     filters: []
 };
 
 const slice = createSlice({
-    name: "user",
+    name: "status",
     initialState: initialState,
     reducers: {
         setColumnVisibility: (state, action) => {

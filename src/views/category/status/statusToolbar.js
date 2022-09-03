@@ -4,33 +4,28 @@ import PropTypes from 'prop-types'
 import { useDispatch, useSelector } from "react-redux"
 import {
     setColumnVisibility,
-} from "stores/views/user"
+} from "stores/views/status"
 import { useTranslation } from "react-i18next"
-import Menu from '@mui/material/Menu'
 import MenuItem from '@mui/material/MenuItem'
 import { IconDelete } from "components/icon/icon"
-import UserPopup from "./UserPopup"
-import { open, change_title } from "components/popup/popupSlice"
 import { EFilterType } from "configs"
-const UserToolbar = (props) => {
-    console.log("render user toolbar")
-    const { onAddClick, onApplyFilter } = props
+import { open, change_title } from "components/popup/popupSlice"
+
+const StatusToolbar = (props) => {
+    const { onApplyFilter } = props
     const { t } = useTranslation()
     const dispatch = useDispatch()
     const toolbarVisible = { ...useSelector((state) => state.master.toolbarVisible) }
-    const columnVisibility = { ...useSelector((state) => state.user.columnVisibility) }
+    const columnVisibility = { ...useSelector((state) => state.status.columnVisibility) }
 
     const columnModel = [{
-        field: "email", value: true, label: t("Email"), type: EFilterType.text
+        field: "name", value: true, label: t("Tên trạng thái"), type: EFilterType.text
     },
     {
-        field: "fullName", value: true, label: t("Họ tên"), type: EFilterType.text
+        field: "color", value: true, label: t("Màu sắc"), type: EFilterType.text
     },
     {
-        field: "teamName", value: true, label: t("Nhóm"), type: EFilterType.text
-    },
-    {
-        field: "status", value: true, label: t("Trạng thái"), type: EFilterType.select
+        field: "description", value: true, label: t("Mô tả"), type: EFilterType.text
     },
     {
         field: "createdDate", value: true, label: t("Ngày tạo"), type: EFilterType.datetime
@@ -42,7 +37,7 @@ const UserToolbar = (props) => {
     }
 
     const handleClickOpen = () => {
-        dispatch(change_title(t("Thêm mới người dùng")))
+        dispatch(change_title(t("Thêm mới trạng thái")))
         dispatch(open())
     }
 
@@ -51,13 +46,10 @@ const UserToolbar = (props) => {
             onApplyFilter={onApplyFilter}
             onColumnConfigChange={handleColumnConfigChange} columnModel={columnModel}
             onAddClick={handleClickOpen} />
-        <UserPopup />
     </div>
 
 }
-
-UserToolbar.propTypes = {
+StatusToolbar.propTypes = {
     onAddClick: PropTypes.func,
 }
-
-export default UserToolbar
+export default StatusToolbar

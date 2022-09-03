@@ -1,51 +1,47 @@
-﻿import React, { useEffect, useState } from "react"
+import React, { useEffect, useState, useRef } from "react"
 import ButtonIcon from "components/button/ButtonIcon"
 import { useTranslation } from "react-i18next"
+import { deleteData } from "services"
 import { useSelector, useDispatch } from "react-redux"
 import ConfirmDeleteDialog from "components/popup/confirmDeleteDialog"
-import {  baseUrl, EButtonIconType } from "configs"
+import { openMessage } from "stores/components/snackbar"
+import { ColorPickerControl } from "components/colorPicker"
+import { ERROR_CODE, baseUrl, EButtonIconType } from "configs"
 import {
+  setPage,
+  setSort,
   setEditData,
+  setReload,
 } from "stores/views/master"
 import { open } from "components/popup/popupSlice"
 import { open as openAlert, onSubmit } from "stores/components/alert-dialog"
+import { loading as loadingButton } from "stores/components/button"
 import GridData from "components/table/GridData"
 
-const TeamDataGrid = React.memo((props) => {
-  console.log("render TeamDataGrid")
+const StatusGrid = React.memo((props) => {
   const dispatch = useDispatch()
   const { t } = useTranslation()
   const { data } = props
   const loading = useSelector((state) => state.master.loading)
-  const columnVisibility = { ...useSelector((state) => state.team.columnVisibility) }
+  const columnVisibility = { ...useSelector((state) => state.status.columnVisibility) }
   const [id, setId] = useState(null)
 
-  const columns = [
+  const [columns, setColumn] = useState([
+    { field: "id", hide: true },
+    { field: "name", headerName: t("Tên trạng thái"), width: 350, flex: 2 },
     {
-      checkboxSelection: true,
-      resizable: false, width: 40, headerCheckboxSelection: true, pinned: 'left'
+      field: "color",
+      headerName: t("Màu sắc"),
+      cellRenderer: (params) => {
+        return <ColorPickerControl readOnly={true} defaultValue={params.value} />
+      }
     },
-    {
-      field: "name", headerName: t("Tên nhóm"),
-      flex: 1,
-      pinned: 'left',
-    },
-    {
-      field: "description",
-      headerName: t("Mô tả"),
-      width: 450,
-      flex: 2,
-    },
-    {
-      field: "parentName",
-      headerName: t("Nhóm cha"),
-      width: 400,
-      flex: 2,
-    },
+    { field: "description", headerName: t("Mô tả"), width: 350 },
     {
       field: "edit",
       headerName: "",
-      width: 150,
+      width: 120,
+      resizable: false,
       cellRenderer: (params) => {
         const onEditClick = (e) => {
           e.stopPropagation() // don't select this row after clicking
@@ -72,11 +68,14 @@ const TeamDataGrid = React.memo((props) => {
       },
       sortable: false,
     },
-  ]
+  ])
 
+  const onPageChange = (param) => {
+    dispatch(setPage(param - 1))
+  }
   return (
     <div style={{ width: "100%", height: "100%" }}>
-      <ConfirmDeleteDialog url={baseUrl.jm_team} id={id} />
+      <ConfirmDeleteDialog url={baseUrl.jm_status} id={id} />
       <GridData
         columnVisibility={columnVisibility}
         loading={loading}
@@ -87,4 +86,4 @@ const TeamDataGrid = React.memo((props) => {
   )
 })
 
-export default TeamDataGrid
+export default StatusGrid

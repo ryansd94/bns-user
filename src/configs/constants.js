@@ -81,7 +81,8 @@ export const EButtonIconType = {
   add: "Add",
   delete: "Delete",
   up: "Up",
-  down: "Down"
+  down: "Down",
+  edit: "Edit"
 }
 
 export const EButtonDetailType = {
@@ -121,7 +122,10 @@ export const EControlType = {
 }
 
 export const baseUrl = {
-  jm_template: '/jm_template'
+  jm_template: '/jm_template',
+  jm_status: '/jm_status',
+  jm_team: 'jm_team',
+  jm_user:'jm_user'
 }
 
 export const _TemplateVariant = EVariant.normal

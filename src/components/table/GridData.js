@@ -9,23 +9,25 @@ import { useDispatch, useSelector } from "react-redux"
 import { ClientSideRowModelModule } from '@ag-grid-community/client-side-row-model'
 import {
     setSort,
-    setFilter
+    setPage,
+    setToolbarVisibility
 } from "stores/views/master"
+import { Pagination } from 'components/pagination'
 import { Loading } from 'components/loading'
-
 
 // Register the required feature modules with the Grid
 ModuleRegistry.registerModules([ClientSideRowModelModule])
 
-
-import { Pagination } from 'components/pagination'
-
-
 const GridData = (props) => {
-
+    const gridRef = useRef()
     const dispatch = useDispatch()
-    const { rows = [], loading, columns, onSelectionChanged, onPageChange, currentPage, totalCount, pageSize, gridRef, rowHeight } = props
+    const { rows = [], loading, columns,
+        totalCount, rowHeight,
+        columnVisibility } = props
     const gridStyle = useMemo(() => ({ width: '100%', display: "flex", flexDirection: "column" }), [])
+    const currentPage = useSelector((state) => state.master.page)
+    const pageSize = useSelector((state) => state.master.pageSize)
+    const toolbarVisible = { ...useSelector((state) => state.master.toolbarVisible) }
 
     const defaultColDef = useMemo(() => {
         return {
@@ -45,20 +47,20 @@ const GridData = (props) => {
         })
         dispatch(setSort(sortModel))
     }
+
     const gridOptions = {
         loadingOverlayComponent: Loading,
         loadingOverlayComponentParams: {
             loadingMessage: 'One moment please...',
         },
     }
+
     useEffect(() => {
         if (gridRef && gridRef.current.api) {
-
             if (loading)
                 gridRef.current.api.showLoadingOverlay()
             else
                 gridRef.current.api.hideOverlay()
-
         }
     }, [loading])
 
@@ -76,6 +78,39 @@ const GridData = (props) => {
                     allColumnIds.push(column.getId())
             })
             gridRef.current.columnApi.autoSizeColumns(allColumnIds, false)
+        }
+    }
+
+    useEffect(() => {
+        columns.map((item) => {
+            if (item.field) {
+                gridRef.current.columnApi && gridRef.current.columnApi.setColumnVisible(item.field, columnVisibility[item.field])
+            }
+        })
+    }, [columnVisibility])
+
+    const onPageChange = (param) => {
+        dispatch(setPage(param - 1))
+    }
+
+    const onSelectionChanged = (newSelection) => {
+        let selectedNodes = newSelection.api.getSelectedNodes()
+        let selectedData = selectedNodes.map(node => node.data)
+        if (selectedData.length > 0) {
+            toolbarVisible.function = true
+        }
+        else {
+            toolbarVisible.function = false
+        }
+        dispatch(setToolbarVisibility({ ...toolbarVisible }))
+    }
+
+    const onGridReady = () => {
+        if (gridRef && gridRef.current.api) {
+            if (loading)
+                gridRef.current.api.showLoadingOverlay()
+            else
+                gridRef.current.api.hideOverlay()
         }
     }
 
@@ -97,6 +132,7 @@ const GridData = (props) => {
                     rowSelection='multiple'
                     onFirstDataRendered={onFirstDataRendered}
                     enableCellTextSelection={true}
+                    onGridReady={onGridReady}
                     //overlayLoadingTemplate={'<span class="ag-overlay-loading-center">Please wait while your rows are loading</span>'}
                     onSortChanged={onSortChanged}
                     suppressRowClickSelection={true}

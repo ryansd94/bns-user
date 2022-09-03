@@ -1,90 +1,76 @@
-﻿import React, { useState, useEffect, useCallback } from "react";
-import ToolBar from "../../../components/toolbar/ToolBar";
-import TeamPopup from "./TeamPopup";
-import TeamDataGrid from "./TeamDataGrid";
-import { useTranslation } from "react-i18next";
-import { open, change_title } from "components/popup/popupSlice";
-import { getTeam, getTeamByID, save } from "services";
+﻿import React, { useState, useEffect, useCallback } from "react"
+import TeamDataGrid from "./TeamDataGrid"
+import { useTranslation } from "react-i18next"
+import { get } from "services"
 import {
-  setData,
   setLoading,
-  setReload,
-  setLoadingPopup,
-} from "stores/views/master";
-import { createInstance } from "services/base";
-import { useSelector, useDispatch } from "react-redux";
-import * as Yup from "yup";
-
-import style from "components/resizable/ResizableNew.scss";
-import ResizePanel from "react-resize-panel";
-import classNames from "classnames/bind";
-import { VisibleDefault } from 'configs/constants';
-let cx = classNames.bind(style);
+} from "stores/views/master"
+import { useSelector, useDispatch } from "react-redux"
+import TeamToolbar from "./teamToolbar"
+import { Resizable } from 'components/resizable'
+import { baseUrl } from "configs"
 
 const Team = React.memo(() => {
-  const services = createInstance("/api");
-  const baseUrl = "/jm_team";
-  const { t } = useTranslation();
-  const url = `${baseUrl}`;
-  const [data, setData] = React.useState({});
-  const page = useSelector((state) => state.master.page);
-  const sortModel = useSelector((state) => state.master.sortModel);
-  const isReload = useSelector((state) => state.master.isReload);
-  const [dataTeam, setDataTeam] = React.useState([]);
-
-  const dispatch = useDispatch();
-
-  const handleClickOpen = () => {
-    //reset();
-    dispatch(change_title(t("Thêm mới Nhóm")));
-    dispatch(setLoadingPopup(false));
-    //dispatch(setEditData(null));
-    dispatch(open());
-  };
+  console.log("render Team")
+  const { t } = useTranslation()
+  const [data, setData] = React.useState({})
+  const page = useSelector((state) => state.master.page)
+  const sortModel = useSelector((state) => state.master.sortModel)
+  const isReload = useSelector((state) => state.master.isReload)
+  const [dataTeam, setDataTeam] = React.useState([])
+  const [filterModels, setFilterModels] = useState([])
+  const dispatch = useDispatch()
 
   const fetchDataTeam = async () => {
-    await getTeam({
+    await get(baseUrl.jm_team, {
       draw: 0,
       start: 0,
       length: 10000,
     }).then((data) => {
-      setDataTeam(data && data.data && data.data.items);
-    });
-  };
-  useEffect(() => {
-    fetchData();
-  }, [page, sortModel, isReload]);
+      setDataTeam(data && data.data && data.data.items)
+    })
+  }
 
   useEffect(() => {
-    fetchDataTeam();
-  }, [isReload]);
+    fetchData()
+  }, [page, sortModel, isReload, filterModels])
+
+  useEffect(() => {
+    fetchDataTeam()
+  }, [isReload])
 
   const fetchData = async () => {
-    dispatch(setLoading(true));
-    await getTeam({
+    dispatch(setLoading(true))
+    await get(baseUrl.jm_team,{
       draw: page,
       start: page == 0 ? 0 : page * 10,
       length: 10,
       fieldSort:
         sortModel != null && sortModel.length > 0 ? sortModel[0].field : "",
       sort: sortModel != null && sortModel.length > 0 ? sortModel[0].sort : "",
+      filters: JSON.stringify(filterModels)
     }).then((data) => {
-       setData(data);
-      dispatch(setLoading(false));
-    });
-    //setData(res);
-  };
-  function GenderLeftContent() {
-    return <TeamDataGrid />;
+      setData(data)
+      dispatch(setLoading(false))
+    })
   }
+
+  const onApplyFilter = (value) => {
+    setFilterModels(value)
+  }
+
+  const genderLeftComponent = () => {
+    return <TeamDataGrid data={data} />
+  }
+
   return (
     <div>
-      <ToolBar  visible={VisibleDefault} onAddClick={handleClickOpen} />
+      {/* <ToolBar visible={VisibleDefault} onAddClick={handleClickOpen} />
 
       <div className={cx("containerNew")}>
         <div className={cx("body")}>
           <div className={cx("content", "panelNew")}>
-            <TeamDataGrid data={data}/>
+            <TeamDataGrid data={data} />
           </div>
           <div hidden={true}>
             <ResizePanel
@@ -99,9 +85,11 @@ const Team = React.memo(() => {
         </div>
       </div>
 
-      <TeamPopup dataTeam={dataTeam} />
+      <TeamPopup dataTeam={dataTeam} /> */}
+      <TeamToolbar dataTeam={dataTeam} onApplyFilter={onApplyFilter} />
+      <Resizable genderLeftComponent={genderLeftComponent} />
     </div>
-  );
-});
+  )
+})
 
-export default Team;
+export default Team

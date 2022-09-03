@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useMemo, useCallback } from "react"
+import React, { useEffect, useState, useMemo, useCallback, useLayoutEffect } from "react"
 
 import Popup from "components/popup/Popup"
 import Grid from "@mui/material/Grid"
@@ -15,50 +15,85 @@ import Box from "@mui/material/Box"
 import { v4 as uuidv4 } from 'uuid'
 import { AccordionControl } from 'components/accordion'
 import ContentTemplate from './contentTemplate'
-import { save } from "services"
+import { save, getByID, get } from "services"
 import { loading as loadingButton } from "stores/components/button"
 import { openMessage } from "stores/components/snackbar"
-import { baseUrl } from 'configs'
-import { message } from "configs"
+import { baseUrl, message } from 'configs'
+import { useParams } from 'react-router'
+import TextInput from "components/input/TextInput"
+import {
+  setLoadingPopup,
+} from "stores/views/master"
 
 const TemplateAdd = React.memo((props) => {
   console.log("render TemplateAdd")
+  const { id } = useParams()
   const { t } = useTranslation()
   const dispatch = useDispatch()
-  const [listStatus, setListStatus] = useState([])
+  const [dataTemplate, setDataTemplate] = useState([])
+  const [statusData, setStatusData] = useState([])
   const validationSchema = Yup.object().shape({
     name: Yup.string().required(t(message.error.fieldNotEmpty)),
   })
-
-
-  useEffect(() => {
-    reset()
-  }, [])
-
-
-  useEffect(() => {
-    const status = getListStatus()
-    setListStatus([...status])
-  }, [])
-
-  const getListStatus = () => {
-    return [{ id: uuidv4(), name: 'Mới', color: '#1976d2' }]
-  }
 
   const {
     control,
     handleSubmit,
     reset,
     setValue,
+    getValues,
     formState: { errors },
   } = useForm({
     resolver: yupResolver(validationSchema),
-    defaultValues: { name: '', description: '' }
+    defaultValues: {
+      name: '',
+      description: '',
+      id: '',
+      // status: [{ id: uuidv4(), name: 'Mới', color: '#1976d2', isNew: true }]e 
+    }
   })
 
+  useEffect(() => {
+    // reset()
+    if (id) {
+      fetchData()
+    }
+  }, [])
+
+  useEffect(() => {
+    fetchStatus()
+  }, [])
+
+  const fetchStatus = async () => {
+    await get(baseUrl.jm_status, {
+      draw: 0,
+      start: 0,
+      length: 100,
+    }).then((data) => {
+      if (data) {
+        setStatusData(data.data.items)
+      }
+    })
+  }
+
+
+  const fetchData = async () => {
+    dispatch(setLoadingPopup(true))
+    // return
+    await getByID(baseUrl.jm_template, id).then((data) => {
+      dispatch(setLoadingPopup(false))
+      setDataTemplate(data.data)
+      setValue("name", data.data.name)
+      setValue("id", data.data.id)
+      setValue("description", data.data.description)
+      // setValue('status', data.data.status)
+      // setListStatus(data.data.status)
+    })
+  }
 
   const onSubmit = async (data) => {
-    //console.log(JSON.stringify(data))
+    // alert(JSON.stringify(data))
+    // return
     dispatch(loadingButton(true))
     data.content = JSON.stringify(data.content)
     const res = await save(baseUrl.jm_template, data)
@@ -68,6 +103,10 @@ const TemplateAdd = React.memo((props) => {
 
   return (
     <Grid container direction="row" spacing={2}>
+      <Grid item xs={12}  >
+        <ButtonDetail
+          onClick={handleSubmit(onSubmit)} type={"Save"} />
+      </Grid>
       <Grid item xs={6}  >
         <AccordionControl
           isExpand={true}
@@ -77,7 +116,7 @@ const TemplateAdd = React.memo((props) => {
             <Box className="box-container">
               <Grid container direction="column" >
                 <Grid item xs={12}  >
-                  <InfoTemplate control={control} />
+                  <InfoTemplate dataTemplate={dataTemplate} control={control} />
                 </Grid>
               </Grid>
             </Box>
@@ -93,7 +132,7 @@ const TemplateAdd = React.memo((props) => {
             <Box className="box-container">
               <Grid container direction="column" >
                 <Grid item xs={12}  >
-                  <StatusTemplate control={control} setValue={setValue} listStatus={listStatus} />
+                  <StatusTemplate statusData={statusData} id={id} control={control} getValues={getValues} handleSubmit={handleSubmit} setValue={setValue} listStatus={(dataTemplate && dataTemplate.status) || []} />
                 </Grid>
               </Grid>
             </Box>
@@ -109,16 +148,12 @@ const TemplateAdd = React.memo((props) => {
             <Box className="box-container">
               <Grid container direction="column" >
                 <Grid item xs={12}  >
-                  <ContentTemplate control={control} setValue={setValue} />
+                  <ContentTemplate statusData={statusData} dataTemplate={dataTemplate} control={control} setValue={setValue} />
                 </Grid>
               </Grid>
             </Box>
           }
         />
-      </Grid>
-      <Grid item xs={12}  >
-        <ButtonDetail
-          onClick={handleSubmit(onSubmit)} type={"Save"} />
       </Grid>
     </Grid>
   )

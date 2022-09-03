@@ -131,6 +131,12 @@ class Sidebar extends Component {
                             <span className="menu-title"><Trans>Mẫu công việc</Trans></span>
                         </Link>
                     </li>
+                    <li className={this.isPathActive('category/status') ? 'nav-item active' : 'nav-item'}>
+                        <Link className="nav-link" to="category/status">
+                            <span className="icon-bg"><i className="mdi mdi-cube menu-icon"></i></span>
+                            <span className="menu-title"><Trans>Trạng thái</Trans></span>
+                        </Link>
+                    </li>
                     <li className={this.isPathActive('/error-pages') ? 'nav-item active' : 'nav-item'}>
                         <div className={this.state.errorPagesMenuOpen ? 'nav-link menu-expanded' : 'nav-link'} onClick={() => this.toggleMenuState('errorPagesMenuOpen')} data-toggle="collapse">
                             <span className="icon-bg"><i className="mdi mdi-security menu-icon"></i></span>

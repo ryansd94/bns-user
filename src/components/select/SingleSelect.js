@@ -21,9 +21,8 @@ const SingleSelect = React.memo(
         name={name}
         render={({ field: { onChange, value }, fieldState: { error } }) =>
           loadingPopup ? (
-            <Skeleton width={"100%"} size={size ? size : "medium"} variant="text">
+            <Skeleton width={"100%"} size={size ? size : _ControlSizeDefault} variant="text">
               <Autocomplete
-                {...field}
                 options={data}
                 size={size ? size : _ControlSizeDefault}
                 disabled={disabled}
@@ -37,10 +36,10 @@ const SingleSelect = React.memo(
                     error={!!error}
                     helperText={error?.message}
                     label={label}
+                    size={size ? size : _ControlSizeDefault}
                     variant="outlined"
                   />
                 )}
-                onChange={(event, value) => field.onChange(value)}
               />
             </Skeleton>
           ) : (
@@ -52,7 +51,7 @@ const SingleSelect = React.memo(
                 size={size ? size : _ControlSizeDefault}
                 disabled={disabled}
                 fullWidth={fullWidth || true}
-                value={value != null ? value : ''}
+                value={value != null ? value : null}
                 disableClearable={disableClearable}
                 isOptionEqualToValue={(option, value) => option.id === value.id}
                 getOptionLabel={(option) => {
@@ -89,6 +88,7 @@ const SingleSelect = React.memo(
                       error={!!error}
                       helperText={error?.message}
                       fullWidth={fullWidth || true}
+                      size={size ? size : _ControlSizeDefault}
                       label={_TemplateVariant === EVariant.outlined ? label : ''}
                       variant="outlined"
                     />

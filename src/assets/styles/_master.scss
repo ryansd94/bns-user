@@ -283,14 +283,18 @@ div[data-rbd-draggable-context-id] {
     width: 100%;
 }
 .MuiAccordion-rounded {
-    .Mui-focusVisible{
+    .Mui-focusVisible {
         background-color: transparent !important;
     }
 }
-.MuiFormControlLabel-root{
-    margin-bottom: 0!important;
-    .MuiRadio-root{
+.MuiFormControlLabel-root {
+    margin-bottom: 0 !important;
+    .MuiRadio-root {
         padding-bottom: 0 !important;
         padding-top: 0 !important;
     }
+}
+.disabled {
+    pointer-events: none;
+    cursor: default;
 }

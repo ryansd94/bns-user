@@ -20,22 +20,39 @@ export default function TextInput({
   disabled,
   variant,
   fullWidth,
-  multiline
+  multiline,
+  defaultValue
 }) {
   const loadingPopup = useSelector((state) => state.master.loadingPopup)
   return (
     <Controller
       render={({ field, fieldState: { error } }) =>
         loadingPopup ? (
-          <Skeleton width={"100%"} height={"56px"} variant="text">
+          <Skeleton width={"100%"}
+            size={size ? size : _ControlSizeDefault} variant="text">
             <TextField
-              fullWidth={fullWidth || true}
-              required={required}
-              error={!!error}
-              helperText={error?.message}
-              label={label}
-              autoFocus={autoFocus}
-              {...field}
+               {...field}
+               fullWidth={fullWidth || true}
+               type={type || "text"}
+               inputProps={inputProps}
+               required={required}
+               variant={variant || EVariant.outlined}
+               error={!!error}
+               name={name}
+               value={field.value || defaultValue || ''}
+               multiline={multiline}
+               rows={multiline ? 2 : 1}
+               maxRows={multiline ? 4 : 1}
+               size={size ? size : _ControlSizeDefault}
+               helperText={error?.message}
+               label={_TemplateVariant === EVariant.outlined ? label : ''}
+               disabled={disabled ? disabled : false}
+               autoComplete="new-password"
+               hidden={hidden ? true : false}
+               onChange={(e) => {
+                 field.onChange(e.target.value)
+               }}
+               autoFocus={autoFocus}
             />
           </Skeleton>
         ) : (
@@ -50,6 +67,7 @@ export default function TextInput({
               variant={variant || EVariant.outlined}
               error={!!error}
               name={name}
+              value={field.value || defaultValue || ''}
               multiline={multiline}
               rows={multiline ? 2 : 1}
               maxRows={multiline ? 4 : 1}
@@ -61,7 +79,6 @@ export default function TextInput({
               hidden={hidden ? true : false}
               onChange={(e) => {
                 field.onChange(e.target.value)
-                onChange && onChange(e.target.value)
               }}
               autoFocus={autoFocus}
             />

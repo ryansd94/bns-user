@@ -13,7 +13,7 @@ import { useSelector, useDispatch } from "react-redux"
 import * as Yup from "yup"
 import { useForm } from "react-hook-form"
 import { yupResolver } from "@hookform/resolvers/yup"
-import { open, change_title, close } from "components/popup/popupSlice"
+import { open, change_title } from "components/popup/popupSlice"
 import { openMessage } from "stores/components/snackbar"
 import {
   setPage,
@@ -22,7 +22,7 @@ import {
   setReload,
   setEditData,
 } from "stores/views/master"
-import { getTeam, getTeamByID, saveTeam, getUser } from "services"
+import { getTeamByID, saveTeam, getUser } from "services"
 import { ERROR_CODE } from "configs"
 import { loading as loadingButton } from "stores/components/button"
 
@@ -30,17 +30,14 @@ import { message } from "configs"
 const TeamPopup = React.memo((props) => {
   const { t } = useTranslation()
   const dispatch = useDispatch()
-  const baseUrl = "/jm_team"
-
   const { dataTeam } = props
   const editData = useSelector((state) => state.master.editData)
   const openPopup = useSelector((state) => state.popup.open)
-
   const [dataUser, setDataUser] = React.useState([])
-
   const validationSchema = Yup.object().shape({
     name: Yup.string().required(t(message.error.fieldNotEmpty)),
   })
+
   const defaultValues = {
     name: "",
     description: "",
@@ -48,10 +45,17 @@ const TeamPopup = React.memo((props) => {
     id: "",
     members: [],
   }
+
   useEffect(() => {
     reset()
-    onEditClick()
   }, [openPopup])
+
+  useEffect(() => {
+    reset()
+    if (editData) {
+      onEditClick()
+    }
+  }, [editData])
 
   const fetchDataUser = async () => {
     await getUser({
@@ -69,6 +73,7 @@ const TeamPopup = React.memo((props) => {
       setDataUser(users)
     })
   }
+
   useEffect(() => {
     fetchDataUser()
   }, [])
@@ -85,9 +90,7 @@ const TeamPopup = React.memo((props) => {
       setValue("description", res.data.description || "")
       setValue(
         "parentId",
-        res.data.parentId != null
-          ? dataTeam && dataTeam.find((e) => e.id === res.data.parentId)
-          : null
+        res.data.parentId
       )
       if (res.data.teamMembers != null) {
         var teamMembers = []
@@ -110,6 +113,7 @@ const TeamPopup = React.memo((props) => {
     resolver: yupResolver(validationSchema),
     defaultValues: defaultValues,
   })
+
   const onSubmit = async (data) => {
     dispatch(loadingButton(true))
     var postData = data
@@ -143,7 +147,7 @@ const TeamPopup = React.memo((props) => {
         <Grid item xs={12}>
           <TextInput
             control={control}
-            label={t("Ghi chú")}
+            label={t("Mô tả")}
             name="description"
           />
         </Grid>

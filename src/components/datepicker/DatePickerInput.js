@@ -23,17 +23,28 @@ const DatePickerInput = ({ size, onChange, disabled, control, name, label }) => 
             name={name}
             render={({ field, fieldState: { error } }) =>
                 loadingPopup ? (
-                    <Skeleton width={"100%"} variant="text">
+                    <Skeleton
+                        width={"100%"}
+                        variant="text"
+                        size={size ? size : _ControlSizeDefault}
+                    >
                         <div className="containerControl">
                             {_TemplateVariant === EVariant.normal ? (label ? <LabelControl label={label} /> : '') : ''}
                             <LocalizationProvider dateAdapter={AdapterDateFns}>
                                 <DesktopDatePicker
                                     clearable
                                     value={null}
+                                    size={size ? size : _ControlSizeDefault}
                                     disabled={disabled ? disabled : false}
                                     inputFormat={EFormatDate.ddmmyyyy}
-                                    renderInput={(params) => <TextField
-                                        size={size ? size : _ControlSizeDefault} {...params} />}
+                                    onChange={(newValue) => {
+                                        setValue(newValue)
+                                        field.onChange(newValue)
+                                        onChange && onChange(newValue)
+                                    }}
+                                    renderInput={(params) =>
+                                        <TextField
+                                            size={size ? size : _ControlSizeDefault} {...params} />}
                                 />
                             </LocalizationProvider >
                         </div>

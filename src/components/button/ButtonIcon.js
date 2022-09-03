@@ -35,7 +35,7 @@ const ButtonIcon = (props) => {
 
   useEffect(() => {
     switch (type) {
-      case "Edit":
+      case EButtonIconType.edit:
         setTitle(t("Chỉnh sửa"))
         break
       case EButtonIconType.delete:

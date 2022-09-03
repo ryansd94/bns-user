@@ -1,29 +1,26 @@
-import * as React from "react";
-import Button from "@mui/material/Button";
-import Dialog from "@mui/material/Dialog";
-import DialogActions from "@mui/material/DialogActions";
-import DialogContent from "@mui/material/DialogContent";
-import DialogContentText from "@mui/material/DialogContentText";
-import DialogTitle from "@mui/material/DialogTitle";
+import * as React from "react"
+import Dialog from "@mui/material/Dialog"
+import DialogActions from "@mui/material/DialogActions"
+import DialogTitle from "@mui/material/DialogTitle"
 
-import { open as openAlert } from "stores/components/alert-dialog";
-import { useSelector, useDispatch } from "react-redux";
-import { useTranslation } from "react-i18next";
-import ButtonDetail from "components/button/ButtonDetail";
-import IconButton from "@mui/material/IconButton";
-import { SpinningCircles } from "react-loading-icons";
+import { open as openAlert } from "stores/components/alert-dialog"
+import { useSelector, useDispatch } from "react-redux"
+import { useTranslation } from "react-i18next"
+import ButtonDetail from "components/button/ButtonDetail"
+import IconButton from "@mui/material/IconButton"
+import { SpinningCircles } from "react-loading-icons"
 
 const AlertDialog = (props) => {
-  const open = useSelector((state) => state.alertDialog.open);
-  const title = useSelector((state) => state.alertDialog.title);
-  const loading = useSelector((state) => state.button.loading);
-  const dispatch = useDispatch();
-  const { t } = useTranslation();
-  const { onSubmit } = props;
+  const open = useSelector((state) => state.alertDialog.open)
+  const title = useSelector((state) => state.alertDialog.title)
+  const loading = useSelector((state) => state.button.loading)
+  const dispatch = useDispatch()
+  const { t } = useTranslation()
+  const { onSubmit } = props
 
   const handleClose = () => {
-    dispatch(openAlert({open :false, title:title ? title : t("Bạn có chắc muốn xóa dữ liệu này?")}));
-  };
+    dispatch(openAlert({ open: false, title: title ? title : t("Bạn có chắc muốn xóa dữ liệu này?") }))
+  }
 
   return (
     <div>
@@ -61,6 +58,6 @@ const AlertDialog = (props) => {
         </DialogActions>
       </Dialog>
     </div>
-  );
-};
-export default AlertDialog;
+  )
+}
+export default AlertDialog

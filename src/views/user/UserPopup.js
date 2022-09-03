@@ -20,15 +20,14 @@ import { loading as loadingButton } from "stores/components/button"
 const UserPopup = React.memo((props) => {
   const { t } = useTranslation()
   const dispatch = useDispatch()
-
   const openPopup = useSelector((state) => state.popup.open)
-
   const validationSchema = Yup.object().shape({
     // name: Yup.string().required(t(message.error.fieldNotEmpty)),
   })
   const defaultValues = {
     emails: [],
   }
+  
   useEffect(() => {
     reset()
   }, [openPopup])

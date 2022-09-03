@@ -18,6 +18,7 @@ import TooltipControl from './tooltipControl'
 import useMediaQuery from '@mui/material/useMediaQuery'
 import { useTheme } from '@mui/material/styles'
 import { v4 as uuidv4 } from 'uuid'
+import StatusItem from 'views/category/status/statusItem'
 
 const DragDropContextContainer = styled.div`
 display:flex;
@@ -169,7 +170,7 @@ const generateListTitle = () => {
 
 const ContentTemplate = (props) => {
   console.log("render ContentTemplate")
-  const { setValue } = props
+  const { setValue, dataTemplate = null, statusData = [] } = props
   const theme = useTheme()
   const largeScreen = useMediaQuery(theme.breakpoints.up('md'))
   const [elementsTitle, setElementsTitle] = useState(generateListTitle())
@@ -184,14 +185,16 @@ const ContentTemplate = (props) => {
   })
 
   useEffect(() => {
-    setElementsTitle(generateListTitle())
-  }, [])
+    if (dataTemplate.content) {
+      const aaaa = JSON.parse(dataTemplate.content)
+      console.log(aaaa)
+      setElementsTitle(aaaa)
+    }
+  }, [dataTemplate])
 
   useEffect(() => {
     setValue('content', elementsTitle)
   }, [elementsTitle])
-
-
 
   const onDragEndTitle = (result) => {
     if (!result.destination) {
@@ -393,7 +396,6 @@ const ContentTemplate = (props) => {
       }
     )
     setElementsTitle(listCopy)
-    // alert(JSON.stringify(data))
   }
 
   const genderPopoverControl = (item, prefix, index, isLastControl) => {
@@ -405,16 +407,17 @@ const ContentTemplate = (props) => {
       prefix={prefix}
       onAction={(type) => onAction(type, item, prefix)} />
   }
+
   return (
     <div>
       <Grid container spacing={2}>
         <Grid className="flex-container" item xs={12}>
           <span>1111111</span>
-          <TextInput control={control} size={ESize.small} name="title" disabled />
+          <TextInput control={control} name="title" disabled />
         </Grid>
         <Grid className="flex-container" container spacing={2} item xs={12}>
           <Grid item>
-            <MultiSelect size={ESize.small} multiple={true}
+            <MultiSelect multiple={true}
               fullWidth={false}
               control={control}
               renderOption=
@@ -433,33 +436,30 @@ const ContentTemplate = (props) => {
                     {...props}
                     variant="outlined"
                     label={option.name}
-                    avatar={<AvatarControl name="A" />}
+                    avatar={<AvatarControl size={ESize.miniSmall} name="A" />}
                   />)
                 }
               }
-              // label={t("Người nhận")}
               name={'assign'}
               data={[{ id: 1, name: 'Người nhận 1' }, { id: 2, name: 'Người nhận 2' }, { id: 3, name: 'Người nhận 3' }]}>
             </MultiSelect>
           </Grid>
           <Grid item>
             <SelectControl
-              // label="Trạng thái"
-              options={[{ id: 1, name: 'Mới', color: '#1976d2' }, { id: 2, name: 'Hoàn tất', color: '#346231' }]}
+              options={[...statusData]}
+              name={'status'}
+              control={control}
               renderOptions={
                 (option) => {
-                  return <Box className="select-item">
-                    <IconCricle />
-                    <Typography key={option.id}>{option.name}</Typography>
-                  </Box>
+                  return <StatusItem status={option} />
                 }
               }
               renderValue={
                 (value) => {
-                  return <Box className="select-item">
-                    <IconCricle />
-                    <Typography key={value.id}>{value.name}</Typography>
-                  </Box>
+                  const item = statusData.find((item) => {
+                    return item.id === value
+                  })
+                  return <StatusItem status={item} />
                 }
               }
             />

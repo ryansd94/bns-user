@@ -44,3 +44,37 @@ export const get = async (baseUrl, param) => {
     return error
   }
 }
+
+export const getByID = async (baseUrl, id) => {
+  try {
+    let query = `${baseUrl}/${id}`
+    const res = await services.get(query)
+    return res
+  } catch (error) {
+    const { request, response } = error
+    if (request) {
+      return request
+    }
+    if (response) {
+      return response
+    }
+    return error
+  }
+}
+
+export const deleteData = async (baseUrl, id) => {
+  try {
+    let query = `${baseUrl}/${id}`;
+    const res = await services.delete(query);
+    return res;
+  } catch (error) {
+    const { request, response } = error;
+    if (request) {
+      return request;
+    }
+    if (response) {
+      return response;
+    }
+    return error;
+  }
+}
