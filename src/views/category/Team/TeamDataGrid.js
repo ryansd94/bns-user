@@ -32,7 +32,7 @@ const TeamDataGrid = React.memo((props) => {
   }, [page, sortModel, isReload, filterModels])
 
   const fetchData = async () => {
-    //dispatch(setLoading(true))
+    dispatch(setLoading(true))
     await get(baseUrl.jm_team, {
       draw: page,
       start: page == 0 ? 0 : page * 10,
@@ -43,7 +43,7 @@ const TeamDataGrid = React.memo((props) => {
       filters: JSON.stringify(filterModels)
     }).then((data) => {
       setData(data)
-      //dispatch(setLoading(false))
+      dispatch(setLoading(false))
     })
   }
 

@@ -105,15 +105,6 @@ const GridData = (props) => {
         dispatch(setToolbarVisibility({ ...toolbarVisible }))
     }
 
-    const onGridReady = () => {
-        if (gridRef && gridRef.current.api) {
-            if (loading)
-                gridRef.current.api.showLoadingOverlay()
-            else
-                gridRef.current.api.hideOverlay()
-        }
-    }
-
     return (
         <div style={{ width: "100%" }} className="grid-wrapper">
             <div style={gridStyle} className="ag-theme-alpine">
@@ -132,7 +123,6 @@ const GridData = (props) => {
                     rowSelection='multiple'
                     onFirstDataRendered={onFirstDataRendered}
                     enableCellTextSelection={true}
-                    onGridReady={onGridReady}
                     //overlayLoadingTemplate={'<span class="ag-overlay-loading-center">Please wait while your rows are loading</span>'}
                     onSortChanged={onSortChanged}
                     suppressRowClickSelection={true}
