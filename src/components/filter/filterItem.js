@@ -15,7 +15,7 @@ import { TextInput } from "components/input"
 const FilterItem = React.memo((props) => {
     console.log("render FilterItem")
     const { t } = useTranslation()
-    const { columnModel, name, index, control, onDeleteItem, onClearValue, onClearConditionValue } = props
+    const { columnModel = [], name, index, control, onDeleteItem, onClearValue, onClearConditionValue } = props
 
     const [conditionOption, setConditionOption] = React.useState([])
     const [conditionValue, setConditionValue] = React.useState(null)
@@ -84,20 +84,24 @@ const FilterItem = React.memo((props) => {
         id: 4,
         name: t("Tạm khóa")
     }]
+
     const onColumnChange = (value) => {
-        if (columnValue && value && value.type != columnValue.type) {
+        const valueItem = columnModel.find((item) => {
+            return item.field === value
+        })
+        if (columnValue && valueItem && valueItem.type != columnValue.type) {
             onClearValue(index)
         }
-        setColumnValue(value)
+        setColumnValue(valueItem)
         //setConditionValue(null)
-        if (value) {
+        if (valueItem) {
             setDisplay("block")
             setDisableCondition(false)
             var disabled = true
             if (conditionValue) {
                 disabled = false
             }
-            if (value.type == EFilterType.text) {
+            if (valueItem.type == EFilterType.text) {
                 setConditionOption(textOptions)
                 setWidth(300)
                 setValueComponent(
@@ -110,7 +114,7 @@ const FilterItem = React.memo((props) => {
                     />
                 )
             }
-            else if (value.type == EFilterType.select) {
+            else if (valueItem.type == EFilterType.select) {
                 setConditionOption(selectOptions)
                 setWidth(300)
                 setValueComponent(
@@ -123,7 +127,7 @@ const FilterItem = React.memo((props) => {
                     </MultiSelect>
                 )
             }
-            else if (value.type == EFilterType.datetime) {
+            else if (valueItem.type == EFilterType.datetime) {
                 setWidth(200)
                 setConditionOption(dateOptions)
                 setValueComponent(
@@ -150,12 +154,14 @@ const FilterItem = React.memo((props) => {
     const onConditionChange = (value) => {
         setConditionValue(value)
     }
+
     const onDelete = () => {
         onDeleteItem(index)
     }
+
     useEffect(() => {
         var disabled = true
-        if (conditionValue) {
+        if (conditionValue != null) {
             disabled = false
         }
         else {
@@ -192,13 +198,14 @@ const FilterItem = React.memo((props) => {
             }
         }
     }, [conditionValue])
+
     return (
         <Grid key={name} item container spacing={2} >
             <Grid item width={200}>
                 <SingleSelect
                     size={size}
                     onSelectChange={onColumnChange}
-                    label={t("Cột")} 
+                    label={t("Cột")}
                     data={setColumnModelData()}
                     control={control}
                     name={`test[${index}].column`}

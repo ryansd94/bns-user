@@ -53,7 +53,7 @@ const SingleSelect = React.memo(
                 fullWidth={fullWidth || true}
                 value={value != null ? value : null}
                 disableClearable={disableClearable}
-                isOptionEqualToValue={(option, value) => option.id === value.id}
+                isOptionEqualToValue={(option, value) => option.id === value}
                 getOptionLabel={(option) => {
                   if (option.name) {
                     return option.name
@@ -66,8 +66,8 @@ const SingleSelect = React.memo(
                   }
                 }}
                 onChange={(event, value) => {
-                  onChange(value)
-                  onSelectChange && onSelectChange(value)
+                  onChange(value && value.id)
+                  onSelectChange && onSelectChange(value && value.id)
                 }}
                 renderOption={(props, option) => {
                   return renderOption ? renderOption(props, option) : (<Box component="li" sx={{ '& > img': { mr: 2, flexShrink: 0 } }} {...props}>

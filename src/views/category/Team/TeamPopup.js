@@ -22,17 +22,19 @@ import {
   setReload,
   setEditData,
 } from "stores/views/master"
-import { getTeamByID, saveTeam, getUser } from "services"
-import { ERROR_CODE } from "configs"
+import { getTeamByID, saveTeam, get } from "services"
+import { ERROR_CODE, baseUrl } from "configs"
 import { loading as loadingButton } from "stores/components/button"
 
 import { message } from "configs"
 const TeamPopup = React.memo((props) => {
+  console.log("render TeamPopup")
   const { t } = useTranslation()
   const dispatch = useDispatch()
-  const { dataTeam } = props
   const editData = useSelector((state) => state.master.editData)
   const openPopup = useSelector((state) => state.popup.open)
+  const isReload = useSelector((state) => state.master.isReload)
+  const [dataTeam, setDataTeam] = React.useState([])
   const [dataUser, setDataUser] = React.useState([])
   const validationSchema = Yup.object().shape({
     name: Yup.string().required(t(message.error.fieldNotEmpty)),
@@ -46,9 +48,29 @@ const TeamPopup = React.memo((props) => {
     members: [],
   }
 
+  const fetchDataTeam = async () => {
+    await get(baseUrl.jm_team, {
+      draw: 0,
+      start: 0,
+      length: 10000,
+    }).then((data) => {
+      setDataTeam(data && data.data && data.data.items)
+    })
+  }
+
   useEffect(() => {
     reset()
   }, [openPopup])
+
+  useEffect(() => {
+    if (openPopup) {
+      fetchDataTeam()
+    }
+  }, [isReload])
+
+  useEffect(() => {
+    fetchDataTeam()
+  }, [])
 
   useEffect(() => {
     reset()
@@ -58,7 +80,7 @@ const TeamPopup = React.memo((props) => {
   }, [editData])
 
   const fetchDataUser = async () => {
-    await getUser({
+    await get(baseUrl.jm_user, {
       draw: 0,
       start: 0,
       length: 10000,
@@ -127,11 +149,12 @@ const TeamPopup = React.memo((props) => {
     dispatch(loadingButton(false))
     dispatch(openMessage({ ...res }))
     if (res.errorCode == ERROR_CODE.success) {
-      dispatch(setEditData(null))
+      //dispatch(setEditData(null))
       dispatch(setReload())
       //dispatch(close())
     }
   }
+
   function ModalBody() {
     return (
       <Grid container rowSpacing={2}>

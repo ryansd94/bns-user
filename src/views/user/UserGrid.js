@@ -23,7 +23,6 @@ const UserGrid = React.memo((props) => {
   const dispatch = useDispatch()
   const { t } = useTranslation()
   const columnVisibility = { ...useSelector((state) => state.user.columnVisibility) }
-  const [alertType, setAlertType] = useState(0)
   const [id, setId] = useState(null)
   const [status, setStatus] = useState(null)
 

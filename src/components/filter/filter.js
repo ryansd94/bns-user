@@ -119,10 +119,10 @@ const Filter = (props) => {
             data.test.map((item, index) => {
                 if (item.column && item.condition) {
                     if (!item.selectValue) {
-                        value.push({ column: item.column.id, operation: item.condition.id, value: item.value })
+                        value.push({ column: item.column, operation: item.condition, value: item.value })
                     }
                     else {
-                        value.push({ column: item.column.id, operation: item.condition.id, value: item.selectValue.map(e => e.id).join(',') })
+                        value.push({ column: item.column, operation: item.condition, value: item.selectValue.map(e => e.id).join(',') })
                     }
                 }
             })
@@ -158,7 +158,12 @@ const Filter = (props) => {
                         {
                             fields.map((item, index) => {
                                 return (
-                                    <FilterItem onClearConditionValue={onClearConditionValue} onClearValue={onClearValue} onDeleteItem={onDeleteItem} control={control} key={`item_${index}`} index={index} name={`item_${index}`} columnModel={columnModel}></FilterItem>
+                                    <FilterItem onClearConditionValue={onClearConditionValue}
+                                        onClearValue={onClearValue} onDeleteItem={onDeleteItem}
+                                        control={control}
+                                        key={`item_${index}`}
+                                        index={index} name={`item_${index}`}
+                                        columnModel={columnModel}></FilterItem>
                                 )
                             })
                         }

@@ -17,7 +17,6 @@ const TeamToolbar = (props) => {
     const dispatch = useDispatch()
     const toolbarVisible = { ...useSelector((state) => state.master.toolbarVisible) }
     const columnVisibility = { ...useSelector((state) => state.team.columnVisibility) }
-
     const columnModel = [{
         field: "name", value: true, label: t("Tên nhóm"), type: EFilterType.text
     },
