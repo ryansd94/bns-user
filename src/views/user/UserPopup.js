@@ -27,10 +27,6 @@ const UserPopup = React.memo((props) => {
   const defaultValues = {
     emails: [],
   }
-  
-  useEffect(() => {
-    reset()
-  }, [openPopup])
 
   const {
     control,
@@ -77,6 +73,7 @@ const UserPopup = React.memo((props) => {
   return (
     <div>
       <Popup
+        reset={reset}
         ModalBody={ModalBody}
         widthSize={"sm"}
         onSave={handleSubmit(onSubmit)}

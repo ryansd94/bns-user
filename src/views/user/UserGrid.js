@@ -25,33 +25,8 @@ const UserGrid = React.memo((props) => {
   const columnVisibility = { ...useSelector((state) => state.user.columnVisibility) }
   const [id, setId] = useState(null)
   const [status, setStatus] = useState(null)
+ 
 
-  const [data, setData] = React.useState({})
-  const page = useSelector((state) => state.master.page)
-  const pageSize = useSelector((state) => state.master.pageSize)
-  const loading = useSelector((state) => state.master.loading)
-  const sortModel = useSelector((state) => state.master.sortModel)
-  const isReload = useSelector((state) => state.master.isReload)
-
-  useEffect(() => {
-    fetchData()
-  }, [page, sortModel, isReload, filterModels])
-
-  const fetchData = async () => {
-    dispatch(setLoading(true))
-    await get(baseUrl.jm_user, {
-      draw: page,
-      start: page == 0 ? 0 : page * pageSize,
-      length: pageSize,
-      fieldSort:
-        sortModel != null && sortModel.length > 0 ? sortModel[0].field : "",
-      sort: sortModel != null && sortModel.length > 0 ? sortModel[0].sort : "",
-      filters: JSON.stringify(filterModels)
-    }).then((data) => {
-      dispatch(setLoading(false))
-      setData(data)
-    })
-  }
 
   const onSendMail = async (email) => {
     const res = await sendMailUser({ emails: [email] })
@@ -174,16 +149,14 @@ const UserGrid = React.memo((props) => {
     },
   ])
 
-
   return (
     <div style={{ width: "100%" }}>
       <ConfirmDeleteDialog url={baseUrl.jm_user} id={id} />
       <GridData
+        url={baseUrl.jm_user}
         columnVisibility={columnVisibility}
-        loading={loading}
         columns={columns}
-        totalCount={data && data.recordsTotal}
-        rows={data && data.data && data.data.items}></GridData>
+        filterModels={filterModels}></GridData>
     </div>
   )
 })

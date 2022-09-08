@@ -6,7 +6,7 @@ import { Resizable } from 'components/resizable'
 
 const Template = React.memo(() => {
   console.log("render Template")
-  const [filterModels, setFilterModels] = useState([])
+  const [filterModels, setFilterModels] = useState(null)
 
   const onApplyFilter = (value) => {
     setFilterModels(value)

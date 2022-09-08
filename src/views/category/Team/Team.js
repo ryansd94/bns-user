@@ -1,19 +1,11 @@
-﻿import React, { useState, useEffect, useCallback } from "react"
+﻿import React, { useState } from "react"
 import TeamDataGrid from "./TeamDataGrid"
-import { useTranslation } from "react-i18next"
-import { get } from "services"
-import {
-  setLoading,
-} from "stores/views/master"
-import { useSelector, useDispatch } from "react-redux"
 import TeamToolbar from "./teamToolbar"
 import { Resizable } from 'components/resizable'
-import { baseUrl } from "configs"
 
 const Team = React.memo(() => {
   console.log("render Team")
-  const [filterModels, setFilterModels] = useState([])
-  const dispatch = useDispatch()
+  const [filterModels, setFilterModels] = useState(null)
 
   const onApplyFilter = (value) => {
     setFilterModels(value)

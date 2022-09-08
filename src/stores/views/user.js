@@ -1,5 +1,5 @@
-import { createSlice } from "@reduxjs/toolkit";
-import { VisibleDefault } from 'configs/constants';
+import { createSlice } from "@reduxjs/toolkit"
+import { VisibleDefault } from 'configs/constants'
 
 const initialState = {
     columnVisibility: {
@@ -13,20 +13,20 @@ const initialState = {
         __check__: true,
     },
     filters: []
-};
+}
 
 const slice = createSlice({
     name: "user",
     initialState: initialState,
     reducers: {
         setColumnVisibility: (state, action) => {
-            state.columnVisibility = action.payload;
+            state.columnVisibility = action.payload
         },
         setFilter: (state, action) => {
-            state.filters = action.payload;
+            state.filters = action.payload
         },
     },
-});
-const { reducer, actions } = slice;
-export const { setColumnVisibility, setFilter } = actions;
-export default reducer;
+})
+const { reducer, actions } = slice
+export const { setColumnVisibility, setFilter } = actions
+export default reducer

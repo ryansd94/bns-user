@@ -15,20 +15,21 @@ import {
 } from "stores/views/master"
 import { open } from "components/popup/popupSlice"
 import { open as openAlert, onSubmit } from "stores/components/alert-dialog"
-import { loading as loadingButton } from "stores/components/button"
 import GridData from "components/table/GridData"
 
 const StatusGrid = React.memo((props) => {
   const dispatch = useDispatch()
   const { t } = useTranslation()
-  const { data } = props
-  const loading = useSelector((state) => state.master.loading)
+  const { filterModels } = props
   const columnVisibility = { ...useSelector((state) => state.status.columnVisibility) }
   const [id, setId] = useState(null)
 
   const [columns, setColumn] = useState([
-    { field: "id", hide: true },
-    { field: "name", headerName: t("Tên trạng thái"), width: 350, flex: 2 },
+    {
+      checkboxSelection: true,
+      resizable: false, width: 40, headerCheckboxSelection: true, pinned: 'left'
+    },
+    { field: "name", headerName: t("Tên trạng thái"),  flex: 1, pinned: 'left' },
     {
       field: "color",
       headerName: t("Màu sắc"),
@@ -70,18 +71,14 @@ const StatusGrid = React.memo((props) => {
     },
   ])
 
-  const onPageChange = (param) => {
-    dispatch(setPage(param - 1))
-  }
   return (
     <div style={{ width: "100%", height: "100%" }}>
       <ConfirmDeleteDialog url={baseUrl.jm_status} id={id} />
       <GridData
         columnVisibility={columnVisibility}
-        loading={loading}
         columns={columns}
-        totalCount={data && data.recordsTotal}
-        rows={data && data.data && data.data.items}></GridData>
+        filterModels={filterModels}
+        url={baseUrl.jm_status}></GridData>
     </div>
   )
 })

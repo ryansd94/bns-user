@@ -1,73 +1,36 @@
-import React, { useState, useEffect, useCallback } from "react"
-import { styled, alpha } from '@mui/material/styles'
+import React, { useState, useEffect } from "react"
 import PropTypes from 'prop-types'
 import FilterItem from './filterItem'
-import Popover from '@mui/material/Popover'
 import Grid from "@mui/material/Grid"
 import Box from "@mui/material/Box"
-import style from "components/resizable/ResizableNew.scss"
-import { saveFilter } from "services"
+import { save, get } from "services"
 import Collapse from '@mui/material/Collapse'
-import classNames from "classnames/bind"
 import ButtonFuntion from 'components/button/ButtonFuntion'
-import { EButtonType, EButtonIconType } from 'configs'
+import { EButtonType, EButtonIconType, baseUrl } from 'configs'
 import { useTranslation } from 'react-i18next'
 import { useForm, useFieldArray, Controller } from "react-hook-form"
 import { TextInput } from "components/input"
 import ButtonIcon from "components/button/ButtonIcon"
-let cx = classNames.bind(style)
-const StyledMenu = styled((props) => (
-    <Popover
-        elevation={0}
-        anchorOrigin={{
-            vertical: 'bottom',
-            horizontal: 'left',
-        }}
-        transformOrigin={{
-            vertical: 'top',
-            horizontal: 'left',
-        }}
-        {...props}
-    />
-))(({ theme }) => ({
-    '& .MuiPaper-root': {
-        borderRadius: 6,
-        marginTop: theme.spacing(1),
-        padding: theme.spacing(1.5),
-        with: "auto",
-        color: theme.palette.mode === 'light' ? 'rgb(55, 65, 81)' : theme.palette.grey[300],
-        boxShadow:
-            'rgb(255, 255, 255) 0px 0px 0px 0px, rgba(0, 0, 0, 0.05) 0px 0px 0px 1px, rgba(0, 0, 0, 0.1) 0px 10px 15px -3px, rgba(0, 0, 0, 0.05) 0px 4px 6px -2px',
-        '& .MuiMenu-list': {
-            padding: '4px 0',
-        },
-        '& .MuiMenuItem-root': {
-            '& .MuiSvgIcon-root': {
-                fontSize: 18,
-                // color: theme.palette.text.secondary,
-                marginRight: theme.spacing(1.5),
-            },
-            '&:active': {
-                backgroundColor: alpha(
-                    theme.palette.primary.main,
-                    theme.palette.action.selectedOpacity,
-                ),
-            },
-        },
-    },
-}))
+import { PopoverControl } from 'components/popover'
+import './styles.scss'
+import { useHistory, useLocation } from 'react-router'
+import { v4 as uuidv4 } from 'uuid'
+import SingleSelect from 'components/select/SingleSelect'
+
 const Filter = (props) => {
-    const { anchorEl, handleClose, onApplyFilter, columnModel, dropdownItem } = props
+    console.log("render Filter")
+    const { anchorEl, onApplyFilter, columnModel, dropdownItem, component } = props
     const open = Boolean(anchorEl)
     const [anchorSave, setAnchorSave] = React.useState(null)
-
-    const { control, reset, handleSubmit, setValue, setError } = useForm({
+    const [filterData, setFilterData] = React.useState(null)
+    const { control, reset, handleSubmit, setValue, getValues, setError } = useForm({
     })
-
     const { fields, append, remove } = useFieldArray({
         control,
         name: "test",
     })
+    const history = useHistory()
+    const location = useLocation()
 
     const handleClickSave = (event) => {
         setAnchorSave(event.currentTarget)
@@ -83,7 +46,7 @@ const Filter = (props) => {
         name: "",
         test: [{
             value: "", selectValue: null, column: null,
-            condition: null,
+            condition: null, id: uuidv4(), type: null
         }]
     }
     const { t } = useTranslation()
@@ -92,12 +55,37 @@ const Filter = (props) => {
             column: null,
             condition: null,
             value: "",
-            selectValue: null
+            selectValue: null,
+            id: uuidv4(),
+            type: null
+        })
+    }
+
+    const loadFilters = async () => {
+        await get(baseUrl.sys_filter, {
+            component: component,
+            isGetAll: true
+        }).then((data) => {
+            if (data && data.data.items.length > 0) {
+                setFilterData(data.data.items)
+            }
         })
     }
 
     useEffect(() => {
-        reset(dataFromServer)
+        loadFilters()
+    }, [])
+
+    useEffect(() => {
+        const urlParams = new URLSearchParams(window.location.search)
+        const filters = urlParams.get('filters');
+        if (filters) {
+            const filterObject = JSON.parse(filters)
+            console.log(filterObject)
+            setValue('test', filterObject)
+        } else {
+            reset(dataFromServer)
+        }
     }, [])
 
     const onClear = () => {
@@ -110,49 +98,100 @@ const Filter = (props) => {
         }
         const value = getDataFilter(data)
         if (value) {
-            const res = await saveFilter({ name: data.name, filterData: JSON.stringify(value) })
+            const res = await save(baseUrl.sys_filter, { name: data.name, filterData: JSON.stringify(value), component: component })
         }
     }
+
     const getDataFilter = (data) => {
         if (data && data.test) {
             const value = []
             data.test.map((item, index) => {
-                if (item.column && item.condition) {
+                if (item.column && item.condition != null) {
                     if (!item.selectValue) {
-                        value.push({ column: item.column, operation: item.condition, value: item.value })
+                        value.push({ column: item.column, condition: item.condition, value: item.value, type: item.type })
                     }
                     else {
-                        value.push({ column: item.column, operation: item.condition, value: item.selectValue.map(e => e.id).join(',') })
+                        value.push({ column: item.column, condition: item.condition, value: item.selectValue.map(e => e.id).join(','), type: item.type })
                     }
                 }
             })
             return value
         }
     }
+
     const onSubmit = (data) => {
         const value = getDataFilter(data)
         if (value) {
+            const url = new URL(window.location);
+            url.searchParams.set('filters', JSON.stringify(value));
+            window.history.pushState(null, '', url.toString());
+
+            // const params = new URLSearchParams({ filters: JSON.stringify(value) })
+            // history.replace({ pathname: location.pathname, search: params.toString() })
             onApplyFilter(value)
         }
     }
+
     const onDeleteItem = (index) => {
         remove(index)
     }
+
     const onClearValue = (value) => {
         setValue(`test[${value}].value`, "")
         setValue(`test[${value}].selectValue`, null)
     }
+
     const onClearConditionValue = (value) => {
         setValue(`test[${value}].condition`, null)
     }
+
+    const genderPopoverControl = () => {
+        return (
+            <Grid className="containerNew filter-save-dialog" width="auto" container
+            >
+                <Grid item  >
+                    <TextInput label={t("Nhập tên bộ lọc")}
+                        fullWidth
+                        required={true}
+                        size={"small"}
+                        control={control}
+                        name={"name"} />
+                </Grid>
+                <Grid item  >
+                    <ButtonIcon
+                        onClick={handleCloseSave}
+                        type={EButtonIconType.cancel}
+                        color="neutral"
+                    />
+                </Grid>
+                <Grid item  >
+                    <ButtonIcon
+                        onClick={handleSubmit(onSave)}
+                        type={EButtonIconType.apply}
+                        color="primary"
+                    />
+                </Grid>
+            </Grid>
+        )
+    }
+
     return (
         <Collapse in={open} timeout="auto" unmountOnExit>
-            <div className={cx("containerNew")}>
+            <div className="containerNew">
                 <Box className="box-container">
                     <Grid width="auto" container
                         direction="column" rowSpacing={2}  >
-                        <Grid key="header" item xs={12}>
-                            <ButtonFuntion spacingLeft={0} visible={true} onClick={onAdd} type={EButtonType.addFilter} />
+                        <Grid key="header" container item columnSpacing={2}>
+                            <Grid item>
+                                <ButtonFuntion spacingLeft={0} onClick={onAdd} type={EButtonType.addFilter} />
+                            </Grid>
+                            <Grid item xs={3}>
+                                <SingleSelect
+                                    data={filterData}
+                                    control={control}
+                                    name='filterId'
+                                />
+                            </Grid>
                         </Grid>
 
                         {
@@ -161,55 +200,27 @@ const Filter = (props) => {
                                     <FilterItem onClearConditionValue={onClearConditionValue}
                                         onClearValue={onClearValue} onDeleteItem={onDeleteItem}
                                         control={control}
-                                        key={`item_${index}`}
-                                        index={index} name={`item_${index}`}
+                                        key={`item_${item.id}`}
+                                        item={item}
+                                        getValues={getValues}
+                                        setValue={setValue}
+                                        index={index} name={`item_${item.id}`}
                                         columnModel={columnModel}></FilterItem>
                                 )
                             })
                         }
                         {/* {inputList} */}
                         <Grid key="footer" style={{ display: "flex" }} item xs={12}>
-                            <ButtonFuntion spacingLeft={0} visible={true} onClick={onClear} type={EButtonType.clearFilter} />
-                            <ButtonFuntion spacingLeft={2} visible={true} onClick={handleSubmit(onSubmit)} type={EButtonType.apply} />
-                            <ButtonFuntion style={{ marginLeft: "auto" }} visible={true} onClick={handleClickSave} type={EButtonType.save} />
-                            <Popover
-                                id={id}
-                                open={openSave}
+                            <ButtonFuntion spacingLeft={0} onClick={onClear} type={EButtonType.clearFilter} />
+                            <ButtonFuntion spacingLeft={2} onClick={handleSubmit(onSubmit)} type={EButtonType.apply} />
+                            <ButtonFuntion style={{ marginLeft: "auto" }} onClick={handleClickSave} type={EButtonType.save} />
+                            <PopoverControl
                                 anchorEl={anchorSave}
                                 onClose={handleCloseSave}
-                                anchorOrigin={{
-                                    vertical: 'bottom',
-                                    horizontal: 'right',
-                                }}
-                                transformOrigin={{
-                                    vertical: 'top',
-                                    horizontal: 'right',
-                                }}
+                                genderBody={genderPopoverControl}
                             >
-                                <Grid className="containerNew" style={{ display: "flex", marginBottom: "0px", flexDirection: "row" }} width="auto" container
-                                    rowSpacing={2} columnSpacing={1} >
-                                    <Grid item  >
-                                        <TextInput label={t("Nhập tên bộ lọc")}
-                                            fullWidth
-                                            required={true}
-                                            size={"small"}
-                                            control={control}
-                                            name={"name"} />
-                                    </Grid>
-                                    <Grid item  >
-                                        <ButtonIcon
-                                            onClick={handleCloseSave}
-                                            type={EButtonIconType.cancel}
-                                        />
-                                    </Grid>
-                                    <Grid item  >
-                                        <ButtonIcon
-                                            onClick={handleSubmit(onSave)}
-                                            type={EButtonIconType.apply}
-                                        />
-                                    </Grid>
-                                </Grid>
-                            </Popover>
+
+                            </PopoverControl>
                         </Grid>
                     </Grid>
                 </Box>

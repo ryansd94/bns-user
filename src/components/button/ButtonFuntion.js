@@ -3,7 +3,6 @@ import Button from '@mui/material/Button';
 import { useTranslation } from 'react-i18next';
 import PropTypes from 'prop-types';
 import { EButtonType, EColor } from 'configs/constants';
-import Tooltip from "@mui/material/Tooltip";
 import { makeStyles } from "@material-ui/core/styles";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 
@@ -114,12 +113,7 @@ const ButtonFuntion = React.memo(props => {
     }, [open2]);
     let button;
     if (visible) {
-        // button = (<Tooltip title={text}><Button onClick={onClick}
-        //     startIcon={
-        //         <i className={icon} />
-        //     } variant="contained" ></Button></Tooltip>);
         button = (
-
             <ThemeProvider theme={theme}>
                 <Button
                     variant="outlined"

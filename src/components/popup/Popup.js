@@ -1,4 +1,4 @@
-import * as React from "react"
+import React, { useEffect, useState } from "react"
 import PropTypes from "prop-types"
 import { styled } from "@mui/material/styles"
 import Dialog from "@mui/material/Dialog"
@@ -63,16 +63,21 @@ function PaperComponent(props) {
 }
 const Popup = React.memo((props) => {
   const dispatch = useDispatch()
-  const { ModalBody, onSave, widthSize } = props
+  const { ModalBody, onSave, widthSize = "sm", reset } = props
   const handleClose = () => {
-    const action = close()
-    dispatch(action)
+    dispatch(close())
     dispatch(setEditData(null))
   }
   const open = useSelector((state) => state.popup.open)
   const title = useSelector((state) => state.popup.title)
   const loading = useSelector((state) => state.button.loading)
-  const style = {}
+
+  useEffect(() => {
+    if (!open) {
+      reset && reset()
+    }
+  }, [open])
+
   return (
     <div>
       <BootstrapDialog
@@ -89,7 +94,7 @@ const Popup = React.memo((props) => {
         >
           {title}
         </BootstrapDialogTitle>
-        <DialogContent sx={style} dividers>
+        <DialogContent dividers>
           <ModalBody />
         </DialogContent>
         <DialogActions>
@@ -107,7 +112,7 @@ const Popup = React.memo((props) => {
             />
           </IconButton>
           <ButtonDetail onClick={handleClose} type="Undo" />
-          <ButtonDetail 
+          <ButtonDetail
             disabled={loading} onClick={onSave} type={"Save"} />
         </DialogActions>
       </BootstrapDialog>

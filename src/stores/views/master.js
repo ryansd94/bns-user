@@ -4,10 +4,9 @@ import { VisibleDefault } from 'configs/constants'
 const initialState = {
   page: 0,
   pageSize: 10,
-  sortModel: [],
   loading: false,
   data: [],
-  isReload: false,
+  isReload: null,
   loadingPopup: false,
   editData: "",
   filterModel: [],
@@ -38,7 +37,14 @@ const slice = createSlice({
       state.filterModel = action.payload
     },
     setReload: (state, action) => {
-      state.isReload = !state.isReload
+      if (state.isReload != null) {
+        state.isReload = !state.isReload
+      } else {
+        state.isReload = true
+      }
+    },
+    setReloadNull: (state, action) => {
+      state.isReload = null
     },
     setLoadingPopup: (state, action) => {
       state.loadingPopup = action.payload
@@ -47,11 +53,11 @@ const slice = createSlice({
       state.editData = action.payload
     },
     setToolbarVisibility: (state, action) => {
-        state.toolbarVisible = action.payload
+      state.toolbarVisible = action.payload
     },
   },
 })
 const { reducer, actions } = slice
-export const { setData, setLoading, setPage, setReload, setSort, 
-  setLoadingPopup, setEditData, setPageSize, setFilter,setToolbarVisibility } = actions
+export const { setData, setLoading, setPage, setReload, setSort,
+  setLoadingPopup, setEditData, setPageSize, setFilter, setToolbarVisibility, setReloadNull } = actions
 export default reducer

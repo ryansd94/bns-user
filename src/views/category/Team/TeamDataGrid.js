@@ -6,11 +6,9 @@ import ConfirmDeleteDialog from "components/popup/confirmDeleteDialog"
 import { baseUrl, EButtonIconType } from "configs"
 import {
   setEditData,
-  setLoading
 } from "stores/views/master"
-import { get } from "services"
 import { open } from "components/popup/popupSlice"
-import { open as openAlert, onSubmit } from "stores/components/alert-dialog"
+import { open as openAlert } from "stores/components/alert-dialog"
 import GridData from "components/table/GridData"
 
 const TeamDataGrid = React.memo((props) => {
@@ -18,34 +16,8 @@ const TeamDataGrid = React.memo((props) => {
   const { filterModels } = props
   const dispatch = useDispatch()
   const { t } = useTranslation()
-  const [data, setData] = React.useState({})
-  const loading = useSelector((state) => state.master.loading)
   const columnVisibility = { ...useSelector((state) => state.team.columnVisibility) }
-  const page = useSelector((state) => state.master.page)
-  const pageSize = useSelector((state) => state.master.pageSize)
-  const sortModel = useSelector((state) => state.master.sortModel)
-  const isReload = useSelector((state) => state.master.isReload)
   const [id, setId] = useState(null)
-
-  useEffect(() => {
-    fetchData()
-  }, [page, sortModel, isReload, filterModels])
-
-  const fetchData = async () => {
-    dispatch(setLoading(true))
-    await get(baseUrl.jm_team, {
-      draw: page,
-      start: page == 0 ? 0 : page * 10,
-      length: pageSize,
-      fieldSort:
-        sortModel != null && sortModel.length > 0 ? sortModel[0].field : "",
-      sort: sortModel != null && sortModel.length > 0 ? sortModel[0].sort : "",
-      filters: JSON.stringify(filterModels)
-    }).then((data) => {
-      setData(data)
-      dispatch(setLoading(false))
-    })
-  }
 
   const columns = [
     {
@@ -105,11 +77,10 @@ const TeamDataGrid = React.memo((props) => {
     <div style={{ width: "100%", height: "100%" }}>
       <ConfirmDeleteDialog url={baseUrl.jm_team} id={id} />
       <GridData
+        url={baseUrl.jm_team}
         columnVisibility={columnVisibility}
-        loading={loading}
-        columns={columns}
-        totalCount={data && data.recordsTotal}
-        rows={data && data.data && data.data.items}></GridData>
+        filterModels={filterModels}
+        columns={columns}></GridData>
     </div>
   )
 })

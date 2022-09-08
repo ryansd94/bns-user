@@ -9,7 +9,8 @@ import { IconDelete } from "components/icon/icon"
 
 const ToolBar = React.memo(props => {
 
-    const { onAddClick, visible, onDeleteClick, columnModel, onColumnConfigChange, dropdownItem, onApplyFilter } = props
+    const { onAddClick, visible, onDeleteClick, columnModel,
+        onColumnConfigChange, dropdownItem, onApplyFilter, component } = props
     const [anchorElColumn, setAnchorElColumn] = React.useState(null)
     const [anchorElFilter, setAnchorElFilter] = React.useState(false)
     const [anchorElFunction, setAnchorElFunction] = React.useState(null)
@@ -54,7 +55,13 @@ const ToolBar = React.memo(props => {
                     <ButtonFuntion spacingLeft={1} visible={visible.delete} onClick={onDeleteClick} type={EButtonType.delete} />
                 </div>
             </div>
-            <Filter onApplyFilter={onApplyFilter} onColumnConfigChange={onColumnConfigChange} columnModel={columnModel} anchorEl={anchorElFilter}></Filter>
+            <Filter
+                component={component}
+                onApplyFilter={onApplyFilter}
+                onColumnConfigChange={onColumnConfigChange}
+                columnModel={columnModel}
+                anchorEl={anchorElFilter}>
+            </Filter>
 
         </div>
     )

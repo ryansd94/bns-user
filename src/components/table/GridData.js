@@ -8,12 +8,12 @@ import { ModuleRegistry } from '@ag-grid-community/core'
 import { useDispatch, useSelector } from "react-redux"
 import { ClientSideRowModelModule } from '@ag-grid-community/client-side-row-model'
 import {
-    setSort,
-    setPage,
-    setToolbarVisibility
+    setToolbarVisibility,
+    setReloadNull
 } from "stores/views/master"
 import { Pagination } from 'components/pagination'
 import { Loading } from 'components/loading'
+import { get } from "services"
 
 // Register the required feature modules with the Grid
 ModuleRegistry.registerModules([ClientSideRowModelModule])
@@ -21,13 +21,16 @@ ModuleRegistry.registerModules([ClientSideRowModelModule])
 const GridData = (props) => {
     const gridRef = useRef()
     const dispatch = useDispatch()
-    const { rows = [], loading, columns,
-        totalCount, rowHeight,
-        columnVisibility } = props
+    const { columns, rowHeight,
+        columnVisibility, filterModels, url } = props
     const gridStyle = useMemo(() => ({ width: '100%', display: "flex", flexDirection: "column" }), [])
-    const currentPage = useSelector((state) => state.master.page)
-    const pageSize = useSelector((state) => state.master.pageSize)
+    const [currentPage, setCurrentPage] = useState(null)
+    const [pageSize, setPageSize] = useState(10)
+    const [sortModel, setSortModel] = useState(null)
     const toolbarVisible = { ...useSelector((state) => state.master.toolbarVisible) }
+    const isReload = useSelector((state) => state.master.isReload)
+    const [data, setData] = useState(null)
+    const loading = useSelector((state) => state.master.loading)
 
     const defaultColDef = useMemo(() => {
         return {
@@ -45,7 +48,7 @@ const GridData = (props) => {
                 return
             }
         })
-        dispatch(setSort(sortModel))
+        setSortModel(sortModel)
     }
 
     const gridOptions = {
@@ -74,7 +77,7 @@ const GridData = (props) => {
 
             const allColumnIds = []
             gridRef.current.columnApi.getAllColumns().forEach((column) => {
-                if (column.colDef.autoSizeColumn)
+                if (column.colDef.suppressAutoSize)
                     allColumnIds.push(column.getId())
             })
             gridRef.current.columnApi.autoSizeColumns(allColumnIds, false)
@@ -90,7 +93,7 @@ const GridData = (props) => {
     }, [columnVisibility])
 
     const onPageChange = (param) => {
-        dispatch(setPage(param - 1))
+        setCurrentPage(param - 1)
     }
 
     const onSelectionChanged = (newSelection) => {
@@ -105,6 +108,50 @@ const GridData = (props) => {
         dispatch(setToolbarVisibility({ ...toolbarVisible }))
     }
 
+    const fetchData = useCallback(async () => {
+        if (gridRef && gridRef.current.api) {
+            gridRef.current.api.showLoadingOverlay()
+        }
+        const params = new URLSearchParams(window.location.search)
+        const filterParams = params.get("filters")
+        return await get(url, {
+            draw: currentPage || 0,
+            start: currentPage ? currentPage * 10 : 0,
+            length: pageSize,
+            fieldSort:
+                sortModel != null && sortModel.length > 0 ? sortModel[0].field : "",
+            sort: sortModel != null && sortModel.length > 0 ? sortModel[0].sort : "",
+            filters: filterParams
+
+        }).then((data) => {
+            if (gridRef && gridRef.current.api) {
+                gridRef.current.api.hideOverlay()
+            }
+            return data
+        })
+    }, [currentPage, sortModel, isReload])
+
+    const onGridReady = useCallback(async (params) => {
+        const value = await fetchData()
+        setData(value)
+    }, [])
+
+    useEffect(async () => {
+        if (currentPage != null) {
+            setData(await fetchData())
+        }
+    }, [currentPage])
+
+    useEffect(async () => {
+        dispatch(setReloadNull())
+    }, [])
+
+    useEffect(async () => {
+        if (sortModel != null || filterModels != null || isReload != null) {
+            setData(await fetchData())
+        }
+    }, [sortModel, filterModels, isReload])
+
     return (
         <div style={{ width: "100%" }} className="grid-wrapper">
             <div style={gridStyle} className="ag-theme-alpine">
@@ -116,23 +163,27 @@ const GridData = (props) => {
                     style={{ height: "auto" }}
                     defaultColDef={defaultColDef}
                     enableRangeSelection={true}
-                    rowData={rows}
+                    rowData={data && data.data && data.data.items}
                     domLayout='autoHeight'
                     gridOptions={gridOptions}
                     columnDefs={columns}
                     rowSelection='multiple'
+                    onGridReady={onGridReady}
                     onFirstDataRendered={onFirstDataRendered}
                     enableCellTextSelection={true}
-                    //overlayLoadingTemplate={'<span class="ag-overlay-loading-center">Please wait while your rows are loading</span>'}
+                    // overlayLoadingTemplate={'<span class="ag-overlay-loading-center">Please wait while your rows are loading</span>'}
+                    // overlayNoRowsTemplate={
+                    //     '<span style="padding: 10px; border: 2px solid #444; background: lightgoldenrodyellow">This is a custom \'no rows\' overlay</span>'
+                    // }
                     onSortChanged={onSortChanged}
                     suppressRowClickSelection={true}
                     suppressCellFocus={true}
                     onSelectionChanged={onSelectionChanged}>
                 </AgGridReact>
                 <Pagination style={{ width: "100%" }}
-                    currentPage={currentPage + 1}
+                    currentPage={currentPage ? currentPage + 1 : 1}
                     onPageChange={onPageChange}
-                    pageSize={pageSize} totalCount={totalCount} className="pagination-bar" />
+                    pageSize={pageSize} totalCount={data && data.recordsTotal} className="pagination-bar" />
             </div>
         </div>
     )
@@ -140,23 +191,14 @@ const GridData = (props) => {
 
 }
 
-
 GridData.propTypes = {
-    rows: PropTypes.array.isRequired,
     columns: PropTypes.array,
     gridOptions: PropTypes.object,
     onSelectionChanged: PropTypes.func,
     onPageChange: PropTypes.func,
-    currentPage: PropTypes.number,
-    totalCount: PropTypes.number,
-    pageSize: PropTypes.number,
 }
 GridData.defaultProps = {
-    rows: [],
     columns: [],
-    pageSize: 10,
-    totalCount: 0,
-    currentPage: 1
 }
 
 export default GridData

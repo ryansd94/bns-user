@@ -64,7 +64,7 @@ export const EFilterType = {
 
 export const EColor =
 {
-  cancel: '#64748B'
+  cancel: '#86878796'
 }
 
 export const EFormatDate =
@@ -122,10 +122,12 @@ export const EControlType = {
 }
 
 export const baseUrl = {
-  jm_template: '/jm_template',
-  jm_status: '/jm_status',
+  jm_template: 'jm_template',
+  jm_status: 'jm_status',
   jm_team: 'jm_team',
-  jm_user:'jm_user'
+  jm_user: 'jm_user',
+  sys_filter: 'sys_filter',
+  jm_taskType: 'jm_tasktype',
 }
 
 export const _TemplateVariant = EVariant.normal

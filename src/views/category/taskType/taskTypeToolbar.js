@@ -4,57 +4,56 @@ import PropTypes from 'prop-types'
 import { useDispatch, useSelector } from "react-redux"
 import {
     setColumnVisibility,
-} from "stores/views/team"
+} from "stores/views/taskType"
 import { useTranslation } from "react-i18next"
-import TeamPopup from "./TeamPopup"
+import TaskTypePopup from "./taskTypePopup"
 import { open, change_title } from "components/popup/popupSlice"
 import { EFilterType, baseUrl } from "configs"
 
-const TeamToolbar = (props) => {
-    // console.log("render TeamToolbar")
-    const { onApplyFilter, dataTeam } = props
+const TaskTypeToolbar = (props) => {
+    const { onApplyFilter } = props
     const { t } = useTranslation()
     const dispatch = useDispatch()
     const toolbarVisible = { ...useSelector((state) => state.master.toolbarVisible) }
-    const columnVisibility = { ...useSelector((state) => state.team.columnVisibility) }
+    const columnVisibility = { ...useSelector((state) => state.taskType.columnVisibility) }
     const columnModel = [{
-        field: "name", value: true, label: t("Tên nhóm"), type: EFilterType.text
+        field: "name", value: true, label: t("Tên loại công việc"), type: EFilterType.text
+    },
+    {
+        field: "templateName", value: true, label: t("Mẫu công việc"), type: EFilterType.text
     },
     {
         field: "description", value: true, label: t("Mô tả"), type: EFilterType.text
     },
     {
-        field: "parentName", value: true, label: t("Nhóm cha"), type: EFilterType.text
+        field: "icon", value: true, label: t("Biểu tượng"), type: EFilterType.text, isHideFilter: true
     },
-    // {
-    //     field: "status", value: true, label: t("Trạng thái"), type: EFilterType.select
-    // },
     {
         field: "createdDate", value: true, label: t("Ngày tạo"), type: EFilterType.datetime
     }]
-
+    
     const handleColumnConfigChange = (event) => {
         columnVisibility[event.target.name] = event.target.checked
         dispatch(setColumnVisibility({ ...columnVisibility }))
     }
 
     const handleClickOpen = () => {
-        dispatch(change_title(t("Thêm mới Nhóm")))
+        dispatch(change_title(t("Thêm mới Loại công việc")))
         dispatch(open())
     }
 
     return <div>
-        <ToolBar component={baseUrl.jm_team} visible={toolbarVisible}
+        <ToolBar component={baseUrl.jm_taskType} visible={toolbarVisible}
             onApplyFilter={onApplyFilter}
             onColumnConfigChange={handleColumnConfigChange} columnModel={columnModel}
             onAddClick={handleClickOpen} />
-        <TeamPopup dataTeam={dataTeam} />
+        <TaskTypePopup />
     </div>
 
 }
 
-TeamToolbar.propTypes = {
+TaskTypeToolbar.propTypes = {
     onAddClick: PropTypes.func,
 }
 
-export default TeamToolbar
+export default TaskTypeToolbar

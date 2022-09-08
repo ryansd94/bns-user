@@ -6,6 +6,7 @@ import IconButton from "@mui/material/IconButton"
 import { makeStyles } from '@mui/styles'
 import { EButtonIconType, ESize } from "configs"
 import { IconDelete } from "components/icon/icon"
+import { createTheme, ThemeProvider } from "@mui/material/styles"
 import {
   IconEdit,
   IconEmail,
@@ -19,6 +20,8 @@ import {
   IconUp,
   IconDown
 } from "components/icon/icon"
+import { EColor } from 'configs/constants'
+
 const useStyles = makeStyles({
   root: {
     "&.Mui-disabled": {
@@ -32,6 +35,14 @@ const ButtonIcon = (props) => {
   const { t } = useTranslation()
   const { type, onClick, title, disabled, color, size, showTooltip, style } = props
   const [titleDefault, setTitle] = useState("")
+  const theme = createTheme({
+    palette: {
+      neutral: {
+        main: EColor.cancel,
+        contrastText: "#fff",
+      },
+    },
+  })
 
   useEffect(() => {
     switch (type) {
@@ -106,12 +117,15 @@ const ButtonIcon = (props) => {
     icon = <IconDown style={{ width: width, height: height }} />
 
   button = (
+
     <IconButton style={style} color={color} size={size} className={classes.root} {...adjustedButtonProps}>
       {icon}
     </IconButton>
   )
 
-  return showTooltip ? <Tooltip title={title ? title : titleDefault}>{button}</Tooltip> : button
+  return showTooltip ? <ThemeProvider theme={theme}>
+    <Tooltip title={title ? title : titleDefault}>{button}</Tooltip>
+  </ThemeProvider> :<ThemeProvider theme={theme}>{button}</ThemeProvider> 
 }
 ButtonIcon.propTypes = {
   type: PropTypes.string.isRequired,

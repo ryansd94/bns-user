@@ -6,8 +6,6 @@ import {
     setColumnVisibility,
 } from "stores/views/status"
 import { useTranslation } from "react-i18next"
-import MenuItem from '@mui/material/MenuItem'
-import { IconDelete } from "components/icon/icon"
 import { EFilterType } from "configs"
 import { open, change_title } from "components/popup/popupSlice"
 

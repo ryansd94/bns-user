@@ -9,6 +9,7 @@ import userReducer from "stores/views/user"
 import templateReducer from "stores/views/template"
 import statusReducer from "stores/views/status"
 import teamReducer from "stores/views/team"
+import taskTypeReducer from "stores/views/taskType"
 
 const rootReducer = {
   popup: popupReducer,
@@ -20,7 +21,8 @@ const rootReducer = {
   user: userReducer,
   template: templateReducer,
   status: statusReducer,
-  team: teamReducer
+  team: teamReducer,
+  taskType: taskTypeReducer
 }
 
 const store = configureStore({

@@ -21,7 +21,7 @@ const SingleSelect = React.memo(
         name={name}
         render={({ field: { onChange, value }, fieldState: { error } }) =>
           loadingPopup ? (
-            <Skeleton width={"100%"} size={size ? size : _ControlSizeDefault} variant="text">
+            <Skeleton width={"100%"} variant="text">
               <Autocomplete
                 options={data}
                 size={size ? size : _ControlSizeDefault}

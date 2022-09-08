@@ -131,10 +131,16 @@ class Sidebar extends Component {
                             <span className="menu-title"><Trans>Mẫu công việc</Trans></span>
                         </Link>
                     </li>
-                    <li className={this.isPathActive('category/status') ? 'nav-item active' : 'nav-item'}>
-                        <Link className="nav-link" to="category/status">
+                    <li className={this.isPathActive('/category/status') ? 'nav-item active' : 'nav-item'}>
+                        <Link className="nav-link" to="/category/status">
                             <span className="icon-bg"><i className="mdi mdi-cube menu-icon"></i></span>
                             <span className="menu-title"><Trans>Trạng thái</Trans></span>
+                        </Link>
+                    </li>
+                    <li className={this.isPathActive('/category/tasktype') ? 'nav-item active' : 'nav-item'}>
+                        <Link className="nav-link" to="/category/tasktype">
+                            <span className="icon-bg"><i className="mdi mdi-cube menu-icon"></i></span>
+                            <span className="menu-title"><Trans>Loại công việc</Trans></span>
                         </Link>
                     </li>
                     <li className={this.isPathActive('/error-pages') ? 'nav-item active' : 'nav-item'}>

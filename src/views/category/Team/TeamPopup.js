@@ -1,12 +1,9 @@
-﻿import React, { useEffect, useState, useMemo, useCallback } from "react"
-
+﻿import React, { useEffect, useState } from "react"
 import Popup from "components/popup/Popup"
-import SkeletonLoading from "components/loader/SkeletonLoading"
 import Grid from "@mui/material/Grid"
 import SingleSelect from "components/select/SingleSelect"
 import PropTypes from "prop-types"
 import MultiSelect from "components/select/MultiSelect"
-
 import TextInput from "components/input/TextInput"
 import { useTranslation } from "react-i18next"
 import { useSelector, useDispatch } from "react-redux"
@@ -16,11 +13,8 @@ import { yupResolver } from "@hookform/resolvers/yup"
 import { open, change_title } from "components/popup/popupSlice"
 import { openMessage } from "stores/components/snackbar"
 import {
-  setPage,
-  setSort,
   setLoadingPopup,
   setReload,
-  setEditData,
 } from "stores/views/master"
 import { getTeamByID, saveTeam, get } from "services"
 import { ERROR_CODE, baseUrl } from "configs"
@@ -32,10 +26,9 @@ const TeamPopup = React.memo((props) => {
   const { t } = useTranslation()
   const dispatch = useDispatch()
   const editData = useSelector((state) => state.master.editData)
-  const openPopup = useSelector((state) => state.popup.open)
   const isReload = useSelector((state) => state.master.isReload)
-  const [dataTeam, setDataTeam] = React.useState([])
-  const [dataUser, setDataUser] = React.useState([])
+  const [dataTeam, setDataTeam] = useState([])
+  const [dataUser, setDataUser] = useState([])
   const validationSchema = Yup.object().shape({
     name: Yup.string().required(t(message.error.fieldNotEmpty)),
   })
@@ -59,11 +52,7 @@ const TeamPopup = React.memo((props) => {
   }
 
   useEffect(() => {
-    reset()
-  }, [openPopup])
-
-  useEffect(() => {
-    if (openPopup) {
+    if (isReload != null) {
       fetchDataTeam()
     }
   }, [isReload])
@@ -73,7 +62,6 @@ const TeamPopup = React.memo((props) => {
   }, [])
 
   useEffect(() => {
-    reset()
     if (editData) {
       onEditClick()
     }
@@ -206,6 +194,7 @@ const TeamPopup = React.memo((props) => {
   return (
     <div>
       <Popup
+        reset={reset}
         ModalBody={ModalBody}
         widthSize={"sm"}
         onSave={handleSubmit(onSubmit)}
