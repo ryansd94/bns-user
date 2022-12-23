@@ -21,19 +21,19 @@ const UserToolbar = (props) => {
     const columnVisibility = { ...useSelector((state) => state.user.columnVisibility) }
 
     const columnModel = [{
-        field: "email", value: true, label: t("Email"), type: EFilterType.text
+        field: "email", isShow: true, label: t("Email"), type: EFilterType.text
     },
     {
-        field: "fullName", value: true, label: t("Họ tên"), type: EFilterType.text
+        field: "fullName", isShow: true, label: t("Họ tên"), type: EFilterType.text
     },
     {
-        field: "teamName", value: true, label: t("Nhóm"), type: EFilterType.text
+        field: "teamName", isShow: true, label: t("Nhóm"), type: EFilterType.text
     },
     {
-        field: "status", value: true, label: t("Trạng thái"), type: EFilterType.select
+        field: "status", isShow: true, label: t("Trạng thái"), type: EFilterType.select
     },
     {
-        field: "createdDate", value: true, label: t("Ngày tạo"), type: EFilterType.datetime
+        field: "createdDate", isShow: true, label: t("Ngày tạo"), type: EFilterType.datetime
     }]
 
     const handleColumnConfigChange = (event) => {

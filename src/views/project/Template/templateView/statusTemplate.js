@@ -14,6 +14,7 @@ import Typography from '@mui/material/Typography'
 import { IconCricle } from "components/icon/icon"
 import Box from "@mui/material/Box"
 import StatusItem from 'views/category/status/statusItem'
+import StatusSelect from 'components/select/statusSelect'
 
 const StatusTemplate = React.memo((props) => {
     console.log("render StatusTemplate");
@@ -26,9 +27,9 @@ const StatusTemplate = React.memo((props) => {
         name: "status",
     })
 
-    // useEffect(() => {
-    //     setValue('status', statusTemplate)
-    // }, [statusTemplate])
+    useEffect(() => {
+        setValue('status', statusTemplate)
+    }, [statusTemplate])
 
     useEffect(() => {
         if (!id) {
@@ -42,15 +43,6 @@ const StatusTemplate = React.memo((props) => {
             setValue('status', [...listStatus])
         }
     }, [listStatus])
-
-    const onColorChange = (value, index, statusItem) => {
-        setValue(`status[${index}].color`, `#${value.hex}`)
-        var item = statusTemplate.find((ele) => {
-            return ele.id === statusItem.id
-        })
-        item.color = `#${value.hex}`
-        setStatusTemplate([...statusTemplate])
-    }
 
     const onStatusDelete = (index, id) => {
         //remove(index)
@@ -71,7 +63,6 @@ const StatusTemplate = React.memo((props) => {
 
     const addNew = () => {
         const newStatus = statusData && statusData.length > 0 && { ...statusData[0] } || {}
-        newStatus.isNew = true
         append(newStatus)
         statusTemplate.splice(statusTemplate.length > 0 ? statusTemplate.length + 1 : 0, 0, newStatus)
         // const status = [...statusTemplate]
@@ -102,27 +93,12 @@ const StatusTemplate = React.memo((props) => {
                     {/* <TextInput fullWidth={false} name={`status[${index}].name`} 
                     control={control} defaultValue={statusItem.name} /> */}
                     {/* <SingleSelect fullWidth={true} data={statusData} name={`status[${index}].name`} control={control} /> */}
-
-                    <SelectControl
-                        disabled={statusItem.isNew ? false : true}
-                        defaultValue={statusItem.id}
-                        control={control}
-                        name={`status[${index}].id`}
+                    <StatusSelect
                         onChange={(value) => onStatusChange(index, value)}
                         options={[...statusData]}
-                        renderOptions={
-                            (option) => {
-                                return <StatusItem status={option} />
-                            }
-                        }
-                        renderValue={
-                            (value) => {
-                                const item = statusData.find((item) => {
-                                    return item.id === value
-                                })
-                                return <StatusItem status={item} />
-                            }
-                        }
+                        defaultValue={statusItem.id}
+                        name={`status[${index}].id`}
+                        control={control}
                     />
                 </Grid>
                 {/* <Grid item  >

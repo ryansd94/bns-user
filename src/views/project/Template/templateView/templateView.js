@@ -20,7 +20,6 @@ import { loading as loadingButton } from "stores/components/button"
 import { openMessage } from "stores/components/snackbar"
 import { baseUrl, message } from 'configs'
 import { useParams } from 'react-router'
-import TextInput from "components/input/TextInput"
 import {
   setLoadingPopup,
 } from "stores/views/master"
@@ -30,8 +29,9 @@ const TemplateAdd = React.memo((props) => {
   const { id } = useParams()
   const { t } = useTranslation()
   const dispatch = useDispatch()
-  const [dataTemplate, setDataTemplate] = useState([])
+  const [dataTemplate, setDataTemplate] = useState(null)
   const [statusData, setStatusData] = useState([])
+  const [templateColumnData, setTemplateColumnData] = useState([])
   const validationSchema = Yup.object().shape({
     name: Yup.string().required(t(message.error.fieldNotEmpty)),
   })
@@ -48,7 +48,7 @@ const TemplateAdd = React.memo((props) => {
     defaultValues: {
       name: '',
       description: '',
-      id: '',
+      id: id,
       // status: [{ id: uuidv4(), name: 'Mới', color: '#1976d2', isNew: true }]e 
     }
   })
@@ -62,13 +62,12 @@ const TemplateAdd = React.memo((props) => {
 
   useEffect(() => {
     fetchStatus()
+    fetchTemplateColumn()
   }, [])
 
   const fetchStatus = async () => {
     await get(baseUrl.jm_status, {
-      draw: 0,
-      start: 0,
-      length: 100,
+      isGetAll: true
     }).then((data) => {
       if (data) {
         setStatusData(data.data.items)
@@ -76,6 +75,15 @@ const TemplateAdd = React.memo((props) => {
     })
   }
 
+  const fetchTemplateColumn = async () => {
+    await get(baseUrl.jm_taskcolumn, {
+      isGetAll: true
+    }).then((data) => {
+      if (data) {
+        setTemplateColumnData(data.data.items)
+      }
+    })
+  }
 
   const fetchData = async () => {
     dispatch(setLoadingPopup(true))
@@ -103,11 +111,11 @@ const TemplateAdd = React.memo((props) => {
 
   return (
     <Grid container direction="row" spacing={2}>
-      <Grid item xs={12}  >
+      <Grid item xs={12}>
         <ButtonDetail
           onClick={handleSubmit(onSubmit)} type={"Save"} />
       </Grid>
-      <Grid item xs={6}  >
+      <Grid item xs={6}>
         <AccordionControl
           isExpand={true}
           title="Thông tin cơ bản"
@@ -148,7 +156,7 @@ const TemplateAdd = React.memo((props) => {
             <Box className="box-container">
               <Grid container direction="column" >
                 <Grid item xs={12}  >
-                  <ContentTemplate statusData={statusData} dataTemplate={dataTemplate} control={control} setValue={setValue} />
+                  <ContentTemplate templateColumnData={templateColumnData} statusData={statusData} dataTemplate={dataTemplate} control={control} setValue={setValue} />
                 </Grid>
               </Grid>
             </Box>

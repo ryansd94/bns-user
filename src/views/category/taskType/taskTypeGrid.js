@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react"
+import React, { useEffect, useState, useRef } from "react"
 import ButtonIcon from "components/button/ButtonIcon"
 import { useTranslation } from "react-i18next"
 import { useSelector, useDispatch } from "react-redux"
@@ -10,6 +10,7 @@ import {
 import { open } from "components/popup/popupSlice"
 import { open as openAlert } from "stores/components/alert-dialog"
 import GridData from "components/table/GridData"
+import UploadIconImage from 'components/upload/uploadIconImage'
 
 const TaskTypeGrid = React.memo((props) => {
     const { filterModels } = props
@@ -21,15 +22,16 @@ const TaskTypeGrid = React.memo((props) => {
     const columns = [
         {
             checkboxSelection: true,
-            resizable: false, width: 40, headerCheckboxSelection: true
+            resizable: false, width: 40, headerCheckboxSelection: true,
+            pinned: 'left'
         },
         {
-            field: "name", headerName: t("Tên mẫu công việc"),
+            field: "name", headerName: t("Tên loại công việc"),
             flex: 1,
+            pinned: 'left'
         },
         {
             field: "templateName", headerName: t("Mẫu công việc"),
-            flex: 1,
         },
         {
             field: "icon", headerName: t("Biểu tượng"),
@@ -37,18 +39,18 @@ const TaskTypeGrid = React.memo((props) => {
             sortable: false,
             cellRenderer: (params) => {
                 return params.data.icon ?
-                    <img className="upload-icon-image" src={params.data.icon}></img> : ''
+                    <UploadIconImage color={params.data.color} src={params.data.icon} /> : ''
             }
         },
         {
             field: "description",
             headerName: t("Mô tả"),
-            width: 450,
-            flex: 2,
+            flex: 1,
         },
         {
             field: "edit",
             headerName: "",
+            width: 120,
             suppressAutoSize: true,
             cellRenderer: (params) => {
                 const onEditClick = (e) => {

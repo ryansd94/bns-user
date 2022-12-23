@@ -45,7 +45,7 @@ const StyledMenu = styled((props) => (
   },
 }));
 const ConfigColumn = (props) => {
-  const { anchorEl, handleClose, columnModel,onColumnConfigChange } = props;
+  const { anchorEl, handleClose, columnModel, onColumnConfigChange } = props;
   const [state, setState] = React.useState(columnModel);
   const open = Boolean(anchorEl);
   const handleChange = (event) => {
@@ -75,7 +75,7 @@ const ConfigColumn = (props) => {
         {
           columnModel && columnModel.map((item, index) => {
             return (<MenuItem key={item.field} disableRipple>
-              <CheckBox name={item.field} onChange={onColumnConfigChange} checked={item.value} label={item.label} />
+              <CheckBox name={item.field} onChange={onColumnConfigChange} checked={item.isShow} label={item.label} />
             </MenuItem>)
           })
         }
@@ -87,6 +87,6 @@ const ConfigColumn = (props) => {
 ConfigColumn.propTypes = {
   anchorEl: PropTypes.object,
   handleClose: PropTypes.func,
-  onColumnConfigChange:PropTypes.func
+  onColumnConfigChange: PropTypes.func
 }
 export default ConfigColumn;

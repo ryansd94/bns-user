@@ -1,5 +1,5 @@
 ﻿import React, { useState, useEffect } from "react"
-import Autocomplete from "@mui/material/Autocomplete"
+import Autocomplete, { createFilterOptions } from "@mui/material/Autocomplete"
 import TextField from "@mui/material/TextField"
 import { Controller } from "react-hook-form"
 import Skeleton from "@mui/material/Skeleton"
@@ -7,15 +7,18 @@ import { useSelector } from "react-redux"
 import Typography from '@mui/material/Typography'
 import Box from '@mui/material/Box'
 import { ChipControl } from "components/chip"
-import { IconCricle } from "components/icon/icon"
 import { _TemplateVariant, EVariant, _ControlSizeDefault } from 'configs'
 import { LabelControl } from 'components/label'
+import { v4 as uuidv4 } from 'uuid'
+
+const filter = createFilterOptions()
 
 const SingleSelect = React.memo(
   (props) => {
     const { control, field, required, data = [], label, name, onSelectChange,
-      size, disabled, fullWidth, renderOption, renderTags, renderInput, disableClearable = false } = props
+      size, disabled, fullWidth, renderOption, renderTags, renderInput, disableClearable = false, freeSolo = false } = props
     const loadingPopup = useSelector((state) => state.master.loadingPopup)
+
     return (
       <Controller
         name={name}
@@ -50,11 +53,18 @@ const SingleSelect = React.memo(
                 options={data}
                 size={size ? size : _ControlSizeDefault}
                 disabled={disabled}
+                freeSolo={freeSolo}
                 fullWidth={fullWidth || true}
                 value={value != null ? value : null}
                 disableClearable={disableClearable}
-                isOptionEqualToValue={(option, value) => option.id === value}
+                selectOnFocus
+                clearOnBlur
+                handleHomeEndKeys
+                isOptionEqualToValue={(option, value) => option.id === value || null}
                 getOptionLabel={(option) => {
+                  if (option.value) {
+                    return option.value
+                  }
                   if (option.name) {
                     return option.name
                   } else {
@@ -62,12 +72,30 @@ const SingleSelect = React.memo(
                     if (item) {
                       return item.name
                     }
-                    return ''
+                    return freeSolo ? option : ''
                   }
                 }}
+                filterOptions={(options, params) => {
+                  const filtered = filter(options, params)
+                  if (params.inputValue !== '' && (!filtered || filtered.length == 0)) {
+                    filtered.push({
+                      id: uuidv4(),
+                      name: `Add "${params.inputValue}"`,
+                      value: params.inputValue,
+                      isAddNew: true
+                    })
+                  }
+                  return filtered
+                }}
                 onChange={(event, value) => {
-                  onChange(value && value.id)
-                  onSelectChange && onSelectChange(value && value.id)
+                  let newValue = value
+                  if (newValue && newValue.isAddNew) {
+                    newValue = { id: uuidv4(), name: value.value, isAddNew: true }
+                  } else {
+                    newValue = newValue && newValue.id
+                  }
+                  onChange(newValue)
+                  onSelectChange && onSelectChange(newValue)
                 }}
                 renderOption={(props, option) => {
                   return renderOption ? renderOption(props, option) : (<Box component="li" sx={{ '& > img': { mr: 2, flexShrink: 0 } }} {...props}>

@@ -9,7 +9,11 @@
     box-shadow: none;
     display: flex;
     flex-direction: column;
-    // gap: 1rem;
+}
+.editor-container .MuiAccordion-root {
+    .MuiButtonBase-root {
+        min-height: auto !important;
+    }
 }
 .MuiAccordionSummary-root {
     border-bottom: 1px solid #8f8f8f52;

@@ -55,8 +55,11 @@ const IconUp = ({ style, className }) => {
 const IconDown = ({ style, className }) => {
   return <i style={style} className="far fa-arrow-down fa-sm"></i>
 }
+const IconExpand = ({ style, className }) => {
+  return <i style={style} className="far fa-angle-down fa-sm"></i>
+}
 
 export {
   IconSave, IconDelete, IconEdit, IconCancel, IconEmail, IconActive, IconBlock,
-  IconUnBlock, IconClean, IconApply, IconBack, IconMore, IconAdd, IconCricle, IconUp, IconDown
+  IconUnBlock, IconClean, IconApply, IconBack, IconMore, IconAdd, IconCricle, IconUp, IconDown, IconExpand
 }

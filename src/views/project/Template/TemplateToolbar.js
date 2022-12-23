@@ -15,13 +15,13 @@ const TemplateToolbar = (props) => {
     const toolbarVisible = { ...useSelector((state) => state.master.toolbarVisible) }
     const columnVisibility = { ...useSelector((state) => state.template.columnVisibility) }
     const columnModel = [{
-        field: "name", value: true, label: t("Tên mẫu"), type: EFilterType.text
+        field: "name", isShow: true, label: t("Tên mẫu"), type: EFilterType.text
     },
     {
-        field: "description", value: true, label: t("Mô tả"), type: EFilterType.text
+        field: "description", isShow: true, label: t("Mô tả"), type: EFilterType.text
     },
     {
-        field: "createdDate", value: true, label: t("Ngày tạo"), type: EFilterType.datetime
+        field: "createdDate", isShow: true, label: t("Ngày tạo"), type: EFilterType.datetime
     }]
     const handleColumnConfigChange = (event) => {
         columnVisibility[event.target.name] = event.target.checked

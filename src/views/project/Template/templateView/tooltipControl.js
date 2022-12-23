@@ -6,7 +6,7 @@ import { PopoverControl } from 'components/popover'
 import TemplateAddControl from './addControl'
 
 const TooltipControl = React.memo((props) => {
-    const { onAction, index, isLastControl, onAddControlSubmit, prefix, item } = props
+    const { onAction, index, isLastControl, onAddControlSubmit, prefix, item, templateColumnData = [] } = props
     const [openPopover, setOpenPopover] = useState(null)
 
     const handlePopoverOpen = (event) => {
@@ -18,7 +18,7 @@ const TooltipControl = React.memo((props) => {
     }
 
     const genderPopoverControl = () => {
-        return <TemplateAddControl onApply={onAddControlSubmit} prefix={prefix} index={index} item={item} />
+        return <TemplateAddControl templateColumnData={templateColumnData} onApply={onAddControlSubmit} prefix={prefix} index={index} item={item} />
     }
 
     return <Grid container spacing={1} style={{ padding: '0.5rem' }}>

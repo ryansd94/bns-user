@@ -1,22 +1,21 @@
-import React, { useState, useEffect } from "react"
+import React, { useState, useEffect, useRef } from "react"
 import PhotoCamera from '@mui/icons-material/PhotoCamera'
-import { AvatarControl } from 'components/avatar'
 import IconButton from "@mui/material/IconButton"
-import { ESize } from "configs"
 import { styled } from '@mui/material/styles'
 import './style.scss'
 import { Controller } from "react-hook-form"
 import { _TemplateVariant, EVariant, _ControlSizeDefault } from "configs"
 import { LabelControl } from 'components/label'
+import UploadIconImage from './uploadIconImage'
 
 const Input = styled('input')({
     display: 'none',
 })
 
 const UploadIcon = (props) => {
-    const { name, control, label, required } = props
+    const { name, control, label, required, color = '' } = props
     const [selectedFile, setSelectedFile] = useState(null)
-
+    const imgRef = useRef()
     const handleUploadClick = (event, field) => {
         var file = event.target.files[0]
         const reader = new FileReader()
@@ -40,11 +39,10 @@ const UploadIcon = (props) => {
                                 <PhotoCamera />
                             </IconButton>
                         </div>
-                        <img className="upload-icon-image" src={selectedFile ? selectedFile : field.value} ></img>
+                        <UploadIconImage color={color} src={selectedFile ? selectedFile : field.value} />
                         <Input onChange={(e) => handleUploadClick(e, field)} accept="image/*" id="upload-icon-button-file" type="file" />
-
                     </label>
-                </div>
+                </div >
             )
             }
             name={name}

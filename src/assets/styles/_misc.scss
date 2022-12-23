@@ -56,12 +56,12 @@ body {
 
 .content-wrapper {
     background: $content-bg;
-    padding: 1.5rem 1.5rem 0 1.5rem;
+    padding: 1rem 1rem 0 1rem;
     width: 100%;
     @include flex-grow(1);
 
     @media (max-width: 991px) {
-        padding: 2rem 2rem 0 2rem;
+        padding: 1rem 1rem 0 1rem;
     }
 }
 

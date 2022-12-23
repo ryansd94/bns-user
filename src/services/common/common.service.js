@@ -1,12 +1,13 @@
 import { createInstance, handleError } from "services/base"
 import { buildQueryString } from "helpers"
+import _ from 'lodash'
 
 const services = createInstance("/api")
 
 export const save = async (baseUrl, param) => {
   try {
     const query = `${baseUrl}`
-    if (!param.id) {
+    if (_.isEmpty(param.id)) {
       const res = await services.post(query, param)
       return res
     } else {
@@ -25,7 +26,7 @@ export const save = async (baseUrl, param) => {
   }
 }
 
-export const get = async (baseUrl, param) => {
+export const get = async (baseUrl, param = null) => {
   try {
     let query = `${baseUrl}`
     if (param) {

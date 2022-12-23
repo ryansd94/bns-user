@@ -12,8 +12,9 @@ import { useSelector } from "react-redux"
 import Skeleton from "@mui/material/Skeleton"
 import { _TemplateVariant, EVariant, _ControlSizeDefault } from "configs"
 import { LabelControl } from 'components/label'
+import _ from 'lodash'
 
-const DatePickerInput = ({ size, onChange, disabled, control, name, label }) => {
+const DatePickerInput = ({ size, onChange, disabled, control, name, label, formatDate = EFormatDate.ddmmyyyy }) => {
     const loadingPopup = useSelector((state) => state.master.loadingPopup)
     const { t } = useTranslation()
     const [value, setValue] = React.useState(null)
@@ -57,15 +58,17 @@ const DatePickerInput = ({ size, onChange, disabled, control, name, label }) => 
                             <DesktopDatePicker
                                 label={_TemplateVariant === EVariant.outlined ? label : ''}
                                 clearable
-                                value={value}
+                                value={value || !_.isNil(field?.value) ? field?.value : null}
                                 disabled={disabled ? disabled : false}
-                                inputFormat={EFormatDate.ddmmyyyy}
+                                inputFormat={formatDate}
+                                mask={""}
                                 onChange={(newValue) => {
                                     setValue(newValue)
                                     field.onChange(newValue)
                                     onChange && onChange(newValue)
                                 }}
                                 renderInput={(params) => <TextField
+                                    fullWidth
                                     size={size ? size : _ControlSizeDefault} {...params} />}
                             />
                         </LocalizationProvider >

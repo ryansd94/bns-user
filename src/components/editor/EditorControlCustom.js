@@ -4,7 +4,6 @@ import 'react-quill/dist/quill.snow.css';
 import EditorToolbar, { modules, formats } from "components/editor/EditorToolbar";
 
 const EditorControlCustom = React.memo((props) => {
-    console.log("render EditorControl")
     const [hideToolbar, setHideToolbar] = useState(true)
     // const [state, setState] = React.useState({ value: null });
     // const handleChange = value => {

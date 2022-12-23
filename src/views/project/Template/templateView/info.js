@@ -4,7 +4,7 @@ import Grid from "@mui/material/Grid"
 import { EditorControl } from 'components/editor'
 
 const InfoTemplate = React.memo((props) => {
-    const { control, dataTemplate } = props
+    const { control, dataTemplate = null } = props
     return (
         <Grid item xs={12} container spacing={2} >
             <Grid item xs={12}>

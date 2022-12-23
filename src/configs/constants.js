@@ -69,7 +69,8 @@ export const EColor =
 
 export const EFormatDate =
 {
-  ddmmyyyy: "dd/MM/yyyy"
+  ddmmyyyy: "dd-MM-yyyy",
+  ddmmyyyy_hhmm: "dd-MM-yyyy HH:mm"
 }
 
 export const EButtonIconType = {
@@ -118,6 +119,7 @@ export const EControlType = {
   editor: "Editor",
   select: "Select",
   group: "Group",
+  dateTimePicker: "DateTimePicker",
   datePicker: "DatePicker"
 }
 
@@ -128,6 +130,9 @@ export const baseUrl = {
   jm_user: 'jm_user',
   sys_filter: 'sys_filter',
   jm_taskType: 'jm_tasktype',
+  jm_task: 'jm_task',
+  jm_taskcolumn: 'jm_taskcolumn',
+  jm_customcolumn: 'jm_customcolumn',
 }
 
 export const _TemplateVariant = EVariant.normal

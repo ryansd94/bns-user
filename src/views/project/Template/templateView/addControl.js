@@ -13,10 +13,10 @@ import { TextInput } from 'components/input'
 import { message } from "configs"
 
 const TemplateAddControl = React.memo((props) => {
-    const { onAction, index, isLastControl, onApply, prefix, item } = props
+    const { onAction, index, onApply, prefix, item, templateColumnData = [] } = props
     const { t } = useTranslation()
     const validationSchema = Yup.object().shape({
-        title: Yup.string().required(t(message.error.fieldNotEmpty))
+        // title: Yup.string().required(t(message.error.fieldNotEmpty))
     })
     const optionPositionItem = [{ id: '1', label: t('Trên') }, { id: '2', label: t('Dưới') }]
     const optionPositionGroup = [{ id: '1', label: t('Trên') }, { id: '2', label: t('Dưới') }, { id: '3', label: t('Bên trong') }]
@@ -40,7 +40,7 @@ const TemplateAddControl = React.memo((props) => {
     function getControlType() {
         return [
             { id: EControlType.textField, name: t('Văn bản') },
-            { id: EControlType.datePicker, name: t('Ngày tháng') },
+            { id: EControlType.dateTimePicker, name: t('Ngày tháng') },
             { id: EControlType.editor, name: t('Mô tả') }
         ]
     }
@@ -54,20 +54,22 @@ const TemplateAddControl = React.memo((props) => {
         </Grid>
         <Grid item>
             <SingleSelect
+                label={t("Tiêu đề")}
+                control={control}
+                name='title'
+                freeSolo={true}
+                data={templateColumnData}
+            >
+            </SingleSelect>
+        </Grid>
+        <Grid item>
+            <SingleSelect
                 label={t("Loại")}
                 control={control}
                 name='type'
                 data={getControlType()}
             >
             </SingleSelect>
-        </Grid>
-        <Grid item>
-            <TextInput
-                control={control}
-                label={t("Tiêu đề")}
-                name='title'
-                required
-            />
         </Grid>
         <Grid item>
             <ButtonFuntion style={{ marginRight: "auto" }} onClick={handleSubmit(onSave)} type={EButtonType.apply} />

@@ -258,6 +258,7 @@ legend {
     display: flex;
     gap: 10px;
     align-items: center;
+    // padding: 10px;
 }
 .chip-container {
     padding: 10px;
@@ -297,4 +298,40 @@ div[data-rbd-draggable-context-id] {
 .disabled {
     pointer-events: none;
     cursor: default;
+}
+.upload-icon-image {
+    width: 18px;
+    height: 18px;
+}
+.f-right {
+    float: right;
+}
+.align-items-center {
+    align-items: center;
+}
+.span-item {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+// .task-column-content > .MuiGrid-root {
+//     display: flex;
+//     flex-direction: column;
+//     gap: 1rem;
+// }
+.ag-horizontal-left-spacer {
+    overflow: auto !important;
+}
+.task-group-container > .MuiCollapse-root {
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
+}
+.MuiDialogActions-root {
+    justify-content: space-between !important;
+}
+.icon-loading-container {
+    margin-right: 1rem !important;
+}
+span[data-testid="alphaslider"] {
+    display: none;
 }

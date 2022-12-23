@@ -17,19 +17,19 @@ const TaskTypeToolbar = (props) => {
     const toolbarVisible = { ...useSelector((state) => state.master.toolbarVisible) }
     const columnVisibility = { ...useSelector((state) => state.taskType.columnVisibility) }
     const columnModel = [{
-        field: "name", value: true, label: t("Tên loại công việc"), type: EFilterType.text
+        field: "name", isShow: true, label: t("Tên loại công việc"), type: EFilterType.text
     },
     {
-        field: "templateName", value: true, label: t("Mẫu công việc"), type: EFilterType.text
+        field: "templateName", isShow: true, label: t("Mẫu công việc"), type: EFilterType.text
     },
     {
-        field: "description", value: true, label: t("Mô tả"), type: EFilterType.text
+        field: "description", isShow: true, label: t("Mô tả"), type: EFilterType.text
     },
     {
-        field: "icon", value: true, label: t("Biểu tượng"), type: EFilterType.text, isHideFilter: true
+        field: "icon", isShow: true, label: t("Biểu tượng"), type: EFilterType.text, isHideFilter: true
     },
     {
-        field: "createdDate", value: true, label: t("Ngày tạo"), type: EFilterType.datetime
+        field: "createdDate", isShow: true, label: t("Ngày tạo"), type: EFilterType.datetime
     }]
     
     const handleColumnConfigChange = (event) => {

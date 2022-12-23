@@ -2,7 +2,6 @@ import * as React from "react"
 import Dialog from "@mui/material/Dialog"
 import DialogActions from "@mui/material/DialogActions"
 import DialogTitle from "@mui/material/DialogTitle"
-
 import { open as openAlert } from "stores/components/alert-dialog"
 import { useSelector, useDispatch } from "react-redux"
 import { useTranslation } from "react-i18next"
@@ -34,19 +33,6 @@ const AlertDialog = (props) => {
           {title ? title : t("Bạn có chắc muốn xóa dữ liệu này?")}
         </DialogTitle>
         <DialogActions>
-          <IconButton
-            hidden={!loading}
-            style={{ padding: 0 }}
-            aria-label="delete"
-          >
-            <SpinningCircles
-              speed={1}
-              width={24}
-              height={24}
-              fill="#1976d2"
-              stroke="#1976d2"
-            />
-          </IconButton>
           <ButtonDetail onClick={handleClose} type="Undo" />
           <ButtonDetail
             disabled={loading}

@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from "react"
+import React, { useState, useMemo, useEffect } from "react"
 import {
     FormControl,
     Select,
@@ -13,6 +13,7 @@ import { LabelControl } from 'components/label'
 import { useSelector } from "react-redux"
 import Skeleton from "@mui/material/Skeleton"
 import { Controller } from "react-hook-form"
+import _ from 'lodash'
 
 const containsText = (text, searchText) =>
     searchText ? text.toLowerCase().indexOf(searchText.toLowerCase()) > -1 : true
@@ -20,19 +21,24 @@ const containsText = (text, searchText) =>
 
 const SelectControl = React.memo((props) => {
     const { fullWidth, label, size, options = [], renderOptions,
-        renderValue, onChange, defaultValue, disabled, control, name } = props
-    const [selectedOption, setSelectedOption] = useState(defaultValue ? defaultValue : (options && options.length > 0 ? options[0].id : null))
+        renderValue, onChange, defaultValue, disabled, control, name, isSearchText = true } = props
+    const [selectedOption, setSelectedOption] = useState(null)
     const loadingPopup = useSelector((state) => state.master.loadingPopup)
     const [searchText, setSearchText] = useState("")
-    const displayedOptions = useMemo(
+    const displayedOptions = isSearchText == true ? useMemo(
         () => options.filter((option) => containsText(option.name, searchText)),
         [searchText]
-    )
-    const onSelectedChange = (value) => {
+    ) : options
+    const onSelectedChange = (value, field) => {
         setSelectedOption(value)
         onChange && onChange(value)
+        field.onChange(value)
     }
-    const genderControlElement = () => {
+    useEffect(() => {
+        setSelectedOption(defaultValue ? defaultValue : (options && options.length > 0 ? options[0].id : null))
+    }, [options])
+
+    const genderControlElement = (field) => {
         return <FormControl className={disabled ? "disabled" : "select-container"} size={size || "small"} fullWidth>
             {/* <InputLabel id="search-select-label">{label}</InputLabel> */}
             {_TemplateVariant === EVariant.normal ? (label ? <LabelControl required={required} label={label} /> : '') : ''}
@@ -40,13 +46,13 @@ const SelectControl = React.memo((props) => {
                 MenuProps={{ autoFocus: false }}
                 labelId="search-select-label"
                 id="search-select"
-                value={selectedOption || ""}
+                value={!_.isNil(field?.value) ? field.value : (selectedOption || "")}
                 label={_TemplateVariant === EVariant.outlined ? label : ''}
-                onChange={(e) => onSelectedChange(e.target.value)}
+                onChange={(e) => onSelectedChange(e.target.value, field)}
                 onClose={() => setSearchText("")}
-                renderValue={() => { return renderValue ? renderValue(selectedOption) : selectedOption.name }}
+                renderValue={() => { return renderValue ? renderValue(!_.isNil(field?.value) ? field.value : selectedOption) : selectedOption.name }}
             >
-                <ListSubheader>
+                {isSearchText ? <ListSubheader>
                     <TextField
                         size={size || "small"}
                         autoFocus
@@ -66,7 +72,7 @@ const SelectControl = React.memo((props) => {
                             }
                         }}
                     />
-                </ListSubheader>
+                </ListSubheader> : <ListSubheader></ListSubheader>}
                 {displayedOptions.map((option, i) => (
                     <MenuItem key={option.id} value={option.id}>
                         {

@@ -29,6 +29,10 @@ const FilterItem = React.memo((props) => {
             id: 2,
             name: t("Có chứa")
         },
+        {
+            id: 9,
+            name: t("Không chứa")
+        },
     ]
     const selectOptions = [{
         id: 0,
@@ -79,7 +83,7 @@ const FilterItem = React.memo((props) => {
         const data = []
         columnModel && columnModel.map((item) => {
             if (!item.isHideFilter) {
-                data.push({ id: item.field, name: item.label, type: item.type })
+                data.push({ id: item.field, name: item.label, type: item.type, isCustom: item.isCustom })
             }
         })
         return data
@@ -111,6 +115,7 @@ const FilterItem = React.memo((props) => {
             setDisplay("block")
             setDisableCondition(false)
             setValue(`test[${index}].type`, valueItem.type)
+            setValue(`test[${index}].isCustom`, valueItem.isCustom)
             var disabled = true
             if (conditionValue) {
                 disabled = false

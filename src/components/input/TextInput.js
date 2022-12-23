@@ -15,13 +15,15 @@ export default function TextInput({
   hidden,
   inputProps,
   type,
-  onChange,
   size,
   disabled,
   variant,
   fullWidth,
   multiline,
-  defaultValue
+  defaultValue,
+  placeholder,
+  focused,
+  onChange,
 }) {
   const loadingPopup = useSelector((state) => state.master.loadingPopup)
   return (
@@ -30,34 +32,6 @@ export default function TextInput({
         loadingPopup ? (
           <Skeleton width={"100%"}
             size={size ? size : _ControlSizeDefault} variant="text">
-            <TextField
-               {...field}
-               fullWidth={fullWidth || true}
-               type={type || "text"}
-               inputProps={inputProps}
-               required={required}
-               variant={variant || EVariant.outlined}
-               error={!!error}
-               name={name}
-               value={field.value || defaultValue || ''}
-               multiline={multiline}
-               rows={multiline ? 2 : 1}
-               maxRows={multiline ? 4 : 1}
-               size={size ? size : _ControlSizeDefault}
-               helperText={error?.message}
-               label={_TemplateVariant === EVariant.outlined ? label : ''}
-               disabled={disabled ? disabled : false}
-               autoComplete="new-password"
-               hidden={hidden ? true : false}
-               onChange={(e) => {
-                 field.onChange(e.target.value)
-               }}
-               autoFocus={autoFocus}
-            />
-          </Skeleton>
-        ) : (
-          <div className="containerControl">
-            {_TemplateVariant === EVariant.normal ? (label ? <LabelControl required={required} label={label} /> : '') : ''}
             <TextField
               {...field}
               fullWidth={fullWidth || true}
@@ -79,6 +53,37 @@ export default function TextInput({
               hidden={hidden ? true : false}
               onChange={(e) => {
                 field.onChange(e.target.value)
+              }}
+              autoFocus={focused}
+            />
+          </Skeleton>
+        ) : (
+          <div className="containerControl">
+            {_TemplateVariant === EVariant.normal ? (label ? <LabelControl required={required} label={label} /> : '') : ''}
+            <TextField
+              {...field}
+              fullWidth={fullWidth || true}
+              type={type || "text"}
+              inputProps={inputProps}
+              required={required}
+              variant={variant || EVariant.outlined}
+              error={!!error}
+              name={name}
+              focused={focused}
+              placeholder={placeholder}
+              value={field.value || defaultValue || ''}
+              multiline={multiline}
+              rows={multiline ? 2 : 1}
+              maxRows={multiline ? 4 : 1}
+              size={size ? size : _ControlSizeDefault}
+              helperText={error?.message}
+              label={_TemplateVariant === EVariant.outlined ? label : ''}
+              disabled={disabled ? disabled : false}
+              autoComplete="new-password"
+              hidden={hidden ? true : false}
+              onChange={(e) => {
+                field.onChange(e.target.value)
+                onChange && onChange(e.target.value)
               }}
               autoFocus={autoFocus}
             />

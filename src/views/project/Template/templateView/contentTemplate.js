@@ -3,22 +3,17 @@ import styled from "styled-components"
 import { DragDropContext } from "react-beautiful-dnd"
 import DraggableElement from "components/drapAndDrop/DraggableElement"
 import TextInput from "components/input/TextInput"
-import Typography from '@mui/material/Typography'
 import { EControlType, ESize, EButtonIconType } from 'configs'
-import Box from "@mui/material/Box"
 import Grid from "@mui/material/Grid"
 import { useForm } from "react-hook-form"
-import MultiSelect from 'components/select/MultiSelect'
 import { useTranslation } from "react-i18next"
-import { AvatarControl } from "components/avatar"
-import { ChipControl } from "components/chip"
-import { IconCricle, IconDelete } from "components/icon/icon"
-import SelectControl from 'components/select/SelectControl'
 import TooltipControl from './tooltipControl'
 import useMediaQuery from '@mui/material/useMediaQuery'
 import { useTheme } from '@mui/material/styles'
 import { v4 as uuidv4 } from 'uuid'
-import StatusItem from 'views/category/status/statusItem'
+import AssignSelect from 'components/select/assignSelect'
+import StatusSelect from 'components/select/statusSelect'
+import _ from "lodash"
 
 const DragDropContextContainer = styled.div`
 display:flex;
@@ -76,101 +71,90 @@ const addToList = (list, index, id, element) => {
 
 const generateListTitle = () => {
   return {
-    "row1": [
+    "column1": [
       {
         id: `item-1`,
-        prefix: "row1",
+        prefix: "column1",
         type: EControlType.editor,
+        name: 'description',
         label: 'Mô tả',
-        level: 0
+        default: true
       },
       {
         id: `item-2`,
-        prefix: "row1",
+        prefix: "column1",
         type: EControlType.editor,
+        name: 'note',
         label: 'Ghi chú',
-        level: 0
+        default: true
       },
-      {
-        id: `item-15`,
-        prefix: "row1",
-        type: EControlType.textField,
-        label: 'test',
-        level: 0
-      }
     ],
-    "row2": [
+    "column2": [
       {
         id: `item-3`,
-        prefix: "item-3@row2",
+        prefix: "item-3@column2",
         type: EControlType.group,
         label: 'Chi tiết',
-        level: 0,
+        name: 'detail',
+        default: true,
         items: [
           {
             id: `item-4@item-3`,
             type: EControlType.textField,
             label: 'Người tạo',
-            level: 1
+            name: 'createdUser',
+            default: true,
+            defaultReadonly: true,
+            isHidenWhenCreate: true
+          },
+          {
+            id: `item-11@item-3`,
+            type: EControlType.dateTimePicker,
+            label: 'Ngày tạo',
+            name: 'createdDate',
+            default: true,
+            defaultReadonly: true,
+            isHidenWhenCreate: true
           },
           {
             id: `item-5@item-3`,
             type: EControlType.select,
             label: 'Độ ưu tiên',
-            level: 1
+            name: 'priority',
+            default: true
           },
-          {
-            id: `item-11@item-3`,
-            type: EControlType.datePicker,
-            label: 'Ngày tạo',
-            level: 1
-          }
         ]
       },
       {
         id: `item-8`,
-        prefix: "item-8@row2",
+        prefix: "item-8@column2",
         type: EControlType.group,
-        label: 'Chi tiết 2',
-        level: 0,
+        label: 'Kế hoạch',
+        default: true,
         items: [
           {
             id: `item-9@item-8`,
-            type: EControlType.textField,
-            label: 'Người tạo 2',
-            level: 1
+            type: EControlType.datePicker,
+            label: 'Ngày bắt đầu',
+            name: 'startDate',
+            default: true
           },
           {
             id: `item-10@item-8`,
-            type: EControlType.select,
-            label: 'Độ ưu tiên 2',
-            level: 1
+            type: EControlType.datePicker,
+            label: 'Ngày hết hạn',
+            name: 'dueDate',
+            default: true
           }
         ]
       }
     ],
-    "row3": [
-      {
-        id: `item-6`,
-        prefix: "row3",
-        type: EControlType.textField,
-        label: 'xxx',
-        level: 0
-      },
-      {
-        id: `item-7`,
-        prefix: "row3",
-        type: EControlType.textField,
-        label: 'yyy',
-        level: 0
-      }
-    ]
   }
 }
 
 const ContentTemplate = (props) => {
   console.log("render ContentTemplate")
-  const { setValue, dataTemplate = null, statusData = [] } = props
+  const { setValue, dataTemplate = null, statusData = [], templateColumnData = [] } = props
   const theme = useTheme()
   const largeScreen = useMediaQuery(theme.breakpoints.up('md'))
   const [elementsTitle, setElementsTitle] = useState(generateListTitle())
@@ -185,10 +169,9 @@ const ContentTemplate = (props) => {
   })
 
   useEffect(() => {
-    if (dataTemplate.content) {
-      const aaaa = JSON.parse(dataTemplate.content)
-      console.log(aaaa)
-      setElementsTitle(aaaa)
+    if (dataTemplate && dataTemplate.content) {
+      const content = JSON.parse(dataTemplate.content)
+      setElementsTitle(content)
     }
   }, [dataTemplate])
 
@@ -268,7 +251,7 @@ const ContentTemplate = (props) => {
 
   const getElementControls = (listKey) => {
     const value = elementsTitle[listKey]
-    return value
+    return _.isNil(value) ? [] : value
   }
 
   const onDeleteControl = (item, prefix) => {
@@ -359,12 +342,20 @@ const ContentTemplate = (props) => {
     let id = item.id
     let isAddInGroup = false
     let groupId = ''
-    const level = item.level
     let isNonGroup = id.indexOf('@') != -1
-
+    let title = ''
     let positionIndex = index
     if (data.position === '2') {
       positionIndex = index + 1
+    }
+
+    if (!data.title.isAddNew) {
+      const column = _.find(templateColumnData, (s) => s.id === data.title)
+      if (!_.isEmpty(column)) {
+        title = column.name
+      }
+    } else {
+      title = data.title.name
     }
 
     //non-group
@@ -377,7 +368,7 @@ const ContentTemplate = (props) => {
     }
 
     //group and case add item in group
-    if (item.type.id === EControlType.group && data.position === '3') {
+    if (item.type === EControlType.group && data.position === '3') {
       positionIndex = 0
       prefixGroup = item.prefix
       isAddInGroup = true
@@ -390,8 +381,10 @@ const ContentTemplate = (props) => {
       prefixGroup,
       {
         id: id,
-        type: data.type.id,
-        label: data.title,
+        type: data.type,
+        label: title,
+        isAddNew: data.title.isAddNew,
+        columnId: data.title.isAddNew ? data.title.id : data.title,
         prefix: isNonGroup ? prefixGroup : null
       }
     )
@@ -400,6 +393,7 @@ const ContentTemplate = (props) => {
 
   const genderPopoverControl = (item, prefix, index, isLastControl) => {
     return <TooltipControl
+      templateColumnData={templateColumnData}
       onAddControlSubmit={onAddControlSubmit}
       isLastControl={isLastControl}
       index={index}
@@ -417,81 +411,47 @@ const ContentTemplate = (props) => {
         </Grid>
         <Grid className="flex-container" container spacing={2} item xs={12}>
           <Grid item>
-            <MultiSelect multiple={true}
-              fullWidth={false}
+            <AssignSelect
               control={control}
-              renderOption=
-              {
-                (props, option) => {
-                  return (<Box className="select-item" {...props}>
-                    <AvatarControl className="" size={ESize.miniSmall} name="A"></AvatarControl>
-                    <Typography style={{ marginLeft: "10px" }} key={option.id}>{option.name}</Typography>
-                  </Box>)
-                }
-              }
-              renderTags=
-              {
-                (option, props) => {
-                  return (<ChipControl
-                    {...props}
-                    variant="outlined"
-                    label={option.name}
-                    avatar={<AvatarControl size={ESize.miniSmall} name="A" />}
-                  />)
-                }
-              }
               name={'assign'}
-              data={[{ id: 1, name: 'Người nhận 1' }, { id: 2, name: 'Người nhận 2' }, { id: 3, name: 'Người nhận 3' }]}>
-            </MultiSelect>
+              data={[{ id: 1, name: 'Người nhận 1' }, { id: 2, name: 'Người nhận 2' }, { id: 3, name: 'Người nhận 3' }]}
+            />
           </Grid>
           <Grid item>
-            <SelectControl
+            <StatusSelect
               options={[...statusData]}
               name={'status'}
               control={control}
-              renderOptions={
-                (option) => {
-                  return <StatusItem status={option} />
-                }
-              }
-              renderValue={
-                (value) => {
-                  const item = statusData.find((item) => {
-                    return item.id === value
-                  })
-                  return <StatusItem status={item} />
-                }
-              }
             />
           </Grid>
         </Grid>
         <DragDropContextContainer>
           <DragDropContext onDragEnd={onDragEndTitle}>
             <Grid container spacing={2} item xs={12} direction="row">
-              <Grid key={2} item xs={12} sm={6}>
+              <Grid key={2} item xs={12} sm={getElementControls("column3").length > 0 ? 6 : 9}>
                 <DraggableElement
                   genderPopoverControl={genderPopoverControl}
-                  prefix={"row1"}
+                  prefix={"column1"}
                   control={control}
-                  controls={getElementControls("row1")}
+                  controls={getElementControls("column1")}
                   onDragEnd={onDragEndTitle}
                 />
               </Grid>
               <Grid key={3} item xs={12} sm={3}>
                 <DraggableElement
                   genderPopoverControl={genderPopoverControl}
-                  prefix={"row2"}
+                  prefix={"column2"}
                   control={control}
-                  controls={getElementControls("row2")}
+                  controls={getElementControls("column2")}
                   onDragEnd={onDragEndTitle}
                 />
               </Grid>
               <Grid key={1} item xs={12} sm={3}>
                 <DraggableElement
                   genderPopoverControl={genderPopoverControl}
-                  prefix={"row3"}
+                  prefix={"column3"}
                   control={control}
-                  controls={getElementControls("row3")}
+                  controls={getElementControls("column3")}
                   onDragEnd={onDragEndTitle}
                 />
               </Grid>
@@ -499,7 +459,7 @@ const ContentTemplate = (props) => {
           </DragDropContext>
         </DragDropContextContainer>
       </Grid>
-    </div>
+    </div >
   )
 }
 

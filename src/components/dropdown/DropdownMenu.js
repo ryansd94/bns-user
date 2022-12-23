@@ -1,118 +1,98 @@
-import * as React from 'react';
-import { styled, alpha } from '@mui/material/styles';
-import Button from '@mui/material/Button';
-import Menu from '@mui/material/Menu';
-import MenuItem from '@mui/material/MenuItem';
-import EditIcon from '@mui/icons-material/Edit';
-import Divider from '@mui/material/Divider';
-import ArchiveIcon from '@mui/icons-material/Archive';
-import FileCopyIcon from '@mui/icons-material/FileCopy';
-import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
-import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
+import React from 'react'
+import Button from '@mui/material/Button'
+import ClickAwayListener from '@mui/material/ClickAwayListener'
+import Grow from '@mui/material/Grow'
+import Paper from '@mui/material/Paper'
+import Popper from '@mui/material/Popper'
+import MenuItem from '@mui/material/MenuItem'
+import MenuList from '@mui/material/MenuList'
+import Stack from '@mui/material/Stack'
+import ButtonFuntion from 'components/button/ButtonFuntion'
+import { EButtonType } from 'configs/constants'
+import { PopoverControl } from 'components/popover'
+import { IconExpand } from 'components/icon/icon'
 
-import Delete from '@mui/icons-material/Delete';
-import PropTypes from 'prop-types';
-const StyledMenu = styled((props) => (
-    <Menu
-        elevation={0}
-        anchorOrigin={{
-            vertical: 'bottom',
-            horizontal: 'right',
-        }}
-        transformOrigin={{
-            vertical: 'top',
-            horizontal: 'right',
-        }}
-        {...props}
-    />
-))(({ theme }) => ({
-    '& .MuiPaper-root': {
-        borderRadius: 6,
-        marginTop: theme.spacing(1),
-        minWidth: 180,
-        color: theme.palette.mode === 'light' ? 'rgb(55, 65, 81)' : theme.palette.grey[300],
-        boxShadow:
-            'rgb(255, 255, 255) 0px 0px 0px 0px, rgba(0, 0, 0, 0.05) 0px 0px 0px 1px, rgba(0, 0, 0, 0.1) 0px 10px 15px -3px, rgba(0, 0, 0, 0.05) 0px 4px 6px -2px',
-        '& .MuiMenu-list': {
-            padding: '4px 0',
-        },
-        '& .MuiMenuItem-root': {
-            '& .MuiSvgIcon-root': {
-                fontSize: 18,
-                // color: theme.palette.text.secondary,
-                marginRight: theme.spacing(1.5),
-            },
-            '&:active': {
-                backgroundColor: alpha(
-                    theme.palette.primary.main,
-                    theme.palette.action.selectedOpacity,
-                ),
-            },
-        },
-    },
-}));
 const DropdownMenu = (props) => {
-    const { anchorEl, handleClose, columnModel,dropdownItem } = props;
-    const [state, setState] = React.useState(columnModel);
-    const open = Boolean(anchorEl);
-    const handleChange = (event) => {
-        var item = state.find((element) => {
-            return element.field === event.target.name;
-        });
-        item.value = event.target.checked;
-        setState(state);
-        console.log(state);
-    };
-    function findArrayElementByTitle(array, title) {
-        return array.find((element) => {
-            return element.field === title;
-        })
+    const { genderDropdownItem, type = EButtonType.add, visible = false, isShowEndIcon = true } = props
+    const [open, setOpen] = React.useState(false)
+    const anchorRef = React.useRef(null)
+
+    const handleToggle = () => {
+        setOpen((prevOpen) => !prevOpen)
+    }
+    const handleClose = (event) => {
+        if (anchorRef.current && anchorRef.current.contains(event.target)) {
+            return
+        }
+
+        setOpen(false)
+    }
+
+    function handleListKeyDown(event) {
+        if (event.key === 'Tab') {
+            event.preventDefault()
+            setOpen(false)
+        } else if (event.key === 'Escape') {
+            setOpen(false)
+        }
+    }
+
+    const genderBody = () => {
+        return <Paper>
+            <ClickAwayListener onClickAway={handleClose}>
+                <MenuList
+                    autoFocusItem={open}
+                    id="composition-menu"
+                    aria-labelledby="composition-button"
+                    onKeyDown={handleListKeyDown}
+                >
+                    {genderDropdownItem && genderDropdownItem()}
+                </MenuList>
+            </ClickAwayListener>
+        </Paper>
+    }
+    const genderEndIcon = () => {
+        return <IconExpand />
     }
     return (
         <div>
-            <StyledMenu
-                id="column-config-menu"
-                MenuListProps={{
-                    'aria-labelledby': 'column-config-button',
+            <ButtonFuntion endIcon={isShowEndIcon ? genderEndIcon() : ''} visible={visible} spacingLeft={1} refs={anchorRef} onClick={handleToggle} type={type} />
+            <PopoverControl
+                anchorOrigin={{
+                    vertical: 'center',
+                    horizontal: 'left',
                 }}
-                anchorEl={anchorEl}
-                open={open}
+                transformOrigin={{
+                    vertical: 'bottom',
+                    horizontal: 'right',
+                }}
+                anchorEl={open ? anchorRef.current : null}
                 onClose={handleClose}
+                genderBody={genderBody}
             >
-                {/* {
-          columnModel && columnModel.map((item, index) => {
-            return (<MenuItem key={item.field} disableRipple>
-              <CheckBox name={item.field} onChange={onColumnConfigChange} checked={item.value} label={item.label} />
-            </MenuItem>)
-          })
-        } */}
-        {dropdownItem}
-                <MenuItem onClick={handleClose} disableRipple>
-                    <Delete />
-                    Edit
-                </MenuItem>
-                {/* <MenuItem onClick={handleClose} disableRipple>
-                    <FileCopyIcon />
-                    Duplicate
-                </MenuItem>
-                <Divider sx={{ my: 0.5 }} />
-                <MenuItem onClick={handleClose} disableRipple>
-                    <ArchiveIcon />
-                    Archive
-                </MenuItem>
-                <MenuItem onClick={handleClose} disableRipple>
-                    <MoreHorizIcon />
-                    More
-                </MenuItem> */}
-            </StyledMenu>
+            </PopoverControl>
+            {/* <Popper
+                open={open}
+                anchorEl={anchorRef.current}
+                role={undefined}
+                placement="bottom-start"
+                transition
+                disablePortal
+            >
+                {({ TransitionProps, placement }) => (
+                    <Grow
+                        {...TransitionProps}
+                        style={{
+                            transformOrigin:
+                                placement === 'bottom-start' ? 'left top' : 'left bottom',
+                        }}
+                    >
+
+                    </Grow>
+                )}
+            </Popper> */}
         </div>
-    );
+    )
 }
 
-DropdownMenu.propTypes = {
-    anchorEl: PropTypes.object,
-    handleClose: PropTypes.func,
-    onColumnConfigChange: PropTypes.func,
-    dropdownItem:PropTypes.object,
-}
-export default DropdownMenu;
+export default DropdownMenu

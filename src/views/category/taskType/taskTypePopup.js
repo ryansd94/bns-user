@@ -21,11 +21,15 @@ import { ERROR_CODE, baseUrl } from "configs"
 import { loading as loadingButton } from "stores/components/button"
 import { UploadIcon } from 'components/upload'
 import { message } from "configs"
+import { ColorPickerControl } from "components/colorPicker"
+import _ from 'lodash'
+
 const TaskTypePopup = React.memo((props) => {
     const { t } = useTranslation()
     const dispatch = useDispatch()
     const editData = useSelector((state) => state.master.editData)
     const [dataTemplaties, setDataTemplaties] = useState(null)
+    const [color, setColor] = useState('')
     const validationSchema = Yup.object().shape({
         name: Yup.string().required(t(message.error.fieldNotEmpty)),
     })
@@ -34,12 +38,12 @@ const TaskTypePopup = React.memo((props) => {
         name: "",
         description: "",
         templateId: null,
-        id: "",
+        id: null,
     }
 
     const fetchDataTemplate = async () => {
         await get(baseUrl.jm_template, {
-            draw: 0,
+            isGetAll: true,
         }).then((data) => {
             setDataTemplaties(data && data.data && data.data.items)
         })
@@ -67,6 +71,8 @@ const TaskTypePopup = React.memo((props) => {
             setValue("description", res.data.description)
             setValue("icon", res.data.icon)
             setValue("templateId", res.data.templateId)
+            setValue('color', res.data.color)
+            setColor(res.data.color)
             dispatch(setLoadingPopup(false))
         })
     }
@@ -84,13 +90,17 @@ const TaskTypePopup = React.memo((props) => {
     const onSubmit = async (data) => {
         dispatch(loadingButton(true))
         var postData = data
-        if (!editData) postData.id = editData
+        if (!_.isEmpty(editData)) postData.id = editData
         const res = await save(baseUrl.jm_taskType, postData)
         dispatch(loadingButton(false))
         dispatch(openMessage({ ...res }))
         if (res.errorCode == ERROR_CODE.success) {
             dispatch(setReload())
         }
+    }
+
+    const onColorChange = (e) => {
+        setColor(e.hex)
     }
 
     function ModalBody() {
@@ -110,6 +120,15 @@ const TaskTypePopup = React.memo((props) => {
                         label={t("Biểu tượng")}
                         control={control}
                         name="icon"
+                        color={color}
+                    />
+                </Grid>
+                <Grid item xs={12}>
+                    <ColorPickerControl
+                        control={control}
+                        label={t("Màu sắc")}
+                        name="color"
+                        onChange={onColorChange}
                     />
                 </Grid>
                 <Grid item xs={12}>

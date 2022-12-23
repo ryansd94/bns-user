@@ -1,6 +1,5 @@
 import React, { useState } from "react"
 import { styled } from '@mui/material/styles'
-import ArrowForwardIosSharpIcon from '@mui/icons-material/ArrowForwardIosSharp'
 import Accordion from '@mui/material/Accordion'
 import AccordionSummary from '@mui/material/AccordionSummary'
 import AccordionDetails from '@mui/material/AccordionDetails'
@@ -8,6 +7,7 @@ import Typography from '@mui/material/Typography'
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
 import './styles.scss'
 import { PopoverControl } from 'components/popover'
+import { LabelControl } from 'components/label'
 
 
 const MuiAccordion = styled((props) => (
@@ -47,7 +47,7 @@ const MuiAccordionDetails = styled(AccordionDetails)(({ theme }) => ({
 
 const AccordionControl = (props) => {
 
-    const { title, name, details, isExpand, className = '', genderPopoverControl = null } = props
+    const { title, name, details, isExpand, className = 'accordion-container', genderPopoverControl = null } = props
     const [expanded, setExpanded] = useState(isExpand ? name : '')
     const [showExpandIcon, setShowExpandIcon] = useState(!isExpand ? true : false)
     const [openPopover, setOpenPopover] = useState(null)
@@ -86,9 +86,9 @@ const AccordionControl = (props) => {
                 expandIcon={showExpandIcon ? <ExpandMoreIcon /> : ''}
                 aria-controls={`${name}-content`}
                 id={`${name}-header`}>
-                <Typography>
-                    {title}
-                </Typography>
+                <LabelControl
+                    label={title}
+                />
                 {genderPopoverControl ? <PopoverControl isCLoseOnHover={true} genderBody={genderPopoverControl} onClose={handlePopoverClose} anchorEl={openPopover} /> : ''}
             </AccordionSummary>
             <AccordionDetails>

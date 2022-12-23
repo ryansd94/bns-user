@@ -11,6 +11,7 @@ const initialState = {
         id: false,
         __check__: true,
     },
+    editId: null
 }
 
 const slice = createSlice({
@@ -18,6 +19,9 @@ const slice = createSlice({
     initialState: initialState,
     reducers: {
         setColumnVisibility: (state, action) => {
+            state.columnVisibility = action.payload
+        },
+        setEditId: (state, action) => {
             state.columnVisibility = action.payload
         },
     },

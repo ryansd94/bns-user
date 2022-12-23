@@ -37,11 +37,12 @@ const StatusGrid = React.memo((props) => {
         return <ColorPickerControl readOnly={true} defaultValue={params.value} />
       }
     },
-    { field: "description", headerName: t("Mô tả"), width: 350 },
+    { field: "description", headerName: t("Mô tả"), flex: 2 },
     {
       field: "edit",
       headerName: "",
       width: 120,
+      suppressAutoSize: true,
       resizable: false,
       cellRenderer: (params) => {
         const onEditClick = (e) => {

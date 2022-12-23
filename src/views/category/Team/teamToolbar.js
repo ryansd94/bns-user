@@ -18,19 +18,19 @@ const TeamToolbar = (props) => {
     const toolbarVisible = { ...useSelector((state) => state.master.toolbarVisible) }
     const columnVisibility = { ...useSelector((state) => state.team.columnVisibility) }
     const columnModel = [{
-        field: "name", value: true, label: t("Tên nhóm"), type: EFilterType.text
+        field: "name", isShow: true, label: t("Tên nhóm"), type: EFilterType.text
     },
     {
-        field: "description", value: true, label: t("Mô tả"), type: EFilterType.text
+        field: "description", isShow: true, label: t("Mô tả"), type: EFilterType.text
     },
     {
-        field: "parentName", value: true, label: t("Nhóm cha"), type: EFilterType.text
+        field: "parentName", isShow: true, label: t("Nhóm cha"), type: EFilterType.text
     },
     // {
     //     field: "status", value: true, label: t("Trạng thái"), type: EFilterType.select
     // },
     {
-        field: "createdDate", value: true, label: t("Ngày tạo"), type: EFilterType.datetime
+        field: "createdDate", isShow: true, label: t("Ngày tạo"), type: EFilterType.datetime
     }]
 
     const handleColumnConfigChange = (event) => {

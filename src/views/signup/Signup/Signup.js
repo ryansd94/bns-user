@@ -1,97 +1,97 @@
-import React, { useState, useEffect } from "react";
-import { useLocation, useHistory } from "react-router-dom";
-import queryString from "query-string";
-import TextInput from "components/input/TextInput";
-import Grid from "@mui/material/Grid";
-import Box from "@mui/material/Box";
-import { useTranslation } from "react-i18next";
-import Button from "@mui/material/Button";
-import { useForm } from "react-hook-form";
-import InputAdornment from "@mui/material/InputAdornment";
-import { useSelector, useDispatch } from "react-redux";
-import FormControl from "@mui/material/FormControl";
-import Visibility from "@mui/icons-material/Visibility";
-import VisibilityOff from "@mui/icons-material/VisibilityOff";
-import InputLabel from "@mui/material/InputLabel";
-import IconButton from "@mui/material/IconButton";
-import OutlinedInput from "@mui/material/OutlinedInput";
-import * as Yup from "yup";
-import { message } from "configs";
-import { yupResolver } from "@hookform/resolvers/yup";
-import AccountCircle from "@mui/icons-material/AccountCircle";
-import Alert from "@mui/material/Alert";
-import { validateTokenSignup, registerGoogle } from "services";
-import { ERROR_CODE } from "configs";
+import React, { useState, useEffect } from "react"
+import { useLocation, useHistory } from "react-router-dom"
+import queryString from "query-string"
+import TextInput from "components/input/TextInput"
+import Grid from "@mui/material/Grid"
+import Box from "@mui/material/Box"
+import { useTranslation } from "react-i18next"
+import Button from "@mui/material/Button"
+import { useForm } from "react-hook-form"
+import InputAdornment from "@mui/material/InputAdornment"
+import { useSelector, useDispatch } from "react-redux"
+import FormControl from "@mui/material/FormControl"
+import Visibility from "@mui/icons-material/Visibility"
+import VisibilityOff from "@mui/icons-material/VisibilityOff"
+import InputLabel from "@mui/material/InputLabel"
+import IconButton from "@mui/material/IconButton"
+import OutlinedInput from "@mui/material/OutlinedInput"
+import * as Yup from "yup"
+import { message } from "configs"
+import { yupResolver } from "@hookform/resolvers/yup"
+import AccountCircle from "@mui/icons-material/AccountCircle"
+import Alert from "@mui/material/Alert"
+import { validateTokenSignup, registerGoogle } from "services"
+import { ERROR_CODE } from "configs"
 import {
   resetUserToken,
   setTokenLoginSucceeded,
   getAccessToken,
-} from "helpers";
-import PasswordChecklist from "react-password-checklist";
-import Spinner from "components/shared/Spinner";
-import { openMessage } from "stores/components/snackbar";
+} from "helpers"
+import PasswordChecklist from "react-password-checklist"
+import Spinner from "components/shared/Spinner"
+import { openMessage } from "stores/components/snackbar"
 
 export default function Signup() {
-  const { search } = useLocation();
-  const { t } = useTranslation();
-  const { token } = queryString.parse(search);
-  const dispatch = useDispatch();
-  const history = useHistory();
+  const { search } = useLocation()
+  const { t } = useTranslation()
+  const { token } = queryString.parse(search)
+  const dispatch = useDispatch()
+  const history = useHistory()
 
-  const [error, setError] = useState("");
-  const [password, setPassword] = useState("");
-  const [loading, setLoading] = useState(false);
-  const [passwordAgain, setPasswordAgain] = useState("");
-  const [passwordIsvalid, setPasswordIsvalid] = useState(false);
-  const [tokenIsvalid, setTokenIsvalid] = useState(true);
+  const [error, setError] = useState("")
+  const [password, setPassword] = useState("")
+  const [loading, setLoading] = useState(false)
+  const [passwordAgain, setPasswordAgain] = useState("")
+  const [passwordIsvalid, setPasswordIsvalid] = useState(false)
+  const [tokenIsvalid, setTokenIsvalid] = useState(true)
   const [values, setValues] = React.useState({
     password: "",
     confirmPassword: "",
     fullName: "",
-  });
+  })
   function escapeRegExp(string) {
-    return string.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"); // $& means the whole matched string
+    return string.replace(/[.*+?^${}()|[\]\\]/g, "\\$&") // $& means the whole matched string
   }
 
   function replaceAll(str, find, replace) {
-    return str.replace(new RegExp(escapeRegExp(find), "g"), replace);
+    return str.replace(new RegExp(escapeRegExp(find), "g"), replace)
   }
   //   useEffect(() => {
   //     if (token) {
-  //       const data = replaceAll(token, " ", "+");
-  //       validateToken(data);
+  //       const data = replaceAll(token, " ", "+")
+  //       validateToken(data)
   //     }
-  //   }, []);
+  //   }, [])
   const validateToken = async (token) => {
-    const res = await validateTokenSignup({ token: token });
+    const res = await validateTokenSignup({ token: token })
     if (res.errorCode == ERROR_CODE.success) {
-      setTokenIsvalid(true);
+      setTokenIsvalid(true)
     } else {
-      setError(res.title);
+      setError(res.title)
     }
-    setLoading(false);
-  };
+    setLoading(false)
+  }
   const handleChange = (prop) => (event) => {
-    setValues({ ...values, [prop]: event.target.value });
-  };
+    setValues({ ...values, [prop]: event.target.value })
+  }
   const handleClickShowPassword = () => {
     setValues({
       ...values,
       showPassword: !values.showPassword,
-    });
-  };
+    })
+  }
 
   const validationSchema = Yup.object().shape({
     fullName: Yup.string().required(t(message.error.fieldNotEmpty)),
-  });
+  })
   const defaultValues = {
     fullName: "",
     password: "",
     confirmPassword: "",
-  };
+  }
   const handleMouseDownPassword = (event) => {
-    event.preventDefault();
-  };
+    event.preventDefault()
+  }
 
   const {
     register,
@@ -103,36 +103,36 @@ export default function Signup() {
   } = useForm({
     resolver: yupResolver(validationSchema),
     defaultValues: defaultValues,
-  });
+  })
   const onSubmit = async (data) => {
-    // alert(passwordIsvalid);
-    // return;
-    if (!passwordIsvalid) return;
+    // alert(passwordIsvalid)
+    // return
+    if (!passwordIsvalid) return
 
-    const dataToken = replaceAll(token, " ", "+");
-    data.token = dataToken;
-    const res = await registerGoogle(data);
-    const dataResult = res && res.data;
+    const dataToken = replaceAll(token, " ", "+")
+    data.token = dataToken
+    const res = await registerGoogle(data)
+    const dataResult = res && res.data
     if (dataResult.errorCode == ERROR_CODE.success) {
-      const userInfo = dataResult.data;
+      const userInfo = dataResult.data
       const token = {
         accessToken: userInfo.token,
         refreshToken: userInfo.token,
         shopIndex: userInfo.shopIndex,
-      };
-      const user = { ...userInfo, isAdmin: true, acceptScreen: [] };
-      setTokenLoginSucceeded({ token, user });
-      history.push(`/dashboard`);
+      }
+      const user = { ...userInfo, isAdmin: true, acceptScreen: [] }
+      setTokenLoginSucceeded({ token, user })
+      history.push(`/dashboard`)
     }
-    // dispatch(openMessage({ ...res }));
-  };
+    // dispatch(openMessage({ ...res }))
+  }
   const onChangePasswordAgain = (text) => {
-    setPasswordAgain(text.toLowerCase());
-  };
+    setPasswordAgain(text.toLowerCase())
+  }
 
   const onChangePassword = (text) => {
-    setPassword(text.toLowerCase());
-  };
+    setPassword(text.toLowerCase())
+  }
 
   return loading ? (
     <Spinner className={"spinnerWrapperMaster"}></Spinner>
@@ -178,9 +178,9 @@ export default function Signup() {
                           type={"password"}
                           onChange={onChangePassword}
                           inputProps={{
-                            autocomplete: "new-password",
+                            autoComplete: "new-password",
                             form: {
-                              autocomplete: "off",
+                              autoComplete: "off",
                             },
                             startAdornment: (
                               <InputAdornment position="start">
@@ -215,9 +215,9 @@ export default function Signup() {
                           type={"password"}
                           onChange={onChangePasswordAgain}
                           InputProps={{
-                            autocomplete: "new-password",
+                            autoComplete: "new-password",
                             form: {
-                              autocomplete: "off",
+                              autoComplete: "off",
                             },
                           }}
                         />
@@ -264,5 +264,5 @@ export default function Signup() {
         </div>
       </div>
     </div>
-  );
+  )
 }

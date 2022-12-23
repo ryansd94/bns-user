@@ -44,19 +44,21 @@ const DraggableElement = ({ prefix, columnHeader, controls = [], control, droppa
   }
 
   const genderElement = (item, index, control) => {
-    let component = <TextInput name={item.id} control={control} size={ESize.small} inputProps={
-      { readOnly: true, }
-    } label={item.label} />
+    let component = <TextInput name={item.id} control={control} size={ESize.small}
+      inputProps={
+        { readOnly: true, }
+      }
+      label={item.label} />
     if (item.type === EControlType.typography) {
       component = <span>{item.id}</span>
     }
     else if (item.type === EControlType.editor) {
-      component = (<EditorControl label={item.label} readOnly={true} className="editor-container" />)
+      component = (<EditorControl label={item.label} readOnly={true} name={item.id} control={control} className="editor-container" />)
     }
     else if (item.type === EControlType.select) {
       component = (<SingleSelect fullWidth={true} label={item.label} name={item.id} control={control} />)
     }
-    else if (item.type === EControlType.datePicker) {
+    else if (item.type === EControlType.dateTimePicker) {
       component = (<DatePickerInput label={item.label} disabled={true} name={item.id} control={control} />)
     }
     else if (item.type === EControlType.group) {
@@ -88,27 +90,23 @@ const DraggableElement = ({ prefix, columnHeader, controls = [], control, droppa
     <Droppable droppableId={`${prefix}`}>
       {(provided) => (
         <div className={droppableClassName} {...provided.droppableProps} ref={provided.innerRef}>
-          <Grid item xs={12}>
-            {
-              controls && controls.map((item, index) => {
-                if (item.type != EControlType.group) {
-                  return genderElement(item, index, control)
-                } else {
-                  return <Droppable key={item.id} droppableId={`${item.prefix}`}>
-                    {(providedChild) => (
-                      <div className={droppableClassName} {...providedChild.droppableProps} ref={providedChild.innerRef}>
-                        <Grid item xs={12}>
-                          {
-                            genderElement(item, index, control)
-                          }
-                        </Grid>
-                      </div>
-                    )}
-                  </Droppable>
-                }
-              })
-            }
-          </Grid>
+          {
+            controls && controls.map((item, index) => {
+              if (item.type != EControlType.group) {
+                return genderElement(item, index, control)
+              } else {
+                return <Droppable key={item.id} droppableId={`${item.prefix}`}>
+                  {(providedChild) => (
+                    <div className={droppableClassName} {...providedChild.droppableProps} ref={providedChild.innerRef}>
+                      {
+                        genderElement(item, index, control)
+                      }
+                    </div>
+                  )}
+                </Droppable>
+              }
+            })
+          }
         </div>
       )}
     </Droppable>

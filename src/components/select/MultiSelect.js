@@ -9,6 +9,7 @@ import Box from '@mui/material/Box'
 import { ChipControl } from "components/chip"
 import { _TemplateVariant, EVariant, _ControlSizeDefault } from 'configs'
 import { LabelControl } from 'components/label'
+import _ from 'lodash'
 
 const MultiSelect = React.memo(
   ({ control, required, data, label, name, placeholder, disabled, size, fullWidth, renderOption, renderTags }) => {
@@ -51,6 +52,13 @@ const MultiSelect = React.memo(
       inputRef.target.select()
     }
 
+    const getDataByDefaultValue = (value) => {
+      const values = _.filter(data, function (o) {
+        return _.indexOf(value, o.id, 0) >= 0;
+      })
+      return values
+    }
+
     return (
       <Controller
         name={name}
@@ -81,6 +89,7 @@ const MultiSelect = React.memo(
                   return (
                     <TextField
                       {...params}
+                      style={{ marginTop: "0px", marginBottom: "0px", minWidth: "250px" }}
                       variant="outlined"
                       label={label}
                       placeholder={placeholder}
@@ -105,11 +114,17 @@ const MultiSelect = React.memo(
                 isOptionEqualToValue={(option, value) =>
                   option != null && value != null ? option.id === value.id : ""
                 }
-                value={value != null ? value : []}
+                value={value != null ? getDataByDefaultValue(value) : []}
                 filterSelectedOptions
                 getOptionLabel={(option) => (option ? option.name : "")}
                 onChange={(event, newValue) => {
-                  onChange(newValue)
+                  if (newValue.length > 0) {
+                    onChange(_.map(newValue, (item) => {
+                      return item.id
+                    }))
+                  } else {
+                    onChange([])
+                  }
                 }}
                 renderOption={(props, option) => {
                   return renderOption ? renderOption(props, option) : (<Box component="li" sx={{ '& > img': { mr: 2, flexShrink: 0 } }} {...props}>
@@ -127,13 +142,12 @@ const MultiSelect = React.memo(
                   return (
                     <TextField
                       {...params}
-                      style={{ marginTop: "0px", marginBottom: "0px" }}
+                      style={{ marginTop: "0px", marginBottom: "0px", minWidth: "250px" }}
                       label={_TemplateVariant === EVariant.outlined ? label : ''}
                       placeholder={placeholder}
                       margin="normal"
                       fullWidth={fullWidth || true}
                       size={size ? size : _ControlSizeDefault}
-
                     ></TextField>
                   )
                 }}

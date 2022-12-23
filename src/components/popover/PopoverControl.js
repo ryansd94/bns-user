@@ -14,7 +14,7 @@ const useStyles = makeStyles(theme => ({
 }))
 
 const PopoverControl = (props) => {
-  const { anchorEl, onClose, genderBody, anchorOrigin, isCLoseOnHover = false } = props
+  const { anchorEl, onClose, genderBody, anchorOrigin, transformOrigin } = props
   const classes = useStyles();
   const open = Boolean(anchorEl)
   const id = open ? 'mouse-over-popover' : undefined
@@ -30,10 +30,7 @@ const PopoverControl = (props) => {
       anchorEl={anchorEl}
       onClick={onClick}
       anchorOrigin={anchorOrigin}
-      transformOrigin={{
-        vertical: 'top',
-        horizontal: 'left',
-      }}
+      transformOrigin={transformOrigin}
       onClose={onClose}
       className={classes.popover}
       classes={{
@@ -52,5 +49,9 @@ PopoverControl.defaultProps = {
     vertical: 'top',
     horizontal: 'left',
   },
+  transformOrigin:{
+    vertical: 'top',
+    horizontal: 'left',
+  }
 }
 export default PopoverControl

@@ -21,8 +21,9 @@ ModuleRegistry.registerModules([ClientSideRowModelModule])
 const GridData = (props) => {
     const gridRef = useRef()
     const dispatch = useDispatch()
-    const { columns, rowHeight,
-        columnVisibility, filterModels, url } = props
+    const { columns = [], rowHeight,
+        columnVisibility, filterModels, url, onRowClicked } = props
+    const [columnsDef, setColumnsDef] = useState([...columns]);
     const gridStyle = useMemo(() => ({ width: '100%', display: "flex", flexDirection: "column" }), [])
     const [currentPage, setCurrentPage] = useState(null)
     const [pageSize, setPageSize] = useState(10)
@@ -85,12 +86,16 @@ const GridData = (props) => {
     }
 
     useEffect(() => {
-        columns.map((item) => {
+        columnsDef.map((item) => {
             if (item.field) {
                 gridRef.current.columnApi && gridRef.current.columnApi.setColumnVisible(item.field, columnVisibility[item.field])
             }
         })
     }, [columnVisibility])
+
+    useEffect(() => {
+        setColumnsDef([...columns])
+    }, [columns])
 
     const onPageChange = (param) => {
         setCurrentPage(param - 1)
@@ -166,9 +171,10 @@ const GridData = (props) => {
                     rowData={data && data.data && data.data.items}
                     domLayout='autoHeight'
                     gridOptions={gridOptions}
-                    columnDefs={columns}
+                    columnDefs={columnsDef}
                     rowSelection='multiple'
                     onGridReady={onGridReady}
+                    onRowClicked={onRowClicked}
                     onFirstDataRendered={onFirstDataRendered}
                     enableCellTextSelection={true}
                     // overlayLoadingTemplate={'<span class="ag-overlay-loading-center">Please wait while your rows are loading</span>'}

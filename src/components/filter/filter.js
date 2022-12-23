@@ -16,6 +16,7 @@ import './styles.scss'
 import { useHistory, useLocation } from 'react-router'
 import { v4 as uuidv4 } from 'uuid'
 import SingleSelect from 'components/select/SingleSelect'
+import _ from 'lodash'
 
 const Filter = (props) => {
     console.log("render Filter")
@@ -78,7 +79,7 @@ const Filter = (props) => {
 
     useEffect(() => {
         const urlParams = new URLSearchParams(window.location.search)
-        const filters = urlParams.get('filters');
+        const filters = urlParams.get('filters')
         if (filters) {
             const filterObject = JSON.parse(filters)
             console.log(filterObject)
@@ -108,10 +109,10 @@ const Filter = (props) => {
             data.test.map((item, index) => {
                 if (item.column && item.condition != null) {
                     if (!item.selectValue) {
-                        value.push({ column: item.column, condition: item.condition, value: item.value, type: item.type })
+                        value.push({ column: item.column, condition: item.condition, value: item.value, type: item.type, isCustom: item.isCustom })
                     }
                     else {
-                        value.push({ column: item.column, condition: item.condition, value: item.selectValue.map(e => e.id).join(','), type: item.type })
+                        value.push({ column: item.column, condition: item.condition, value: item.selectValue.map(e => e.id).join(','), type: item.type, isCustom: item.isCustom })
                     }
                 }
             })
@@ -120,16 +121,19 @@ const Filter = (props) => {
     }
 
     const onSubmit = (data) => {
-        const value = getDataFilter(data)
-        if (value) {
-            const url = new URL(window.location);
-            url.searchParams.set('filters', JSON.stringify(value));
-            window.history.pushState(null, '', url.toString());
+        const filters = getDataFilter(data)
+        const url = new URL(window.location)
+        if (_.isArray(filters) && filters.length > 0) {
+            url.searchParams.set('filters', JSON.stringify(filters))
+            window.history.pushState(null, '', url.toString())
 
             // const params = new URLSearchParams({ filters: JSON.stringify(value) })
             // history.replace({ pathname: location.pathname, search: params.toString() })
-            onApplyFilter(value)
+        } else {
+            url.searchParams.delete('filters')
+            window.history.pushState(null, '', url.toString())
         }
+        onApplyFilter(filters)
     }
 
     const onDeleteItem = (index) => {

@@ -38,7 +38,7 @@ const useStyles = props => makeStyles(theme => ({
 const ButtonFuntion = React.memo(props => {
     const classes = useStyles(props)();
     const { t } = useTranslation();
-    const { type, onClick, visible = true, open3, label, style } = props;
+    const { type, onClick, visible = true, open3, label, style, refs, endIcon } = props;
     const [icon, setIcon] = useState('');
     const [text, setText] = useState(t('Thêm mới'));
     const [float, setFloat] = useState(' float-right');
@@ -116,6 +116,7 @@ const ButtonFuntion = React.memo(props => {
         button = (
             <ThemeProvider theme={theme}>
                 <Button
+                    ref={refs}
                     variant="outlined"
                     color={color != null ? color : "primary"}
                     size="large"
@@ -123,7 +124,7 @@ const ButtonFuntion = React.memo(props => {
                     onClick={onClick}
                     className={classes.button + float}
                     startIcon={startIcon ? <i className={icon} /> : ''}
-                    endIcon={!startIcon ? <i className={icon} /> : ''}
+                    endIcon={endIcon ? endIcon : (!startIcon ? <i className={icon} /> : '')}
                 >
                     <span className={classes.buttonText}>{label ? label : text}</span>
                 </Button>
