@@ -3,7 +3,7 @@ import { VisibleDefault } from 'configs/constants'
 
 const initialState = {
   page: 0,
-  pageSize: 10,
+  pageSize: null,
   loading: false,
   data: [],
   isReload: null,

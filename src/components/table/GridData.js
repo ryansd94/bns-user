@@ -9,11 +9,14 @@ import { useDispatch, useSelector } from "react-redux"
 import { ClientSideRowModelModule } from '@ag-grid-community/client-side-row-model'
 import {
     setToolbarVisibility,
-    setReloadNull
+    setReloadNull,
+    setPageSize
 } from "stores/views/master"
 import { Pagination } from 'components/pagination'
 import { Loading } from 'components/loading'
 import { get } from "services"
+import _ from 'lodash'
+import './styles.scss'
 
 // Register the required feature modules with the Grid
 ModuleRegistry.registerModules([ClientSideRowModelModule])
@@ -22,16 +25,16 @@ const GridData = (props) => {
     const gridRef = useRef()
     const dispatch = useDispatch()
     const { columns = [], rowHeight,
-        columnVisibility, filterModels, url, onRowClicked } = props
+        columnVisibility, filterModels, url, onRowClicked, frameworkComponents, autoGroupColumnDef } = props
     const [columnsDef, setColumnsDef] = useState([...columns]);
     const gridStyle = useMemo(() => ({ width: '100%', display: "flex", flexDirection: "column" }), [])
     const [currentPage, setCurrentPage] = useState(null)
-    const [pageSize, setPageSize] = useState(10)
     const [sortModel, setSortModel] = useState(null)
     const toolbarVisible = { ...useSelector((state) => state.master.toolbarVisible) }
     const isReload = useSelector((state) => state.master.isReload)
     const [data, setData] = useState(null)
     const loading = useSelector((state) => state.master.loading)
+    const pageSize = useSelector((state) => state.master.pageSize)
 
     const defaultColDef = useMemo(() => {
         return {
@@ -113,7 +116,7 @@ const GridData = (props) => {
         dispatch(setToolbarVisibility({ ...toolbarVisible }))
     }
 
-    const fetchData = useCallback(async () => {
+    const fetchData = async () => {
         if (gridRef && gridRef.current.api) {
             gridRef.current.api.showLoadingOverlay()
         }
@@ -121,8 +124,8 @@ const GridData = (props) => {
         const filterParams = params.get("filters")
         return await get(url, {
             draw: currentPage || 0,
-            start: currentPage ? currentPage * 10 : 0,
-            length: pageSize,
+            start: currentPage ? currentPage * (_.isNil(pageSize) ? 10 : pageSize) : 0,
+            length: _.isNil(pageSize) ? 10 : pageSize,
             fieldSort:
                 sortModel != null && sortModel.length > 0 ? sortModel[0].field : "",
             sort: sortModel != null && sortModel.length > 0 ? sortModel[0].sort : "",
@@ -134,12 +137,16 @@ const GridData = (props) => {
             }
             return data
         })
-    }, [currentPage, sortModel, isReload])
+    }
 
     const onGridReady = useCallback(async (params) => {
         const value = await fetchData()
         setData(value)
     }, [])
+
+    const onPageLengthChange = (value) => {
+        dispatch(setPageSize(_.parseInt(_.isEmpty(value) ? 1000 : value)))
+    }
 
     useEffect(async () => {
         if (currentPage != null) {
@@ -157,6 +164,12 @@ const GridData = (props) => {
         }
     }, [sortModel, filterModels, isReload])
 
+    useEffect(async () => {
+        if (!_.isNil(pageSize)) {
+            setData(await fetchData())
+        }
+    }, [pageSize])
+
     return (
         <div style={{ width: "100%" }} className="grid-wrapper">
             <div style={gridStyle} className="ag-theme-alpine">
@@ -165,7 +178,7 @@ const GridData = (props) => {
                     ref={gridRef}
                     animateRows={true}
                     sort
-                    style={{ height: "auto" }}
+                    style={{ height: "100%" }}
                     defaultColDef={defaultColDef}
                     enableRangeSelection={true}
                     rowData={data && data.data && data.data.items}
@@ -176,6 +189,7 @@ const GridData = (props) => {
                     onGridReady={onGridReady}
                     onRowClicked={onRowClicked}
                     onFirstDataRendered={onFirstDataRendered}
+                    autoGroupColumnDef={autoGroupColumnDef}
                     enableCellTextSelection={true}
                     // overlayLoadingTemplate={'<span class="ag-overlay-loading-center">Please wait while your rows are loading</span>'}
                     // overlayNoRowsTemplate={
@@ -184,11 +198,15 @@ const GridData = (props) => {
                     onSortChanged={onSortChanged}
                     suppressRowClickSelection={true}
                     suppressCellFocus={true}
+                    frameworkComponents={frameworkComponents}
+                    groupSelectsChildren={true}
+                    suppressAggFuncInHeader={true}
                     onSelectionChanged={onSelectionChanged}>
                 </AgGridReact>
                 <Pagination style={{ width: "100%" }}
                     currentPage={currentPage ? currentPage + 1 : 1}
                     onPageChange={onPageChange}
+                    onPageLengthChange={onPageLengthChange}
                     pageSize={pageSize} totalCount={data && data.recordsTotal} className="pagination-bar" />
             </div>
         </div>

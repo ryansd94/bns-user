@@ -1,4 +1,5 @@
-import React from 'react'
+import React, { useState } from 'react'
+import { useSelector, useDispatch } from "react-redux"
 import ButtonFuntion from 'components/button/ButtonFuntion'
 import PropTypes from 'prop-types'
 import { EButtonType } from 'configs/constants'
@@ -6,13 +7,17 @@ import { ConfigColumn, DropdownMenu } from 'components/dropdown'
 import { Filter } from 'components/filter'
 import MenuItem from '@mui/material/MenuItem'
 import { IconDelete } from "components/icon/icon"
+import {
+    setReload,
+} from "stores/views/master"
 
 const ToolBar = React.memo(props => {
 
     const { onAddClick, visible, onDeleteClick, columnModel,
         onColumnConfigChange, onApplyFilter, component, genarateCustomButton } = props
-    const [anchorElColumn, setAnchorElColumn] = React.useState(null)
-    const [anchorElFilter, setAnchorElFilter] = React.useState(false)
+    const [anchorElColumn, setAnchorElColumn] = useState(null)
+    const [anchorElFilter, setAnchorElFilter] = useState(false)
+    const dispatch = useDispatch()
 
     const handleClickColumn = (event) => {
         setAnchorElColumn(event.currentTarget)
@@ -32,6 +37,10 @@ const ToolBar = React.memo(props => {
         </MenuItem>
     }
 
+    const onRefreshClick = () => {
+        dispatch(setReload())
+    }
+
     return (
         <div>
             <div className="row">
@@ -39,9 +48,10 @@ const ToolBar = React.memo(props => {
                     <ConfigColumn onColumnConfigChange={onColumnConfigChange} columnModel={columnModel} anchorEl={anchorElColumn} handleClose={handleCloseColumn}></ConfigColumn>
                     <ButtonFuntion spacingLeft={0} visible={visible.column} onClick={handleClickColumn} type={EButtonType.columnConfig} />
                     <ButtonFuntion spacingLeft={1} visible={visible.column} open={anchorElFilter} onClick={handleClickFilter} type={EButtonType.filter} />
-                    <DropdownMenu  visible={visible.function} type={EButtonType.function} genderDropdownItem={genderDropdownItem} />
+                    <DropdownMenu visible={visible.function} type={EButtonType.function} genderDropdownItem={genderDropdownItem} />
                     <ButtonFuntion spacingLeft={1} visible={visible.add} onClick={onAddClick} type={EButtonType.add} />
                     <ButtonFuntion spacingLeft={1} visible={visible.delete} onClick={onDeleteClick} type={EButtonType.delete} />
+                    <ButtonFuntion spacingLeft={1} onClick={onRefreshClick} type={EButtonType.refresh} />
                     {genarateCustomButton && genarateCustomButton()}
                 </div>
             </div>

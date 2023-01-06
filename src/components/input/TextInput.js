@@ -5,6 +5,7 @@ import { useSelector } from "react-redux"
 import Skeleton from "@mui/material/Skeleton"
 import { _TemplateVariant, EVariant, _ControlSizeDefault } from "configs"
 import { LabelControl } from 'components/label'
+import _ from 'lodash'
 
 export default function TextInput({
   control,
@@ -14,16 +15,18 @@ export default function TextInput({
   autoFocus,
   hidden,
   inputProps,
-  type,
+  type = 'text',
   size,
   disabled,
   variant,
-  fullWidth,
+  fullWidth = true,
   multiline,
   defaultValue,
   placeholder,
   focused,
   onChange,
+  style,
+  className = 'containerControl'
 }) {
   const loadingPopup = useSelector((state) => state.master.loadingPopup)
   return (
@@ -34,7 +37,7 @@ export default function TextInput({
             size={size ? size : _ControlSizeDefault} variant="text">
             <TextField
               {...field}
-              fullWidth={fullWidth || true}
+              fullWidth={fullWidth || false}
               type={type || "text"}
               inputProps={inputProps}
               required={required}
@@ -58,17 +61,18 @@ export default function TextInput({
             />
           </Skeleton>
         ) : (
-          <div className="containerControl">
+          <div className={className}>
             {_TemplateVariant === EVariant.normal ? (label ? <LabelControl required={required} label={label} /> : '') : ''}
             <TextField
               {...field}
-              fullWidth={fullWidth || true}
+              fullWidth={fullWidth || false}
               type={type || "text"}
               inputProps={inputProps}
               required={required}
               variant={variant || EVariant.outlined}
               error={!!error}
               name={name}
+              style={style}
               focused={focused}
               placeholder={placeholder}
               value={field.value || defaultValue || ''}
@@ -82,8 +86,22 @@ export default function TextInput({
               autoComplete="new-password"
               hidden={hidden ? true : false}
               onChange={(e) => {
-                field.onChange(e.target.value)
-                onChange && onChange(e.target.value)
+                let valueChange = e.target.value
+                if (type === 'number') {
+                  if (!_.isEmpty(valueChange)) {
+                    valueChange = parseFloat(valueChange)
+                  } else {
+                    valueChange = null
+                  }
+                }
+                field.onChange(valueChange)
+                onChange && onChange(valueChange)
+              }}
+              sx={{
+                "& .MuiInputBase-input": {
+                  overflow: "hidden",
+                  textOverflow: "ellipsis"
+                }
               }}
               autoFocus={autoFocus}
             />

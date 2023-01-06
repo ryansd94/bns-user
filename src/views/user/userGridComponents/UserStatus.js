@@ -1,8 +1,8 @@
 import React, { useState } from "react"
-import { ChipControl } from "components/chip"
 import { useTranslation } from "react-i18next"
 import { IconActive, IconEmail, IconBlock } from "components/icon/icon"
 import { EUserStatus } from "configs"
+import Grid from "@mui/material/Grid"
 
 const UserStatus = (props) => {
     const { t } = useTranslation()
@@ -26,9 +26,13 @@ const UserStatus = (props) => {
         label = t("Tạm khóa")
     }
     return (
-        <ChipControl
-            icon={icon2}
-            label={label}
-        />)
+        <Grid container item spacing={2} direction="row" >
+            <Grid item>
+                {icon2}
+            </Grid>
+            <Grid item xs>
+                {label}
+            </Grid>
+        </Grid>)
 }
 export default UserStatus

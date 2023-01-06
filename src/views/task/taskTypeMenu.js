@@ -13,10 +13,10 @@ const TaskTypeMenu = (props) => {
     }
 
     useEffect(() => {
-        fetchDataTemplate()
+        fetchTaskType()
     }, [])
 
-    const fetchDataTemplate = async () => {
+    const fetchTaskType = async () => {
         await get(baseUrl.jm_taskType, {
             isGetAll: true,
         }).then((data) => {

@@ -1,3 +1,12 @@
+.pagination-root {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    .MuiFormControl-root {
+        margin-bottom: 1rem;
+        margin-top: 1rem;
+    }
+}
 .pagination-container {
     display: flex;
     list-style-type: none;
@@ -70,7 +79,7 @@
     }
 }
 .pagination-bar {
-    width: 100%;
+    // width: 100%;
     display: flex;
     justify-content: right;
 }

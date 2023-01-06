@@ -23,19 +23,30 @@ body {
     width: 100%;
     box-sizing: border-box;
     flex-grow: 1;
+    background: white;
     .panel {
         display: flex;
         // justify-content: center;
     }
     .containerNew {
         height: 100%;
+        flex-flow: row;
         .box-container {
             height: 100%;
             padding: 0px !important;
         }
+        .MuiBox-root {
+            visibility: visible;
+        }
         box-shadow: none;
         overflow: auto;
         direction: ltr;
+        visibility: hidden;
+        transition: visibility 0s 0.2s;
+    }
+    .containerNew:hover,
+    .containerNew:focus {
+        visibility: visible !important;
     }
 }
 
@@ -70,7 +81,7 @@ body {
     width: 2px;
     background: white !important;
     display: flex;
-    z-index: 99999;
+    // z-index: 99999;
     align-items: center;
     align-content: center;
     justify-content: center;

@@ -6,11 +6,9 @@ import * as Yup from "yup"
 import { useForm } from "react-hook-form"
 import { yupResolver } from "@hookform/resolvers/yup"
 import { useTranslation } from "react-i18next"
-import SingleSelect from 'components/select/SingleSelect'
+import SingleAddSelect from 'components/select/SingleAddSelect'
 import ButtonFuntion from 'components/button/ButtonFuntion'
 import { EButtonType } from 'configs'
-import { TextInput } from 'components/input'
-import { message } from "configs"
 
 const TemplateAddControl = React.memo((props) => {
     const { onAction, index, onApply, prefix, item, templateColumnData = [] } = props
@@ -41,7 +39,8 @@ const TemplateAddControl = React.memo((props) => {
         return [
             { id: EControlType.textField, name: t('Văn bản') },
             { id: EControlType.dateTimePicker, name: t('Ngày tháng') },
-            { id: EControlType.editor, name: t('Mô tả') }
+            { id: EControlType.editor, name: t('Mô tả') },
+            { id: EControlType.number, name: t('Nhập số') }
         ]
     }
     const onSave = (data) => {
@@ -53,23 +52,23 @@ const TemplateAddControl = React.memo((props) => {
             <RadioGroupControl options={item.type === EControlType.group ? optionPositionGroup : optionPositionItem} control={control} name='position' />
         </Grid>
         <Grid item>
-            <SingleSelect
+            <SingleAddSelect
                 label={t("Tiêu đề")}
                 control={control}
                 name='title'
                 freeSolo={true}
                 data={templateColumnData}
             >
-            </SingleSelect>
+            </SingleAddSelect>
         </Grid>
         <Grid item>
-            <SingleSelect
+            <SingleAddSelect
                 label={t("Loại")}
                 control={control}
                 name='type'
                 data={getControlType()}
             >
-            </SingleSelect>
+            </SingleAddSelect>
         </Grid>
         <Grid item>
             <ButtonFuntion style={{ marginRight: "auto" }} onClick={handleSubmit(onSave)} type={EButtonType.apply} />

@@ -7,7 +7,7 @@ const CheckBox = (props) => {
     const { name, label, checked, onChange } = props;
     return (
         <FormGroup style={{ width: "100%" }}>
-            <FormControlLabel control={<Checkbox name={name} onChange={onChange} defaultChecked={checked} />} label={label} />
+            <FormControlLabel control={<Checkbox name={name} onChange={onChange} checked={checked} />} label={label} />
         </FormGroup>
     );
 }

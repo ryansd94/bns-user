@@ -34,6 +34,10 @@ const ButtonDetail = (props) => {
         setText(t("Lưu"))
         setDefaultLoading(true)
         break
+      case EButtonDetailType.ok:
+        setIcon(<IconSave />)
+        setText(t("Ok"))
+        break
       case EButtonDetailType.undo:
         setIcon(<IconCancel></IconCancel>)
         setText(t("Hủy bỏ"))

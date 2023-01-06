@@ -7,7 +7,7 @@ import { useForm, useFieldArray, Controller } from "react-hook-form"
 import { EButtonIconType, ESize, baseUrl } from "configs"
 import { v4 as uuidv4 } from 'uuid'
 import TextInput from 'components/input/TextInput'
-import SingleSelect from 'components/select/SingleSelect'
+import SingleAddSelect from 'components/select/SingleAddSelect'
 import { get } from "services"
 import SelectControl from 'components/select/SelectControl'
 import Typography from '@mui/material/Typography'

@@ -1,6 +1,6 @@
-import React from "react";
-import TextField from "@mui/material/TextField";
-
+import React from "react"
+import TextField from "@mui/material/TextField"
+import { _ControlSizeDefault } from "configs"
 
 const BaseTextField = (props) => {
     const {
@@ -16,16 +16,18 @@ const BaseTextField = (props) => {
         size,
         disabled,
         value,
+        fullWidth = true,
+        style
     } = props
     return (
         <TextField
-            fullWidth
+            fullWidth={fullWidth || false}
             name={name}
+            style={style}
             disabled={disabled ? disabled : false}
-            size={size ? size : "medium"}
+            size={size ? size : _ControlSizeDefault}
             type={type || "text"}
             inputProps={inputProps}
-            // value={value || ""}
             required={required}
             error={!!error}
             helperText={error?.message}
@@ -33,9 +35,15 @@ const BaseTextField = (props) => {
             autoComplete="new-password"
             hidden={hidden ? true : false}
             onChange={onChange}
+            sx={{
+                "& .MuiInputBase-input": {
+                    overflow: "hidden",
+                    textOverflow: "ellipsis"
+                }
+            }}
             autoFocus={autoFocus}
         />
-    );
+    )
 }
 
-export default BaseTextField;
+export default BaseTextField

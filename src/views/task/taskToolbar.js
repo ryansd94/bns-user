@@ -21,10 +21,22 @@ const TaskToolbar = (props) => {
         field: "title", isShow: true, label: t("Tiêu đề"), type: EFilterType.text
     },
     {
+        field: "status.Name", isShow: true, label: t("Trạng thái"), type: EFilterType.text
+    },
+    {
+        field: "estimatedhour", isShow: true, label: t("Thời gian ước tính"), type: EFilterType.text
+    },
+    {
+        field: "tags", isShow: true, label: t("Nhãn"), type: EFilterType.text
+    },
+    {
         field: "taskType.name", isShow: true, label: t("Loại công việc"), type: EFilterType.text
     },
     {
-        field: "status.Name", isShow: true, label: t("Trạng thái"), type: EFilterType.text
+        field: "startDate", isShow: true, label: t("Ngày bắt đầu"), type: EFilterType.datetime
+    },
+    {
+        field: "dueDate", isShow: true, label: t("Ngày hết hạn"), type: EFilterType.datetime
     },
     {
         field: "createdDate", isShow: true, label: t("Ngày tạo"), type: EFilterType.datetime
@@ -56,7 +68,7 @@ const TaskToolbar = (props) => {
         if (!_.isNil(columnModel)) {
             columnModel.isShow = event.target.checked
         }
-        dispatch(setColumnVisibility({ ...columnVisibility }))
+        dispatch(setColumnVisibility(columnVisibility))
     }
 
     const handleClickOpen = () => {

@@ -6,7 +6,7 @@ const LinkControl = (props) => {
     const { title, href, underline, onClick, target = "_blank" } = props
 
     return (
-        <Link href={href && href} target={target} onClick={onClick} underline={underline}>
+        <Link style={{ width: '100%' }} href={href && href} target={target} onClick={onClick} underline={underline}>
             {title}
         </Link>
     )

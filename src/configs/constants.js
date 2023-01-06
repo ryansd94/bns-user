@@ -48,7 +48,10 @@ export const EButtonType = {
   addFilter: "Add_Filter",
   clearFilter: "Clear_Filter",
   save: "Save",
-  apply: "Apply"
+  apply: "Apply",
+  refresh: "Refresh",
+  addTag: "AddTag",
+  more: "More"
 };
 export const EColumnType = {
   checkbox: "Checkbox",
@@ -90,6 +93,7 @@ export const EButtonDetailType = {
   save: "Save",
   undo: "Undo",
   accpet: "Accpet",
+  ok: "Ok",
 }
 
 export const ESize = {
@@ -120,7 +124,9 @@ export const EControlType = {
   select: "Select",
   group: "Group",
   dateTimePicker: "DateTimePicker",
-  datePicker: "DatePicker"
+  datePicker: "DatePicker",
+  userItem: "UserItem",
+  number: "Number"
 }
 
 export const baseUrl = {

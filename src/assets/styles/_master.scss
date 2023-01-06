@@ -1,5 +1,5 @@
 $font_size_normal: 14px;
-
+$border_control: 1px solid #c4c4c4;
 button {
     text-transform: none !important;
 }
@@ -325,6 +325,7 @@ div[data-rbd-draggable-context-id] {
 .task-group-container > .MuiCollapse-root {
     padding-left: 0.5rem;
     padding-right: 0.5rem;
+    padding-top: 1rem;
 }
 .MuiDialogActions-root {
     justify-content: space-between !important;
@@ -334,4 +335,90 @@ div[data-rbd-draggable-context-id] {
 }
 span[data-testid="alphaslider"] {
     display: none;
+}
+.label-control-container {
+    flex-wrap: nowrap !important;
+    align-items: center;
+    .label-control-text {
+        width: calc(100% - 34px);
+    }
+}
+.MuiTypography-root {
+    font-size: 14px !important;
+}
+// .ag-center-cols-viewport {
+//     visibility: hidden;
+//     .ag-center-cols-container {
+//         visibility: visible;
+//     }
+// }
+// .ag-center-cols-viewport:hover,
+// .ag-center-cols-viewport:focus {
+//     visibility: visible;
+// }
+// .ag-root {
+//     .ag-body-horizontal-scroll-viewport {
+//         visibility: hidden;
+//     }
+// }
+
+// .ag-root-wrapper:hover ~ .ag-body-horizontal-scroll-viewport,
+// .ag-root-wrapper:focus ~ .ag-body-horizontal-scroll-viewport {
+//     background: red;
+// }
+// .ag-root-wrapper:hover + .ag-body-horizontal-scroll-viewport,
+// .ag-root-wrapper:focus + .ag-body-horizontal-scroll-viewport {
+//     background: red;
+// }
+
+.ag-body-viewport {
+    height: calc(100vh - 280px) !important;
+    overflow: auto !important;
+}
+.MuiAutocomplete-inputRoot {
+    input {
+        padding-right: 22px !important;
+    }
+}
+.tag-item-root {
+    width: auto !important;
+    max-width: max-content !important;
+}
+.tag-item-container {
+    max-width: 180px !important;
+    flex-wrap: nowrap !important;
+    gap: 8px;
+    border: $border_control;
+    padding: 0.5rem;
+    border-radius: 4px;
+    width: auto !important;
+    display: flex;
+    align-items: center;
+    .tag-item {
+        max-width: 180px;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        overflow: hidden;
+    }
+    .ellipsis {
+        width: calc(100% - 20px);
+    }
+}
+.tag-control-contaier {
+    gap: 16px;
+    margin: 0;
+    align-items: center;
+}
+.cell-multi-root {
+    // display: flex;
+    // gap: 10px;
+}
+.cell-multi-item {
+    background: rgba(200, 222, 243, 0.842);
+    border-radius: 4px;
+    margin-right: 10px;
+    padding: 5px;
+}
+.MuiModal-root.MuiDialog-root {
+    // z-index: 99999;
 }

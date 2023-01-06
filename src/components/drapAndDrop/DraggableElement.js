@@ -3,10 +3,10 @@ import ListItem from "./ListItem"
 import React from "react"
 import styled from "styled-components"
 import { EditorControl } from 'components/editor'
-import { EControlType, ESize } from 'configs'
+import { EControlType, ESize, EFormatDate } from 'configs'
 import Grid from "@mui/material/Grid"
-import { TextInput } from 'components/input'
-import SingleSelect from 'components/select/SingleSelect'
+import { TextInput, NumberInput } from 'components/input'
+import SingleAddSelect from 'components/select/SingleAddSelect'
 import { AccordionControl } from 'components/accordion'
 import { DatePickerInput } from 'components/datepicker'
 
@@ -56,10 +56,16 @@ const DraggableElement = ({ prefix, columnHeader, controls = [], control, droppa
       component = (<EditorControl label={item.label} readOnly={true} name={item.id} control={control} className="editor-container" />)
     }
     else if (item.type === EControlType.select) {
-      component = (<SingleSelect fullWidth={true} label={item.label} name={item.id} control={control} />)
+      component = (<SingleAddSelect fullWidth={true} label={item.label} name={item.id} control={control} />)
     }
     else if (item.type === EControlType.dateTimePicker) {
+      component = (<DatePickerInput label={item.label} formatDate={EFormatDate.ddmmyyyy_hhmm} disabled={true} name={item.id} control={control} />)
+    }
+    else if (item.type === EControlType.datePicker) {
       component = (<DatePickerInput label={item.label} disabled={true} name={item.id} control={control} />)
+    }
+    else if (item.type === EControlType.number) {
+      component = (<NumberInput label={item.label} disabled={true} name={item.id} control={control} />)
     }
     else if (item.type === EControlType.group) {
       component = <AccordionControl

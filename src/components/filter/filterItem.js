@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useCallback } from "react"
-import SingleSelect from 'components/select/SingleSelect'
+import SingleAddSelect from 'components/select/SingleAddSelect'
 import MultiSelect from 'components/select/MultiSelect'
-
 import Grid from "@mui/material/Grid"
 import { useTranslation } from "react-i18next"
 import { DatePickerInput } from "components/datepicker"
@@ -229,7 +228,7 @@ const FilterItem = React.memo((props) => {
     return (
         <Grid key={name} item container spacing={2} >
             <Grid item width={200}>
-                <SingleSelect
+                <SingleAddSelect
                     size={size}
                     onSelectChange={onColumnChange}
                     label={t("Cột")}
@@ -237,10 +236,10 @@ const FilterItem = React.memo((props) => {
                     control={control}
                     name={`test[${index}].column`}
                 >
-                </SingleSelect>
+                </SingleAddSelect>
             </Grid>
             <Grid item width={200}  >
-                <SingleSelect
+                <SingleAddSelect
                     size={size}
                     onSelectChange={onConditionChange}
                     disabled={item && item.condition != null ? false : disableCondition}
@@ -248,7 +247,7 @@ const FilterItem = React.memo((props) => {
                     label={t("So sánh")}
                     name={`test[${index}].condition`}
                     data={conditionOption}>
-                </SingleSelect>
+                </SingleAddSelect>
             </Grid>
             <Grid display={display} item minWidth={width}  >
                 {valueComponent}
@@ -256,7 +255,6 @@ const FilterItem = React.memo((props) => {
             <Grid item style={{ display: 'flex', alignItems: 'center' }}  >
                 <ButtonIcon onClick={onDelete} type={EButtonIconType.delete}></ButtonIcon>
             </Grid>
-
         </Grid>
     )
 })

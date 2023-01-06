@@ -1,12 +1,7 @@
 import React from 'react'
-import Button from '@mui/material/Button'
 import ClickAwayListener from '@mui/material/ClickAwayListener'
-import Grow from '@mui/material/Grow'
 import Paper from '@mui/material/Paper'
-import Popper from '@mui/material/Popper'
-import MenuItem from '@mui/material/MenuItem'
 import MenuList from '@mui/material/MenuList'
-import Stack from '@mui/material/Stack'
 import ButtonFuntion from 'components/button/ButtonFuntion'
 import { EButtonType } from 'configs/constants'
 import { PopoverControl } from 'components/popover'
@@ -42,6 +37,7 @@ const DropdownMenu = (props) => {
             <ClickAwayListener onClickAway={handleClose}>
                 <MenuList
                     autoFocusItem={open}
+                    onClick={handleClose}
                     id="composition-menu"
                     aria-labelledby="composition-button"
                     onKeyDown={handleListKeyDown}
@@ -71,26 +67,6 @@ const DropdownMenu = (props) => {
                 genderBody={genderBody}
             >
             </PopoverControl>
-            {/* <Popper
-                open={open}
-                anchorEl={anchorRef.current}
-                role={undefined}
-                placement="bottom-start"
-                transition
-                disablePortal
-            >
-                {({ TransitionProps, placement }) => (
-                    <Grow
-                        {...TransitionProps}
-                        style={{
-                            transformOrigin:
-                                placement === 'bottom-start' ? 'left top' : 'left bottom',
-                        }}
-                    >
-
-                    </Grow>
-                )}
-            </Popper> */}
         </div>
     )
 }

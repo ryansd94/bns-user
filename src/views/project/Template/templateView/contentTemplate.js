@@ -100,7 +100,7 @@ const generateListTitle = () => {
         items: [
           {
             id: `item-4@item-3`,
-            type: EControlType.textField,
+            type: EControlType.userItem,
             label: 'Người tạo',
             name: 'createdUser',
             default: true,
@@ -144,6 +144,13 @@ const generateListTitle = () => {
             type: EControlType.datePicker,
             label: 'Ngày hết hạn',
             name: 'dueDate',
+            default: true
+          },
+          {
+            id: `item-12@item-8`,
+            type: EControlType.number,
+            label: 'Thời gian ước tính',
+            name: 'estimatedhour',
             default: true
           }
         ]

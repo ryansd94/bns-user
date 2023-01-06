@@ -13,6 +13,7 @@ import ButtonDetail from "components/button/ButtonDetail"
 import { useSelector, useDispatch } from "react-redux"
 import { close } from "components/popup/popupSlice"
 import { setEditData } from "stores/views/master"
+import { EButtonDetailType } from "configs"
 
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
   "& .MuiDialogContent-root": {
@@ -62,7 +63,7 @@ function PaperComponent(props) {
 }
 const Popup = React.memo((props) => {
   const dispatch = useDispatch()
-  const { ModalBody, onSave, widthSize = "sm", reset } = props
+  const { ModalBody, onSave, widthSize = "sm", reset, typeSave = EButtonDetailType.save } = props
   const handleClose = () => {
     dispatch(close())
     dispatch(setEditData(null))
@@ -97,9 +98,9 @@ const Popup = React.memo((props) => {
         </DialogContent>
         <DialogActions>
 
-          <ButtonDetail onClick={handleClose} type="Undo" />
+          <ButtonDetail onClick={handleClose} type={EButtonDetailType.undo} />
           <ButtonDetail
-            onClick={onSave} type={"Save"} />
+            onClick={onSave} type={typeSave} />
         </DialogActions>
       </BootstrapDialog>
     </div>

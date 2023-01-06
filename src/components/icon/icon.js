@@ -1,17 +1,9 @@
-import { Save } from "styled-icons/fluentui-system-regular"
-import { Edit } from "styled-icons/fluentui-system-filled"
-import { Cancel } from "styled-icons/material"
-import CheckIcon from '@mui/icons-material/Check'
-import Delete from '@mui/icons-material/Delete'
-import EmailIcon from '@mui/icons-material/Email'
-import LockIcon from '@mui/icons-material/Lock'
-import LockOpenIcon from '@mui/icons-material/LockOpen'
 const defaultSize = "fa-sm"
 const IconSave = ({ className }) => {
   return <i className="far fa-save fa-sm"></i>
 }
-const IconDelete = ({ size }) => {
-  return <i className="far fa-trash-alt fa-sm"></i>
+const IconDelete = ({ size, onClick }) => {
+  return <i onClick={onClick} className="far fa-trash-alt fa-sm"></i>
 }
 const IconEdit = ({ className }) => {
   return <i className="far fa-edit fa-sm"></i>

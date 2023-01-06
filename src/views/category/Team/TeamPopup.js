@@ -1,7 +1,7 @@
 ﻿import React, { useEffect, useState } from "react"
 import Popup from "components/popup/Popup"
 import Grid from "@mui/material/Grid"
-import SingleSelect from "components/select/SingleSelect"
+import SingleAddSelect from "components/select/SingleAddSelect"
 import PropTypes from "prop-types"
 import MultiSelect from "components/select/MultiSelect"
 import TextInput from "components/input/TextInput"
@@ -163,7 +163,7 @@ const TeamPopup = React.memo((props) => {
           />
         </Grid>
         <Grid item xs={12}>
-          <SingleSelect
+          <SingleAddSelect
             data={dataTeam}
             control={control}
             name="parentId"

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react"
+import React, { useEffect, useState, useMemo } from "react"
 import ButtonIcon from "components/button/ButtonIcon"
 import { useTranslation } from "react-i18next"
 import { useSelector, useDispatch } from "react-redux"
@@ -7,24 +7,30 @@ import { baseUrl, EButtonIconType } from "configs"
 import {
     setEditData,
 } from "stores/views/master"
-import { open } from "components/popup/popupSlice"
+import { open, change_title } from "components/popup/popupSlice"
 import { open as openAlert } from "stores/components/alert-dialog"
 import GridData from "components/table/GridData"
 import StatusItem from 'views/category/status/statusItem'
-import { formatDate } from "helpers/commonFunction"
+import { cellFormatDate, cellFormatDateTime } from "helpers/commonFunction"
 import { UserItem } from 'components/user'
 import UploadIconImage from 'components/upload/uploadIconImage'
 import { LinkControl } from 'components/link'
+import { CellMuliValue } from 'components/table'
 import _ from 'lodash'
 import LabelIconControl from 'components/label/labelIconControl'
+import { DropdownMenu } from 'components/dropdown'
+import MenuItem from '@mui/material/MenuItem'
+import { EButtonType } from 'configs/constants'
+import TaskChildPopup from './taskChildPopup'
 
 const TaskGrid = React.memo((props) => {
     console.log("render TaskGrid")
     const { filterModels, onRowClicked, customColumns } = props
     const dispatch = useDispatch()
     const { t } = useTranslation()
-    const [columnVisibility, setColumnVisibility] = useState({ ...useSelector((state) => state.task.columnVisibility) })
+    const columnVisibility = { ...useSelector((state) => state.task.columnVisibility) }
     const [id, setId] = useState(null)
+    const [taskTypeId, setTaskTypeId] = useState(null)
     const [columns, setColumn] = useState([
         {
             checkboxSelection: true,
@@ -33,6 +39,7 @@ const TaskGrid = React.memo((props) => {
             pinned: 'left',
             headerCheckboxSelection: true
         },
+        // { field: 'parentId', rowGroup: true, hide: true },
         {
             field: "title",
             headerName: t("Tiêu đề"),
@@ -47,10 +54,6 @@ const TaskGrid = React.memo((props) => {
             }
         },
         {
-            field: "taskType.name", headerName: t("Loại công việc"),
-            suppressAutoSize: true,
-        },
-        {
             field: "status.name", headerName: t("Trạng thái"),
             suppressAutoSize: true,
             cellRenderer: (params) => {
@@ -58,16 +61,43 @@ const TaskGrid = React.memo((props) => {
             }
         },
         {
-            field: "createdDate",
-            headerName: t("Ngày tạo"),
+            field: "estimatedhour", headerName: t("Thời gian ước tính"),
+            suppressAutoSize: true,
+        },
+        {
+            field: "taskType.name", headerName: t("Loại công việc"),
+            suppressAutoSize: true,
+        },
+        {
+            field: "tags", headerName: t("Nhãn"),
+            width: 200,
+            cellRenderer: (params) => {
+                return <CellMuliValue values={params.value} />
+            }
+        },
+        {
+            field: "startDate",
+            headerName: t("Ngày bắt đầu"),
             suppressAutoSize: true,
             valueFormatter: cellFormatDate
         },
         {
-            field: "createUser.name", headerName: t("Người tạo"),
+            field: "dueDate",
+            headerName: t("Ngày hết hạn"),
+            suppressAutoSize: true,
+            valueFormatter: cellFormatDate
+        },
+        {
+            field: "createdDate",
+            headerName: t("Ngày tạo"),
+            suppressAutoSize: true,
+            valueFormatter: cellFormatDateTime
+        },
+        {
+            field: "createdUser.name", headerName: t("Người tạo"),
             suppressAutoSize: true,
             cellRenderer: (params) => {
-                return <UserItem {...params.data.createUser} />
+                return <UserItem {...params.data.createdUser} />
             }
         },
         {
@@ -75,13 +105,7 @@ const TaskGrid = React.memo((props) => {
             width: 110,
             resizable: false,
             cellRenderer: (params) => {
-                const onEditClick = (e) => {
-                    e.stopPropagation() // don't select this row after clicking
-                    if (!params) return
-                    dispatch(open())
-                    dispatch(setEditData(params.data.id))
-                }
-
+                
                 const onDeleteClick = (e) => {
                     e.stopPropagation() // don't select this row after clicking
                     dispatch(openAlert({ open: true }))
@@ -90,7 +114,6 @@ const TaskGrid = React.memo((props) => {
 
                 return (
                     <strong>
-                        <ButtonIcon onClick={onEditClick} type={EButtonIconType.edit}></ButtonIcon>
                         <ButtonIcon
                             onClick={onDeleteClick}
                             type={EButtonIconType.delete}
@@ -100,8 +123,44 @@ const TaskGrid = React.memo((props) => {
             },
             sortable: false,
         },
+        {
+            headerName: 'Action Buttons',
+            pinned: 'right',
+            // width: 60,
+            cellClass: 'abcdef',
+            cellRenderer: 'ActionBtnRenderer',
+        },
     ])
 
+    const addChildTask = (data) => {
+        setId(data.id)
+        setTaskTypeId(data.taskTypeId)
+        dispatch(change_title(t("Thêm công việc")))
+        dispatch(open())
+        // window.open(`/task/create/${data.taskTypeId}?parentId=${data.id}`)
+    }
+
+    const genderDropdownItem = (data) => {
+        return <MenuItem onClick={() => addChildTask(data)}>
+            Add Child
+        </MenuItem>
+    }
+
+    const ActionBtnRenderer = (params) => {
+        return <DropdownMenu type={EButtonType.more} isShowEndIcon={false} visible={true} genderDropdownItem={() => genderDropdownItem(params.data)} />
+    }
+
+    const autoGroupColumnDef = useMemo(() => {
+        return {
+            headerName: 'Title',
+            field: 'title',
+            minWidth: 250,
+            cellRenderer: 'agGroupCellRenderer',
+            cellRendererParams: {
+                checkbox: true,
+            },
+        };
+    }, []);
 
     useEffect(() => {
         var newColumns = []
@@ -118,26 +177,24 @@ const TaskGrid = React.memo((props) => {
             })
         })
         setColumn([
-            ...columns.slice(0, columns.length - 1),
+            ...columns.slice(0, columns.length - 2),
             ...newColumns,
-            ...columns.slice(columns.length - 1)
+            ...columns.slice(columns.length - 2)
         ])
     }, [customColumns])
-
-
-    function cellFormatDate(params) {
-        return formatDate(params.value);
-    }
 
     return (
         <div style={{ width: "100%", height: "100%" }}>
             <ConfirmDeleteDialog url={baseUrl.jm_task} id={id} />
             <GridData
+                frameworkComponents={{ ActionBtnRenderer: ActionBtnRenderer }}
                 onRowClicked={onRowClicked}
+                // autoGroupColumnDef={autoGroupColumnDef}
                 url={baseUrl.jm_task}
                 columnVisibility={columnVisibility}
                 filterModels={filterModels}
                 columns={columns}></GridData>
+            <TaskChildPopup taskParentId={id} taskTypeId={taskTypeId} />
         </div>
     )
 })

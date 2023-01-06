@@ -15,7 +15,7 @@ import { PopoverControl } from 'components/popover'
 import './styles.scss'
 import { useHistory, useLocation } from 'react-router'
 import { v4 as uuidv4 } from 'uuid'
-import SingleSelect from 'components/select/SingleSelect'
+import SingleAddSelect from 'components/select/SingleAddSelect'
 import _ from 'lodash'
 
 const Filter = (props) => {
@@ -190,7 +190,7 @@ const Filter = (props) => {
                                 <ButtonFuntion spacingLeft={0} onClick={onAdd} type={EButtonType.addFilter} />
                             </Grid>
                             <Grid item xs={3}>
-                                <SingleSelect
+                                <SingleAddSelect
                                     data={filterData}
                                     control={control}
                                     name='filterId'
