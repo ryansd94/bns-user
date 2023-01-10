@@ -65,12 +65,12 @@ const useStyles = props => makeStyles(theme => ({
 const ButtonFuntion = React.memo(props => {
     const classes = useStyles(props)()
     const { t } = useTranslation()
-    const { type, onClick, visible = true, open3, label, style, refs, endIcon, onClickAway = null } = props
+    const { type, onClick, visible = true, open,
+        label = '', style, refs, endIcon, onClickAway = null, isFloatLeft = false } = props
     const [icon, setIcon] = useState('')
     const [text, setText] = useState('')
-    const [float, setFloat] = useState(' float-right')
+    const [float, setFloat] = useState(isFloatLeft ? ' float-left' : ' float-right')
     const [startIcon, setStartIcon] = useState(true)
-    const [open2] = useState(open3)
     const [color, setColor] = useState(null)
     const [isButtonIcon, setIsButtonIcon] = useState(true)
     const theme = createTheme({
@@ -108,7 +108,7 @@ const ButtonFuntion = React.memo(props => {
                 setFloat(' float-left')
                 break
             case EButtonType.filter:
-                if (open2 && open2)
+                if (open && open)
                     setIcon("far fa-angle-up" + sizeDefault)
                 else
                     setIcon("far fa-angle-down" + sizeDefault)
@@ -154,7 +154,7 @@ const ButtonFuntion = React.memo(props => {
     }
     useEffect(() => {
         setButton()
-    }, [open2])
+    }, [open])
     let button = <Button
         ref={refs}
         variant="outlined"

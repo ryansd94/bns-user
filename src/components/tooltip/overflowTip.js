@@ -1,13 +1,15 @@
 import React, { useRef, useEffect, useState } from 'react'
 import Tooltip from "@mui/material/Tooltip"
+import _ from 'lodash'
+
 const OverflowTip = props => {
+  const { disableHoverListener = null } = props
   // Create Ref
   const textElementRef = useRef()
 
   const compareSize = () => {
     const compare =
       textElementRef.current.scrollWidth > textElementRef.current.clientWidth
-    console.log('compare: ', compare)
     setHover(compare)
   }
 
@@ -28,9 +30,9 @@ const OverflowTip = props => {
   return (
     <Tooltip
       title={props.value}
-    //   interactive
-      disableHoverListener={!hoverStatus}
-      style={{fontSize: '2em'}}
+      //   interactive
+      disableHoverListener={!_.isNil(disableHoverListener) ? disableHoverListener : !hoverStatus}
+      style={{ fontSize: '2em' }}
     >
       <div
         ref={textElementRef}

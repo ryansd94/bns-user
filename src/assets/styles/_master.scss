@@ -268,7 +268,7 @@ legend {
     min-width: 150px !important;
 }
 div[data-rbd-draggable-context-id] {
-    padding: 1rem 0 0 1rem !important;
+    // padding: 1rem 0 0 1rem !important;
     cursor: move !important;
 }
 .ql-toolbar.ql-snow {
@@ -336,10 +336,11 @@ div[data-rbd-draggable-context-id] {
 span[data-testid="alphaslider"] {
     display: none;
 }
-.label-control-container {
+.label-icon-control-container {
     flex-wrap: nowrap !important;
     align-items: center;
-    .label-control-text {
+    .label-icon-control-text {
+        padding-left: 5px !important;
         width: calc(100% - 34px);
     }
 }
@@ -421,4 +422,16 @@ span[data-testid="alphaslider"] {
 }
 .MuiModal-root.MuiDialog-root {
     // z-index: 99999;
+}
+.child-task-root{
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    .child-task-item:hover{
+        background-color: rgba(239, 246, 252, 1);
+        border-radius: 2px;
+    }
+}
+.fa-xs{
+    font-size: .65rem !important;
 }

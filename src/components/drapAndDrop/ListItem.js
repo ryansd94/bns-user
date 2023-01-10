@@ -5,7 +5,7 @@ import { PopoverControl } from 'components/popover'
 
 
 const DragItem = styled.div`
-  padding: 10px;
+  // padding: 10px;
   background: transparent;
   display: grid;
   grid-gap: 20px;

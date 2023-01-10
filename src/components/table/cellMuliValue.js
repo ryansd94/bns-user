@@ -10,10 +10,12 @@ const CellMuliValue = (props) => {
     })
 
     const genderTooltipContent = () => {
-        return <div className="cell-multi-root">{_.map(values, (x) => {
-            return <span key={x.id} className="cell-multi-item">{x.name}</span>
-        })
-        }
+        return <div className="cell-multi-root">
+            {
+                _.map(values, (x) => {
+                    return <span key={x.id} className="cell-multi-item">{x.name}</span>
+                })
+            }
         </div>
     }
 

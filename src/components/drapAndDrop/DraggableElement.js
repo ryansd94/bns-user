@@ -9,6 +9,7 @@ import { TextInput, NumberInput } from 'components/input'
 import SingleAddSelect from 'components/select/SingleAddSelect'
 import { AccordionControl } from 'components/accordion'
 import { DatePickerInput } from 'components/datepicker'
+import { TaskChild } from 'components/task'
 
 const ColumnHeader = styled.div`
   text-transform: uppercase;
@@ -72,15 +73,32 @@ const DraggableElement = ({ prefix, columnHeader, controls = [], control, droppa
         isExpand={true}
         title={item.label}
         name={item.name}
+        className='task-group-container'
         genderPopoverControl={() => genderPopoverControl(item, prefix, index, isLastControl(item))}
         details={
           <div>
             {
-              item.items && item.items.map((x, childIndex) => {
-                return genderElement(x, childIndex, control)
-              })
+              <Grid container item rowSpacing={2} xs={12}>
+                {
+
+                  item.items && item.items.map((x, childIndex) => {
+                    return genderElement(x, childIndex, control)
+                  })
+                }
+              </Grid>
             }
           </div>
+        }
+      />
+    }
+    else if (item.type === EControlType.childTask) {
+      component = <AccordionControl
+        isExpand={true}
+        title={item.label}
+        name={item.name}
+        className='task-group-container'
+        details={
+          <TaskChild control={control} />
         }
       />
     }

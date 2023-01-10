@@ -39,7 +39,7 @@ const IconAdd = ({ style, className }) => {
   return <i style={style} className="far fa-plus fa-sm"></i>
 }
 const IconCricle = ({ style, className }) => {
-  return <i style={style} className="fas fa-circle fa-sm"></i>
+  return <i style={style} className="fas fa-circle fa-xs"></i>
 }
 const IconUp = ({ style, className }) => {
   return <i style={style} className="far fa-arrow-up fa-sm"></i>
@@ -50,8 +50,11 @@ const IconDown = ({ style, className }) => {
 const IconExpand = ({ style, className }) => {
   return <i style={style} className="far fa-angle-down fa-sm"></i>
 }
-
+const IconRemove = ({ style, className }) => {
+  return <i style={style} className="fa-regular fa-xmark fa-sm"></i>
+}
 export {
   IconSave, IconDelete, IconEdit, IconCancel, IconEmail, IconActive, IconBlock,
-  IconUnBlock, IconClean, IconApply, IconBack, IconMore, IconAdd, IconCricle, IconUp, IconDown, IconExpand
+  IconUnBlock, IconClean, IconApply, IconBack, IconMore, IconAdd, IconCricle, IconUp, 
+  IconDown, IconExpand, IconRemove
 }

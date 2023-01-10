@@ -187,7 +187,6 @@ const TeamPopup = React.memo((props) => {
           />
 
         </Grid>
-
       </Grid>
     )
   }

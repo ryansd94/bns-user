@@ -154,6 +154,14 @@ const generateListTitle = () => {
             default: true
           }
         ]
+      },
+      {
+        id: `item-13`,
+        prefix: "item-13@column2",
+        type: EControlType.childTask,
+        label: 'Công việc con',
+        name: 'taskChilds',
+        default: true,
       }
     ],
   }
@@ -432,39 +440,41 @@ const ContentTemplate = (props) => {
             />
           </Grid>
         </Grid>
-        <DragDropContextContainer>
-          <DragDropContext onDragEnd={onDragEndTitle}>
-            <Grid container spacing={2} item xs={12} direction="row">
-              <Grid key={2} item xs={12} sm={getElementControls("column3").length > 0 ? 6 : 9}>
-                <DraggableElement
-                  genderPopoverControl={genderPopoverControl}
-                  prefix={"column1"}
-                  control={control}
-                  controls={getElementControls("column1")}
-                  onDragEnd={onDragEndTitle}
-                />
+        <Grid item>
+          <DragDropContextContainer>
+            <DragDropContext onDragEnd={onDragEndTitle}>
+              <Grid className="task-column-content" container spacing={2} item xs={12} direction="row">
+                <Grid key={2} item xs={12} sm={getElementControls("column3").length > 0 ? 6 : 9}>
+                  <DraggableElement
+                    genderPopoverControl={genderPopoverControl}
+                    prefix={"column1"}
+                    control={control}
+                    controls={getElementControls("column1")}
+                    onDragEnd={onDragEndTitle}
+                  />
+                </Grid>
+                <Grid key={3} item xs={12} sm={3}>
+                  <DraggableElement
+                    genderPopoverControl={genderPopoverControl}
+                    prefix={"column2"}
+                    control={control}
+                    controls={getElementControls("column2")}
+                    onDragEnd={onDragEndTitle}
+                  />
+                </Grid>
+                <Grid key={1} item xs={12} sm={3}>
+                  <DraggableElement
+                    genderPopoverControl={genderPopoverControl}
+                    prefix={"column3"}
+                    control={control}
+                    controls={getElementControls("column3")}
+                    onDragEnd={onDragEndTitle}
+                  />
+                </Grid>
               </Grid>
-              <Grid key={3} item xs={12} sm={3}>
-                <DraggableElement
-                  genderPopoverControl={genderPopoverControl}
-                  prefix={"column2"}
-                  control={control}
-                  controls={getElementControls("column2")}
-                  onDragEnd={onDragEndTitle}
-                />
-              </Grid>
-              <Grid key={1} item xs={12} sm={3}>
-                <DraggableElement
-                  genderPopoverControl={genderPopoverControl}
-                  prefix={"column3"}
-                  control={control}
-                  controls={getElementControls("column3")}
-                  onDragEnd={onDragEndTitle}
-                />
-              </Grid>
-            </Grid>
-          </DragDropContext>
-        </DragDropContextContainer>
+            </DragDropContext>
+          </DragDropContextContainer>
+        </Grid>
       </Grid>
     </div >
   )

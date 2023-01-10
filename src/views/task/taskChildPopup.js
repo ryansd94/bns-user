@@ -27,16 +27,16 @@ import TaskView from './taskView'
 const TaskChildPopup = React.memo((props) => {
     const { taskParentId, taskTypeId } = props
     const { t } = useTranslation()
-    const dispatch = useDispatch()
     const validationSchema = Yup.object().shape({
         title: Yup.string().required(t(message.error.fieldNotEmpty)),
         taskTypeId: Yup.string().nullable(true).required(t(message.error.fieldNotEmpty))
     })
     const [taskTypies, setTaskType] = useState([])
+    const open = useSelector((state) => state.popup.open)
 
     const defaultValues = {
         title: "",
-        taskTypeId: taskTypeId,
+        taskTypeId: null,
     }
 
     const {
@@ -59,7 +59,7 @@ const TaskChildPopup = React.memo((props) => {
         if (!_.isNil(taskParentId)) {
             fetchTaskType()
         }
-    }, [taskParentId])
+    }, [])
 
     const fetchTaskType = async () => {
         await get(baseUrl.jm_taskType, {
@@ -74,13 +74,13 @@ const TaskChildPopup = React.memo((props) => {
     }
 
     const ModalBody = () => {
-        return (
-            <TaskView taskTypeId={taskTypeId} />
+        return  (
+            <TaskView taskTypeId={taskTypeId} parentId={taskParentId}/>
         )
     }
 
     return (
-        <div>
+        open ? <div>
             <Popup
                 reset={reset}
                 ModalBody={ModalBody}
@@ -88,7 +88,7 @@ const TaskChildPopup = React.memo((props) => {
                 typeSave={EButtonDetailType.ok}
                 onSave={handleSubmit(onSubmit)}
             />
-        </div>
+        </div> : ''
     )
 })
 

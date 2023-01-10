@@ -4,16 +4,12 @@ import { useTranslation } from "react-i18next"
 import { useSelector, useDispatch } from "react-redux"
 import ConfirmDeleteDialog from "components/popup/confirmDeleteDialog"
 import { baseUrl, EButtonIconType } from "configs"
-import {
-    setEditData,
-} from "stores/views/master"
 import { open, change_title } from "components/popup/popupSlice"
 import { open as openAlert } from "stores/components/alert-dialog"
 import GridData from "components/table/GridData"
 import StatusItem from 'views/category/status/statusItem'
 import { cellFormatDate, cellFormatDateTime } from "helpers/commonFunction"
 import { UserItem } from 'components/user'
-import UploadIconImage from 'components/upload/uploadIconImage'
 import { LinkControl } from 'components/link'
 import { CellMuliValue } from 'components/table'
 import _ from 'lodash'
@@ -46,7 +42,7 @@ const TaskGrid = React.memo((props) => {
             width: 400,
             pinned: 'left',
             cellRenderer: (params) => {
-                const titleTask = <LabelIconControl name={params.data.title} color={params.data.taskType.color} icon={params.data.taskType.icon} />
+                const titleTask = <LabelIconControl id={params.data.id} name={params.data.title} color={params.data.taskType.color} icon={params.data.taskType.icon} />
                 const href = `/task/edit/${params.data.id}`
                 return <div className="select-item">
                     <LinkControl href={href} title={titleTask}></LinkControl>

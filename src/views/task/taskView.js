@@ -32,24 +32,25 @@ import { TagControl } from "components/tag"
 import * as Yup from "yup"
 import { yupResolver } from "@hookform/resolvers/yup"
 import { message } from "configs"
+import { TaskChild } from 'components/task'
 
 const TaskView = (props) => {
     console.log("render TaskView")
-    const { isCreate = true, taskId = null } = props
+    const { isCreate = true, taskId = null, taskTypeId, parentId } = props
     const { search } = useLocation()
-    const { parentId } = queryString.parse(search)
+    const { parentId: parentIdFromQuery } = queryString.parse(search)
     const dispatch = useDispatch()
-    const [template, setTemplate] = useState(null)
+    const [data, setData] = useState({})
     const [userAssign, setUserAssign] = useState([])
-    const [templateContent, setTemplateContent] = useState(JSON.parse(template && template.content))
+    const [templateContent, setTemplateContent] = useState('')
     const { t } = useTranslation()
     const { id, taskEditId } = useParams()
-    const [taskData, setTaskData] = useState(null)
     const validationSchema = Yup.object().shape({
         defaultData: Yup.object().shape({
             title: Yup.string().required(t(message.error.fieldNotEmpty)),
         }),
     })
+    const [taskTypeId2, settaskTypeId2] = useState(taskTypeId)
     const {
         control,
         handleSubmit,
@@ -59,23 +60,23 @@ const TaskView = (props) => {
         resolver: yupResolver(validationSchema),
         defaultValues: {
             dynamicData: {},
-            defaultData: { title: '', parentId: parentId, taskTypeId: id, estimatedhour: '0', tags: [] },
+            defaultData: { title: '', parentId: parentIdFromQuery || parentId, taskTypeId: id || taskTypeId, estimatedhour: '0', tags: [] },
         }
     })
 
     const getStatus = () => {
-        if (!template) {
+        if (!data.template) {
             return []
         }
-        const templateStatus = template && _.orderBy(template.templateStatus, 'order', 'asc').map((item) => {
+        const templateStatus = data.template && _.orderBy(data.template.templateStatus, 'order', 'asc').map((item) => {
             return item.status
         })
         return templateStatus
     }
 
     useEffect(() => {
-        if (!_.isNil(template)) {
-            setTemplateContent(JSON.parse(template && template.content))
+        if (!_.isNil(data.template)) {
+            setTemplateContent(JSON.parse(data.template && data.template.content))
             if (isCreate) {
                 const status = getStatus()
                 if (status.length > 0) {
@@ -83,48 +84,61 @@ const TaskView = (props) => {
                 }
             }
         }
-    }, [template])
+    }, [data])
 
     useEffect(() => {
-        if (isCreate && !_.isNil(id)) {
-            fetchDataTemplate()
+        if (!_.isNil(id)) {
+            fetchDataTemplate(id)
+            fetchDataUserAssign()
+        } else if (!_.isNil(taskTypeId2)) {
+            fetchDataTemplate(taskTypeId2)
+            fetchDataUserAssign()
         }
-        fetchDataUserAssign()
+    }, [isCreate, id, taskTypeId2])
+
+
+    useEffect(() => {
+        return () => {
+            settaskTypeId2(null)
+            console.log('unmounot')
+        }
     }, [])
 
     useEffect(() => {
         if (!_.isNil(taskId) || !_.isNil(taskEditId)) {
             setValue('dynamicData', {})
             fetchTaskById(taskId || taskEditId)
+            fetchDataUserAssign()
         }
     }, [taskId, taskEditId])
 
-    const fetchDataTemplate = async () => {
+    const fetchDataTemplate = async (id) => {
         await getByID(baseUrl.jm_taskType, id).then((data) => {
-            setTemplate(data && data.data && data.data.template)
+            setData({ template: data && data.data && data.data.template })
         })
     }
 
     const fetchTaskById = async (id) => {
         await getByID(baseUrl.jm_task, id).then((data) => {
-            setTaskData({ ...data?.data?.task })
-            setTemplate(data && data.data && data.data.taskType?.template)
-
-            // _.map(JSON.parse(taskData.dynamicData), (item) => {
-            //     setValue(`dynamicData[${item.id}]`, item.value)
-            // })
+            setData({
+                template: data && data.data && data.data.taskType?.template,
+                task: data?.data?.task,
+                taskChilds: data.data.taskChilds
+            })
         })
     }
 
     useEffect(() => {
-        if (!_.isNil(taskData)) {
+        if (!_.isNil(data.task)) {
+            const taskData = data.task
+            const taskChilds = data.taskChilds
             setValue('defaultData', taskData)
             setValue('defaultData.usersAssign', taskData.usersAssign)
             setValue('defaultData.statusId', taskData.statusId)
             setValue('defaultData.tags', taskData.tags)
             setValue(`dynamicData`, { ...taskData.dynamicData })
         }
-    }, [taskData])
+    }, [data])
 
     const fetchDataUserAssign = async () => {
         await get(`${baseUrl.jm_task}/user-assign`, {
@@ -184,6 +198,17 @@ const TaskView = (props) => {
                                 </Grid>
                             }
                         </div>
+                    }
+                />
+                break
+            case EControlType.childTask:
+                component = <AccordionControl
+                    isExpand={true}
+                    title={item.label}
+                    name={name}
+                    className='task-group-container'
+                    details={
+                        <TaskChild control={control} name={name} />
                     }
                 />
                 break
