@@ -32,7 +32,8 @@ import { TagControl } from "components/tag"
 import * as Yup from "yup"
 import { yupResolver } from "@hookform/resolvers/yup"
 import { message } from "configs"
-import { TaskChild } from 'components/task'
+import { TaskChild, TaskParent } from 'components/task'
+import { MultipleFileUploadField } from 'components/upload/uploadFile'
 
 const TaskView = (props) => {
     console.log("render TaskView")
@@ -208,8 +209,24 @@ const TaskView = (props) => {
                     name={name}
                     className='task-group-container'
                     details={
-                        <TaskChild control={control} name={name} />
+                        <TaskChild taskId={taskId || taskEditId} taskTypeId={id || taskTypeId || data?.task.taskTypeId} control={control} setValue={setValue} getValues={getValues} name={name} />
                     }
+                />
+                break
+            case EControlType.parentTask:
+                component = <AccordionControl
+                    isExpand={true}
+                    title={item.label}
+                    name={name}
+                    className='task-group-container'
+                    details={
+                        <TaskParent taskId={taskId || taskEditId} taskTypeId={id || taskTypeId || data?.task.taskTypeId} control={control} setValue={setValue} getValues={getValues} name={name} />
+                    }
+                />
+                break
+            case EControlType.upload:
+                component = <MultipleFileUploadField
+                    name={item.name}
                 />
                 break
             default:
@@ -228,6 +245,9 @@ const TaskView = (props) => {
         let postData = data
         if (!_.isNil(taskEditId) || !_.isNil(taskId)) {
             postData.id = taskEditId || taskId
+        }
+        if (!_.isNil(data.defaultData?.taskParent)) {
+            postData.defaultData.parentId = data.defaultData.taskParent.id
         }
         const res = await save(baseUrl.jm_task, postData)
         dispatch(loadingButton(false))
@@ -283,49 +303,54 @@ const TaskView = (props) => {
         </Grid>
     }
 
-    return <div className="containerNew">
-        <Box className="task-view-container">
-            <Grid container item spacing={2} direction="row">
-                <Grid item xs={12}>
-                    <TextInput autoFocus={true} focused={true} control={control} placeholder={t('Tiêu đề')} name="defaultData.title" />
-                </Grid>
-                <Grid className="flex-container" flexWrap={'nowrap'} container spacing={2} item xs={12}>
-                    <Grid item xs>
-                        <Grid className="flex-container" container spacing={2} item xs={12}>
-                            <Grid item>
-                                <AssignSelect
-                                    control={control}
-                                    name={'defaultData.usersAssign'}
-                                    data={userAssign}
-                                />
-                            </Grid>
-                            <Grid item>
-                                <StatusSelect
-                                    options={getStatus()}
-                                    name={'defaultData.statusId'}
-                                    control={control}
-                                />
-                            </Grid>
-                            <Grid item>
-                                <TagControl
-                                    name={'defaultData.tags'}
-                                    control={control}
-                                    setValue={setValue}
-                                    getValues={getValues}
-                                />
+    const renderTaskContent = () => {
+        return <div className="containerNew">
+            <Box className="task-view-container">
+                <Grid container item spacing={2} direction="row">
+                    <Grid item xs={12}>
+                        <TextInput autoFocus={true} focused={true} control={control} placeholder={t('Tiêu đề')} name="defaultData.title" />
+                    </Grid>
+                    <Grid className="flex-container" flexWrap={'nowrap'} container spacing={2} item xs={12}>
+                        <Grid item xs>
+                            <Grid className="flex-container" container spacing={2} item xs={12}>
+                                <Grid item>
+                                    <AssignSelect
+                                        control={control}
+                                        name={'defaultData.usersAssign'}
+                                        data={userAssign}
+                                    />
+                                </Grid>
+                                <Grid item>
+                                    <StatusSelect
+                                        options={getStatus()}
+                                        name={'defaultData.statusId'}
+                                        control={control}
+                                    />
+                                </Grid>
+                                <Grid item>
+                                    <TagControl
+                                        name={'defaultData.tags'}
+                                        control={control}
+                                        setValue={setValue}
+                                        getValues={getValues}
+                                    />
+                                </Grid>
                             </Grid>
                         </Grid>
+                        <Grid item>
+                            <ButtonDetail className="f-right" onClick={handleSubmit(onSubmit)} type={EButtonDetailType.save} />
+                        </Grid>
                     </Grid>
-                    <Grid item>
-                        <ButtonDetail className="f-right" onClick={handleSubmit(onSubmit)} type={EButtonDetailType.save} />
+                    <Grid item xs={12}>
+                        <TabControl tabItems={getTabItems()} />
                     </Grid>
                 </Grid>
-                <Grid item xs={12}>
-                    <TabControl tabItems={getTabItems()} />
-                </Grid>
+            </Box>
+        </div>
+    }
 
-            </Grid>
-        </Box>
+    return <div>
+        {renderTaskContent()}
     </div>
 }
 

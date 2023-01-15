@@ -3,7 +3,7 @@ import Tooltip from "@mui/material/Tooltip"
 import _ from 'lodash'
 
 const OverflowTip = props => {
-  const { disableHoverListener = null } = props
+  const { disableHoverListener = null, className } = props
   // Create Ref
   const textElementRef = useRef()
 
@@ -29,6 +29,7 @@ const OverflowTip = props => {
 
   return (
     <Tooltip
+      className={className}
       title={props.value}
       //   interactive
       disableHoverListener={!_.isNil(disableHoverListener) ? disableHoverListener : !hoverStatus}

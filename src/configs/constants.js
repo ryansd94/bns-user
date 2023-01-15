@@ -127,7 +127,9 @@ export const EControlType = {
   datePicker: "DatePicker",
   userItem: "UserItem",
   number: "Number",
-  childTask: "ChildTask"
+  childTask: "ChildTask",
+  parentTask: "ParentTask",
+  upload: "Upload"
 }
 
 export const baseUrl = {

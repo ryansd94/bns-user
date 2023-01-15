@@ -420,18 +420,33 @@ span[data-testid="alphaslider"] {
     margin-right: 10px;
     padding: 5px;
 }
-.MuiModal-root.MuiDialog-root {
-    // z-index: 99999;
-}
-.child-task-root{
+.child-task-root {
     display: flex;
     flex-direction: column;
     gap: 10px;
-    .child-task-item:hover{
+    .child-task-item:hover {
         background-color: rgba(239, 246, 252, 1);
         border-radius: 2px;
     }
+    .child-task-item:hover > .delete-icon-root {
+        display: block !important;
+    }
+    .child-task-item {
+        .delete-icon-root{
+            display: none;
+            position: absolute;
+            right: 0;
+            margin: 5px 12px 0 0;
+        }
+        .delete-icon {
+            font-size: medium;
+            cursor: pointer;
+            &:hover {
+                color: red;
+            }
+        }
+    }
 }
-.fa-xs{
-    font-size: .65rem !important;
+.fa-circle {
+    font-size: 0.65rem !important;
 }

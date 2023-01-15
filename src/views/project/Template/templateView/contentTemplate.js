@@ -156,11 +156,27 @@ const generateListTitle = () => {
         ]
       },
       {
+        id: `item-14`,
+        prefix: "item-14@column2",
+        type: EControlType.parentTask,
+        label: 'Công việc cha',
+        name: 'taskParent',
+        default: true,
+      },
+      {
         id: `item-13`,
         prefix: "item-13@column2",
         type: EControlType.childTask,
         label: 'Công việc con',
         name: 'taskChilds',
+        default: true,
+      },
+      {
+        id: `item-15`,
+        prefix: "item-15@column2",
+        type: EControlType.upload,
+        label: 'Tập tin đính kèm',
+        name: 'files',
         default: true,
       }
     ],

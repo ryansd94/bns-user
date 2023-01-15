@@ -18,7 +18,8 @@ const SingleAddSelect = React.memo(
   (props) => {
     const { control, field, required, data = [], label, name, onSelectChange,
       size, disabled, fullWidth, renderOption, renderTags, renderInput,
-      disableClearable = false, freeSolo = false, placeholder, width = '100%', isAddWhenNoOption = true } = props
+      disableClearable = false, freeSolo = false, placeholder, width = '100%', isAddWhenNoOption = true,
+      onInputChange } = props
     const loadingPopup = useSelector((state) => state.master.loadingPopup)
     const { t } = useTranslation()
 
@@ -101,8 +102,9 @@ const SingleAddSelect = React.memo(
                   field.onChange(newValue)
                   onSelectChange && onSelectChange(newValue)
                 }}
+                onInputChange={onInputChange}
                 renderOption={(props, option) => {
-                  return renderOption ? renderOption(props, option) : (<Box component="li" sx={{ '& > img': { mr: 2, flexShrink: 0 } }} {...props}>
+                  return renderOption ? renderOption(props, option) : (<Box component="li" sx={{ '& > img': { mr: 2, flexShrink: 0 } }} {...props} key={option.id}>
                     <Typography key={option.id}>{option.name}</Typography>
                   </Box>)
                 }}

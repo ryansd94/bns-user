@@ -9,7 +9,8 @@ import { TextInput, NumberInput } from 'components/input'
 import SingleAddSelect from 'components/select/SingleAddSelect'
 import { AccordionControl } from 'components/accordion'
 import { DatePickerInput } from 'components/datepicker'
-import { TaskChild } from 'components/task'
+import { TaskChild, TaskParent } from 'components/task'
+import { MultipleFileUploadField } from 'components/upload/uploadFile'
 
 const ColumnHeader = styled.div`
   text-transform: uppercase;
@@ -80,7 +81,6 @@ const DraggableElement = ({ prefix, columnHeader, controls = [], control, droppa
             {
               <Grid container item rowSpacing={2} xs={12}>
                 {
-
                   item.items && item.items.map((x, childIndex) => {
                     return genderElement(x, childIndex, control)
                   })
@@ -98,7 +98,31 @@ const DraggableElement = ({ prefix, columnHeader, controls = [], control, droppa
         name={item.name}
         className='task-group-container'
         details={
-          <TaskChild control={control} />
+          <TaskChild name={item.id} control={control} />
+        }
+      />
+    }
+    else if (item.type === EControlType.parentTask) {
+      component = <AccordionControl
+        isExpand={true}
+        title={item.label}
+        name={item.name}
+        className='task-group-container'
+        details={
+          <TaskParent name={item.id} control={control} />
+        }
+      />
+    }
+    else if (item.type === EControlType.upload) {
+      component = <AccordionControl
+        isExpand={true}
+        title={item.label}
+        name={item.name}
+        className='task-group-container'
+        details={
+          <MultipleFileUploadField
+            name={item.name}
+          />
         }
       />
     }

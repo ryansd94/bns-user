@@ -2,8 +2,8 @@ const defaultSize = "fa-sm"
 const IconSave = ({ className }) => {
   return <i className="far fa-save fa-sm"></i>
 }
-const IconDelete = ({ size, onClick }) => {
-  return <i onClick={onClick} className="far fa-trash-alt fa-sm"></i>
+const IconDelete = ({ size, onClick, className = '' }) => {
+  return <i onClick={onClick} className={`far fa-trash-alt fa-sm ${className}`}></i>
 }
 const IconEdit = ({ className }) => {
   return <i className="far fa-edit fa-sm"></i>
@@ -51,10 +51,10 @@ const IconExpand = ({ style, className }) => {
   return <i style={style} className="far fa-angle-down fa-sm"></i>
 }
 const IconRemove = ({ style, className }) => {
-  return <i style={style} className="fa-regular fa-xmark fa-sm"></i>
+  return <i style={style} className={`fa-regular fa-xmark fa-sm ${className}`}></i>
 }
 export {
   IconSave, IconDelete, IconEdit, IconCancel, IconEmail, IconActive, IconBlock,
-  IconUnBlock, IconClean, IconApply, IconBack, IconMore, IconAdd, IconCricle, IconUp, 
+  IconUnBlock, IconClean, IconApply, IconBack, IconMore, IconAdd, IconCricle, IconUp,
   IconDown, IconExpand, IconRemove
 }

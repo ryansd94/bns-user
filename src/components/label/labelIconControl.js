@@ -1,5 +1,5 @@
 import React from "react"
-import UploadIconImage from 'components/upload/uploadIconImage'
+import UploadIconImage from 'components/upload/uploadIcon/uploadIconImage'
 import Grid from "@mui/material/Grid"
 import { OverflowTip } from 'components/tooltip'
 

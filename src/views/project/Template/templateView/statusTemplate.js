@@ -1,19 +1,10 @@
 import React, { useEffect, useState } from "react"
 import Grid from "@mui/material/Grid"
 import { useTranslation } from "react-i18next"
-import { ColorPicker } from 'mui-color'
 import ButtonIcon from "components/button/ButtonIcon"
-import { useForm, useFieldArray, Controller } from "react-hook-form"
-import { EButtonIconType, ESize, baseUrl } from "configs"
+import { useFieldArray } from "react-hook-form"
+import { EButtonIconType } from "configs"
 import { v4 as uuidv4 } from 'uuid'
-import TextInput from 'components/input/TextInput'
-import SingleAddSelect from 'components/select/SingleAddSelect'
-import { get } from "services"
-import SelectControl from 'components/select/SelectControl'
-import Typography from '@mui/material/Typography'
-import { IconCricle } from "components/icon/icon"
-import Box from "@mui/material/Box"
-import StatusItem from 'views/category/status/statusItem'
 import StatusSelect from 'components/select/statusSelect'
 
 const StatusTemplate = React.memo((props) => {

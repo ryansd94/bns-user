@@ -8,7 +8,8 @@ import { PopoverControl } from 'components/popover'
 import { IconExpand } from 'components/icon/icon'
 
 const DropdownMenu = (props) => {
-    const { genderDropdownItem, type = EButtonType.add, visible = false, isShowEndIcon = true } = props
+    const { genderDropdownItem, type = EButtonType.add, visible = false, 
+        isShowEndIcon = true, label , isFloatLeft = false, spacingLeft = 1} = props
     const [open, setOpen] = React.useState(false)
     const anchorRef = React.useRef(null)
 
@@ -52,7 +53,7 @@ const DropdownMenu = (props) => {
     }
     return (
         <div>
-            <ButtonFuntion endIcon={isShowEndIcon ? genderEndIcon() : ''} visible={visible} spacingLeft={1} refs={anchorRef} onClick={handleToggle} type={type} />
+            <ButtonFuntion isFloatLeft={isFloatLeft} label={label} endIcon={isShowEndIcon ? genderEndIcon() : ''} visible={visible} spacingLeft={spacingLeft} refs={anchorRef} onClick={handleToggle} type={type} />
             <PopoverControl
                 anchorOrigin={{
                     vertical: 'center',

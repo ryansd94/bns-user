@@ -6,7 +6,7 @@ import './style.scss'
 import { Controller } from "react-hook-form"
 import { _TemplateVariant, EVariant, _ControlSizeDefault } from "configs"
 import { LabelControl } from 'components/label'
-import UploadIconImage from './uploadIconImage'
+import UploadIconImage from 'components/upload/uploadIcon/uploadIconImage'
 
 const Input = styled('input')({
     display: 'none',

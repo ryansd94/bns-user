@@ -63,7 +63,7 @@ function PaperComponent(props) {
 }
 const Popup = React.memo((props) => {
   const dispatch = useDispatch()
-  const { ModalBody, onSave, widthSize = "sm", reset, typeSave = EButtonDetailType.save } = props
+  const { ModalBody, onSave, widthSize = "sm", reset, typeSave = EButtonDetailType.save, isShowFooter = true } = props
   const handleClose = () => {
     dispatch(close())
     dispatch(setEditData(null))
@@ -96,12 +96,12 @@ const Popup = React.memo((props) => {
         <DialogContent dividers>
           <ModalBody />
         </DialogContent>
-        <DialogActions>
+        {isShowFooter ? <DialogActions>
 
           <ButtonDetail onClick={handleClose} type={EButtonDetailType.undo} />
           <ButtonDetail
             onClick={onSave} type={typeSave} />
-        </DialogActions>
+        </DialogActions> : ''}
       </BootstrapDialog>
     </div>
   )

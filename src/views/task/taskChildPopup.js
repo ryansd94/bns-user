@@ -1,27 +1,13 @@
 import React, { useEffect, useState } from "react"
 import Popup from "components/popup/Popup"
-import Grid from "@mui/material/Grid"
-import SingleAddSelect from "components/select/SingleAddSelect"
-import TextInput from "components/input/TextInput"
 import { useTranslation } from "react-i18next"
-import { useSelector, useDispatch } from "react-redux"
+import { useSelector } from "react-redux"
 import * as Yup from "yup"
 import { useForm } from "react-hook-form"
 import { yupResolver } from "@hookform/resolvers/yup"
-import { open, change_title } from "components/popup/popupSlice"
-import { openMessage } from "stores/components/snackbar"
-import {
-    setLoadingPopup,
-    setReload,
-} from "stores/views/master"
-import { getByID, save, get } from "services"
-import { ERROR_CODE, baseUrl, EButtonDetailType, message } from "configs"
-import { loading as loadingButton } from "stores/components/button"
-import { UploadIcon } from 'components/upload'
-import { ColorPickerControl } from "components/colorPicker"
+import { get } from "services"
+import { baseUrl, EButtonDetailType, message } from "configs"
 import _ from 'lodash'
-import TaskTypeMenuItem from './taskTypeMenuItem'
-import Box from '@mui/material/Box'
 import TaskView from './taskView'
 
 const TaskChildPopup = React.memo((props) => {
@@ -74,14 +60,15 @@ const TaskChildPopup = React.memo((props) => {
     }
 
     const ModalBody = () => {
-        return  (
-            <TaskView taskTypeId={taskTypeId} parentId={taskParentId}/>
+        return (
+            <TaskView taskTypeId={taskTypeId} parentId={taskParentId} />
         )
     }
 
     return (
         open ? <div>
             <Popup
+                isShowFooter={false}
                 reset={reset}
                 ModalBody={ModalBody}
                 widthSize={"xl"}

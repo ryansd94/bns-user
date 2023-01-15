@@ -10,7 +10,7 @@ import {
 import { open } from "components/popup/popupSlice"
 import { open as openAlert } from "stores/components/alert-dialog"
 import GridData from "components/table/GridData"
-import UploadIconImage from 'components/upload/uploadIconImage'
+import UploadIconImage from 'components/upload/uploadIcon/uploadIconImage'
 
 const TaskTypeGrid = React.memo((props) => {
     const { filterModels } = props

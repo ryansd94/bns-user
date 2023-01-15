@@ -80,7 +80,8 @@ const TaskToolbar = (props) => {
     }
 
     return <div>
-        <ToolBar component={baseUrl.jm_taskType} visible={toolbarVisible}
+        <ToolBar component={baseUrl.jm_task}
+            visible={toolbarVisible}
             onApplyFilter={onApplyFilter}
             genarateCustomButton={genarateCustomButton}
             onColumnConfigChange={handleColumnConfigChange}
