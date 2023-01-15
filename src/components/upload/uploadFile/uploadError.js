@@ -1,11 +1,8 @@
-import {
-    createStyles,
-    LinearProgress,
-    Typography,
-    withStyles
-} from '@material-ui/core';
-import React from 'react';
-import { FileHeader } from './';
+import { createStyles, withStyles } from '@material-ui/core'
+import Typography from "@mui/material/Typography"
+import LinearProgress from "@mui/material/LinearProgress"
+import React from 'react'
+import { FileHeader } from './'
 
 
 const ErrorLinearProgress = withStyles((theme) =>
@@ -14,7 +11,7 @@ const ErrorLinearProgress = withStyles((theme) =>
             backgroundColor: theme.palette.error.main,
         },
     })
-)(LinearProgress);
+)(LinearProgress)
 
 const UploadError = (props) => {
     const { file, onDelete, errors } = props
@@ -28,7 +25,7 @@ const UploadError = (props) => {
                 </div>
             ))}
         </div>
-    );
+    )
 }
 
 export default UploadError
