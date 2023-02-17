@@ -1,4 +1,4 @@
-$font_size_normal: 14px;
+$font_size_normal: "1rem";
 $border_control: 1px solid #c4c4c4;
 button {
     text-transform: none !important;
@@ -345,7 +345,7 @@ span[data-testid="alphaslider"] {
     }
 }
 .MuiTypography-root {
-    font-size: 14px !important;
+    font-size: $font_size_normal;
 }
 // .ag-center-cols-viewport {
 //     visibility: hidden;
@@ -425,28 +425,61 @@ span[data-testid="alphaslider"] {
     flex-direction: column;
     gap: 10px;
     .child-task-item:hover {
-        background-color: rgba(239, 246, 252, 1);
+        background-color: $item-background-color;
         border-radius: 2px;
     }
     .child-task-item:hover > .delete-icon-root {
         display: block !important;
     }
-    .child-task-item {
-        .delete-icon-root{
-            display: none;
-            position: absolute;
-            right: 0;
-            margin: 5px 12px 0 0;
-        }
-        .delete-icon {
-            font-size: medium;
-            cursor: pointer;
-            &:hover {
-                color: red;
-            }
-        }
+}
+.file-item:hover {
+    background-color: $item-background-color;
+    border-radius: 2px;
+}
+.file-item:hover .delete-icon-root {
+    display: block !important;
+}
+.delete-icon-root {
+    display: none;
+    position: absolute;
+    right: 0;
+    margin: 5px 12px 0 0;
+}
+.delete-icon {
+    font-size: medium;
+    cursor: pointer;
+    &:hover {
+        color: red;
     }
 }
 .fa-circle {
     font-size: 0.65rem !important;
+}
+.button-detail {
+    height: 36.5px !important;
+}
+.mention {
+    width: auto !important;
+}
+.comment-container {
+    padding: 12px 16px;
+    border: $border_control;
+    border-radius: 4px;
+    .comment-root {
+        .comment-header {
+            border-bottom: $border_control;
+            padding: 12px 16px;
+        }
+        .editor-comment {
+            border: none !important;
+            padding: 12px 16px;
+            .ql-editor {
+                padding: 0 !important;
+                min-height: auto !important;
+            }
+        }
+    }
+}
+.mantine-RichTextEditor-root {
+    border: $border_control;
 }

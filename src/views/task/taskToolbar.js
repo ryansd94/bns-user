@@ -42,7 +42,7 @@ const TaskToolbar = (props) => {
         field: "createdDate", isShow: true, label: t("Ngày tạo"), type: EFilterType.datetime
     },
     {
-        field: "createUser.name", isShow: true, label: t("Người tạo"), type: EFilterType.text
+        field: "createdUser.fullName", isShow: true, label: t("Người tạo"), type: EFilterType.text
     }
     ])
 

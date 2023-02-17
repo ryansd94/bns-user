@@ -7,7 +7,6 @@ import TaskOptionItem from './../taskOptionItem'
 import Box from '@mui/material/Box'
 import { useTranslation } from "react-i18next"
 import { Controller } from "react-hook-form"
-import Grid from "@mui/material/Grid"
 
 const TaskParentAddButton = (props) => {
     const { control, defaultData = [], name, setValue } = props

@@ -12,7 +12,7 @@ const TaskParentItem = (props) => {
     }
 
     const renderParentItem = (item) => {
-        return <TaskItem item={item}  onRemoveTaskItem={onRemoveTaskParent}/>
+        return <TaskItem item={item} onRemoveTaskItem={onRemoveTaskParent} />
     }
 
     return <Controller

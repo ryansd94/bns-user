@@ -9,8 +9,19 @@ import { withTranslation } from "react-i18next";
 import AppRoutes from './AppRoutes';
 import Progress from "react-progress-2";
 import CustomizedSnackbar from 'components/snackbar/CustomizedSnackbar';
+import { MuiThemeProvider, createTheme } from '@material-ui/core/styles';
 
-
+const theme = createTheme({
+    palette: {
+        primary: {
+            main: '#c4c4c4',
+            border_color: '#c4c4c4'
+        },
+        secondary: {
+            main: '#351436'
+        }
+    }
+});
 
 class App extends Component {
     state = {}
@@ -25,19 +36,21 @@ class App extends Component {
         let footerComponent = !this.state.isFullPageLayout ? <Footer /> : '';
         return (
             <div className="container-scroller">
-                <Progress.Component />
-                <CustomizedSnackbar />
-                { navbarComponent}
-                <div className="container-fluid page-body-wrapper">
-                    {sidebarComponent}
-                    <div className="main-panel">
-                        <div className="content-wrapper">
-                            <AppRoutes />
-                            {SettingsPanelComponent}
+                <MuiThemeProvider theme={theme}>
+                    <Progress.Component />
+                    <CustomizedSnackbar />
+                    {navbarComponent}
+                    <div className="container-fluid page-body-wrapper">
+                        {sidebarComponent}
+                        <div className="main-panel">
+                            <div className="content-wrapper">
+                                <AppRoutes />
+                                {SettingsPanelComponent}
+                            </div>
+                            {footerComponent}
                         </div>
-                        {footerComponent}
                     </div>
-                </div>
+                </MuiThemeProvider>
             </div>
         );
     }
@@ -63,7 +76,7 @@ class App extends Component {
             i18n.changeLanguage('en');
         }
         window.scrollTo(0, 0);
-        const fullPageLayoutRoutes = ['/login','/signup/jointeam','/signup','/grid'];
+        const fullPageLayoutRoutes = ['/login', '/signup/jointeam', '/signup', '/grid'];
         for (let i = 0; i < fullPageLayoutRoutes.length; i++) {
             if (this.props.location.pathname === fullPageLayoutRoutes[i]) {
                 this.setState({

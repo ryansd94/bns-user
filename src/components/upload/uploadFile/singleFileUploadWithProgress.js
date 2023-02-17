@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { FileHeader } from './'
 import Grid from "@mui/material/Grid"
 import LinearProgress from "@mui/material/LinearProgress"
+import { uploadFile } from 'helpers'
 
 const SingleFileUploadWithProgress = (props) => {
     const { file,
@@ -10,48 +11,21 @@ const SingleFileUploadWithProgress = (props) => {
 
     const [progress, setProgress] = useState(0)
 
-    const uploadFile = (file, onProgress) => {
-        const url = 'https://api.cloudinary.com/v1_1/demo/image/upload'
-        const key = 'docs_upload_example_us_preset'
-
-        var promise = new Promise(function (res, rej) {
-            const xhr = new XMLHttpRequest()
-            xhr.open('POST', url)
-
-            xhr.onload = () => {
-                const resp = JSON.parse(xhr.responseText)
-                res(resp.secure_url)
-            }
-            xhr.onerror = (evt) => rej(evt)
-            xhr.upload.onprogress = (event) => {
-                if (event.lengthComputable) {
-                    const percentage = (event.loaded / event.total) * 100
-                    onProgress(Math.round(percentage))
-                }
-            }
-
-            const formData = new FormData()
-            formData.append('file', file)
-            formData.append('upload_preset', key)
-
-            xhr.send(formData)
-        })
-        return promise
-    }
-
     useEffect(() => {
-        async function upload() {
-            const url = await uploadFile(file, setProgress)
-            onUpload(file, url)
-        }
+        if (file.isAddNew === true) {
+            async function upload() {
+                const url = await uploadFile(file.file, setProgress)
+                onUpload(file.file, url)
+            }
 
-        upload()
+            upload()
+        }
     }, [])
 
     return (
-        <Grid item>
+        <Grid className='file-item' item style={{ width: '100%' }}>
             <FileHeader file={file} onDelete={onDelete} />
-            <LinearProgress variant="determinate" value={progress} />
+            {file.isAddNew === true ? <LinearProgress variant="determinate" value={progress} /> : ''}
         </Grid>
     )
 }

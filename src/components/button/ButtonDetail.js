@@ -92,7 +92,7 @@ const ButtonDetail = (props) => {
         onClick={onClick}
         color={color != null ? color : "primary"}
         autoFocus={autoFocus}
-        className={className}
+        className={`${className} button-detail`}
         disabled={disabled}
         // startIcon={icon}
         variant="outlined"

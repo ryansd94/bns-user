@@ -66,7 +66,7 @@ const ButtonFuntion = React.memo(props => {
     const classes = useStyles(props)()
     const { t } = useTranslation()
     const { type, onClick, visible = true, open,
-        label = '', style, refs, endIcon, onClickAway = null, isFloatLeft = false } = props
+        label = '', style, refs, endIcon, onClickAway = null, isFloatLeft = false, className } = props
     const [icon, setIcon] = useState('')
     const [text, setText] = useState('')
     const [float, setFloat] = useState(isFloatLeft ? ' float-left' : ' float-right')
@@ -147,6 +147,21 @@ const ButtonFuntion = React.memo(props => {
                 setIcon('far fa-ellipsis-h' + sizeDefault)
                 setText(t('Chức năng'))
                 setIsButtonIcon(false)
+                setFloat(' float-left')
+                break
+            case EButtonType.comment:
+                setIcon('far fa-sync-alt' + sizeDefault)
+                setText(t('Bình luận'))
+                break
+            case EButtonType.reply:
+                setIcon('far fa-reply' + sizeDefault)
+                setText(t('Trả lời'))
+                break
+            case EButtonType.cancel:
+                setIcon('far fa-times' + sizeDefault)
+                setText(t('Hủy'))
+                setFloat(' float-left')
+                setColor("neutral")
                 break
             default:
                 break
@@ -163,7 +178,7 @@ const ButtonFuntion = React.memo(props => {
         style={style}
         onClick={onClick}
         disableTouchRipple
-        className={`${isButtonIcon ? classes.button : classes.buttonIcon} ${float}`}
+        className={`${isButtonIcon ? classes.button : classes.buttonIcon} ${float} ${className}`}
         startIcon={startIcon ? <i className={icon} /> : ''}
         endIcon={endIcon ? endIcon : (!startIcon ? <i className={icon} /> : '')}
     >

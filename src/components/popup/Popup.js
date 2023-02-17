@@ -14,6 +14,7 @@ import { useSelector, useDispatch } from "react-redux"
 import { close } from "components/popup/popupSlice"
 import { setEditData } from "stores/views/master"
 import { EButtonDetailType } from "configs"
+import _ from 'lodash'
 
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
   "& .MuiDialogContent-root": {
@@ -63,19 +64,25 @@ function PaperComponent(props) {
 }
 const Popup = React.memo((props) => {
   const dispatch = useDispatch()
-  const { ModalBody, onSave, widthSize = "sm", reset, typeSave = EButtonDetailType.save, isShowFooter = true } = props
-  const handleClose = () => {
-    dispatch(close())
-    dispatch(setEditData(null))
+  const { ModalBody, open = null, title = null,
+    onSave, widthSize = "sm", reset, typeSave = EButtonDetailType.save,
+    isShowFooter = true, handleClose = null } = props
+  const onClose = () => {
+    if (_.isNil(handleClose)) {
+      dispatch(close())
+      dispatch(setEditData(null))
+    } else {
+      handleClose()
+    }
   }
-  const open = useSelector((state) => state.popup.open)
-  const title = useSelector((state) => state.popup.title)
+  const stateOpen = !_.isNil(open) ? open : useSelector((state) => state.popup.open)
+  const stateTitle = !_.isNil(title) ? title : useSelector((state) => state.popup.title)
 
   useEffect(() => {
-    if (!open) {
+    if (!stateOpen) {
       reset && reset()
     }
-  }, [open])
+  }, [stateOpen])
 
   return (
     <div>
@@ -84,21 +91,21 @@ const Popup = React.memo((props) => {
         fullWidth={true}
         aria-labelledby="customized-dialog-title"
         PaperComponent={PaperComponent}
-        open={open}
-        onClose={handleClose}
+        open={stateOpen}
+        onClose={onClose}
       >
         <BootstrapDialogTitle
           id="customized-dialog-title"
-          onClose={handleClose}
+          onClose={onClose}
         >
-          {title}
+          {stateTitle}
         </BootstrapDialogTitle>
         <DialogContent dividers>
           <ModalBody />
         </DialogContent>
         {isShowFooter ? <DialogActions>
 
-          <ButtonDetail onClick={handleClose} type={EButtonDetailType.undo} />
+          <ButtonDetail onClick={onClose} type={EButtonDetailType.undo} />
           <ButtonDetail
             onClick={onSave} type={typeSave} />
         </DialogActions> : ''}

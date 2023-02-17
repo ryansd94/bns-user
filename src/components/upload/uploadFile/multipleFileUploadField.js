@@ -1,94 +1,122 @@
 import { makeStyles } from '@material-ui/core'
 import Grid from "@mui/material/Grid"
 import React, { useCallback, useEffect, useState } from 'react'
-import { FileError, FileRejection, useDropzone } from 'react-dropzone'
-import { SingleFileUploadWithProgress } from './'
+import { useDropzone } from 'react-dropzone'
+import { SingleFileUploadWithProgress, FileItem } from './'
 import { UploadError } from './'
-
-let currentId = 0
+import { useTranslation } from "react-i18next"
+import ButtonIcon from "components/button/ButtonIcon"
+import { EButtonIconType } from "configs"
+import { Controller } from "react-hook-form"
+import _ from 'lodash'
+import { v4 as uuidv4 } from 'uuid'
 
 function getNewId() {
-    // we could use a fancier solution instead of a sequential ID :)
-    return ++currentId
+    return uuidv4()
 }
 
 const useStyles = makeStyles((theme) => ({
     dropzone: {
-        border: `2px dashed ${theme.palette.primary.main}`,
+        border: `2px dashed ${theme.palette.primary.border_color}`,
         borderRadius: theme.shape.borderRadius,
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
-        background: theme.palette.background.default,
-        height: theme.spacing(10),
+        // background: theme.palette.background.default,
+        height: 'auto',
         outline: 'none',
     },
 }))
 
-const MultipleFileUploadField = ({ name }) => {
+const MultipleFileUploadField = ({ name, control, setValue, getValues }) => {
+    const { t } = useTranslation()
     const classes = useStyles()
-
-    const [files, setFiles] = useState([])
+    const [files, setFiles] = useState(getValues && getValues(name) || [])
     const onDrop = useCallback((accFiles, rejFiles) => {
-        const mappedAcc = accFiles.map((file) => ({ file, errors: [], id: getNewId() }))
-        const mappedRej = rejFiles.map((r) => ({ ...r, id: getNewId() }))
+        const mappedAcc = accFiles.map((file) => ({ file, errors: [], id: getNewId(), isAddNew: true }))
+        const mappedRej = rejFiles.map((r) => ({ ...r, id: getNewId(), isAddNew: true }))
         setFiles((curr) => [...curr, ...mappedAcc, ...mappedRej])
     }, [])
 
     useEffect(() => {
         console.log(files)
-        // helpers.setTouched(true)
+        setValue && setValue(name, files)
     }, [files])
 
     const onUpload = (file, url) => {
         setFiles((curr) =>
             curr.map((fw) => {
                 if (fw.file === file) {
-                    return { ...fw, url }
+                    return { ...fw, url, isAddNew: true }
                 }
                 return fw
             })
         )
     }
 
-    const onDelete = (file) => {
-        setFiles((curr) => curr.filter((fw) => fw.file !== file))
+    const onDelete = (id) => {
+        var fileDelete = _.find(files, (x) => x.id === id)
+        if (_.isNil(fileDelete))
+            return
+        if (fileDelete.isAddNew !== true) {
+            fileDelete.isDelete = true
+            setValue && setValue(name, files)
+            return
+        }
+        setFiles((curr) => curr.filter((fw) => fw.id !== id))
     }
 
     const { getRootProps, getInputProps } = useDropzone({
         onDrop,
         accept: ['image/*', 'video/*', '.pdf'],
-        maxSize: 300 * 1024, // 300KB
+        maxSize: 1000 * 1024, // 300KB
     })
 
     return (
-        <React.Fragment>
-            <Grid item>
+        <Grid container spacing={2} item>
+            <Grid item style={{ width: '100%' }} >
                 <div {...getRootProps({ className: classes.dropzone })}>
-                    <input {...getInputProps()} />
-
-                    <p>Drag 'n' drop some files here, or click to select files</p>
+                    <Grid className="flex-container" container spacing={2} item alignItems={'center'} direction='column'>
+                        <Grid item xs>
+                            <input {...getInputProps()} />
+                        </Grid>
+                        <Grid item xs>
+                            <span>{t('Kéo và thả file vào đây hoặc nhấn để chọn file')}</span>
+                        </Grid>
+                        <Grid item xs>
+                            <ButtonIcon type={EButtonIconType.upload} />
+                        </Grid>
+                    </Grid>
                 </div>
             </Grid>
-
-            {files.map((fileWrapper) => (
-                <Grid item key={fileWrapper.id}>
-                    {fileWrapper.errors.length ? (
-                        <UploadError
-                            file={fileWrapper.file}
-                            errors={fileWrapper.errors}
-                            onDelete={onDelete}
-                        />
-                    ) : (
-                        <SingleFileUploadWithProgress
-                            onDelete={onDelete}
-                            onUpload={onUpload}
-                            file={fileWrapper.file}
-                        />
-                    )}
-                </Grid>
-            ))}
-        </React.Fragment>
+            <Grid item style={{ width: '100%' }} >
+                <Controller
+                    render={({ field, fieldState: { error } }) =>
+                        <Grid container spacing={2}>{
+                            !_.isNil(field?.value) ? _.map(_.filter(field?.value, (x) => x.isDelete !== true), (fileWrapper) => {
+                                return <Grid style={{ width: '100%' }} item key={fileWrapper.id}>
+                                    {fileWrapper.errors?.length ? (
+                                        <UploadError
+                                            file={fileWrapper}
+                                            url={fileWrapper.url}
+                                            errors={fileWrapper.errors}
+                                            onDelete={onDelete}
+                                        />
+                                    ) : (
+                                        <SingleFileUploadWithProgress
+                                            onDelete={onDelete}
+                                            onUpload={onUpload}
+                                            file={fileWrapper}
+                                        />
+                                    )}
+                                </Grid>
+                            }) : ''
+                        }</Grid>}
+                    name={name}
+                    control={control && control}
+                />
+            </Grid>
+        </Grid>
     )
 }
 export default MultipleFileUploadField

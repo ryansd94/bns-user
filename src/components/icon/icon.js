@@ -33,7 +33,7 @@ const IconBack = ({ style, className }) => {
   return <i style={style} className="fas fa-arrow-left fa-sm"></i>
 }
 const IconMore = ({ style, className }) => {
-  return <i style={style} className="fas fa-ellipsis-v fa-sm"></i>
+  return <i style={style} className="fas fa-ellipsis-h fa-sm"></i>
 }
 const IconAdd = ({ style, className }) => {
   return <i style={style} className="far fa-plus fa-sm"></i>
@@ -53,8 +53,20 @@ const IconExpand = ({ style, className }) => {
 const IconRemove = ({ style, className }) => {
   return <i style={style} className={`fa-regular fa-xmark fa-sm ${className}`}></i>
 }
+const IconUpload = ({ style, className }) => {
+  return <i style={style} className="far fa-upload fa-sm"></i>
+}
+const IconChange = ({ style, className }) => {
+  return <i style={style} className="far fa-exchange fa-sm"></i>
+}
+const IconCopy = ({ style, className }) => {
+  return <i style={style} className="far fa-copy fa-sm"></i>
+}
+const IconComment = ({ style, className }) => {
+  return <i style={style} className="far fa-comment-alt fa-sm"></i>
+}
 export {
   IconSave, IconDelete, IconEdit, IconCancel, IconEmail, IconActive, IconBlock,
   IconUnBlock, IconClean, IconApply, IconBack, IconMore, IconAdd, IconCricle, IconUp,
-  IconDown, IconExpand, IconRemove
+  IconDown, IconExpand, IconRemove, IconUpload, IconChange, IconCopy, IconComment
 }

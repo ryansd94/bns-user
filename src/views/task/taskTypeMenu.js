@@ -33,6 +33,7 @@ const TaskTypeMenu = (props) => {
             })}
         </div>
     }
+    
     return (
         <div>
             <DropdownMenu isShowEndIcon={false} visible={true} genderDropdownItem={genderDropdownItem} />

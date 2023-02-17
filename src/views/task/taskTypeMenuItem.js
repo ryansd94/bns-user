@@ -7,7 +7,7 @@ const TaskTypeMenuItem = (props) => {
 
     return (
         <Grid container columnSpacing={2}>
-            <Grid item>
+            <Grid item display='flex' alignItems={'center'}>
                 <UploadIconImage color={color} src={icon} />
             </Grid>
             <Grid item>{name}</Grid>

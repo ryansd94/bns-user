@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react"
-import { EditorControl } from 'components/editor'
-import { EControlType, ESize, EButtonDetailType } from 'configs'
+import { EditorControl, EditorControlCustom } from 'components/editor'
+import { EControlType, ESize, EButtonDetailType, EButtonIconType } from 'configs'
 import Grid from "@mui/material/Grid"
 import { TextInput, NumberInput } from 'components/input'
 import SingleAddSelect from 'components/select/SingleAddSelect'
@@ -34,15 +34,18 @@ import { yupResolver } from "@hookform/resolvers/yup"
 import { message } from "configs"
 import { TaskChild, TaskParent } from 'components/task'
 import { MultipleFileUploadField } from 'components/upload/uploadFile'
+import { TaskMoreButton } from '../task/taskMoreButton'
+import { Comment } from 'components/comment'
 
 const TaskView = (props) => {
     console.log("render TaskView")
     const { isCreate = true, taskId = null, taskTypeId, parentId } = props
     const { search } = useLocation()
-    const { parentId: parentIdFromQuery } = queryString.parse(search)
+    const { parentId: parentIdFromQuery, copyTaskId } = queryString.parse(search)
     const dispatch = useDispatch()
     const [data, setData] = useState({})
     const [userAssign, setUserAssign] = useState([])
+    const [taskTypies, setTaskType] = useState([])
     const [templateContent, setTemplateContent] = useState('')
     const { t } = useTranslation()
     const { id, taskEditId } = useParams()
@@ -62,6 +65,7 @@ const TaskView = (props) => {
         defaultValues: {
             dynamicData: {},
             defaultData: { title: '', parentId: parentIdFromQuery || parentId, taskTypeId: id || taskTypeId, estimatedhour: '0', tags: [] },
+            comments: []
         }
     })
 
@@ -90,28 +94,30 @@ const TaskView = (props) => {
     useEffect(() => {
         if (!_.isNil(id)) {
             fetchDataTemplate(id)
-            fetchDataUserAssign()
         } else if (!_.isNil(taskTypeId2)) {
             fetchDataTemplate(taskTypeId2)
-            fetchDataUserAssign()
         }
     }, [isCreate, id, taskTypeId2])
 
 
     useEffect(() => {
+        fetchTaskType()
+        fetchDataUserAssign()
         return () => {
             settaskTypeId2(null)
-            console.log('unmounot')
         }
     }, [])
 
     useEffect(() => {
-        if (!_.isNil(taskId) || !_.isNil(taskEditId)) {
-            setValue('dynamicData', {})
-            fetchTaskById(taskId || taskEditId)
-            fetchDataUserAssign()
+        if (!_.isNil(taskId) || !_.isNil(taskEditId) || !_.isNil(copyTaskId)) {
+            loadData()
         }
-    }, [taskId, taskEditId])
+    }, [taskId, taskEditId, copyTaskId])
+
+    const loadData = () => {
+        setValue('dynamicData', {})
+        fetchTaskById(taskId || taskEditId || copyTaskId)
+    }
 
     const fetchDataTemplate = async (id) => {
         await getByID(baseUrl.jm_taskType, id).then((data) => {
@@ -124,8 +130,16 @@ const TaskView = (props) => {
             setData({
                 template: data && data.data && data.data.taskType?.template,
                 task: data?.data?.task,
-                taskChilds: data.data.taskChilds
+                taskChilds: data.data.taskChilds,
+                comments: data?.data?.comments
             })
+        })
+    }
+    const fetchTaskType = async () => {
+        await get(baseUrl.jm_taskType, {
+            isGetAll: true,
+        }).then((data) => {
+            setTaskType(data && data.data && data.data.items)
         })
     }
 
@@ -133,6 +147,7 @@ const TaskView = (props) => {
         if (!_.isNil(data.task)) {
             const taskData = data.task
             const taskChilds = data.taskChilds
+            setValue('comments', data.comments)
             setValue('defaultData', taskData)
             setValue('defaultData.usersAssign', taskData.usersAssign)
             setValue('defaultData.statusId', taskData.statusId)
@@ -225,9 +240,23 @@ const TaskView = (props) => {
                 />
                 break
             case EControlType.upload:
-                component = <MultipleFileUploadField
-                    name={item.name}
+                component = <AccordionControl
+                    isExpand={true}
+                    title={item.label}
+                    name={name}
+                    className='task-group-container'
+                    details={
+                        <MultipleFileUploadField
+                            name={name}
+                            control={control}
+                            setValue={setValue}
+                            getValues={getValues}
+                        />
+                    }
                 />
+                break
+            case EControlType.comment:
+                component = <Comment getValues={getValues} label={item.label} name={'comments'} setValue={setValue} control={control} />
                 break
             default:
                 break
@@ -339,6 +368,13 @@ const TaskView = (props) => {
                         </Grid>
                         <Grid item>
                             <ButtonDetail className="f-right" onClick={handleSubmit(onSubmit)} type={EButtonDetailType.save} />
+                        </Grid>
+                        <Grid item>
+                            <TaskMoreButton
+                                taskTypies={taskTypies}
+                                onChangeTaskType={loadData}
+                                task={data?.task}
+                                taskId={taskId || taskEditId} />
                         </Grid>
                     </Grid>
                     <Grid item xs={12}>

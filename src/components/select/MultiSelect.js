@@ -108,6 +108,7 @@ const MultiSelect = React.memo(
                 options={data}
                 size={size ? size : _ControlSizeDefault}
                 limitTags={2}
+                autoHighlight={true}
                 fullWidth={fullWidth || true}
                 style={{ marginTop: "0px" }}
                 disabled={disabled}

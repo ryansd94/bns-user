@@ -62,8 +62,7 @@ const SingleAddSelect = React.memo(
                 value={field.value != null ? field.value : null}
                 disableClearable={disableClearable}
                 selectOnFocus
-                autoHighlight
-                clearOnBlur
+                autoHighlight={true}
                 handleHomeEndKeys
                 isOptionEqualToValue={(option, value) => option.id === value || null}
                 getOptionLabel={(option) => {

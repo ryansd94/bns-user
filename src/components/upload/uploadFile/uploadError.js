@@ -3,6 +3,7 @@ import Typography from "@mui/material/Typography"
 import LinearProgress from "@mui/material/LinearProgress"
 import React from 'react'
 import { FileHeader } from './'
+import Grid from "@mui/material/Grid"
 
 
 const ErrorLinearProgress = withStyles((theme) =>
@@ -14,17 +15,17 @@ const ErrorLinearProgress = withStyles((theme) =>
 )(LinearProgress)
 
 const UploadError = (props) => {
-    const { file, onDelete, errors } = props
+    const { file, onDelete, errors, url } = props
     return (
-        <div>
-            <FileHeader file={file} onDelete={onDelete} />
+        <Grid className='file-item' item style={{ width: '100%' }}>
+            <FileHeader url={url} file={file} onDelete={onDelete} />
             <ErrorLinearProgress variant="determinate" value={100} />
             {errors.map((error) => (
                 <div key={error.code}>
                     <Typography color="error">{error.message}</Typography>
                 </div>
             ))}
-        </div>
+        </Grid>
     )
 }
 

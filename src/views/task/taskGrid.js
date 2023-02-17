@@ -14,7 +14,7 @@ import { LinkControl } from 'components/link'
 import { CellMuliValue } from 'components/table'
 import _ from 'lodash'
 import LabelIconControl from 'components/label/labelIconControl'
-import { DropdownMenu } from 'components/dropdown'
+import { DropdownMenu, DropDownItem } from 'components/dropdown'
 import MenuItem from '@mui/material/MenuItem'
 import { EButtonType } from 'configs/constants'
 import TaskChildPopup from './taskChildPopup'
@@ -35,7 +35,6 @@ const TaskGrid = React.memo((props) => {
             pinned: 'left',
             headerCheckboxSelection: true
         },
-        // { field: 'parentId', rowGroup: true, hide: true },
         {
             field: "title",
             headerName: t("Tiêu đề"),
@@ -90,7 +89,8 @@ const TaskGrid = React.memo((props) => {
             valueFormatter: cellFormatDateTime
         },
         {
-            field: "createdUser.name", headerName: t("Người tạo"),
+            field: "createdUser.fullName", 
+            headerName: t("Người tạo"),
             suppressAutoSize: true,
             cellRenderer: (params) => {
                 return <UserItem {...params.data.createdUser} />
@@ -137,9 +137,7 @@ const TaskGrid = React.memo((props) => {
     }
 
     const genderDropdownItem = (data) => {
-        return <MenuItem onClick={() => addChildTask(data)}>
-            Add Child
-        </MenuItem>
+        return <DropDownItem onClick={() => addChildTask(data)} title={t('Tạo công việc con')}/>
     }
 
     const ActionBtnRenderer = (params) => {

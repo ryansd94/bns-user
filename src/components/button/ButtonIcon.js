@@ -18,7 +18,9 @@ import {
   IconMore,
   IconAdd,
   IconUp,
-  IconDown
+  IconDown,
+  IconUpload,
+  IconComment
 } from "components/icon/icon"
 import { EColor } from 'configs/constants'
 
@@ -33,7 +35,7 @@ const useStyles = makeStyles({
 const ButtonIcon = (props) => {
   const classes = useStyles()
   const { t } = useTranslation()
-  const { type, onClick, title, disabled, color, size, showTooltip, style } = props
+  const { type, onClick, title, disabled, color, size, showTooltip = true, style, refs } = props
   const [titleDefault, setTitle] = useState("")
   const theme = createTheme({
     palette: {
@@ -76,6 +78,9 @@ const ButtonIcon = (props) => {
       case EButtonIconType.down:
         setTitle(t("Xuống"))
         break
+      case EButtonIconType.comment:
+        setTitle(t("Trả lời"))
+        break
       default:
         break
     }
@@ -115,17 +120,27 @@ const ButtonIcon = (props) => {
     icon = <IconUp style={{ width: width, height: height }} />
   else if (type == EButtonIconType.down)
     icon = <IconDown style={{ width: width, height: height }} />
+  else if (type == EButtonIconType.upload)
+    icon = <IconUpload style={{ width: width, height: height }} />
+  else if (type == EButtonIconType.comment)
+    icon = <IconComment style={{ width: width, height: height }} />
 
   button = (
 
-    <IconButton style={style} color={color} size={size} className={classes.root} {...adjustedButtonProps}>
+    <IconButton
+      ref={refs}
+      style={style}
+      color={color}
+      size={size}
+      className={classes.root}
+      {...adjustedButtonProps}>
       {icon}
     </IconButton>
   )
 
   return showTooltip ? <ThemeProvider theme={theme}>
     <Tooltip title={title ? title : titleDefault}>{button}</Tooltip>
-  </ThemeProvider> :<ThemeProvider theme={theme}>{button}</ThemeProvider> 
+  </ThemeProvider> : <ThemeProvider theme={theme}>{button}</ThemeProvider>
 }
 ButtonIcon.propTypes = {
   type: PropTypes.string.isRequired,

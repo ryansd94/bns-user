@@ -11,6 +11,7 @@ import { AccordionControl } from 'components/accordion'
 import { DatePickerInput } from 'components/datepicker'
 import { TaskChild, TaskParent } from 'components/task'
 import { MultipleFileUploadField } from 'components/upload/uploadFile'
+import { Comment } from 'components/comment'
 
 const ColumnHeader = styled.div`
   text-transform: uppercase;
@@ -122,10 +123,15 @@ const DraggableElement = ({ prefix, columnHeader, controls = [], control, droppa
         details={
           <MultipleFileUploadField
             name={item.name}
+            control={control}
           />
         }
       />
     }
+    else if (item.type === EControlType.comment) {
+      component = <Comment label={item.label} name={item.id} control={control}/>
+    }
+
     return (
       <Grid key={index} item xs={12}>
         <ListItem genderPopoverControl={item.type !== EControlType.group ? () => genderPopoverControl(item, prefix, index, isLastControl(item)) : null} control={component} key={item.id} id={item.id} index={index} />

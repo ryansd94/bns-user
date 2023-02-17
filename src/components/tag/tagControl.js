@@ -7,7 +7,6 @@ import { useTranslation } from "react-i18next"
 import ClickAwayListener from '@mui/material/ClickAwayListener'
 import Box from "@mui/material/Box"
 import _ from 'lodash'
-import { ChipControl } from "components/chip"
 import TagItem from './tagItem'
 import { Controller } from "react-hook-form"
 

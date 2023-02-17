@@ -88,6 +88,14 @@ const generateListTitle = () => {
         label: 'Ghi chú',
         default: true
       },
+      {
+        id: `item-16`,
+        prefix: "column1",
+        type: EControlType.comment,
+        name: 'comment',
+        label: 'Bình luận',
+        default: true
+      },
     ],
     "column2": [
       {

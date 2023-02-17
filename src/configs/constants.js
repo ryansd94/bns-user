@@ -51,7 +51,10 @@ export const EButtonType = {
   apply: "Apply",
   refresh: "Refresh",
   addTag: "AddTag",
-  more: "More"
+  more: "More",
+  comment: "Comment",
+  reply: "Reply",
+  cancel: "cancel"
 };
 export const EColumnType = {
   checkbox: "Checkbox",
@@ -72,8 +75,8 @@ export const EColor =
 
 export const EFormatDate =
 {
-  ddmmyyyy: "dd-MM-yyyy",
-  ddmmyyyy_hhmm: "dd-MM-yyyy HH:mm"
+  ddmmyyyy: "dd/MM/yyyy",
+  ddmmyyyy_hhmm: "dd/MM/yyyy HH:mm"
 }
 
 export const EButtonIconType = {
@@ -81,12 +84,14 @@ export const EButtonIconType = {
   apply: "Apply",
   cancel: "Cancel",
   back: "Back",
-  more: " More",
+  more: "More",
   add: "Add",
   delete: "Delete",
   up: "Up",
   down: "Down",
-  edit: "Edit"
+  edit: "Edit",
+  upload: "Upload",
+  comment: "Comment"
 }
 
 export const EButtonDetailType = {
@@ -129,7 +134,8 @@ export const EControlType = {
   number: "Number",
   childTask: "ChildTask",
   parentTask: "ParentTask",
-  upload: "Upload"
+  upload: "Upload",
+  comment: "Comment"
 }
 
 export const baseUrl = {

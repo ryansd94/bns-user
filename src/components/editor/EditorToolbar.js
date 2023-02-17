@@ -1,6 +1,9 @@
-import React from "react";
-import { Quill } from "react-quill";
-import ImageResize from 'quill-image-resize-module-react';
+import React from "react"
+import { Quill } from "react-quill"
+import ImageResize from 'quill-image-resize-module-react'
+import { uploadFile } from 'helpers'
+import  "quill-mention"
+import 'quill-mention/dist/quill.mention.css'
 
 // Custom Undo button icon component for Quill editor. You can import it directly
 // from 'quill/assets/icons/undo.svg' but I found that a number of loaders do not
@@ -13,7 +16,7 @@ const CustomUndo = () => (
             d="M8.09,13.91A4.6,4.6,0,0,0,9,14,5,5,0,1,0,4,9"
         />
     </svg>
-);
+)
 
 // Redo button icon component for Quill editor
 const CustomRedo = () => (
@@ -24,24 +27,39 @@ const CustomRedo = () => (
             d="M9.91,13.91A4.6,4.6,0,0,1,9,14a5,5,0,1,1,5-5"
         />
     </svg>
-);
+)
 
 // Undo and redo functions for Custom Toolbar
 function undoChange() {
-    this.quill.history.undo();
+    this.quill.history.undo()
 }
 function redoChange() {
-    this.quill.history.redo();
+    this.quill.history.redo()
+}
+async function insertImage() {
+    const input = document.createElement('input')
+
+    input.setAttribute('type', 'file')
+    input.setAttribute('accept', 'image/*')
+    input.click()
+
+    input.onchange = async () => {
+        var file = input.files[0]
+        const xxx = await uploadFile(file)
+        const cursorPosition = this.quill.getSelection().index
+        this.quill.insertEmbed(cursorPosition, 'image', xxx)
+        this.quill.setSelection(cursorPosition + 1)
+    }
 }
 
 // Add sizes to whitelist and register them
-const Size = Quill.import("formats/size");
-Size.whitelist = ["extra-small", "small", "medium", "large"];
-Quill.register(Size, true);
-Quill.register('modules/imageResize', ImageResize);
+const Size = Quill.import("formats/size")
+Size.whitelist = ["extra-small", "small", "medium", "large"]
+Quill.register(Size, true)
+Quill.register('modules/imageResize', ImageResize)
 
 // Add fonts to whitelist and register them
-const Font = Quill.import("formats/font");
+const Font = Quill.import("formats/font")
 Font.whitelist = [
     "arial",
     "comic-sans",
@@ -49,8 +67,41 @@ Font.whitelist = [
     "georgia",
     "helvetica",
     "lucida"
+]
+Quill.register(Font, true)
+
+const atValues = [
+    { id: 1, value: "Fredrik Sundqvist" },
+    { id: 2, value: "Patrik Sjölin" }
 ];
-Quill.register(Font, true);
+const hashValues = [
+    { id: 3, value: "Fredrik Sundqvist 2" },
+    { id: 4, value: "Patrik Sjölin 2" }
+];
+
+
+const insertMention = (data) => {
+    // this is null when the editor doesn't have focus
+    // const range = quill.getSelection();
+    
+    const range = this.quill.selection.savedRange; // cursor position
+  
+    if (!range || range.length != 0) return;
+    const position = range.index;
+  
+    this.quill.insertEmbed(position, 'mention', data, Quill.sources.API);
+    this.quill.insertText(position + 1, ' ', Quill.sources.API);
+    // this.quill.setSelection(position + 2, Quill.sources.API);
+  }
+
+const addMention = () => {
+    const data = {
+        name: "@John Doe",
+        id: 'asdf12345',
+    };
+
+    insertMention(data);
+};
 
 // Modules object for setting up the Quill editor
 export const modules = {
@@ -58,7 +109,8 @@ export const modules = {
         container: "#toolbar",
         handlers: {
             undo: undoChange,
-            redo: redoChange
+            redo: redoChange,
+            image: insertImage
         }
     },
     history: {
@@ -69,8 +121,31 @@ export const modules = {
     imageResize: {
         parchment: Quill.import('parchment'),
         modules: ['Resize', 'DisplaySize']
+    },
+    mention: {
+        allowedChars: /^[A-Za-z\sÅÄÖåäö]*$/,
+        mentionDenotationChars: ["@", "#"],
+        source: function (searchTerm, renderList, mentionChar) {
+            let values;
+
+            if (mentionChar === "@") {
+                values = atValues;
+            } else {
+                values = hashValues;
+            }
+
+            if (searchTerm.length === 0) {
+                renderList(values, searchTerm);
+            } else {
+                const matches = [];
+                for (let i = 0; i < values.length; i++)
+                    if (values[i].value.toLowerCase().indexOf(searchTerm.toLowerCase()))
+                        matches.push(values[i]);
+                renderList(matches, searchTerm);
+            }
+        }
     }
-};
+}
 
 // Formats objects for setting up the Quill editor
 export const formats = [
@@ -91,8 +166,9 @@ export const formats = [
     "link",
     "image",
     "color",
-    "code-block"
-];
+    "code-block",
+    "mention"
+]
 
 // Quill Toolbar component
 export const EditorToolbar = ({ hide }) => {
@@ -160,6 +236,6 @@ export const EditorToolbar = ({ hide }) => {
             </button>
         </span>
     </div>
-};
+}
 
-export default EditorToolbar;
+export default EditorToolbar

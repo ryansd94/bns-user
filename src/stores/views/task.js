@@ -11,7 +11,7 @@ const initialState = {
         "status.name": true,
         dueDate: true,
         startDate: true,
-        "createUser.name": true,
+        "createdUser.fullName": true,
         id: false,
         __check__: true,
     },
