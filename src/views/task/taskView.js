@@ -161,7 +161,7 @@ const TaskView = (props) => {
             isGetAll: true
         }).then((data) => {
             setUserAssign(data && data.data && _.map(data.data.items, (item) => {
-                return { id: item.id, name: item.fullName }
+                return { id: item.id, fullName: item.fullName }
             }))
         })
     }
@@ -256,7 +256,7 @@ const TaskView = (props) => {
                 />
                 break
             case EControlType.comment:
-                component = <Comment getValues={getValues} label={item.label} name={'comments'} setValue={setValue} control={control} />
+                component = <Comment taskId={taskId || taskEditId} getValues={getValues} label={item.label} name={'comments'} setValue={setValue} control={control} />
                 break
             default:
                 break
@@ -339,9 +339,9 @@ const TaskView = (props) => {
                     <Grid item xs={12}>
                         <TextInput autoFocus={true} focused={true} control={control} placeholder={t('Tiêu đề')} name="defaultData.title" />
                     </Grid>
-                    <Grid className="flex-container" flexWrap={'nowrap'} container spacing={2} item xs={12}>
+                    <Grid className="flex-container" flexWrap={'nowrap'} container gap={2} item xs={12}>
                         <Grid item xs>
-                            <Grid className="flex-container" container spacing={2} item xs={12}>
+                            <Grid className="flex-container" container gap={2} item xs={12}>
                                 <Grid item>
                                     <AssignSelect
                                         control={control}

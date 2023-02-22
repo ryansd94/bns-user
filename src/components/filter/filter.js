@@ -151,7 +151,7 @@ const Filter = (props) => {
 
     const genderPopoverControl = () => {
         return (
-            <Grid className="containerNew filter-save-dialog" width="auto" container
+            <Grid className='box-container' flexWrap='nowrap' width="auto" container
             >
                 <Grid item  >
                     <TextInput label={t("Nhập tên bộ lọc")}

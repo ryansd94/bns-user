@@ -17,9 +17,9 @@ const TaskParentItem = (props) => {
 
     return <Controller
         render={({ field, fieldState: { error } }) =>
-            <Grid container xs={12} className='child-task-root' item spacing={2} direction="column">{
-                !_.isNil(field?.value) ? renderParentItem(field?.value) : ''
-            }</Grid>}
+            !_.isNil(field?.value) ? <Grid container xs={12} className='child-task-root' item spacing={2} direction="column">{
+                renderParentItem(field?.value)
+            }</Grid> : ''}
         name={name}
         control={control && control}
     />

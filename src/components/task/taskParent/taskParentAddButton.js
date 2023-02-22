@@ -37,7 +37,7 @@ const TaskParentAddButton = (props) => {
     return <Controller
         render={({ field, fieldState: { error } }) =>
             <div>{
-                !_.isNil(field?.value) ?  '' : (<SingleAddSelect
+                !_.isNil(field?.value) ? '' : (<SingleAddSelect
                     data={data}
                     freeSolo
                     onSelectChange={onSelectChange}
@@ -48,7 +48,8 @@ const TaskParentAddButton = (props) => {
                     control={control}
                     name={'parentId'}
                 />)
-            }</div>}
+            }</div>
+        }
         name={name}
         control={control && control}
     />

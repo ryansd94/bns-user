@@ -79,3 +79,20 @@ export const deleteData = async (baseUrl, id) => {
     return error;
   }
 }
+
+export const post = async (baseUrl, param) => {
+  try {
+    const query = `${baseUrl}`
+    const res = await services.post(query, param)
+    return res
+  } catch (error) {
+    const { request, response } = error
+    if (request) {
+      return request
+    }
+    if (response) {
+      return response
+    }
+    return error
+  }
+}

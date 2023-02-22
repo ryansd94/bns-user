@@ -9,6 +9,7 @@ import { Controller } from "react-hook-form"
 import { uploadFile } from 'helpers'
 import { RichTextEditor } from '@mantine/rte'
 import _ from 'lodash'
+import { v4 as uuidv4 } from 'uuid'
 
 const EditorControl = React.memo((props) => {
     const { label, name, control, size, isShowAccordion = true, onChange, value = null, readOnly, className } = props

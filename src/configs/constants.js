@@ -148,6 +148,7 @@ export const baseUrl = {
   jm_task: 'jm_task',
   jm_taskcolumn: 'jm_taskcolumn',
   jm_customcolumn: 'jm_customcolumn',
+  jm_comment: 'jm_comment'
 }
 
 export const _TemplateVariant = EVariant.normal

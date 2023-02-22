@@ -103,9 +103,7 @@ const TabControl = (props) => {
         {
           _.map(tabItems, (item, index) => {
             return <TabPanel key={index} value={value} index={index}>
-              <div className='tabpanel-content'>
                 {item.Content}
-              </div>
             </TabPanel>
           })
         }

@@ -35,12 +35,16 @@ const useStyles = makeStyles({
 const ButtonIcon = (props) => {
   const classes = useStyles()
   const { t } = useTranslation()
-  const { type, onClick, title, disabled, color, size, showTooltip = true, style, refs } = props
+  const { type, onClick, title, disabled, color, size, showTooltip = true, style, refs, className ='button-icon' } = props
   const [titleDefault, setTitle] = useState("")
   const theme = createTheme({
     palette: {
       neutral: {
         main: EColor.cancel,
+        contrastText: "#fff",
+      },
+      delete: {
+        main: "#e50e0e96",
         contrastText: "#fff",
       },
     },
@@ -132,8 +136,10 @@ const ButtonIcon = (props) => {
       style={style}
       color={color}
       size={size}
-      className={classes.root}
-      {...adjustedButtonProps}>
+      className={`${classes.root} ${className}`}
+      {...adjustedButtonProps}
+      aria-describedby={'mouse-over-popover'}
+      >
       {icon}
     </IconButton>
   )

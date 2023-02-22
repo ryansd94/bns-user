@@ -22,11 +22,11 @@ const TaskChildListItem = (props) => {
 
     return <Controller
         render={({ field, fieldState: { error } }) =>
-            <Grid container xs={12} className='child-task-root' item spacing={2} direction="column">{
+            !_.isEmpty(field?.value) ? <Grid container xs={12} className='child-task-root' item gap={2} direction="column">{
                 _.map(field?.value, (item) => {
                     return !_.isNil(item) && !_.isEmpty(item) ? renderChildItem(item) : ''
                 })
-            }</Grid>}
+            }</Grid> : ''}
         name={name}
         control={control && control}
     />

@@ -14,7 +14,7 @@ const useStyles = makeStyles(theme => ({
 }))
 
 const PopoverControl = (props) => {
-  const { anchorEl, onClose, genderBody, anchorOrigin, transformOrigin } = props
+  const { anchorEl, onClose, genderBody, anchorOrigin, transformOrigin, isHideWhenWithOutFocus = true,className } = props
   const classes = useStyles();
   const open = Boolean(anchorEl)
   const id = open ? 'mouse-over-popover' : undefined
@@ -32,10 +32,10 @@ const PopoverControl = (props) => {
       anchorOrigin={anchorOrigin}
       transformOrigin={transformOrigin}
       onClose={onClose}
-      className={classes.popover}
-      classes={{
+      className={`${isHideWhenWithOutFocus ? classes.popover : ''} ${className}`}
+      classes={isHideWhenWithOutFocus ? {
         paper: classes.popoverContent,
-      }}
+      } : {}}
     >
       {genderBody && genderBody()}
     </Popover>
@@ -46,10 +46,10 @@ PopoverControl.propTypes = {
 }
 PopoverControl.defaultProps = {
   anchorOrigin: {
-    vertical: 'top',
+    vertical: 'bottom',
     horizontal: 'left',
   },
-  transformOrigin:{
+  transformOrigin: {
     vertical: 'top',
     horizontal: 'left',
   }

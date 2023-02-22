@@ -28,8 +28,8 @@ const AssignSelect = (props) => {
                 return (<ChipControl
                     {...props}
                     variant="outlined"
-                    label={option.name}
-                    avatar={<AvatarControl size={ESize.miniSmall} name={option.name} />}
+                    label={option.fullName}
+                    avatar={<AvatarControl size={ESize.miniSmall} name={option.fullName} />}
                 />)
             }
         }>

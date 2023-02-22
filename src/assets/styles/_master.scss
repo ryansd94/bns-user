@@ -325,7 +325,7 @@ div[data-rbd-draggable-context-id] {
 .task-group-container > .MuiCollapse-root {
     padding-left: 0.5rem;
     padding-right: 0.5rem;
-    padding-top: 1rem;
+    // padding-top: 1rem;
 }
 .MuiDialogActions-root {
     justify-content: space-between !important;
@@ -410,10 +410,6 @@ span[data-testid="alphaslider"] {
     margin: 0;
     align-items: center;
 }
-.cell-multi-root {
-    // display: flex;
-    // gap: 10px;
-}
 .cell-multi-item {
     background: rgba(200, 222, 243, 0.842);
     border-radius: 4px;
@@ -480,6 +476,25 @@ span[data-testid="alphaslider"] {
         }
     }
 }
+.comment-component:hover > .icon-delete-comment {
+    visibility: visible;
+    opacity: 1;
+    transition: visibility 300ms linear, opacity 300ms linear;
+}
 .mantine-RichTextEditor-root {
     border: $border_control;
+}
+a:hover {
+    text-decoration: none !important;
+    cursor: pointer;
+}
+.MuiGrid-root {
+    margin-top: 0 !important;
+}
+.icon-delete-comment {
+    visibility: hidden;
+    opacity: 0;
+}
+.button-icon {
+    padding: 0 !important;
 }

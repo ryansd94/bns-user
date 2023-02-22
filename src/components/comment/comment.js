@@ -9,7 +9,7 @@ import {
 } from "helpers"
 
 const Comment = (props) => {
-    const { label, name, control, getValues, setValue } = props
+    const { label, name, control, getValues, setValue, taskId } = props
     const user = getUserInfo()
 
     const renderItem = (comments = []) => {

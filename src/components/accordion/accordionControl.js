@@ -33,11 +33,11 @@ const AccordionControl = (props) => {
     }
 
     const handlePopoverOpen = (event) => {
-        setOpenPopover(event.currentTarget);
+        setOpenPopover(event.currentTarget)
     }
 
     const handlePopoverClose = () => {
-        setOpenPopover(null);
+        setOpenPopover(null)
     }
 
     return (
