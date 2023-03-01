@@ -2,11 +2,11 @@ const defaultSize = "fa-sm"
 const IconSave = ({ className }) => {
   return <i className="far fa-save fa-sm"></i>
 }
-const IconDelete = ({ size, onClick, className = '' }) => {
-  return <i onClick={onClick} className={`far fa-trash-alt fa-sm ${className}`}></i>
+const IconDelete = ({ style, size, onClick, className = '' }) => {
+  return <i style={style} onClick={onClick} className={`far fa-trash-alt fa-sm ${className}`}></i>
 }
 const IconEdit = ({ className }) => {
-  return <i className="far fa-edit fa-sm"></i>
+  return <i className={`far fa-edit fa-sm ${className}`}></i>
 }
 const IconCancel = ({ style, className }) => {
   return <i style={style} className="far fa-ban fa-sm"></i>

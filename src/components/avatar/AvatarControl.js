@@ -3,7 +3,7 @@ import Avatar from '@mui/material/Avatar';
 import { ESize } from "configs";
 
 const AvatarControl = (props) => {
-    const { size = ESize.medium, name, cursor, onClick, className = "avatar", image = '' } = props
+    const { size = ESize.small, name, cursor, onClick, className = "avatar", image = '' } = props
     let width = 56
     let height = 56
     let fontSize = 24

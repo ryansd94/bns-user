@@ -1,5 +1,5 @@
 $font_size_normal: "1rem";
-$border_control: 1px solid #c4c4c4;
+$border_control: 1px solid rgba(234, 234, 234, 1);
 button {
     text-transform: none !important;
 }
@@ -458,7 +458,7 @@ span[data-testid="alphaslider"] {
     width: auto !important;
 }
 .comment-container {
-    padding: 12px 16px;
+    padding: 0 16px 12px 16px;
     border: $border_control;
     border-radius: 4px;
     .comment-root {
@@ -468,15 +468,18 @@ span[data-testid="alphaslider"] {
         }
         .editor-comment {
             border: none !important;
-            padding: 12px 16px;
+            // padding: 12px 16px;
             .ql-editor {
                 padding: 0 !important;
                 min-height: auto !important;
             }
         }
     }
+    a {
+        color: #65a9f3 !important;
+    }
 }
-.comment-component:hover > .icon-delete-comment {
+.comment-component:hover > .dropdown-more-comment {
     visibility: visible;
     opacity: 1;
     transition: visibility 300ms linear, opacity 300ms linear;
@@ -491,10 +494,19 @@ a:hover {
 .MuiGrid-root {
     margin-top: 0 !important;
 }
-.icon-delete-comment {
+.dropdown-more-comment {
     visibility: hidden;
     opacity: 0;
+    position: absolute;
+    top: 16px;
+    right: 0;
+}
+.icon-more-comment {
+    padding: 0.5rem !important;
 }
 .button-icon {
     padding: 0 !important;
+}
+.icon-dropdown-menu {
+    color: #1976d2;
 }

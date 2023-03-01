@@ -11,7 +11,8 @@ import Menu from '@mui/material/Menu'
 
 const DropdownMenu = (props) => {
     const { genderDropdownItem, type = EButtonType.add, visible = false,
-        isShowEndIcon = true, label, isFloatLeft = false, spacingLeft = 1, isButtonIcon = false } = props
+        isShowEndIcon = true, label, isFloatLeft = false, spacingLeft = 1,
+        isButtonIcon = false, className, isCLoseOnClick = true, classNameIcon } = props
     const [open, setOpen] = React.useState(false)
     const anchorRef = React.useRef(null)
 
@@ -59,7 +60,7 @@ const DropdownMenu = (props) => {
         return <ButtonFuntion
             isFloatLeft={isFloatLeft}
             label={label}
-            className='button-detail'
+            className={`button-detail`}
             endIcon={isShowEndIcon ? renderEndIcon() : ''}
             visible={visible}
             spacingLeft={spacingLeft}
@@ -69,16 +70,26 @@ const DropdownMenu = (props) => {
     }
 
     const renderButtonIcon = () => {
-        return <ButtonIcon refs={anchorRef} type={type} onClick={handleToggle} />
+        return <ButtonIcon
+            refs={anchorRef}
+            type={type}
+            className={classNameIcon}
+            onClick={handleToggle} />
+    }
+
+    const onClick = (e) => {
+        if (isCLoseOnClick) {
+            handleClose(e)
+        }
     }
     return (
-        <div>
+        <div className={`${className}`}>
             {isButtonIcon ? renderButtonIcon() : renderButtonFunction()}
             <Menu
                 anchorEl={open ? anchorRef.current : null}
                 open={open}
                 onClose={handleClose}
-                onClick={handleClose}
+                onClick={onClick}
                 PaperProps={{
                     elevation: 0,
                     sx: {
@@ -110,20 +121,6 @@ const DropdownMenu = (props) => {
             >
                 {genderDropdownItem()}
             </Menu>
-            {/* <PopoverControl
-                anchorOrigin={{
-                    vertical: 'center',
-                    horizontal: 'left',
-                }}
-                transformOrigin={{
-                    vertical: 'bottom',
-                    horizontal: 'right',
-                }}
-                anchorEl={open ? anchorRef.current : null}
-                onClose={handleClose}
-                genderBody={genderBody}
-            >
-            </PopoverControl> */}
         </div>
     )
 }

@@ -16,11 +16,11 @@ const CommentDeleteLabel = (props) => {
 
     return (
         <Grid className="label-icon-control-container" item container columnSpacing={2}>
+            <Grid item>
+                <IconDelete className="label-title" />
+            </Grid>
             <Grid item xs={12}>
                 <LabelControl label={t('Bình luận đã xóa')} />
-            </Grid>
-            <Grid item>
-                <IconDelete />
             </Grid>
         </Grid>
     )

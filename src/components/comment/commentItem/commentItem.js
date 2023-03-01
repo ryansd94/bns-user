@@ -7,15 +7,20 @@ import { EditorControl } from 'components/editor'
 import { LabelControl } from 'components/label'
 import { CommentFooter, CommentDeleteLabel } from './'
 import { LinkControl } from 'components/link'
-import { get, deleteData } from "services"
+import { get, deleteData, save } from "services"
 import { baseUrl, EButtonIconType, ERROR_CODE } from "configs"
 import ButtonIcon from 'components/button/ButtonIcon'
 import { PopoverControl } from 'components/popover'
+import { useTranslation } from "react-i18next"
+import { DropdownMenu, DropDownItem } from 'components/dropdown'
+import { IconDelete, IconEdit } from 'components/icon/icon'
 
 const CommentItem = (props) => {
     const { comment = {}, taskId } = props
     const [commentLocal, setComment] = useState(comment)
     const [openPopover, setOpenPopover] = useState(null)
+    const [isEditComment, setIsEditComment] = useState(false)
+    const { t } = useTranslation()
 
     const onShowMoreComment = async () => {
         await get(`${baseUrl.jm_comment}/children`, {
@@ -53,7 +58,7 @@ const CommentItem = (props) => {
     }
 
     const renderMoreChildLink = () => {
-        return <Grid item xs>
+        return <Grid item xs style={{ paddingLeft: `${commentLocal.level * 60}px` }}>
             <LinkControl underline='none' onClick={onShowMoreComment} title={`Hiển thị ${commentLocal.countReply} trả lời`} />
         </Grid>
     }
@@ -82,7 +87,7 @@ const CommentItem = (props) => {
     const genderPopoverControl = () => {
         return <Grid item container gap={2} className='box-container'>
             <Grid item>
-                Bạn có muốn xóa bình luận này
+                {t('Bạn có muốn xóa bình luận này?')}
             </Grid>
             <Grid item container justifyContent='space-between'>
                 <Grid item>
@@ -107,12 +112,39 @@ const CommentItem = (props) => {
         setOpenPopover(event.currentTarget)
     }
 
+    const onEditComment = () => {
+        setIsEditComment(true)
+    }
+
+    const onCancelEdit = () => {
+        setIsEditComment(false)
+    }
+
+    const onChangeComment = (value) => {
+        commentLocal.value = value
+        setComment({ ...commentLocal })
+    }
+
+    const onConfrimChangeComment = async () => {
+        const res = await save(`${baseUrl.jm_comment}`, commentLocal)
+        if (res.errorCode == ERROR_CODE.success) {
+            // setValue('comments', comments)
+            setIsEditComment(false)
+        }
+    }
+
     const renderRootComment = () => {
         if (!comment.isDelete) {
-            return <Grid item xs className="comment-root">
-                <LabelControl className='comment-header' label={`${commentLocal.user?.fullName}, ${commentLocal.updatedTime}`} />
-                <EditorControl className='editor-comment' readOnly={true} value={commentLocal.value} name={`rte${commentLocal.id}`} isShowAccordion={false} />
-                <CommentFooter {...props} id={commentLocal.id} />
+            return <Grid item xs className="comment-root" container flexDirection={'column'} gap={2}>
+                <Grid item>
+                    <LabelControl className='comment-header' label={`${commentLocal.user?.fullName}, ${commentLocal.updatedTime}`} />
+                </Grid>
+                <Grid item>
+                    <EditorControl onChange={onChangeComment} className={!isEditComment ? 'editor-comment' : ''} readOnly={!isEditComment} value={commentLocal.value} name={`rte${commentLocal.id}`} isShowAccordion={false} />
+                </Grid>
+                <Grid item>
+                    <CommentFooter onCancelEdit={onCancelEdit} {...props} id={commentLocal.id} onConfrimChangeComment={onConfrimChangeComment} isEditComment={isEditComment} />
+                </Grid>
             </Grid>
         }
         return <CommentDeleteLabel />
@@ -122,10 +154,23 @@ const CommentItem = (props) => {
         setOpenPopover(null)
     }
 
-    return !_.isEmpty(commentLocal) ? <div>
+    const genderDropdownItem = () => {
+        return <div>
+            <DropDownItem
+                icon={<IconDelete className="icon-dropdown-menu" />}
+                onClick={onDeleteComment}
+                title={t('Xóa bình luận')} />
+            <DropDownItem
+                icon={<IconEdit className="icon-dropdown-menu" />}
+                onClick={onEditComment}
+                title={t('Chỉnh sửa bình luận')} />
+        </div>
+    }
+
+    return !_.isEmpty(commentLocal) ? <Grid item xs container gap={2}>
         <Grid className="comment-component" style={{ position: 'relative', paddingLeft: `${commentLocal.level * 60}px` }} item container spacing={2} direction='row'>
             <Grid item>
-                <AvatarControl size={ESize.medium} name={commentLocal.user?.fullName} />
+                <AvatarControl name={commentLocal.user?.fullName} />
             </Grid>
             <Grid item xs container gap={2} direction='column'>
                 {
@@ -133,18 +178,20 @@ const CommentItem = (props) => {
                 }
             </Grid>
             {
-                !commentLocal.isDelete ? <ButtonIcon
-                    onClick={onDeleteComment}
-                    className={`icon-delete-comment ${!_.isNil(openPopover) ? 'icon-delete-comment-show' : ''}`}
-                    color='delete' style={{ position: 'absolute', top: 0, right: 0 }}
-                    type={EButtonIconType.delete} /> : ''
+                !commentLocal.isDelete ? <DropdownMenu
+                    classNameIcon='icon-more-comment'
+                    genderDropdownItem={genderDropdownItem}
+                    className={`dropdown-more-comment ${!_.isNil(openPopover) ? 'dropdown-more-comment-show' : ''}`}
+                    isButtonIcon={true}
+                    type={EButtonIconType.more} />
+                    : ''
             }
             <PopoverControl className='pop-delete-comment' isHideWhenWithOutFocus={false} genderBody={genderPopoverControl} onClose={handlePopoverClose} anchorEl={openPopover} />
         </Grid>
         {
             renderListComment()
         }
-    </div> : ''
+    </Grid> : ''
 
 }
 

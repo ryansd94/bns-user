@@ -137,7 +137,7 @@ function MyComponent() {
                     <li className="nav-item nav-profile nav-language">
                         <Dropdown alignRight>
                             <Dropdown.Toggle className="nav-link count-indicator">
-                                <AvatarControl size={ESize.small} name={user?.fullName} image={user?.image} />
+                                <AvatarControl name={user?.fullName} image={user?.image} />
                                 <div className="nav-profile-text">
                                     <p className="mb-1 text-black"><Trans>{user?.fullName}</Trans></p>
                                 </div>
