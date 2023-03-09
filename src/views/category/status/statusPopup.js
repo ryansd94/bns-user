@@ -22,7 +22,6 @@ import { getByID, save } from "services"
 import { ERROR_CODE, baseUrl } from "configs"
 import { loading as loadingButton } from "stores/components/button"
 import { message } from "configs"
-import parse from "html-react-parser"
 
 const StatusPopup = React.memo((props) => {
     const { t } = useTranslation()

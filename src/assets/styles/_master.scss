@@ -510,3 +510,35 @@ a:hover {
 .icon-dropdown-menu {
     color: #1976d2;
 }
+.mention {
+    background-color: rgb(231, 245, 255) !important;
+}
+.mention[data-me="true"] {
+    color: red;
+    font-weight: 600;
+}
+.ql-toolbar.ql-snow {
+    border: none !important;
+    border-top: $border_control !important;
+    border-left: $border_control !important;
+    border-right: $border_control !important;
+}
+.ql-container.ql-snow {
+    border: $border_control !important;
+}
+.MuiAccordionSummary-content {
+    justify-content: space-between;
+}
+.task-view-status-container {
+    min-width: min-content;
+    flex-wrap: nowrap !important;
+    .group {
+        width: 300px;
+    }
+}
+.task-drag-item:hover {
+    background-color: $item-background-color;
+}
+.task-drag-item {
+    padding: 1rem;
+}

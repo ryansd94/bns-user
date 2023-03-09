@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react"
+import React from "react"
 import _ from "lodash"
 import Grid from "@mui/material/Grid"
 import { LinkControl } from 'components/link'
@@ -9,6 +9,7 @@ import { IconDelete } from "components/icon/icon"
 import { useTranslation } from "react-i18next"
 import { cellFormatDateTime } from "helpers/commonFunction"
 import { LabelControl } from 'components/label'
+import { TaskTitle } from './'
 
 const TaskItem = (props) => {
     const { item, onRemoveTaskItem } = props
@@ -34,14 +35,7 @@ const TaskItem = (props) => {
         const href = `/task/edit/${item.id}`
         return <Grid className='child-task-item' container gap={1} item key={item.id} direction='column'>
             <Grid style={{ width: '100%' }} container key={item.id} direction='column'>
-                <Grid item container gap={1} className='label-icon-control-container' direction='row'>
-                    <Grid item>
-                        {titleTaskType}
-                    </Grid>
-                    <Grid item className='label-icon-control-text'>
-                        <LinkControl href={href} title={titleTask}></LinkControl>
-                    </Grid>
-                </Grid>
+                <TaskTitle item={item} />
                 <Grid item container gap={1} direction='row'>
                     <Grid item>
                         <LabelControl label={`${t('Cập nhật')} ${cellFormatDateTime({ value: item.updatedDate || item.createdDate })}, `} />

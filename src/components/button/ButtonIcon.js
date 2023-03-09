@@ -20,7 +20,8 @@ import {
   IconUp,
   IconDown,
   IconUpload,
-  IconComment
+  IconComment,
+  IconFullScreen
 } from "components/icon/icon"
 import { EColor } from 'configs/constants'
 
@@ -35,7 +36,7 @@ const useStyles = makeStyles({
 const ButtonIcon = (props) => {
   const classes = useStyles()
   const { t } = useTranslation()
-  const { type, onClick, title, disabled, color, size, showTooltip = true, style, refs, className ='button-icon' } = props
+  const { type, onClick, title, disabled, color, size, showTooltip = true, style, refs, className = 'button-icon' } = props
   const [titleDefault, setTitle] = useState("")
   const theme = createTheme({
     palette: {
@@ -85,6 +86,9 @@ const ButtonIcon = (props) => {
       case EButtonIconType.comment:
         setTitle(t("Trả lời"))
         break
+      case EButtonIconType.fullScreen:
+        setTitle(t("Full màn hình"))
+        break
       default:
         break
     }
@@ -128,9 +132,10 @@ const ButtonIcon = (props) => {
     icon = <IconUpload style={{ width: width, height: height }} />
   else if (type == EButtonIconType.comment)
     icon = <IconComment style={{ width: width, height: height }} />
+  else if (type == EButtonIconType.fullScreen)
+    icon = <IconFullScreen style={{ width: width, height: height }} />
 
   button = (
-
     <IconButton
       ref={refs}
       style={style}
@@ -139,7 +144,7 @@ const ButtonIcon = (props) => {
       className={`${classes.root} ${className}`}
       {...adjustedButtonProps}
       aria-describedby={'mouse-over-popover'}
-      >
+    >
       {icon}
     </IconButton>
   )

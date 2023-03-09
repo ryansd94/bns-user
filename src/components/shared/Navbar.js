@@ -1,39 +1,39 @@
-import React, { Component, useState } from 'react';
-import { Dropdown } from 'react-bootstrap';
-import { Link, useHistory } from 'react-router-dom';
-import { Trans } from 'react-i18next';
-import i18n from '../../i18n';
+import React, { Component, useState } from 'react'
+import { Dropdown } from 'react-bootstrap'
+import { Link, useHistory } from 'react-router-dom'
+import { Trans } from 'react-i18next'
+import i18n from '../../i18n'
 import { AvatarControl } from 'components/avatar'
 import {
     resetUserToken,
     getUserInfo
 } from "helpers"
 import firebase from "firebase/compat/app"
-import { ESize } from "configs";
-// import { getAuth, signOut } from "firebase/auth";
+import { ESize } from "configs"
+// import { getAuth, signOut } from "firebase/auth"
 function MyComponent() {
-    const [languageIcon, setLanguageIcon] = useState('flag-icon flag-icon-vn');
-    const [language, setLanguage] = useState('Vietnamese');
-    const history = useHistory();
-    const user = getUserInfo();
-    // const auth = getAuth();
+    const [languageIcon, setLanguageIcon] = useState('flag-icon flag-icon-vn')
+    const [language, setLanguage] = useState('Vietnamese')
+    const history = useHistory()
+    const user = getUserInfo()
+    // const auth = getAuth()
     function toggleOffcanvas() {
-        document.querySelector('.sidebar-offcanvas').classList.toggle('active');
+        document.querySelector('.sidebar-offcanvas').classList.toggle('active')
     }
     //useEffect(() => {
     //    debugger
-    //    i18n.changeLanguage(languageKey);
-    //}, []);
+    //    i18n.changeLanguage(languageKey)
+    //}, [])
     const changeLanguage = (lng) => {
         if (lng === 'vi') {
-            setLanguageIcon('flag-icon flag-icon-vn');
-            setLanguage('Vietnamese');
+            setLanguageIcon('flag-icon flag-icon-vn')
+            setLanguage('Vietnamese')
         }
         else {
-            setLanguageIcon('flag-icon flag-icon-gb');
-            setLanguage('English');
+            setLanguageIcon('flag-icon flag-icon-gb')
+            setLanguage('English')
         }
-        i18n.changeLanguage(lng);
+        i18n.changeLanguage(lng)
     }
     const onLogOut = () => {
         resetUserToken()
@@ -41,7 +41,7 @@ function MyComponent() {
 
         // }).catch((error) => {
         //     // An error happened.
-        // });
+        // })
         firebase.auth().signOut()
         history.push(`/login`)
     }
@@ -288,15 +288,15 @@ function MyComponent() {
                 </button>
             </div>
         </nav>
-    );
+    )
 }
 
 class Navbar extends Component {
     render() {
         return (
             <MyComponent></MyComponent>
-        );
+        )
     }
 }
 
-export default Navbar;
+export default Navbar

@@ -1,179 +1,178 @@
-﻿import React, { useState, useEffect, useLayoutEffect } from "react";
-import { Link, useHistory } from "react-router-dom";
-import { Form } from "react-bootstrap";
-import Box from "@mui/material/Box";
-import IconButton from "@mui/material/IconButton";
-import OutlinedInput from "@mui/material/OutlinedInput";
-import InputLabel from "@mui/material/InputLabel";
-import InputAdornment from "@mui/material/InputAdornment";
-import FormControl from "@mui/material/FormControl";
-import Visibility from "@mui/icons-material/Visibility";
-import VisibilityOff from "@mui/icons-material/VisibilityOff";
+﻿import React, { useState, useEffect, useLayoutEffect } from "react"
+import { Link, useHistory } from "react-router-dom"
+import { Form } from "react-bootstrap"
+import Box from "@mui/material/Box"
+import IconButton from "@mui/material/IconButton"
+import OutlinedInput from "@mui/material/OutlinedInput"
+import InputLabel from "@mui/material/InputLabel"
+import InputAdornment from "@mui/material/InputAdornment"
+import FormControl from "@mui/material/FormControl"
+import Visibility from "@mui/icons-material/Visibility"
+import VisibilityOff from "@mui/icons-material/VisibilityOff"
 import {
   resetUserToken,
   setTokenLoginSucceeded,
   getAccessToken,
-} from "helpers";
-import { login, loginGoogle } from "services";
-import httpStatus from "http-status";
-import Button from "@mui/material/Button";
-import { ERROR_CODE } from "configs";
-import firebase from "firebase/compat/app";
-import StyledFirebaseAuth from "react-firebaseui/StyledFirebaseAuth";
-import { message, ROLE, routeUrls } from "../../configs";
-import "firebase/compat/auth";
+} from "helpers"
+import { login, loginGoogle } from "services"
+import httpStatus from "http-status"
+import Button from "@mui/material/Button"
+import { ERROR_CODE } from "configs"
+import firebase from "firebase/compat/app"
+import StyledFirebaseAuth from "react-firebaseui/StyledFirebaseAuth"
+import "firebase/compat/auth"
+
 export default function Login() {
-  const history = useHistory();
+  const history = useHistory()
   const [values, setValues] = React.useState({
     amount: "",
     password: "",
     weight: "",
-    shopcode: "",
     username: "",
     weightRange: "",
     showPassword: false,
-  });
-  const [isSubmitting, setIsSubmitting] = useState(false);
+  })
+  const [isSubmitting, setIsSubmitting] = useState(false)
   const [error, setError] = useState({
     dirty: false,
     msg: "",
-  });
+  })
 
   const handleChange = (prop) => (event) => {
-    setValues({ ...values, [prop]: event.target.value });
-  };
+    setValues({ ...values, [prop]: event.target.value })
+  }
 
   const handleClickShowPassword = () => {
     setValues({
       ...values,
       showPassword: !values.showPassword,
-    });
-  };
+    })
+  }
 
   const handleMouseDownPassword = (event) => {
-    event.preventDefault();
-  };
+    event.preventDefault()
+  }
 
   const onLoginGoogleSuccess = () => { 
     const unregisterAuthObserver = firebase
         .auth()
         .onAuthStateChanged(async (user) => {
           if (!user) {
-            return;
+            return
           }
-          const token = await user.getIdToken();
+          const token = await user.getIdToken()
           const res = await loginGoogle({
             token: token,
-          });
+          })
           switch (res.status) {
             case httpStatus.OK: {
-              const { data } = res && res;
+              const { data } = res && res
               if (data.errorCode == ERROR_CODE.userNotRegister) {
-                history.push(`/signup?token=${token}`);
-                break;
+                history.push(`/signup?token=${token}`)
+                break
               } else if (data.errorCode != ERROR_CODE.success) {
                 setError({
                   dirty: true,
                   msg: "tài hkoản hoặc mật khẩu sai",
-                });
-                break;
+                })
+                break
               } else {
-                const { data } = res && res.data;
+                const { data } = res && res.data
                 const token = {
                   accessToken: data.token,
                   refreshToken: data.token,
                   shopIndex: data.shopIndex,
-                };
-                const user = { ...data, isAdmin: true, acceptScreen: [] };
-                setTokenLoginSucceeded({ token, user });
+                }
+                const user = { ...data, isAdmin: true, acceptScreen: [] }
+                setTokenLoginSucceeded({ token, user })
                 setError({
                   dirty: false,
                   msg: "",
-                });
-                history.push(`/dashboard`);
+                })
+                history.push(`/dashboard`)
               }
-              break;
+              break
             }
             default: {
               setError({
                 dirty: true,
                 msg: "Đã có lỗi xảy ra. Vui lòng thử lại sau",
-              });
-              resetUserToken();
-              break;
+              })
+              resetUserToken()
+              break
             }
           }
-        });
-        return () => unregisterAuthObserver();
+        })
+        return () => unregisterAuthObserver()
   }
 
   function validate() {
-    let valid = true;
-    return valid;
+    let valid = true
+    return valid
   }
   useLayoutEffect(() => {
-    const tokenWeb = getAccessToken();
-    if (tokenWeb) history.push(`/dashboard`);
+    const tokenWeb = getAccessToken()
+    if (tokenWeb) history.push(`/dashboard`)
     else {
       // const unregisterAuthObserver = firebase
       //   .auth()
       //   .onAuthStateChanged(async (user) => {
       //     if (!user) {
-      //       return;
+      //       return
       //     }
-      //     const token = await user.getIdToken();
+      //     const token = await user.getIdToken()
       //     const res = await loginGoogle({
       //       token: token,
-      //     });
+      //     })
       //     switch (res.status) {
       //       case httpStatus.OK: {
-      //         const { data } = res && res;
+      //         const { data } = res && res
       //         if (data.errorCode == ERROR_CODE.userNotRegister) {
-      //           history.push(`/signup?token=${token}`);
-      //           break;
+      //           history.push(`/signup?token=${token}`)
+      //           break
       //         } else if (data.errorCode != ERROR_CODE.success) {
       //           setError({
       //             dirty: true,
       //             msg: "tài hkoản hoặc mật khẩu sai",
-      //           });
-      //           break;
+      //           })
+      //           break
       //         } else {
-      //           const { data } = res && res.data;
+      //           const { data } = res && res.data
       //           const token = {
       //             accessToken: data.token,
       //             refreshToken: data.token,
       //             shopIndex: data.shopIndex,
-      //           };
-      //           const user = { ...data, isAdmin: true, acceptScreen: [] };
-      //           setTokenLoginSucceeded({ token, user });
+      //           }
+      //           const user = { ...data, isAdmin: true, acceptScreen: [] }
+      //           setTokenLoginSucceeded({ token, user })
       //           setError({
       //             dirty: false,
       //             msg: "",
-      //           });
-      //           history.push(`/dashboard`);
+      //           })
+      //           history.push(`/dashboard`)
       //         }
-      //         break;
+      //         break
       //       }
       //       default: {
       //         setError({
       //           dirty: true,
       //           msg: "Đã có lỗi xảy ra. Vui lòng thử lại sau",
-      //         });
-      //         resetUserToken();
-      //         break;
+      //         })
+      //         resetUserToken()
+      //         break
       //       }
       //     }
-      //   });
-      //   return () => unregisterAuthObserver();
+      //   })
+      //   return () => unregisterAuthObserver()
     }
 
-  }, []);
+  }, [])
   // Configure Firebase.
   const config = {
     apiKey: process.env.REACT_APP_FIREBASE_API_KEY,
     authDomain: process.env.REACT_APP_FIREBASE_AUTH_DOMAIN,
-  };
-  firebase.initializeApp(config);
+  }
+  firebase.initializeApp(config)
   const uiConfig = {
     signInFlow: "redirect",
     signInSuccessUrl: "/login",
@@ -184,78 +183,77 @@ export default function Login() {
         onLoginGoogleSuccess()
       },
     },
-  };
+  }
   async function handleSubmit() {
-    const valid = validate();
+    const valid = validate()
     if (valid) {
-      setIsSubmitting(true);
+      setIsSubmitting(true)
       const res = await login({
         userName: values.username,
         passWord: values.password,
-        shopCode: values.shopcode,
         remember: true,
-      });
-      setIsSubmitting(false);
+      })
+      setIsSubmitting(false)
       switch (res.status) {
         case httpStatus.OK: {
-          const { data, errors } = res && res;
+          const { data, errors } = res && res
           if (data.errorCode != ERROR_CODE.success) {
             setError({
               dirty: true,
               msg: "tài hkoản hoặc mật khẩu sai",
-            });
-            break;
+            })
+            break
           } else {
-            const { data } = res && res.data;
+            const { data } = res && res.data
             const token = {
               accessToken: data.token,
               refreshToken: data.token,
               shopIndex: data.shopIndex,
-            };
-            const user = { ...data, isAdmin: true, acceptScreen: [] };
-            setTokenLoginSucceeded({ token, user });
+            }
+            const user = { ...data, isAdmin: true, acceptScreen: [] }
+            setTokenLoginSucceeded({ token, user })
             setError({
               dirty: false,
               msg: "",
-            });
-            history.push(`/dashboard`);
-            //let checkRole = jwt_decode(data.jwToken);
+            })
+            history.push(`/dashboard`)
+            //let checkRole = jwt_decode(data.jwToken)
             //if (Array.isArray(checkRole.roles) && checkRole.roles.length > 0) {
             //    const token = {
             //        accessToken: data.jwToken,
             //        refreshToken: data.refreshToken,
-            //    };
-            //    const user = { ...data, isAdmin: true, acceptScreen: [] };
-            //    setTokenLoginSucceeded({ token, user });
+            //    }
+            //    const user = { ...data, isAdmin: true, acceptScreen: [] }
+            //    setTokenLoginSucceeded({ token, user })
             //    setError({
             //        dirty: false,
             //        msg: '',
-            //    });
-            //    history.push(`/`);
+            //    })
+            //    history.push(`/`)
             //} else {
-            //    let acceptScreen = JSON.parse(checkRole.api_access);
+            //    let acceptScreen = JSON.parse(checkRole.api_access)
             //    const token = {
             //        accessToken: data.jwToken,
             //        refreshToken: data.refreshToken,
-            //    };
-            //    const user = { ...data, isAdmin: false, acceptScreen };
-            //    setTokenLoginSucceeded({ token, user });
+            //    }
+            //    const user = { ...data, isAdmin: false, acceptScreen }
+            //    setTokenLoginSucceeded({ token, user })
             //    setError({
             //        dirty: false,
             //        msg: '',
-            //    });
-            //    history.push(`/`);
+            //    })
+            //    history.push(`/`)
             //}
           }
-          break;
+          break
         }
         default: {
           setError({
             dirty: true,
             msg: "Đã có lỗi xảy ra. Vui lòng thử lại sau",
-          });
-          resetUserToken();
-          break;
+          })
+          resetUserToken()
+          break
         }
       }
     }
@@ -283,15 +281,6 @@ export default function Login() {
                 noValidate
                 autoComplete="off"
               >
-                <FormControl fullWidth className="row">
-                  <InputLabel htmlFor="component-outlined">ShopCode</InputLabel>
-                  <OutlinedInput
-                    id="component-outlined"
-                    value={values.shopcode}
-                    onChange={handleChange("shopcode")}
-                    label="ShopCode"
-                  />
-                </FormControl>
                 <FormControl fullWidth>
                   <InputLabel htmlFor="component-outlined">UserName</InputLabel>
                   <OutlinedInput
@@ -368,5 +357,5 @@ export default function Login() {
         </div>
       </div>
     </div>
-  );
+  )
 }

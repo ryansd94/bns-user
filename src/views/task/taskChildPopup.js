@@ -17,7 +17,7 @@ const TaskChildPopup = React.memo((props) => {
         title: Yup.string().required(t(message.error.fieldNotEmpty)),
         taskTypeId: Yup.string().nullable(true).required(t(message.error.fieldNotEmpty))
     })
-    const [taskTypies, setTaskType] = useState([])
+    // const [taskTypies, setTaskType] = useState([])
     const open = useSelector((state) => state.popup.open)
 
     const defaultValues = {
@@ -41,19 +41,19 @@ const TaskChildPopup = React.memo((props) => {
         }
     }, [taskTypeId])
 
-    useEffect(() => {
-        if (!_.isNil(taskParentId)) {
-            fetchTaskType()
-        }
-    }, [])
+    // useEffect(() => {
+    //     if (!_.isNil(taskParentId)) {
+    //         fetchTaskType()
+    //     }
+    // }, [])
 
-    const fetchTaskType = async () => {
-        await get(baseUrl.jm_taskType, {
-            isGetAll: true,
-        }).then((data) => {
-            setTaskType(data && data.data && data.data.items)
-        })
-    }
+    // const fetchTaskType = async () => {
+    //     await get(baseUrl.jm_taskType, {
+    //         isGetAll: true,
+    //     }).then((data) => {
+    //         setTaskType(data && data.data && data.data.items)
+    //     })
+    // }
 
     const onSubmit = async (data) => {
         alert(JSON.stringify(data))

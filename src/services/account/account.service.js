@@ -5,7 +5,7 @@ const baseUrl = `${process.env.REACT_APP_API_URL}/api/account`;
 
 export const login = async data => {
     try {
-        const res = await axios.post(`${baseUrl}/authenticate`, data);
+        const res = await axios.post(`${baseUrl}/login`, data);
         return res;
     } catch (error) {
         const { request, response } = error;

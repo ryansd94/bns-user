@@ -1,10 +1,25 @@
 import React from "react"
-import { Quill } from "react-quill"
 import ImageResize from 'quill-image-resize-module-react'
 import { uploadFile } from 'helpers'
-import  "quill-mention"
 import 'quill-mention/dist/quill.mention.css'
+import ReactQuill, { Quill } from "react-quill";
 
+// Add sizes to whitelist and register them
+const Size = Quill.import("formats/size");
+Size.whitelist = ["extra-small", "small", "medium", "large"];
+Quill.register(Size, true);
+
+// Add fonts to whitelist and register them
+const Font = Quill.import("formats/font");
+Font.whitelist = [
+  "arial",
+  "comic-sans",
+  "courier-new",
+  "georgia",
+  "helvetica",
+  "lucida"
+];
+Quill.register(Font, true);
 // Custom Undo button icon component for Quill editor. You can import it directly
 // from 'quill/assets/icons/undo.svg' but I found that a number of loaders do not
 // handle them correctly
@@ -52,23 +67,6 @@ async function insertImage() {
     }
 }
 
-// Add sizes to whitelist and register them
-const Size = Quill.import("formats/size")
-Size.whitelist = ["extra-small", "small", "medium", "large"]
-Quill.register(Size, true)
-Quill.register('modules/imageResize', ImageResize)
-
-// Add fonts to whitelist and register them
-const Font = Quill.import("formats/font")
-Font.whitelist = [
-    "arial",
-    "comic-sans",
-    "courier-new",
-    "georgia",
-    "helvetica",
-    "lucida"
-]
-Quill.register(Font, true)
 
 const atValues = [
     { id: 1, value: "Fredrik Sundqvist" },

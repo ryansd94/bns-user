@@ -11,7 +11,7 @@ import TaskTypeMenu from './taskTypeMenu'
 import _ from 'lodash'
 
 const TaskToolbar = (props) => {
-    const { onApplyFilter, customColumns } = props
+    const { onApplyFilter, customColumns, taskTypes } = props
     const { t } = useTranslation()
     const dispatch = useDispatch()
     const toolbarVisible = { ...useSelector((state) => state.task.toolbarVisible) }
@@ -76,7 +76,7 @@ const TaskToolbar = (props) => {
     }
 
     const genarateCustomButton = () => {
-        return <TaskTypeMenu />
+        return <TaskTypeMenu taskTypes={taskTypes}/>
     }
 
     return <div>

@@ -91,7 +91,8 @@ export const EButtonIconType = {
   down: "Down",
   edit: "Edit",
   upload: "Upload",
-  comment: "Comment"
+  comment: "Comment",
+  fullScreen: "FullScreen"
 }
 
 export const EButtonDetailType = {

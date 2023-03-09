@@ -9,7 +9,7 @@ const TaskParent = (props) => {
         <Grid item style={{ width: '100%' }}>
             <TaskParentAddButton {...props} />
         </Grid>
-        <Grid container xs={12} item spacing={2} direction="column">
+        <Grid container xs={12} item gap={2} direction="column">
             <TaskParentItem {...props} />
         </Grid>
     </Grid>

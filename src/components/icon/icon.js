@@ -65,8 +65,12 @@ const IconCopy = ({ style, className }) => {
 const IconComment = ({ style, className }) => {
   return <i style={style} className="far fa-comment-alt fa-sm"></i>
 }
+const IconFullScreen = ({ style, className }) => {
+  return <i style={style} className="far fa-expand-alt fa-sm"></i>
+}
+
 export {
   IconSave, IconDelete, IconEdit, IconCancel, IconEmail, IconActive, IconBlock,
   IconUnBlock, IconClean, IconApply, IconBack, IconMore, IconAdd, IconCricle, IconUp,
-  IconDown, IconExpand, IconRemove, IconUpload, IconChange, IconCopy, IconComment
+  IconDown, IconExpand, IconRemove, IconUpload, IconChange, IconCopy, IconComment, IconFullScreen
 }

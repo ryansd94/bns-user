@@ -17,11 +17,11 @@ import { useTranslation } from "react-i18next"
 import StatusSelect from 'components/select/statusSelect'
 import ButtonDetail from "components/button/ButtonDetail"
 import { TabControl } from 'components/tab'
-import { useSelector, useDispatch } from "react-redux"
+import { useDispatch } from "react-redux"
 import { loading as loadingButton } from "stores/components/button"
 import { openMessage } from "stores/components/snackbar"
 import { UserControl } from 'components/user'
-import { useLocation, useHistory } from "react-router-dom"
+import { useLocation } from "react-router-dom"
 import queryString from "query-string"
 import {
     setReload,
@@ -39,13 +39,13 @@ import { Comment } from 'components/comment'
 
 const TaskView = (props) => {
     console.log("render TaskView")
-    const { isCreate = true, taskId = null, taskTypeId, parentId } = props
+    const { isCreate = true, taskId = null, taskTypeId, parentId, taskTypes} = props
     const { search } = useLocation()
     const { parentId: parentIdFromQuery, copyTaskId } = queryString.parse(search)
     const dispatch = useDispatch()
     const [data, setData] = useState({})
     const [userAssign, setUserAssign] = useState([])
-    const [taskTypies, setTaskType] = useState([])
+    const [userSuggest, setUserSuggest] = useState([])
     const [templateContent, setTemplateContent] = useState('')
     const { t } = useTranslation()
     const { id, taskEditId } = useParams()
@@ -101,8 +101,8 @@ const TaskView = (props) => {
 
 
     useEffect(() => {
-        fetchTaskType()
         fetchDataUserAssign()
+        fetchDataUserSuggest()
         return () => {
             settaskTypeId2(null)
         }
@@ -135,23 +135,17 @@ const TaskView = (props) => {
             })
         })
     }
-    const fetchTaskType = async () => {
-        await get(baseUrl.jm_taskType, {
-            isGetAll: true,
-        }).then((data) => {
-            setTaskType(data && data.data && data.data.items)
-        })
-    }
 
     useEffect(() => {
         if (!_.isNil(data.task)) {
             const taskData = data.task
-            const taskChilds = data.taskChilds
+            const taskChilds = taskData.taskChilds
             setValue('comments', data.comments)
             setValue('defaultData', taskData)
             setValue('defaultData.usersAssign', taskData.usersAssign)
             setValue('defaultData.statusId', taskData.statusId)
             setValue('defaultData.tags', taskData.tags)
+            setValue('defaultData.taskChilds', taskChilds)
             setValue(`dynamicData`, { ...taskData.dynamicData })
         }
     }, [data])
@@ -162,6 +156,16 @@ const TaskView = (props) => {
         }).then((data) => {
             setUserAssign(data && data.data && _.map(data.data.items, (item) => {
                 return { id: item.id, fullName: item.fullName }
+            }))
+        })
+    }
+
+    const fetchDataUserSuggest = async () => {
+        await get(`${baseUrl.jm_user}/suggest`, {
+            isGetAll: true
+        }).then((data) => {
+            setUserSuggest(data && data.data && _.map(data.data.items, (item) => {
+                return { id: item.id, value: item.fullName }
             }))
         })
     }
@@ -179,7 +183,7 @@ const TaskView = (props) => {
                 component = <span>{item.id}</span>
                 break
             case EControlType.editor:
-                component = (<EditorControl label={item.label} name={name} control={control} className="editor-container" />)
+                component = (<EditorControl isFullScreen={true} userSuggest={userSuggest} label={item.label} name={name} control={control} className="editor-container" />)
                 break
             case EControlType.select:
                 component = (<SingleAddSelect fullWidth={true} label={item.label} name={name} control={control} />)
@@ -256,7 +260,7 @@ const TaskView = (props) => {
                 />
                 break
             case EControlType.comment:
-                component = <Comment taskId={taskId || taskEditId} getValues={getValues} label={item.label} name={'comments'} setValue={setValue} control={control} />
+                component = <Comment userSuggest={userSuggest} taskId={taskId || taskEditId} getValues={getValues} label={item.label} name={'comments'} setValue={setValue} control={control} />
                 break
             default:
                 break
@@ -287,7 +291,7 @@ const TaskView = (props) => {
     }
 
     const renderDetailTabContent = () => {
-        return (<Grid className="task-column-content" item container spacing={2} xs={12}>
+        return <Grid className="task-column-content" item container spacing={2} xs={12}>
             <Grid item xs={(templateContent && (_.isNil(templateContent.column3) || templateContent.column3.length == 0)) ? 9 : 6}>
                 {templateContent && templateContent.column1.map((item, index) => {
                     return genderElement(item, index, control)
@@ -303,7 +307,7 @@ const TaskView = (props) => {
                     return genderElement(item, index, control)
                 })}
             </Grid>
-        </Grid>)
+        </Grid>
     }
 
     const getTabItems = () => {
@@ -371,7 +375,7 @@ const TaskView = (props) => {
                         </Grid>
                         <Grid item>
                             <TaskMoreButton
-                                taskTypies={taskTypies}
+                                taskTypies={taskTypes}
                                 onChangeTaskType={loadData}
                                 task={data?.task}
                                 taskId={taskId || taskEditId} />

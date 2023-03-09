@@ -474,7 +474,6 @@ const ContentTemplate = (props) => {
                     prefix={"column1"}
                     control={control}
                     controls={getElementControls("column1")}
-                    onDragEnd={onDragEndTitle}
                   />
                 </Grid>
                 <Grid key={3} item xs={12} sm={3}>
@@ -483,7 +482,6 @@ const ContentTemplate = (props) => {
                     prefix={"column2"}
                     control={control}
                     controls={getElementControls("column2")}
-                    onDragEnd={onDragEndTitle}
                   />
                 </Grid>
                 <Grid key={1} item xs={12} sm={3}>
@@ -492,7 +490,6 @@ const ContentTemplate = (props) => {
                     prefix={"column3"}
                     control={control}
                     controls={getElementControls("column3")}
-                    onDragEnd={onDragEndTitle}
                   />
                 </Grid>
               </Grid>

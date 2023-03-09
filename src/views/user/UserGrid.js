@@ -25,7 +25,7 @@ const UserGrid = React.memo((props) => {
   const columnVisibility = { ...useSelector((state) => state.user.columnVisibility) }
   const [id, setId] = useState(null)
   const [status, setStatus] = useState(null)
- 
+
 
 
   const onSendMail = async (email) => {
@@ -86,12 +86,10 @@ const UserGrid = React.memo((props) => {
           onSendMail(params.data.email)
         }
         const onDeleteClick = (e) => {
-          setAlertType(EAlertPopupType.DELETE)
           setId(params.data.id)
           dispatch(openAlert({ open: true }))
         }
         const onBlockClick = (sta) => {
-          setAlertType(EAlertPopupType.UPDATE_STATUS)
           setId(params.data.id)
           setStatus(sta)
           dispatch(
@@ -139,7 +137,7 @@ const UserGrid = React.memo((props) => {
         )
         return React.createElement(
           "div",
-          {},
+          { style: { display: 'flex', gap: '1rem' } },
           deleteElement,
           emailElement,
           _status == EUserStatus.ACTIVE ? blockElement : unBlockElement

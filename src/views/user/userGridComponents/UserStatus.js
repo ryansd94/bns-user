@@ -26,7 +26,7 @@ const UserStatus = (props) => {
         label = t("Tạm khóa")
     }
     return (
-        <Grid container item spacing={2} direction="row" >
+        <Grid container item gap={2} direction="row" >
             <Grid item>
                 {icon2}
             </Grid>

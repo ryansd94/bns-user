@@ -3,7 +3,7 @@ import _ from "lodash"
 import Grid from "@mui/material/Grid"
 import { AvatarControl } from "components/avatar"
 import { ESize } from 'configs'
-import { EditorControl } from 'components/editor'
+import { EditorControl, EditorControlCustom } from 'components/editor'
 import ButtonFuntion from 'components/button/ButtonFuntion'
 import { EButtonType } from 'configs'
 import { v4 as uuidv4 } from 'uuid'
@@ -13,9 +13,8 @@ import { baseUrl, ERROR_CODE } from "configs"
 
 const CommentByUser = (props) => {
     const { label, name, user = {}, control, getValues, setValue,
-        isShow = true, isReplyComment = false, onCancel, parentId = null, taskId } = props
+        isShow = true, isReplyComment = false, onCancel, parentId = null, taskId, userSuggest } = props
     const [commentLocal, setCommentLocal] = useState(null)
-
     const onComment = async () => {
         if (_.isEmpty(commentLocal)) return
         let comments = getValues && getValues('comments') || []
@@ -69,7 +68,7 @@ const CommentByUser = (props) => {
             </Grid>
             <Grid item xs container gap={2} direction='column'>
                 <Grid item xs>
-                    <EditorControl value={commentLocal} onChange={onChange} label={label} name={parentId ? parentId : name} isShowAccordion={false} />
+                    <EditorControl isFullScreen={true} userSuggest={userSuggest} value={commentLocal} onChange={onChange} label={label} name={parentId ? parentId : name} isShowAccordion={false} />
                 </Grid>
                 {
                     isReplyComment ? <Grid item xs>

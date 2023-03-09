@@ -14,6 +14,9 @@ import { PopoverControl } from 'components/popover'
 import { useTranslation } from "react-i18next"
 import { DropdownMenu, DropDownItem } from 'components/dropdown'
 import { IconDelete, IconEdit } from 'components/icon/icon'
+import {
+    getUserInfo
+} from "helpers"
 
 const CommentItem = (props) => {
     const { comment = {}, taskId } = props
@@ -21,6 +24,7 @@ const CommentItem = (props) => {
     const [openPopover, setOpenPopover] = useState(null)
     const [isEditComment, setIsEditComment] = useState(false)
     const { t } = useTranslation()
+    const user = getUserInfo()
 
     const onShowMoreComment = async () => {
         await get(`${baseUrl.jm_comment}/children`, {
@@ -178,7 +182,7 @@ const CommentItem = (props) => {
                 }
             </Grid>
             {
-                !commentLocal.isDelete ? <DropdownMenu
+                !commentLocal.isDelete && user.userId === comment.createdUserId ? <DropdownMenu
                     classNameIcon='icon-more-comment'
                     genderDropdownItem={genderDropdownItem}
                     className={`dropdown-more-comment ${!_.isNil(openPopover) ? 'dropdown-more-comment-show' : ''}`}
