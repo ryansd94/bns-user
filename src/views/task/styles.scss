@@ -1,0 +1,14 @@
+.task-view-container {
+    // overflow: auto;
+    > .MuiGrid-root {
+        min-width: 600px;
+        padding: 0 1rem 1rem 1rem;
+    }
+}
+.task-column-content {
+    > .MuiGrid-root {
+        > .MuiGrid-root {
+            padding-bottom: 1rem;
+        }
+    }
+}
