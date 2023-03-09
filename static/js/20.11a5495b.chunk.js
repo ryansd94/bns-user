@@ -1,0 +1,2 @@
+(this["webpackJsonpbns-user"]=this["webpackJsonpbns-user"]||[]).push([[20],{993:function(n,s,e){"use strict";e.r(s),e.d(s,"default",(function(){return t}));e(1);var r=e(0);function t(){return Object(r.jsx)("div",{children:"dasboard ne\u0300"})}}}]);
+//# sourceMappingURL=20.11a5495b.chunk.js.map
