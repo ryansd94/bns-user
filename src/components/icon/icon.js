@@ -68,9 +68,16 @@ const IconComment = ({ style, className }) => {
 const IconFullScreen = ({ style, className }) => {
   return <i style={style} className="far fa-expand-alt fa-sm"></i>
 }
+const IconHour = ({ style, className }) => {
+  return <i style={style} className="far fa-clock fa-sm"></i>
+}
+const IconDescription = ({ style, className, onClick }) => {
+  return <i onClick={onClick} style={style} className="far fa-file-invoice"></i>
+}
 
 export {
   IconSave, IconDelete, IconEdit, IconCancel, IconEmail, IconActive, IconBlock,
   IconUnBlock, IconClean, IconApply, IconBack, IconMore, IconAdd, IconCricle, IconUp,
-  IconDown, IconExpand, IconRemove, IconUpload, IconChange, IconCopy, IconComment, IconFullScreen
+  IconDown, IconExpand, IconRemove, IconUpload, IconChange, IconCopy, IconComment, IconFullScreen,
+  IconHour, IconDescription
 }

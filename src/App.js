@@ -43,11 +43,11 @@ class App extends Component {
                     <div className="container-fluid page-body-wrapper">
                         {sidebarComponent}
                         <div className="main-panel">
-                            <div className="content-wrapper">
+                            <div className="content-wrapper flex-column flex-grow">
                                 <AppRoutes />
                                 {SettingsPanelComponent}
                             </div>
-                            {footerComponent}
+                            {/* {footerComponent} */}
                         </div>
                     </div>
                 </MuiThemeProvider>

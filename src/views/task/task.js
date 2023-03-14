@@ -6,7 +6,7 @@ import { Resizable } from 'components/resizable'
 import { get } from "services"
 import _ from "lodash"
 import { baseUrl } from "configs"
-import { TaskViewStatus } from './taskViewStatus'
+import { TaskBoard } from './taskBoard'
 
 const Task = React.memo(() => {
   const [filterModels, setFilterModels] = useState(null)
@@ -43,7 +43,7 @@ const Task = React.memo(() => {
 
   const genderLeftComponent = () => {
     // return <TaskGrid customColumns={customColumns} onRowClicked={onRowClicked} filterModels={filterModels} />
-    return <TaskViewStatus onRowClicked={onRowClicked}/>
+    return <TaskBoard onRowClicked={onRowClicked}/>
   }
 
   const genderRightComponent = () => {
@@ -51,7 +51,7 @@ const Task = React.memo(() => {
   }
 
   return (
-    <div>
+    <div className="flex-column flex-grow overflow-hidden">
       <TaskToolbar taskTypes={taskTypes} customColumns={customColumns} onApplyFilter={onApplyFilter} />
       <Resizable hidenRight={false} genderRightComponent={genderRightComponent} genderLeftComponent={genderLeftComponent} />
     </div>

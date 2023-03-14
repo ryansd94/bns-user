@@ -7,8 +7,6 @@ import FullscreenIcon from '@mui/icons-material/Fullscreen'
 import './styles.scss'
 import { PopoverControl } from 'components/popover'
 import { LabelControl } from 'components/label'
-import ButtonIcon from 'components/button/ButtonIcon'
-import { EButtonIconType } from 'configs'
 import { FullScreen, useFullScreenHandle } from "react-full-screen"
 
 const AccordionControl = (props) => {

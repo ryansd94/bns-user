@@ -2,10 +2,10 @@ import * as React from 'react'
 import { styled } from '@mui/material/styles'
 import Tabs from '@mui/material/Tabs'
 import Tab from '@mui/material/Tab'
-import Box from '@mui/material/Box'
 import SwipeableViews from 'react-swipeable-views'
 import _ from 'lodash'
 import './style.scss'
+import Grid from "@mui/material/Grid"
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props
@@ -84,7 +84,7 @@ const TabControl = (props) => {
   }
 
   return (
-    <div>
+    <Grid container item flexWrap="nowrap" className="overflow-hidden" direction="column">
       <div>
         <AntTabs value={value} onChange={handleChange} aria-label="ant example">
           {
@@ -95,6 +95,7 @@ const TabControl = (props) => {
         </AntTabs>
       </div>
       <SwipeableViews
+        className='flex-column'
         animateTransitions={false}
         index={value}
         style={{ overflow: 'hidden' }}
@@ -103,13 +104,13 @@ const TabControl = (props) => {
         {
           _.map(tabItems, (item, index) => {
             return <TabPanel key={index} value={value} index={index}>
-                {item.Content}
+              {item.Content}
             </TabPanel>
           })
         }
       </SwipeableViews>
 
-    </div>
+    </Grid>
   )
 }
 export default TabControl

@@ -39,7 +39,7 @@ import { Comment } from 'components/comment'
 
 const TaskView = (props) => {
     console.log("render TaskView")
-    const { isCreate = true, taskId = null, taskTypeId, parentId, taskTypes} = props
+    const { isCreate = true, taskId = null, taskTypeId, parentId, taskTypes } = props
     const { search } = useLocation()
     const { parentId: parentIdFromQuery, copyTaskId } = queryString.parse(search)
     const dispatch = useDispatch()
@@ -142,7 +142,7 @@ const TaskView = (props) => {
             const taskChilds = taskData.taskChilds
             setValue('comments', data.comments)
             setValue('defaultData', taskData)
-            setValue('defaultData.usersAssign', taskData.usersAssign)
+            setValue('defaultData.usersAssignId', taskData.usersAssignId)
             setValue('defaultData.statusId', taskData.statusId)
             setValue('defaultData.tags', taskData.tags)
             setValue('defaultData.taskChilds', taskChilds)
@@ -339,17 +339,17 @@ const TaskView = (props) => {
     const renderTaskContent = () => {
         return <div className="containerNew">
             <Box className="task-view-container">
-                <Grid container item spacing={2} direction="row">
-                    <Grid item xs={12}>
+                <Grid container item spacing={2} flexWrap="nowrap" direction="column">
+                    <Grid item xs={12} className="flex-basis-auto">
                         <TextInput autoFocus={true} focused={true} control={control} placeholder={t('Tiêu đề')} name="defaultData.title" />
                     </Grid>
-                    <Grid className="flex-container" flexWrap={'nowrap'} container gap={2} item xs={12}>
+                    <Grid className="flex-container flex-basis-auto" flexWrap={'nowrap'} container gap={2} item xs={12}>
                         <Grid item xs>
                             <Grid className="flex-container" container gap={2} item xs={12}>
                                 <Grid item>
                                     <AssignSelect
                                         control={control}
-                                        name={'defaultData.usersAssign'}
+                                        name={'defaultData.usersAssignId'}
                                         data={userAssign}
                                     />
                                 </Grid>
@@ -381,7 +381,7 @@ const TaskView = (props) => {
                                 taskId={taskId || taskEditId} />
                         </Grid>
                     </Grid>
-                    <Grid item xs={12}>
+                    <Grid item container direction='column' xs={12} className="flex-basis-auto overflow-hidden">
                         <TabControl tabItems={getTabItems()} />
                     </Grid>
                 </Grid>
@@ -389,9 +389,7 @@ const TaskView = (props) => {
         </div>
     }
 
-    return <div>
-        {renderTaskContent()}
-    </div>
+    return renderTaskContent()
 }
 
 export default TaskView

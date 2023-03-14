@@ -1,13 +1,13 @@
 import React, { useEffect, useState, useMemo } from "react"
 import Grid from "@mui/material/Grid"
-import { get } from "services"
-import { baseUrl } from "configs"
+import { get, save } from "services"
+import { baseUrl, ERROR_CODE } from "configs"
 import _ from "lodash"
 import { DragDropContext } from "react-beautiful-dnd"
-import { TaskDragElement } from './'
+import { TaskDragElement } from '.'
 import Box from "@mui/material/Box"
 
-const TaskViewStatus = React.memo((props) => {
+const TaskBoard = React.memo((props) => {
     const { onRowClicked } = props
     const [listStatus, setStatus] = useState([])
     const [listTask, setTask] = useState([])
@@ -29,18 +29,24 @@ const TaskViewStatus = React.memo((props) => {
         })
     }
 
-    const onDragEnd = (result) => {
+    const onDragEnd = async (result) => {
         if (!result.destination) {
             return
         }
 
-        let sourceDroppableId = result.source.droppableId
-        let destinationDroppableId = result.destination.droppableId
+        let sourceStatusId = result.source.droppableId
+        let destinationStatusId = result.destination.droppableId
 
         let task = _.find(listTask, (x) => x.id === result.draggableId)
         if (!_.isNil(task)) {
-            task.statusId = destinationDroppableId
+            task.statusId = destinationStatusId
             setTask([...listTask])
+            await save(`${baseUrl.jm_task}/status`, { id: task.id, statusId: task.statusId }).then((data) => {
+                if (data.errorCode !== ERROR_CODE.success) {
+                    task.statusId = sourceStatusId
+                    setTask([...listTask])
+                }
+            })
         }
     }
 
@@ -49,18 +55,17 @@ const TaskViewStatus = React.memo((props) => {
         return _.isNil(value) ? [] : value
     }
 
-    return <Box className="task-view-container">
-        <Grid container className="task-view-status-container" spacing={2} item xs={12}>
+    return <Box className="box-container flex-column flex-row" style={{ overflowX: 'auto', overflowY: 'hidden' }}>
+        <Grid container className="task-view-status-container flex-row overflow-hidden" item xs={12}>
             {
                 <DragDropContext onDragEnd={onDragEnd}>{
                     _.map(listStatus, (item) => {
-                        return <Grid className="group" key={item.id} item>
-                            <TaskDragElement
-                                onRowClicked={onRowClicked}
-                                prefix={item.id}
-                                controls={getElementControls(item.id)}
-                            />
-                        </Grid>
+                        return <TaskDragElement
+                            key={item.id}
+                            onRowClicked={onRowClicked}
+                            item={item}
+                            controls={getElementControls(item.id)}
+                        />
                     })
                 }
                 </DragDropContext>
@@ -69,4 +74,4 @@ const TaskViewStatus = React.memo((props) => {
     </Box>
 })
 
-export default TaskViewStatus
+export default TaskBoard
