@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { useSelector, useDispatch } from "react-redux"
 import ButtonFuntion from 'components/button/ButtonFuntion'
 import PropTypes from 'prop-types'
@@ -44,7 +44,7 @@ const ToolBar = React.memo(props => {
     return (
         <div>
             <div className="row">
-                <div className="col-md-12 grid-margin  justify-content-end">
+                <div className="col-md-12 grid-margin justify-content-end">
                     <ConfigColumn onColumnConfigChange={onColumnConfigChange} columnModel={columnModel} anchorEl={anchorElColumn} handleClose={handleCloseColumn}></ConfigColumn>
                     <ButtonFuntion spacingLeft={0} visible={visible.column} onClick={handleClickColumn} type={EButtonType.columnConfig} />
                     <ButtonFuntion spacingLeft={1} visible={visible.column} open={anchorElFilter} onClick={handleClickFilter} type={EButtonType.filter} />
@@ -52,7 +52,7 @@ const ToolBar = React.memo(props => {
                     <ButtonFuntion spacingLeft={1} visible={visible.add} onClick={onAddClick} type={EButtonType.add} />
                     <ButtonFuntion spacingLeft={1} visible={visible.delete} onClick={onDeleteClick} type={EButtonType.delete} />
                     <ButtonFuntion spacingLeft={1} onClick={onRefreshClick} type={EButtonType.refresh} />
-                    {genarateCustomButton && genarateCustomButton()}
+                    {genarateCustomButton}
                 </div>
             </div>
             <Filter

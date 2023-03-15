@@ -6,6 +6,7 @@ let cx = classNames.bind(style)
 
 const Resizable = React.memo((props) => {
     const { genderLeftComponent, genderRightComponent, hidenRight = true } = props
+    const display = hidenRight ? 'none' : 'flex'
     return (
         // <div className={cx("containerNew")} style={{ flexFlow: "column" }}>
         //     <div className={cx("body")}>
@@ -31,7 +32,7 @@ const Resizable = React.memo((props) => {
             </div>
             <ResizePanel
                 direction="w"
-                style={{ width: "400px", display: hidenRight ? 'none' : 'flex' }}
+                style={{ width: "400px", display: display }}
                 handleClass="customHandle"
                 borderClass="customResizeBorder"
             >

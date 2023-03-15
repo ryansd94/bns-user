@@ -8,10 +8,12 @@ import {
 import { useTranslation } from "react-i18next"
 import { EFilterType, baseUrl } from "configs"
 import TaskTypeMenu from './taskTypeMenu'
+import { EButtonType } from 'configs/constants'
+import ButtonFuntion from 'components/button/ButtonFuntion'
 import _ from 'lodash'
 
 const TaskToolbar = (props) => {
-    const { onApplyFilter, customColumns, taskTypes } = props
+    const { onApplyFilter, customColumns, taskTypes, onFullScreen, hidenRight } = props
     const { t } = useTranslation()
     const dispatch = useDispatch()
     const toolbarVisible = { ...useSelector((state) => state.task.toolbarVisible) }
@@ -54,7 +56,7 @@ const TaskToolbar = (props) => {
                 isShow: true,
                 width: 110,
                 type: EFilterType.text,
-                isCustom : true
+                isCustom: true
             })
         })
         setColumnModel([...columnModels])
@@ -76,14 +78,20 @@ const TaskToolbar = (props) => {
     }
 
     const genarateCustomButton = () => {
-        return <TaskTypeMenu taskTypes={taskTypes}/>
+        return <div>
+            {
+                hidenRight === true ? <ButtonFuntion onClick={() => onFullScreen(false)} isTextAndIcon={false} spacingLeft={1} type={EButtonType.add} />
+                    : <ButtonFuntion onClick={() => onFullScreen(true)} isTextAndIcon={false} spacingLeft={1} type={EButtonType.full} />
+            }
+            <TaskTypeMenu taskTypes={taskTypes} />
+        </div>
     }
 
     return <div>
         <ToolBar component={baseUrl.jm_task}
             visible={toolbarVisible}
             onApplyFilter={onApplyFilter}
-            genarateCustomButton={genarateCustomButton}
+            genarateCustomButton={genarateCustomButton()}
             onColumnConfigChange={handleColumnConfigChange}
             columnModel={columnModels}
             onAddClick={handleClickOpen} />

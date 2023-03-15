@@ -31,7 +31,6 @@ const OverflowTip = props => {
     <Tooltip
       className={className}
       title={props.value}
-      //   interactive
       disableHoverListener={!_.isNil(disableHoverListener) ? disableHoverListener : !hoverStatus}
       style={{ fontSize: '2em' }}
     >

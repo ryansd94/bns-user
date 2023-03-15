@@ -255,7 +255,7 @@ const EditorControl = (props) => {
 
     const renderEditor = (field) => {
 
-        return <div style={{ marginTop: isShowAccordion ? '1rem' : '0' }}>
+        return <div className={className} style={{ marginTop: isShowAccordion ? '1rem' : '0' }}>
             <EditorToolbar hide={hideToolbar} id={`rte${id}`} />
             <ReactQuill
                 id={`rte${id}`}

@@ -13,6 +13,7 @@ const Task = React.memo(() => {
   const [customColumns, setCustomColumn] = useState(null)
   const [id, setId] = useState(null)
   const [taskTypes, setTaskType] = useState([])
+  const [hidenRight, setHidenRight] = useState(false)
 
   const onApplyFilter = (value) => {
     setFilterModels(value)
@@ -34,26 +35,30 @@ const Task = React.memo(() => {
   }
 
   const fetchTaskType = async () => {
-      await get(baseUrl.jm_taskType, {
-          isGetAll: true,
-      }).then((data) => {
-          setTaskType(data && data.data && data.data.items)
-      })
+    await get(baseUrl.jm_taskType, {
+      isGetAll: true,
+    }).then((data) => {
+      setTaskType(data && data.data && data.data.items)
+    })
   }
 
   const genderLeftComponent = () => {
     // return <TaskGrid customColumns={customColumns} onRowClicked={onRowClicked} filterModels={filterModels} />
-    return <TaskBoard onRowClicked={onRowClicked}/>
+    return <TaskBoard onRowClicked={onRowClicked} />
   }
 
   const genderRightComponent = () => {
     return <TaskView taskTypes={taskTypes} taskId={id} isCreate={false} />
   }
 
+  const onFullScreen = (value) => {
+    setHidenRight(value)
+  }
+
   return (
     <div className="flex-column flex-grow overflow-hidden">
-      <TaskToolbar taskTypes={taskTypes} customColumns={customColumns} onApplyFilter={onApplyFilter} />
-      <Resizable hidenRight={false} genderRightComponent={genderRightComponent} genderLeftComponent={genderLeftComponent} />
+      <TaskToolbar hidenRight={hidenRight} onFullScreen={onFullScreen} taskTypes={taskTypes} customColumns={customColumns} onApplyFilter={onApplyFilter} />
+      <Resizable hidenRight={hidenRight} genderRightComponent={genderRightComponent} genderLeftComponent={genderLeftComponent} />
     </div>
   )
 })

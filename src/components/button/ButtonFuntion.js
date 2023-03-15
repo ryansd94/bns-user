@@ -13,6 +13,7 @@ import _ from 'lodash'
 const useStyles = props => makeStyles(theme => ({
     button: {
         marginLeft: theme.spacing(props.spacingLeft || 0),
+        height: 36,
         // marginTop: theme.spacing(1),
         // marginBottom: theme.spacing(1),
         [theme.breakpoints.down("sm")]: {
@@ -38,8 +39,7 @@ const useStyles = props => makeStyles(theme => ({
         // marginTop: theme.spacing(1),
         // marginBottom: theme.spacing(1),
         minWidth: 32,
-        padding: '11px 10px',
-        margin: '0px !important',
+        height: 36,
         "& .MuiButton-startIcon": {
             margin: 0,
         },
@@ -51,6 +51,18 @@ const useStyles = props => makeStyles(theme => ({
         },
         "& .MuiButton-endIcon>*:nth-of-type(1)": {
             fontSize: "1rem"
+        },
+        [theme.breakpoints.down("sm")]: {
+            minWidth: 32,
+            paddingLeft: 8,
+            paddingRight: 8,
+            padding: '5px 15px',
+            "& .MuiButton-startIcon": {
+                margin: 0,
+            },
+            "& .MuiButton-endIcon": {
+                margin: 0
+            }
         }
     },
     buttonIconText: {
@@ -66,13 +78,12 @@ const ButtonFuntion = React.memo(props => {
     const classes = useStyles(props)()
     const { t } = useTranslation()
     const { type, onClick, visible = true, open,
-        label = '', style, refs, endIcon, onClickAway = null, isFloatLeft = false, className, disabled } = props
+        label = '', style, refs, endIcon, onClickAway = null, isFloatLeft = false, className, disabled, isTextAndIcon = true } = props
     const [icon, setIcon] = useState('')
     const [text, setText] = useState('')
     const [float, setFloat] = useState(isFloatLeft ? ' float-left' : ' float-right')
     const [startIcon, setStartIcon] = useState(true)
     const [color, setColor] = useState(null)
-    const [isButtonIcon, setIsButtonIcon] = useState(true)
     const theme = createTheme({
         palette: {
             neutral: {
@@ -141,12 +152,10 @@ const ButtonFuntion = React.memo(props => {
                 setIcon('far fa-tags' + sizeDefault)
                 setFloat(' float-left')
                 setText(t('Thêm nhãn'))
-                setIsButtonIcon(false)
                 break
             case EButtonType.more:
                 setIcon('far fa-ellipsis-h' + sizeDefault)
                 setText(t('Chức năng'))
-                setIsButtonIcon(false)
                 setFloat(' float-left')
                 break
             case EButtonType.comment:
@@ -162,6 +171,16 @@ const ButtonFuntion = React.memo(props => {
                 setText(t('Hủy'))
                 setFloat(' float-left')
                 setColor("neutral")
+                break
+            case EButtonType.full:
+                setIcon('far fa-square-full' + sizeDefault)
+                setText(t('Toàn khung'))
+                setFloat(' float-left')
+                break
+            case EButtonType.split:
+                setIcon('far fa-columns' + sizeDefault)
+                setText(t('Phân nữa'))
+                setFloat(' float-left')
                 break
             default:
                 break
@@ -179,16 +198,16 @@ const ButtonFuntion = React.memo(props => {
         disabled={disabled}
         onClick={onClick}
         disableTouchRipple
-        className={`${isButtonIcon ? classes.button : classes.buttonIcon} ${float} ${className}`}
+        className={`${isTextAndIcon === true ? classes.button : classes.buttonIcon} ${float} ${className}`}
         startIcon={startIcon ? <i className={icon} /> : ''}
         endIcon={endIcon ? endIcon : (!startIcon ? <i className={icon} /> : '')}
     >
-        <span className={isButtonIcon ? classes.buttonText : classes.buttonIconText}>{label ? label : text}</span>
+        <span className={isTextAndIcon === true ? classes.buttonText : classes.buttonIconText}>{label ? label : text}</span>
     </Button>
     if (visible) {
         button = (
             <ThemeProvider theme={theme}>
-                {!isButtonIcon ? <Tooltip title={label ? label : text}>
+                {!isTextAndIcon === true ? <Tooltip title={label ? label : text}>
                     {button}
                 </Tooltip> : button}
             </ThemeProvider>

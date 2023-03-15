@@ -1,13 +1,12 @@
 import React, { useEffect, useState } from "react"
 import Grid from "@mui/material/Grid"
 import { OverflowTip } from 'components/tooltip'
-import { IconHour } from 'components/icon/icon'
 import { IconDescription } from 'components/icon/icon'
 import { PopoverControl } from 'components/popover'
 import { EditorControl } from 'components/editor'
 
 const TaskNoteItem = (props) => {
-    const { item } = props
+    const { item, title } = props
 
     const [openPopover, setOpenPopover] = useState(null)
 
@@ -16,16 +15,21 @@ const TaskNoteItem = (props) => {
     }
 
     const genderPopoverControl = () => {
-        return <EditorControl readOnly={true} isFullScreen={true} value={item?.description} name={'description'} isShowAccordion={false} />
+        return <EditorControl className='editor-popover' readOnly={true} isFullScreen={true} value={item?.description} name={'description'} isShowAccordion={false} />
     }
+
     const handlePopoverOpen = (event) => {
         setOpenPopover(event.currentTarget)
     }
 
-    return <div>
-        <IconDescription onClick={handlePopoverOpen} />
-        <PopoverControl className='pop-delete-comment' isHideWhenWithOutFocus={false} genderBody={genderPopoverControl} onClose={handlePopoverClose} anchorEl={openPopover} />
-    </div>
+    const genderTooltip = (item) => {
+        return <div>
+            <IconDescription className={'cursor-pointer'} onClick={handlePopoverOpen} />
+            <PopoverControl isHideWhenWithOutFocus={false} genderBody={genderPopoverControl} onClose={handlePopoverClose} anchorEl={openPopover} />
+        </div>
+    }
+
+    return <OverflowTip disableHoverListener={false} value={title} genderTooltipContent={() => genderTooltip(item)} />
 }
 
 export default TaskNoteItem

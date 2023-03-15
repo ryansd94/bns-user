@@ -53,7 +53,7 @@ const TaskMoreButton = (props) => {
 
     return (
         <div>
-            <DropdownMenu title={t('Cài đặt')} type={EButtonIconType.more} isShowEndIcon={false} visible={true} genderDropdownItem={genderDropdownItem} />
+            <DropdownMenu spacingLeft={0} isTextAndIcon={false} type={EButtonIconType.more} isShowEndIcon={false} visible={true} genderDropdownItem={genderDropdownItem} />
             <ChangeTaskTypePopup handleClose={onCloseTaskTypePopup} open={openTaskTypePopup} {...props} />
             <CopyTaskPopup handleClose={onCloseCopyTaskPopup} open={openCopyTaskPopup} {...props} />
         </div>

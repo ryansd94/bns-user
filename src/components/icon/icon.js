@@ -72,7 +72,7 @@ const IconHour = ({ style, className }) => {
   return <i style={style} className="far fa-clock fa-sm"></i>
 }
 const IconDescription = ({ style, className, onClick }) => {
-  return <i onClick={onClick} style={style} className="far fa-file-invoice"></i>
+  return <i onClick={onClick} style={style} className={`far fa-file-invoice ${className}`}></i>
 }
 
 export {

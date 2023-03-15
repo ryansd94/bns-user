@@ -54,7 +54,9 @@ export const EButtonType = {
   more: "More",
   comment: "Comment",
   reply: "Reply",
-  cancel: "cancel"
+  cancel: "cancel",
+  full: "Full",
+  split: "Split"
 };
 export const EColumnType = {
   checkbox: "Checkbox",

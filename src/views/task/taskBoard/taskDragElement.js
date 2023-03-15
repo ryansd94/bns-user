@@ -7,13 +7,10 @@ import { TaskTitle } from 'components/task'
 import StatusItem from 'views/category/status/statusItem'
 import { UserItem } from 'components/user'
 import _ from 'lodash'
-import { DatePickerInput } from "components/datepicker"
 import { useForm } from "react-hook-form"
 import { useTranslation } from "react-i18next"
 import { LabelDateControl } from 'components/label'
 import { formatDateTime } from 'helpers'
-import { IconDescription } from 'components/icon/icon'
-import { OverflowTip } from 'components/tooltip'
 import { TaskNoteItem } from './../taskBoardItem'
 
 const ColumnHeader = styled.div`
@@ -48,10 +45,6 @@ const TaskDragElement = ({ item, columnHeader, controls = [], droppableClassName
     </Grid>
   }
 
-  const genderTooltipDescription = (item) => {
-    return <TaskNoteItem item={item} />
-  }
-
   const renderRowInfo = (item) => {
     let dueDate = ''
     if (!_.isNil(item.dueDate)) {
@@ -62,7 +55,7 @@ const TaskDragElement = ({ item, columnHeader, controls = [], droppableClassName
     return !_.isEmpty(dueDate) ? <Grid gap={1} item container direction='row'>
       {dueDate}
       <Grid item>
-        <OverflowTip disableHoverListener={false} value={t('Mô tả')} genderTooltipContent={() => genderTooltipDescription(item)} />
+        <TaskNoteItem item={item} title={t('Mô tả')} />
       </Grid>
     </Grid> : ''
   }
@@ -84,8 +77,8 @@ const TaskDragElement = ({ item, columnHeader, controls = [], droppableClassName
     </Grid>
   }
 
-  return <Grid className="task-view-status-content" container gap={2} key={item.id} item direction='column'>
-    <Grid item className="task-status-header">
+  return <Grid className="task-board-content" container gap={2} key={item.id} item direction='column'>
+    <Grid item className="task-board-header">
       <StatusItem status={item} />
     </Grid>
     <Grid className="group" item>

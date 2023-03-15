@@ -73,7 +73,7 @@ const TagControl = React.memo(props => {
                             />
                         </Grid> : ''}
                         <Grid item>
-                            <ButtonFuntion spacingLeft={1} onClick={onAddTagClick} type={EButtonType.addTag} />
+                            <ButtonFuntion isTextAndIcon={false} onClick={onAddTagClick} type={EButtonType.addTag} />
                         </Grid>
                     </Grid>
                 </Box>

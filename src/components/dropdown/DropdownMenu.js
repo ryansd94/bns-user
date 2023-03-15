@@ -12,7 +12,7 @@ import Menu from '@mui/material/Menu'
 const DropdownMenu = (props) => {
     const { genderDropdownItem, type = EButtonType.add, visible = false,
         isShowEndIcon = true, label, isFloatLeft = false, spacingLeft = 1,
-        isButtonIcon = false, className, isCLoseOnClick = true, classNameIcon } = props
+        isButtonIcon = false, className, isCLoseOnClick = true, classNameIcon, isTextAndIcon = true } = props
     const [open, setOpen] = React.useState(false)
     const anchorRef = React.useRef(null)
 
@@ -60,6 +60,7 @@ const DropdownMenu = (props) => {
         return <ButtonFuntion
             isFloatLeft={isFloatLeft}
             label={label}
+            isTextAndIcon={isTextAndIcon}
             className={`button-detail`}
             endIcon={isShowEndIcon ? renderEndIcon() : ''}
             visible={visible}

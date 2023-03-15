@@ -472,7 +472,7 @@ span[data-testid="alphaslider"] {
             border: none !important;
             // padding: 12px 16px;
             .ql-editor {
-                padding: 0 !important;
+                // padding: 0 !important;
                 min-height: auto !important;
             }
         }
@@ -531,7 +531,7 @@ a:hover {
 .MuiAccordionSummary-content {
     justify-content: space-between;
 }
-.task-view-status-container {
+.task-board-container {
     min-width: min-content;
     flex-wrap: nowrap !important;
     .group {
@@ -543,9 +543,10 @@ a:hover {
             overflow-y: overlay;
         }
     }
-    > .task-view-status-content {
+    > .task-board-content {
         width: 300px;
         background-color: $task-status-content;
+        border-radius: 10px;
     }
     .MuiGrid-container {
         flex-wrap: nowrap !important;
@@ -567,7 +568,7 @@ a:hover {
         background-color: $item-background-color;
     }
 }
-.task-status-header {
+.task-board-header {
     padding: 1rem 0 0 1rem;
 }
 .flex-column {
@@ -585,4 +586,10 @@ a:hover {
     flex-flow: column nowrap;
     flex-direction: column !important;
     overflow: auto;
+}
+.ql-editor {
+    padding: 1rem !important;
+}
+.editor-popover {
+    min-width: 300px;
 }
