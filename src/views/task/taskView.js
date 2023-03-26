@@ -36,6 +36,7 @@ import { TaskChild, TaskParent } from 'components/task'
 import { MultipleFileUploadField } from 'components/upload/uploadFile'
 import { TaskMoreButton } from '../task/taskMoreButton'
 import { Comment } from 'components/comment'
+import { deepFindAll } from "helpers/commonFunction"
 
 const TaskView = (props) => {
     console.log("render TaskView")
@@ -49,11 +50,15 @@ const TaskView = (props) => {
     const [templateContent, setTemplateContent] = useState('')
     const { t } = useTranslation()
     const { id, taskEditId } = useParams()
-    const validationSchema = Yup.object().shape({
+    const [validateData, setValidateData] = useState({
         defaultData: Yup.object().shape({
-            title: Yup.string().required(t(message.error.fieldNotEmpty)),
+            'title': Yup.string().required(t(message.error.fieldNotEmpty)),
         }),
+        dynamicData: Yup.object().shape({
+        })
     })
+
+    const validationSchema = Yup.object().shape(validateData)
     const [taskTypeId2, settaskTypeId2] = useState(taskTypeId)
     const {
         control,
@@ -79,9 +84,42 @@ const TaskView = (props) => {
         return templateStatus
     }
 
+    const setDataValidate = (template) => {
+        if (_.isNil(template)) return
+        const templateValidate = [...template.column1, ...template.column2]
+        const validateDefaultData = deepFindAll(templateValidate, function (obj) {
+            return obj.required === true && obj.default === true
+        }, 'items')
+        const validateDynamicData = deepFindAll(templateValidate, function (obj) {
+            return obj.required === true && obj.default !== true
+        }, 'items')
+        let defaultValidate = {
+            'title': Yup.string().required(t(message.error.fieldNotEmpty)),
+        }
+        let dynamicValidate = {}
+        if (!_.isEmpty(validateDefaultData)) {
+            _.map(validateDefaultData, (x) => {
+                defaultValidate[x.name] = Yup.string().required(t(message.error.fieldNotEmpty))
+            })
+        }
+        if (!_.isEmpty(validateDynamicData)) {
+            _.map(validateDynamicData, (x) => {
+                const key = _.isNil(x.customColumnId) ? x.id : x.customColumnId
+                dynamicValidate[key] = Yup.string().required(t(message.error.fieldNotEmpty))
+            })
+        }
+
+        setValidateData({
+            defaultData: Yup.object().shape(defaultValidate),
+            dynamicData: Yup.object().shape(dynamicValidate)
+        })
+    }
+
     useEffect(() => {
         if (!_.isNil(data.template)) {
-            setTemplateContent(JSON.parse(data.template && data.template.content))
+            const template = JSON.parse(data.template && data.template.content)
+            setTemplateContent(template)
+            setDataValidate(template)
             if (isCreate) {
                 const status = getStatus()
                 if (status.length > 0) {
@@ -101,6 +139,25 @@ const TaskView = (props) => {
 
 
     useEffect(() => {
+        const fetchDataUserAssign = async () => {
+            await get(`${baseUrl.jm_task}/user-assign`, {
+                isGetAll: true
+            }).then((data) => {
+                setUserAssign(data && data.data && _.map(data.data.items, (item) => {
+                    return { id: item.id, fullName: item.fullName }
+                }))
+            })
+        }
+
+        const fetchDataUserSuggest = async () => {
+            await get(`${baseUrl.jm_user}/suggest`, {
+                isGetAll: true
+            }).then((data) => {
+                setUserSuggest(data && data.data && _.map(data.data.items, (item) => {
+                    return { id: item.id, value: item.fullName }
+                }))
+            })
+        }
         fetchDataUserAssign()
         fetchDataUserSuggest()
         return () => {
@@ -150,26 +207,6 @@ const TaskView = (props) => {
         }
     }, [data])
 
-    const fetchDataUserAssign = async () => {
-        await get(`${baseUrl.jm_task}/user-assign`, {
-            isGetAll: true
-        }).then((data) => {
-            setUserAssign(data && data.data && _.map(data.data.items, (item) => {
-                return { id: item.id, fullName: item.fullName }
-            }))
-        })
-    }
-
-    const fetchDataUserSuggest = async () => {
-        await get(`${baseUrl.jm_user}/suggest`, {
-            isGetAll: true
-        }).then((data) => {
-            setUserSuggest(data && data.data && _.map(data.data.items, (item) => {
-                return { id: item.id, value: item.fullName }
-            }))
-        })
-    }
-
     const genderElement = (item, index, control) => {
         const name = _.isNil(item.name) ? (_.isNil(item.customColumnId) ? `dynamicData.${item.id}` : `dynamicData.${item.customColumnId}`) : `defaultData.${item.name}`
         const readOnly = item.defaultReadonly || false
@@ -177,25 +214,25 @@ const TaskView = (props) => {
         if (!_.isNil(id)) {
             if (isHidenWhenCreate) return ''
         }
-        let component = <TextInput disabled={readOnly} name={name} control={control} size={ESize.small} label={item.label} />
+        let component = <TextInput required={item.required} disabled={readOnly} name={name} control={control} size={ESize.small} label={item.label} />
         switch (item.type) {
             case EControlType.typography:
                 component = <span>{item.id}</span>
                 break
             case EControlType.editor:
-                component = (<EditorControl isFullScreen={true} userSuggest={userSuggest} label={item.label} name={name} control={control} className="editor-container" />)
+                component = (<EditorControl required={item.required} isFullScreen={true} userSuggest={userSuggest} label={item.label} name={name} control={control} className="editor-container" />)
                 break
             case EControlType.select:
-                component = (<SingleAddSelect fullWidth={true} label={item.label} name={name} control={control} />)
+                component = (<SingleAddSelect required={item.required} fullWidth={true} label={item.label} name={name} control={control} />)
                 break
             case EControlType.dateTimePicker:
-                component = (<DatePickerInput disabled={readOnly} formatDate={EFormatDate.ddmmyyyy_hhmm} label={item.label} name={name} control={control} />)
+                component = (<DatePickerInput required={item.required} disabled={readOnly} formatDate={EFormatDate.ddmmyyyy_hhmm} label={item.label} name={name} control={control} />)
                 break
             case EControlType.datePicker:
-                component = (<DatePickerInput disabled={readOnly} label={item.label} name={name} control={control} />)
+                component = (<DatePickerInput required={item.required} disabled={readOnly} label={item.label} name={name} control={control} />)
                 break
             case EControlType.number:
-                component = (<NumberInput disabled={readOnly} label={item.label} name={name} control={control} />)
+                component = (<NumberInput required={item.required} disabled={readOnly} label={item.label} name={name} control={control} />)
                 break
             case EControlType.userItem:
                 component = (<UserControl disabled={readOnly} label={item.label} name={name} control={control} />)
@@ -246,6 +283,7 @@ const TaskView = (props) => {
             case EControlType.upload:
                 component = <AccordionControl
                     isExpand={true}
+                    required={item.required}
                     title={item.label}
                     name={name}
                     className='task-group-container'
@@ -291,7 +329,7 @@ const TaskView = (props) => {
     }
 
     const renderDetailTabContent = () => {
-        return <Grid className="task-column-content" item container spacing={2} xs={12}>
+        return <Grid className="task-column-content no-wrap" item container gap={2} xs={12}>
             <Grid item xs={(templateContent && (_.isNil(templateContent.column3) || templateContent.column3.length == 0)) ? 9 : 6}>
                 {templateContent && templateContent.column1.map((item, index) => {
                     return genderElement(item, index, control)
@@ -302,11 +340,14 @@ const TaskView = (props) => {
                     return genderElement(item, index, control)
                 })}
             </Grid>
-            <Grid item xs={3}>
-                {templateContent && templateContent.column3 && templateContent.column3.map((item, index) => {
-                    return genderElement(item, index, control)
-                })}
-            </Grid>
+            {
+                _.isNil(templateContent.column3) || templateContent.column3.length == 0 ? '' :
+                    <Grid item xs={3}>
+                        {templateContent && templateContent.column3 && templateContent.column3.map((item, index) => {
+                            return genderElement(item, index, control)
+                        })}
+                    </Grid>
+            }
         </Grid>
     }
 

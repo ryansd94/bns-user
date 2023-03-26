@@ -1,5 +1,4 @@
 import React, { useEffect, useState, useMemo, useCallback } from "react"
-
 import Popup from "components/popup/Popup"
 import Grid from "@mui/material/Grid"
 import { ColorPickerControl } from "components/colorPicker"
@@ -12,8 +11,6 @@ import { yupResolver } from "@hookform/resolvers/yup"
 import { open, change_title, close } from "components/popup/popupSlice"
 import { openMessage } from "stores/components/snackbar"
 import {
-    setPage,
-    setSort,
     setLoadingPopup,
     setReload,
     setEditData,
@@ -22,6 +19,8 @@ import { getByID, save } from "services"
 import { ERROR_CODE, baseUrl } from "configs"
 import { loading as loadingButton } from "stores/components/button"
 import { message } from "configs"
+import { CheckBoxControl } from 'components/checkbox'
+import _ from "lodash"
 
 const StatusPopup = React.memo((props) => {
     const { t } = useTranslation()
@@ -32,6 +31,8 @@ const StatusPopup = React.memo((props) => {
     const validationSchema = Yup.object().shape({
         name: Yup.string().required(t(message.error.fieldNotEmpty)),
     })
+    const [statusStartDisable, setStatusStartDisable] = useState(false)
+    const [statusEndDisable, setStatusEndDisable] = useState(false)
 
     const defaultValues = {
         name: "",
@@ -54,6 +55,8 @@ const StatusPopup = React.memo((props) => {
             setValue("name", res.data.name || "")
             setValue("description", res.data.description || "")
             setValue("color", res.data.color)
+            setValue("isStatusStart", res.data.isStatusStart)
+            setValue("isStatusEnd", res.data.isStatusEnd)
             dispatch(setLoadingPopup(false))
         })
     }
@@ -67,7 +70,7 @@ const StatusPopup = React.memo((props) => {
         resolver: yupResolver(validationSchema),
         defaultValues: defaultValues,
     })
-    
+
     const onSubmit = async (data) => {
         dispatch(loadingButton(true))
         var postData = data
@@ -82,12 +85,23 @@ const StatusPopup = React.memo((props) => {
             dispatch(setEditData(null))
             dispatch(setReload())
             reset()
+            if (!_.isEmpty(editData)) {
+                dispatch(close())
+            }
         }
     }
-    
+
+    const onStatusStartChange = (value) => {
+        setStatusEndDisable(value)
+    }
+
+    const onStatusEndChange = (value) => {
+        setStatusStartDisable(value)
+    }
+
     function ModalBody() {
         return (
-            <Grid container rowSpacing={2}>
+            <Grid container gap={2}>
                 <Grid item xs={12}>
                     <TextInput
                         autoFocus={true}
@@ -109,6 +123,24 @@ const StatusPopup = React.memo((props) => {
                         control={control}
                         label={t("Mô tả")}
                         name="description"
+                    />
+                </Grid>
+                <Grid item xs={12}>
+                    <CheckBoxControl
+                        disabled={statusStartDisable}
+                        onChange={onStatusStartChange}
+                        control={control}
+                        label={t("Trạng thái bắt đầu")}
+                        name="isStatusStart"
+                    />
+                </Grid>
+                <Grid item xs={12}>
+                    <CheckBoxControl
+                        disabled={statusEndDisable}
+                        onChange={onStatusEndChange}
+                        control={control}
+                        label={t("Trạng thái kết thúc")}
+                        name="isStatusEnd"
                     />
                 </Grid>
             </Grid>

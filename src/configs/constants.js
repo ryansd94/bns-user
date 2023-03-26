@@ -56,7 +56,9 @@ export const EButtonType = {
   reply: "Reply",
   cancel: "cancel",
   full: "Full",
-  split: "Split"
+  split: "Split",
+  list: "List",
+  board: "Board"
 };
 export const EColumnType = {
   checkbox: "Checkbox",
@@ -94,7 +96,9 @@ export const EButtonIconType = {
   edit: "Edit",
   upload: "Upload",
   comment: "Comment",
-  fullScreen: "FullScreen"
+  fullScreen: "FullScreen",
+  require: "Require",
+  setting:"Setting"
 }
 
 export const EButtonDetailType = {
@@ -152,6 +156,20 @@ export const baseUrl = {
   jm_taskcolumn: 'jm_taskcolumn',
   jm_customcolumn: 'jm_customcolumn',
   jm_comment: 'jm_comment'
+}
+
+export const EViewMode = {
+  list: 0,
+  board: 1
+}
+
+export const EStatusResponse = {
+  unauthorized: 401
+}
+
+export const EAlertType = {
+  error: 'error',
+  warning: 'warning'
 }
 
 export const _TemplateVariant = EVariant.normal

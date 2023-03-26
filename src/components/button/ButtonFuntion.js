@@ -182,6 +182,16 @@ const ButtonFuntion = React.memo(props => {
                 setText(t('Phân nữa'))
                 setFloat(' float-left')
                 break
+            case EButtonType.list:
+                setIcon('far fa-list' + sizeDefault)
+                setText(t('Chế độ xem lưới'))
+                setFloat(' float-left')
+                break
+            case EButtonType.board:
+                setIcon('far fa-table' + sizeDefault)
+                setText(t('Chế độ xem bảng'))
+                setFloat(' float-left')
+                break
             default:
                 break
         }
@@ -189,6 +199,11 @@ const ButtonFuntion = React.memo(props => {
     useEffect(() => {
         setButton()
     }, [open])
+
+    useEffect(() => {
+        setButton()
+    }, [type])
+
     let button = <Button
         ref={refs}
         variant="outlined"

@@ -81,14 +81,14 @@ const TaskTypeGrid = React.memo((props) => {
     ]
 
     return (
-        <div style={{ width: "100%", height: "100%" }}>
+        <>
             <ConfirmDeleteDialog url={baseUrl.jm_taskType} id={id} />
             <GridData
                 url={baseUrl.jm_taskType}
                 columnVisibility={columnVisibility}
                 filterModels={filterModels}
                 columns={columns}></GridData>
-        </div>
+        </>
     )
 })
 

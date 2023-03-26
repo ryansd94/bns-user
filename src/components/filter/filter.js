@@ -184,8 +184,8 @@ const Filter = (props) => {
             <div className="containerNew">
                 <Box className="box-container">
                     <Grid width="auto" container
-                        direction="column" rowSpacing={2}  >
-                        <Grid key="header" container item columnSpacing={2}>
+                        direction="column" gap={2}  >
+                        <Grid key="header" container gap={2} item>
                             <Grid item>
                                 <ButtonFuntion spacingLeft={0} onClick={onAdd} type={EButtonType.addFilter} />
                             </Grid>

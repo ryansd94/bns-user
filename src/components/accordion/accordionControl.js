@@ -11,7 +11,8 @@ import { FullScreen, useFullScreenHandle } from "react-full-screen"
 
 const AccordionControl = (props) => {
 
-    const { title, name, details, isExpand, className = 'accordion-container', genderPopoverControl = null, isFullScreen = false } = props
+    const { title, name, details, isExpand, className = 'accordion-container',
+        genderPopoverControl = null, isFullScreen = false, required } = props
     const [expanded, setExpanded] = useState(isExpand ? name : '')
     const [showIcon, setShowIcon] = useState(!isExpand ? true : false)
     const [openPopover, setOpenPopover] = useState(null)
@@ -58,6 +59,7 @@ const AccordionControl = (props) => {
                     aria-controls={`${name}-content`}
                     id={`${name}-header`}>
                     <LabelControl
+                        required={required}
                         label={title}
                     />
                     {isFullScreen && showIcon ? <FullscreenIcon onClick={onFullScreen} /> : ''}

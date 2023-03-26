@@ -14,10 +14,10 @@ import { LinkControl } from 'components/link'
 import { CellMuliValue } from 'components/table'
 import _ from 'lodash'
 import LabelIconControl from 'components/label/labelIconControl'
-import { DropdownMenu, DropDownItem } from 'components/dropdown'
-import MenuItem from '@mui/material/MenuItem'
+import { DropDownItem } from 'components/dropdown'
 import { EButtonType } from 'configs/constants'
 import TaskChildPopup from './taskChildPopup'
+import { ActionButton } from 'components/cellRender'
 
 const TaskGrid = React.memo((props) => {
     console.log("render TaskGrid")
@@ -89,7 +89,7 @@ const TaskGrid = React.memo((props) => {
             valueFormatter: cellFormatDateTime
         },
         {
-            field: "createdUser.fullName", 
+            field: "createdUser.fullName",
             headerName: t("Người tạo"),
             suppressAutoSize: true,
             cellRenderer: (params) => {
@@ -101,7 +101,7 @@ const TaskGrid = React.memo((props) => {
             width: 110,
             resizable: false,
             cellRenderer: (params) => {
-                
+
                 const onDeleteClick = (e) => {
                     e.stopPropagation() // don't select this row after clicking
                     dispatch(openAlert({ open: true }))
@@ -122,8 +122,8 @@ const TaskGrid = React.memo((props) => {
         {
             headerName: 'Action Buttons',
             pinned: 'right',
-            // width: 60,
-            cellClass: 'abcdef',
+            width: 60,
+            cellClass: 'grid-action',
             cellRenderer: 'ActionBtnRenderer',
         },
     ])
@@ -137,11 +137,11 @@ const TaskGrid = React.memo((props) => {
     }
 
     const genderDropdownItem = (data) => {
-        return <DropDownItem onClick={() => addChildTask(data)} title={t('Tạo công việc con')}/>
+        return <DropDownItem onClick={() => addChildTask(data)} title={t('Tạo công việc con')} />
     }
 
     const ActionBtnRenderer = (params) => {
-        return <DropdownMenu type={EButtonType.more} isShowEndIcon={false} visible={true} genderDropdownItem={() => genderDropdownItem(params.data)} />
+        return <ActionButton isTextAndIcon={false} type={EButtonType.more} isShowEndIcon={false} visible={true} genderDropdownItem={() => genderDropdownItem(params.data)} />
     }
 
     const autoGroupColumnDef = useMemo(() => {
@@ -178,7 +178,7 @@ const TaskGrid = React.memo((props) => {
     }, [customColumns])
 
     return (
-        <div style={{ width: "100%", height: "100%" }}>
+        <>
             <ConfirmDeleteDialog url={baseUrl.jm_task} id={id} />
             <GridData
                 frameworkComponents={{ ActionBtnRenderer: ActionBtnRenderer }}
@@ -189,7 +189,7 @@ const TaskGrid = React.memo((props) => {
                 filterModels={filterModels}
                 columns={columns}></GridData>
             <TaskChildPopup taskParentId={id} taskTypeId={taskTypeId} />
-        </div>
+        </>
     )
 })
 

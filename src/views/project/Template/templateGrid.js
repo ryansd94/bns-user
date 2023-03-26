@@ -81,7 +81,7 @@ const TemplateGrid = React.memo((props) => {
     ])
 
     return (
-        <div style={{ width: "100%" }}>
+        <>
             <ConfirmDeleteDialog url={baseUrl.jm_template} id={id} />
             <GridData
                 filterModels={filterModels}
@@ -90,7 +90,7 @@ const TemplateGrid = React.memo((props) => {
                 loading={loading}
                 columns={column}
             ></GridData>
-        </div>
+        </>
     )
 })
 

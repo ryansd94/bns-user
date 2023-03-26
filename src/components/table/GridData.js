@@ -27,7 +27,7 @@ const GridData = (props) => {
     const { columns = [], rowHeight,
         columnVisibility, filterModels, url, onRowClicked, frameworkComponents, autoGroupColumnDef } = props
     const [columnsDef, setColumnsDef] = useState([...columns]);
-    const gridStyle = useMemo(() => ({ width: '100%', display: "flex", flexDirection: "column" }), [])
+    const gridStyle = useMemo(() => ({ width: '100%', display: "flex", flexDirection: "column", flexGrow: 1 }), [])
     const [currentPage, setCurrentPage] = useState(null)
     const [sortModel, setSortModel] = useState(null)
     const toolbarVisible = { ...useSelector((state) => state.master.toolbarVisible) }
@@ -178,11 +178,11 @@ const GridData = (props) => {
                     ref={gridRef}
                     animateRows={true}
                     sort
-                    style={{ height: "100%" }}
+                    style={{ display: "flex" }}
                     defaultColDef={defaultColDef}
                     enableRangeSelection={true}
                     rowData={data && data.data && data.data.items}
-                    domLayout='autoHeight'
+                    // domLayout='autoHeight'
                     gridOptions={gridOptions}
                     columnDefs={columnsDef}
                     rowSelection='multiple'

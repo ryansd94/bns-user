@@ -15,7 +15,7 @@ export const getRefreshToken = () => {
 
 export const getUserInfo = () => {
     const user = localStorage.getItem(LOCAL_STORAGE_KEYS.user);
-    return user ? JSON.parse(user) : null;
+    return user ? JSON.parse(user) : {};
 };
 
 export const getLanguage = () => {
@@ -28,7 +28,11 @@ export const setTokenLoginSucceeded = ({ token, user }) => {
     localStorage.setItem(LOCAL_STORAGE_KEYS.accessToken, token.accessToken);
     localStorage.setItem(LOCAL_STORAGE_KEYS.refreshToken, token.refreshToken);
     localStorage.setItem(LOCAL_STORAGE_KEYS.shopIndex, token.shopIndex);
-};
+}
+
+export const setUserInfo = ({ user }) => {
+    localStorage.setItem(LOCAL_STORAGE_KEYS.user, JSON.stringify(user))
+}
 
 export const setRefreshTokenSucceeded = data => {
     localStorage.setItem(LOCAL_STORAGE_KEYS.accessToken, data.accessToken);

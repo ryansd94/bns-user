@@ -8,8 +8,13 @@
         min-width: 600px;
         padding: 0 1rem 1rem 1rem;
     }
-    &:hover{
+    &:hover {
         overflow-x: overlay;
+    }
+    .react-swipeable-view-container {
+        flex-flow: column nowrap;
+        flex-direction: column !important;
+        overflow: auto;
     }
 }
 .task-column-content {

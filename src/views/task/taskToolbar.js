@@ -13,7 +13,7 @@ import ButtonFuntion from 'components/button/ButtonFuntion'
 import _ from 'lodash'
 
 const TaskToolbar = (props) => {
-    const { onApplyFilter, customColumns, taskTypes, onFullScreen, hidenRight } = props
+    const { onApplyFilter, customColumns, taskTypes, onFullScreen, hidenRight, isViewList, onChangeViewMode } = props
     const { t } = useTranslation()
     const dispatch = useDispatch()
     const toolbarVisible = { ...useSelector((state) => state.task.toolbarVisible) }
@@ -78,13 +78,17 @@ const TaskToolbar = (props) => {
     }
 
     const genarateCustomButton = () => {
-        return <div>
+        return <>
             {
-                hidenRight === true ? <ButtonFuntion onClick={() => onFullScreen(false)} isTextAndIcon={false} spacingLeft={1} type={EButtonType.add} />
+                hidenRight === true ? <ButtonFuntion onClick={() => onFullScreen(false)} isTextAndIcon={false} spacingLeft={1} type={EButtonType.split} />
                     : <ButtonFuntion onClick={() => onFullScreen(true)} isTextAndIcon={false} spacingLeft={1} type={EButtonType.full} />
             }
+            {
+                isViewList === true ? <ButtonFuntion onClick={() => onChangeViewMode(false)} isTextAndIcon={false} spacingLeft={1} type={EButtonType.board} />
+                    : <ButtonFuntion onClick={() => onChangeViewMode(true)} isTextAndIcon={false} spacingLeft={1} type={EButtonType.list} />
+            }
             <TaskTypeMenu taskTypes={taskTypes} />
-        </div>
+        </>
     }
 
     return <div>

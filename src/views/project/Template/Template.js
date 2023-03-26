@@ -17,7 +17,7 @@ const Template = React.memo(() => {
   }
 
   return (
-    <div>
+    <div className="body-content">
       <TemplateToolbar onApplyFilter={onApplyFilter} />
       <Resizable genderLeftComponent={genderLeftComponent} />
     </div>

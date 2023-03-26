@@ -15,7 +15,7 @@ const TaskType = React.memo(() => {
   }
 
   return (
-    <div>
+    <div className="body-content">
       <TaskTypeToolbar onApplyFilter={onApplyFilter} />
       <Resizable genderLeftComponent={genderLeftComponent} />
     </div>

@@ -1,21 +1,18 @@
-import React, { useEffect, useState, useRef } from "react"
+import React, { useEffect, useState } from "react"
 import ButtonIcon from "components/button/ButtonIcon"
 import { useTranslation } from "react-i18next"
-import { deleteData } from "services"
 import { useSelector, useDispatch } from "react-redux"
 import ConfirmDeleteDialog from "components/popup/confirmDeleteDialog"
-import { openMessage } from "stores/components/snackbar"
 import { ColorPickerControl } from "components/colorPicker"
-import { ERROR_CODE, baseUrl, EButtonIconType } from "configs"
+import { baseUrl, EButtonIconType } from "configs"
 import {
-  setPage,
-  setSort,
   setEditData,
-  setReload,
 } from "stores/views/master"
 import { open } from "components/popup/popupSlice"
-import { open as openAlert, onSubmit } from "stores/components/alert-dialog"
+import { open as openAlert } from "stores/components/alert-dialog"
 import GridData from "components/table/GridData"
+import Grid from "@mui/material/Grid"
+import { CheckBoxCellRender } from 'components/cellRender'
 
 const StatusGrid = React.memo((props) => {
   const dispatch = useDispatch()
@@ -29,12 +26,26 @@ const StatusGrid = React.memo((props) => {
       checkboxSelection: true,
       resizable: false, width: 40, headerCheckboxSelection: true, pinned: 'left'
     },
-    { field: "name", headerName: t("Tên trạng thái"),  flex: 1, pinned: 'left' },
+    { field: "name", headerName: t("Tên trạng thái"), flex: 1, pinned: 'left' },
     {
       field: "color",
       headerName: t("Màu sắc"),
       cellRenderer: (params) => {
         return <ColorPickerControl readOnly={true} defaultValue={params.value} />
+      }
+    },
+    {
+      field: "isStatusStart",
+      headerName: t("Trạng thái bắt đầu"),
+      cellRenderer: (params) => {
+        return <CheckBoxCellRender disabled={true} checked={params.value} />
+      }
+    },
+    {
+      field: "isStatusEnd",
+      headerName: t("Trạng thái kết thúc"),
+      cellRenderer: (params) => {
+        return <CheckBoxCellRender disabled={true} checked={params.value} />
       }
     },
     { field: "description", headerName: t("Mô tả"), flex: 2 },
@@ -60,11 +71,14 @@ const StatusGrid = React.memo((props) => {
 
         return (
           <strong>
-            <ButtonIcon onClick={onEditClick} type={EButtonIconType.edit}></ButtonIcon>
-            <ButtonIcon
-              onClick={onDeleteClick}
-              type={EButtonIconType.delete}
-            ></ButtonIcon>
+            <Grid container gap={1} direction='row'>
+              <Grid item xs>
+                <ButtonIcon onClick={onEditClick} type={EButtonIconType.edit} />
+              </Grid>
+              <Grid item xs>
+                <ButtonIcon onClick={onDeleteClick} type={EButtonIconType.delete} />
+              </Grid>
+            </Grid>
           </strong>
         )
       },
@@ -73,14 +87,14 @@ const StatusGrid = React.memo((props) => {
   ])
 
   return (
-    <div style={{ width: "100%", height: "100%" }}>
+    <>
       <ConfirmDeleteDialog url={baseUrl.jm_status} id={id} />
       <GridData
         columnVisibility={columnVisibility}
         columns={columns}
         filterModels={filterModels}
-        url={baseUrl.jm_status}></GridData>
-    </div>
+        url={baseUrl.jm_status} />
+    </>
   )
 })
 

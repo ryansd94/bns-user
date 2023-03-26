@@ -47,7 +47,7 @@ const DraggableElement = ({ prefix, columnHeader, controls = [], control, droppa
   }
 
   const genderElement = (item, index, control) => {
-    let component = <TextInput name={item.id} control={control} size={ESize.small}
+    let component = <TextInput required={item.required} name={item.id} control={control} size={ESize.small}
       inputProps={
         { readOnly: true, }
       }
@@ -56,19 +56,19 @@ const DraggableElement = ({ prefix, columnHeader, controls = [], control, droppa
       component = <span>{item.id}</span>
     }
     else if (item.type === EControlType.editor) {
-      component = (<EditorControl label={item.label} readOnly={true} name={item.id} control={control} className="editor-container" />)
+      component = (<EditorControl required={item.required} label={item.label} readOnly={true} name={item.id} control={control} className="editor-container" />)
     }
     else if (item.type === EControlType.select) {
-      component = (<SingleAddSelect fullWidth={true} label={item.label} name={item.id} control={control} />)
+      component = (<SingleAddSelect required={item.required} fullWidth={true} label={item.label} name={item.id} control={control} />)
     }
     else if (item.type === EControlType.dateTimePicker) {
-      component = (<DatePickerInput label={item.label} formatDate={EFormatDate.ddmmyyyy_hhmm} disabled={true} name={item.id} control={control} />)
+      component = (<DatePickerInput required={item.required} label={item.label} formatDate={EFormatDate.ddmmyyyy_hhmm} disabled={true} name={item.id} control={control} />)
     }
     else if (item.type === EControlType.datePicker) {
-      component = (<DatePickerInput label={item.label} disabled={true} name={item.id} control={control} />)
+      component = (<DatePickerInput required={item.required} label={item.label} disabled={true} name={item.id} control={control} />)
     }
     else if (item.type === EControlType.number) {
-      component = (<NumberInput label={item.label} disabled={true} name={item.id} control={control} />)
+      component = (<NumberInput required={item.required} label={item.label} disabled={true} name={item.id} control={control} />)
     }
     else if (item.type === EControlType.group) {
       component = <AccordionControl
@@ -96,6 +96,7 @@ const DraggableElement = ({ prefix, columnHeader, controls = [], control, droppa
       component = <AccordionControl
         isExpand={true}
         title={item.label}
+        required={item.required}
         name={item.name}
         className='task-group-container'
         details={
@@ -107,6 +108,7 @@ const DraggableElement = ({ prefix, columnHeader, controls = [], control, droppa
       component = <AccordionControl
         isExpand={true}
         title={item.label}
+        required={item.required}
         name={item.name}
         className='task-group-container'
         details={
@@ -117,6 +119,7 @@ const DraggableElement = ({ prefix, columnHeader, controls = [], control, droppa
     else if (item.type === EControlType.upload) {
       component = <AccordionControl
         isExpand={true}
+        required={item.required}
         title={item.label}
         name={item.name}
         className='task-group-container'
@@ -129,7 +132,7 @@ const DraggableElement = ({ prefix, columnHeader, controls = [], control, droppa
       />
     }
     else if (item.type === EControlType.comment) {
-      component = <Comment label={item.label} name={item.id} control={control}/>
+      component = <Comment label={item.label} name={item.id} control={control} />
     }
 
     return (

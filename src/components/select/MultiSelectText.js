@@ -4,7 +4,6 @@ import TextField from "@mui/material/TextField";
 import { Controller } from "react-hook-form";
 import Skeleton from "@mui/material/Skeleton";
 import { useSelector } from "react-redux";
-import Email from "react-email-autocomplete";
 const MultiSelectText = React.memo(
   ({ control, field, required, data, label, name, placeholder }) => {
     const loadingPopup = useSelector((state) => state.master.loadingPopup);

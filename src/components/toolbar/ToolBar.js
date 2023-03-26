@@ -44,7 +44,7 @@ const ToolBar = React.memo(props => {
     return (
         <div>
             <div className="row">
-                <div className="col-md-12 grid-margin justify-content-end">
+                <div className="col-md-12 justify-content-end">
                     <ConfigColumn onColumnConfigChange={onColumnConfigChange} columnModel={columnModel} anchorEl={anchorElColumn} handleClose={handleCloseColumn}></ConfigColumn>
                     <ButtonFuntion spacingLeft={0} visible={visible.column} onClick={handleClickColumn} type={EButtonType.columnConfig} />
                     <ButtonFuntion spacingLeft={1} visible={visible.column} open={anchorElFilter} onClick={handleClickFilter} type={EButtonType.filter} />

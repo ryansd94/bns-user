@@ -23,17 +23,33 @@ export const cellFormatDateTime = (params) => {
     return formatDateTime(params.value)
 }
 
-export const deepFind = (arr, search) => {
+export const deepFind = (arr, search, keyChildItem = 'childrens') => {
     for (var obj of arr) {
         if (search(obj)) {
             return obj
         }
-        if (obj.childrens) {
-            var deepResult = deepFind(obj.childrens, search)
+        if (obj[keyChildItem]) {
+            var deepResult = deepFind(obj[keyChildItem], search)
             if (deepResult) {
                 return deepResult
             }
         }
     }
     return null
+}
+
+export const deepFindAll = (arr, search, keyChildItem = 'childrens') => {
+    let data = []
+    for (var obj of arr) {
+        if (search(obj)) {
+            data.push(obj)
+        }
+        if (obj[keyChildItem]) {
+            var deepResult = deepFind(obj[keyChildItem], search)
+            if (deepResult) {
+                data.push(deepResult)
+            }
+        }
+    }
+    return data
 }

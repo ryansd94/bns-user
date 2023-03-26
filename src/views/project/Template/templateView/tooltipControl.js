@@ -3,28 +3,43 @@ import Grid from "@mui/material/Grid"
 import ButtonIcon from "components/button/ButtonIcon"
 import { EButtonIconType } from 'configs'
 import { PopoverControl } from 'components/popover'
-import TemplateAddControl from './addControl'
+import AddControl from './addControl'
+import SettingControl from './settingControl'
 
 const TooltipControl = React.memo((props) => {
-    const { onAction, index, isLastControl, onAddControlSubmit, prefix, item, templateColumnData = [] } = props
-    const [openPopover, setOpenPopover] = useState(null)
+    const { onAction, index, isLastControl, onAddControlSubmit, onSettingSubmit, prefix, item, templateColumnData = [] } = props
+    const [openAdd, setOpenAdd] = useState(null)
+    const [openSetting, setOpenSetting] = useState(null)
 
-    const handlePopoverOpen = (event) => {
-        setOpenPopover(event.currentTarget);
+    const handleAddOpen = (event) => {
+        setOpenAdd(event.currentTarget);
     }
 
-    const handlePopoverClose = () => {
-        setOpenPopover(null);
+    const handleAddClose = () => {
+        setOpenAdd(null);
+    }
+    
+    const handleSettingOpen = (event) => {
+        setOpenSetting(event.currentTarget);
     }
 
-    const genderPopoverControl = () => {
-        return <TemplateAddControl templateColumnData={templateColumnData} onApply={onAddControlSubmit} prefix={prefix} index={index} item={item} />
+    const handleSettingClose = (data, index, prefix, item) => {
+        setOpenSetting(null)
+        onSettingSubmit(data, index, prefix, item)
     }
 
-    return <Grid container spacing={1} style={{ padding: '0.5rem' }}>
+    const renderAddControl = () => {
+        return <AddControl templateColumnData={templateColumnData} onApply={onAddControlSubmit} prefix={prefix} index={index} item={item} />
+    }
+
+    const renderSettingControl = () => {
+        return <SettingControl onApply={(data, index, prefix, item) => handleSettingClose(data, index, prefix, item)} prefix={prefix} index={index} item={item} />
+    }
+
+    return <Grid container gap={2} style={{ padding: '1rem' }}>
         <Grid item>
-            <ButtonIcon onClick={handlePopoverOpen} color="success" type={EButtonIconType.add} />
-            <PopoverControl isCLoseOnHover={true} genderBody={genderPopoverControl} onClose={handlePopoverClose} anchorEl={openPopover} />
+            <ButtonIcon onClick={handleAddOpen} color="success" type={EButtonIconType.add} />
+            <PopoverControl isCLoseOnHover={true} genderBody={renderAddControl} onClose={handleAddClose} anchorEl={openAdd} />
         </Grid>
         <Grid item>
             <ButtonIcon color="primary" disabled={index == 0 ? true : false} onClick={() => onAction(EButtonIconType.up)} type={EButtonIconType.up} />
@@ -34,6 +49,10 @@ const TooltipControl = React.memo((props) => {
         </Grid>
         <Grid item>
             <ButtonIcon color="error" onClick={() => onAction(EButtonIconType.delete)} type={EButtonIconType.delete} />
+        </Grid>
+        <Grid item>
+            <ButtonIcon onClick={handleSettingOpen} type={EButtonIconType.setting} />
+            <PopoverControl isCLoseOnHover={true} genderBody={renderSettingControl} onClose={handleSettingClose} anchorEl={openSetting} />
         </Grid>
     </Grid>
 })

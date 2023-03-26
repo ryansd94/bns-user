@@ -56,7 +56,7 @@ class Sidebar extends Component {
     }
     render() {
         return (
-            <nav className="sidebar sidebar-offcanvas" id="sidebar">
+            <nav className="sidebar sidebar-offcanvas ofy-auto" id="sidebar">
                 <ul className="nav">
                     <li className="nav-item nav-category"><Trans>Main</Trans></li>
                     <li className={this.isPathActive('/dashboard') ? 'nav-item active' : 'nav-item'}>
@@ -66,7 +66,7 @@ class Sidebar extends Component {
                         </Link>
                     </li>
                     <li className="nav-item nav-category"><Trans>Danh mục</Trans></li>
-                    <li className={this.isPathActive('/category/area') || this.isPathActive('/category/branch')? 'nav-item active' : 'nav-item'}>
+                    <li className={this.isPathActive('/category/area') || this.isPathActive('/category/branch')? 'nav-item active hover-open' : 'nav-item hover-open'}>
                         <div className={this.state.basicUiMenuOpen ? 'nav-link menu-expanded' : 'nav-link'} onClick={() => this.toggleMenuState('basicUiMenuOpen')} data-toggle="collapse">
                             <span className="icon-bg"><i className="mdi mdi-crosshairs-gps menu-icon"></i></span>
                             <span className="menu-title"><Trans>Danh mục</Trans></span>

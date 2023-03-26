@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useMemo, useCallback } from "react"
+import React from "react"
 import Grid from "@mui/material/Grid"
 import { EControlType } from 'configs'
 import { RadioGroupControl } from 'components/radio'
@@ -10,8 +10,8 @@ import SingleAddSelect from 'components/select/SingleAddSelect'
 import ButtonFuntion from 'components/button/ButtonFuntion'
 import { EButtonType } from 'configs'
 
-const TemplateAddControl = React.memo((props) => {
-    const { onAction, index, onApply, prefix, item, templateColumnData = [] } = props
+const AddControl = React.memo((props) => {
+    const { index, onApply, prefix, item, templateColumnData = [] } = props
     const { t } = useTranslation()
     const validationSchema = Yup.object().shape({
         // title: Yup.string().required(t(message.error.fieldNotEmpty))
@@ -75,4 +75,4 @@ const TemplateAddControl = React.memo((props) => {
         </Grid>
     </Grid>
 })
-export default TemplateAddControl
+export default AddControl

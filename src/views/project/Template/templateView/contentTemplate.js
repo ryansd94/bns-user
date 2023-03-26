@@ -14,6 +14,7 @@ import { v4 as uuidv4 } from 'uuid'
 import AssignSelect from 'components/select/assignSelect'
 import StatusSelect from 'components/select/statusSelect'
 import _ from "lodash"
+import { deepFind } from "helpers/commonFunction"
 
 const DragDropContextContainer = styled.div`
 display:flex;
@@ -78,6 +79,7 @@ const generateListTitle = () => {
         type: EControlType.editor,
         name: 'description',
         label: 'Mô tả',
+        required: true,
         default: true
       },
       {
@@ -195,15 +197,13 @@ const ContentTemplate = (props) => {
   console.log("render ContentTemplate")
   const { setValue, dataTemplate = null, statusData = [], templateColumnData = [] } = props
   const theme = useTheme()
-  const largeScreen = useMediaQuery(theme.breakpoints.up('md'))
   const [elementsTitle, setElementsTitle] = useState(generateListTitle())
   const { t } = useTranslation()
   const {
     control
   } = useForm({
     defaultValues: {
-      assign: [{ id: 1, name: 'Người nhận 1' }],
-      status: { id: 1, name: 'Mới', color: '#1976d2' }
+      assign: [1]
     }
   })
 
@@ -369,9 +369,20 @@ const ContentTemplate = (props) => {
       onMoveUpControl(item, prefix)
     } else if (type === EButtonIconType.down) {
       onMoveDownControl(item, prefix)
-    } else if (type === EButtonIconType.add) {
-
     }
+  }
+
+  const onSettingSubmit = (data, index, prefix, item) => {
+    let listCopy = { ...elementsTitle }
+    let sourceList = listCopy[prefix]
+    let settingItem = deepFind(sourceList, function (obj) {
+      return obj.id === item.id
+    }, 'items')
+    if (!_.isNil(settingItem)) {
+      settingItem.label = data.label
+      settingItem.required = data.required
+    }
+    setElementsTitle(listCopy)
   }
 
   const onAddControlSubmit = (data, index, prefix, item) => {
@@ -434,6 +445,7 @@ const ContentTemplate = (props) => {
     return <TooltipControl
       templateColumnData={templateColumnData}
       onAddControlSubmit={onAddControlSubmit}
+      onSettingSubmit={onSettingSubmit}
       isLastControl={isLastControl}
       index={index}
       item={item}
@@ -453,7 +465,7 @@ const ContentTemplate = (props) => {
             <AssignSelect
               control={control}
               name={'assign'}
-              data={[{ id: 1, name: 'Người nhận 1' }, { id: 2, name: 'Người nhận 2' }, { id: 3, name: 'Người nhận 3' }]}
+              data={[{ id: 1, fullName: 'Người nhận 1' }, { id: 2, fullName: 'Người nhận 2' }, { id: 3, fullName: 'Người nhận 3' }]}
             />
           </Grid>
           <Grid item>
@@ -464,7 +476,7 @@ const ContentTemplate = (props) => {
             />
           </Grid>
         </Grid>
-        <Grid item>
+        <Grid item xs>
           <DragDropContextContainer>
             <DragDropContext onDragEnd={onDragEndTitle}>
               <Grid className="task-column-content" container spacing={2} item xs={12} direction="row">
@@ -484,14 +496,14 @@ const ContentTemplate = (props) => {
                     controls={getElementControls("column2")}
                   />
                 </Grid>
-                <Grid key={1} item xs={12} sm={3}>
+                {/* <Grid key={1} item xs={12} sm={3}>
                   <DraggableElement
                     genderPopoverControl={genderPopoverControl}
                     prefix={"column3"}
                     control={control}
                     controls={getElementControls("column3")}
                   />
-                </Grid>
+                </Grid> */}
               </Grid>
             </DragDropContext>
           </DragDropContextContainer>

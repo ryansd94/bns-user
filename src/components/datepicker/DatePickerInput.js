@@ -11,8 +11,10 @@ import Skeleton from "@mui/material/Skeleton"
 import { _TemplateVariant, EVariant, _ControlSizeDefault } from "configs"
 import { LabelControl } from 'components/label'
 import _ from 'lodash'
+import { FormHelperText } from '@mui/material'
 
-const DatePickerInput = ({ size, onChange, disabled, control, name, label, formatDate = EFormatDate.ddmmyyyy, isViewMode = false }) => {
+const DatePickerInput = ({ size, onChange, disabled, control, name, label,
+    formatDate = EFormatDate.ddmmyyyy, isViewMode = false, required }) => {
     const loadingPopup = useSelector((state) => state.master.loadingPopup)
     const { t } = useTranslation()
     const [value, setValue] = React.useState(null)
@@ -28,7 +30,7 @@ const DatePickerInput = ({ size, onChange, disabled, control, name, label, forma
                         size={size ? size : _ControlSizeDefault}
                     >
                         <div className="containerControl">
-                            {_TemplateVariant === EVariant.normal ? (label ? <LabelControl label={label} /> : '') : ''}
+                            {_TemplateVariant === EVariant.normal ? (label ? <LabelControl required={required} label={label} /> : '') : ''}
                             <LocalizationProvider dateAdapter={AdapterDateFns}>
                                 <DesktopDatePicker
                                     clearable
@@ -51,7 +53,10 @@ const DatePickerInput = ({ size, onChange, disabled, control, name, label, forma
 
                 ) : (
                     <div className="containerControl">
-                        {_TemplateVariant === EVariant.normal ? (label ? <LabelControl label={label} /> : '') : ''}
+                        {_TemplateVariant === EVariant.normal ? (label ? <LabelControl required={required} label={label} /> : '') : ''}
+                        {
+                            isViewMode === false ? <FormHelperText children={error?.message} error={!_.isNil(error) ? true : false} /> : ''
+                        }
                         {
                             isViewMode === true ? (value || field?.value) : <LocalizationProvider dateAdapter={AdapterDateFns}>
                                 <DesktopDatePicker

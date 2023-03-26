@@ -12,6 +12,7 @@ function TabPanel(props) {
 
   return (
     <div
+      className='tab-content'
       role="tabpanel"
       hidden={value !== index}
       id={`full-width-tabpanel-${index}`}
@@ -71,7 +72,7 @@ const AntTab = styled((props) => <Tab disableRipple {...props} />)(({ theme }) =
 
 
 const TabControl = (props) => {
-  const { tabItems = [] } = props
+  const { tabItems = [], classNameSwipeableView } = props
   const indexDefault = _.findIndex(tabItems, (x) => x.isActive)
   const [value, setValue] = React.useState(indexDefault != -1 ? indexDefault : 0)
 
@@ -95,10 +96,9 @@ const TabControl = (props) => {
         </AntTabs>
       </div>
       <SwipeableViews
-        className='flex-column'
+        className={`flex-column ofx-hiden ${classNameSwipeableView}`}
         animateTransitions={false}
         index={value}
-        style={{ overflow: 'hidden' }}
         onChangeIndex={handleChangeIndex}
       >
         {

@@ -1,19 +1,15 @@
 import React, { useEffect, useState, useMemo, useCallback, useLayoutEffect } from "react"
-
-import Popup from "components/popup/Popup"
 import Grid from "@mui/material/Grid"
 import ButtonDetail from "components/button/ButtonDetail"
-
+import { TabControl } from 'components/tab'
 import { useTranslation } from "react-i18next"
 import { useSelector, useDispatch } from "react-redux"
 import * as Yup from "yup"
-import { useForm, useFieldArray } from "react-hook-form"
+import { useForm } from "react-hook-form"
 import { yupResolver } from "@hookform/resolvers/yup"
 import StatusTemplate from './statusTemplate'
 import InfoTemplate from './info'
 import Box from "@mui/material/Box"
-import { v4 as uuidv4 } from 'uuid'
-import { AccordionControl } from 'components/accordion'
 import ContentTemplate from './contentTemplate'
 import { save, getByID, get } from "services"
 import { loading as loadingButton } from "stores/components/button"
@@ -23,6 +19,7 @@ import { useParams } from 'react-router'
 import {
   setLoadingPopup,
 } from "stores/views/master"
+import _ from 'lodash'
 
 const TemplateAdd = React.memo((props) => {
   console.log("render TemplateAdd")
@@ -35,6 +32,7 @@ const TemplateAdd = React.memo((props) => {
   const validationSchema = Yup.object().shape({
     name: Yup.string().required(t(message.error.fieldNotEmpty)),
   })
+  const [disabled, setDisabled] = useState(true)
 
   const {
     control,
@@ -42,7 +40,7 @@ const TemplateAdd = React.memo((props) => {
     reset,
     setValue,
     getValues,
-    formState: { errors },
+    formState,
   } = useForm({
     resolver: yupResolver(validationSchema),
     defaultValues: {
@@ -54,16 +52,22 @@ const TemplateAdd = React.memo((props) => {
   })
 
   useEffect(() => {
-    // reset()
     if (id) {
       fetchData()
     }
-  }, [])
-
-  useEffect(() => {
     fetchStatus()
     fetchTemplateColumn()
   }, [])
+
+  useEffect(() => {
+    if (id) {
+      if (!_.isNil(formState) && !_.isEmpty(formState.dirtyFields)) {
+        setDisabled(false)
+      } else {
+        setDisabled(true)
+      }
+    }
+  }, [formState])
 
   const fetchStatus = async () => {
     await get(baseUrl.jm_status, {
@@ -109,61 +113,51 @@ const TemplateAdd = React.memo((props) => {
     dispatch(openMessage({ ...res }))
   }
 
+  const renderTabInfo = () => {
+    return <InfoTemplate dataTemplate={dataTemplate} control={control} />
+  }
+
+  const renderTabStatus = () => {
+    return <StatusTemplate statusData={statusData} id={id} control={control} getValues={getValues} handleSubmit={handleSubmit} setValue={setValue} listStatus={(dataTemplate && dataTemplate.status) || []} />
+  }
+
+  const renderView = () => {
+    return <ContentTemplate templateColumnData={templateColumnData} statusData={statusData} dataTemplate={dataTemplate} control={control} setValue={setValue} />
+  }
+
+  const getTabItems = () => {
+    const data = [
+      {
+        label: t('Thông tin cơ bản'),
+        Content: renderTabInfo()
+      },
+      {
+        label: t('Danh sách trạng thái'),
+        Content: renderTabStatus()
+      },
+      {
+        label: t('Giao diện'),
+        Content: renderView()
+      }
+    ]
+    return data
+  }
+
   return (
-    <Grid container direction="row" spacing={2}>
-      <Grid item xs={12}>
-        <ButtonDetail
-          onClick={handleSubmit(onSubmit)} type={"Save"} />
+    <>
+      <Grid className="overflow-hidden flex-column no-wrap" container gap={2}>
+        <Grid item xs={12} className='flex-basis-auto'>
+          <ButtonDetail
+            disabled={!_.isNil(id) ? disabled : false}
+            onClick={handleSubmit(onSubmit)} type={"Save"} />
+        </Grid>
+        <div className="containerNew">
+          <Box className="flex-column flex-row overflow-hidden">
+            <TabControl classNameSwipeableView={'ofy-auto'} tabItems={getTabItems()} />
+          </Box>
+        </div>
       </Grid>
-      <Grid item xs={6}>
-        <AccordionControl
-          isExpand={true}
-          title="Thông tin cơ bản"
-          name="info"
-          details={
-            <Box className="box-container">
-              <Grid container direction="column" >
-                <Grid item xs={12}  >
-                  <InfoTemplate dataTemplate={dataTemplate} control={control} />
-                </Grid>
-              </Grid>
-            </Box>
-          }
-        />
-      </Grid>
-      <Grid item xs={6}  >
-        <AccordionControl
-          isExpand={true}
-          title="Danh sách trạng thái"
-          name="status"
-          details={
-            <Box className="box-container">
-              <Grid container direction="column" >
-                <Grid item xs={12}  >
-                  <StatusTemplate statusData={statusData} id={id} control={control} getValues={getValues} handleSubmit={handleSubmit} setValue={setValue} listStatus={(dataTemplate && dataTemplate.status) || []} />
-                </Grid>
-              </Grid>
-            </Box>
-          }
-        />
-      </Grid>
-      <Grid item xs={12}  >
-        <AccordionControl
-          isExpand={true}
-          title="Giao diện"
-          name="template"
-          details={
-            <Box className="box-container">
-              <Grid container direction="column" >
-                <Grid item xs={12}  >
-                  <ContentTemplate templateColumnData={templateColumnData} statusData={statusData} dataTemplate={dataTemplate} control={control} setValue={setValue} />
-                </Grid>
-              </Grid>
-            </Box>
-          }
-        />
-      </Grid>
-    </Grid>
+    </>
   )
 })
 

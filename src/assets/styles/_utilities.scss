@@ -206,3 +206,35 @@
 .ofy-hiden {
   overflow-y: hidden;
 }
+.ofy-auto {
+  overflow-y: auto;
+}
+.none {
+  display: none;
+}
+.flex-column {
+  display: flex;
+  flex-direction: column;
+}
+.flex-row {
+  display: flex;
+  flex-direction: row;
+}
+.overflow-hidden {
+  overflow: hidden;
+}
+.flex {
+  display: flex;
+}
+.no-wrap {
+  flex-wrap: nowrap !important;
+}
+.flex-basis-auto {
+  flex-basis: auto !important;
+}
+.of-auto {
+  overflow: auto;
+}
+.align-items-center {
+    align-items: center;
+}

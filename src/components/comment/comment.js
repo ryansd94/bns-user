@@ -4,9 +4,7 @@ import Grid from "@mui/material/Grid"
 import { AccordionControl } from 'components/accordion'
 import { CommentByUser, ListComment } from './'
 import { Controller } from "react-hook-form"
-import {
-    getUserInfo
-} from "helpers"
+import { getUserInfo } from "helpers"
 
 const Comment = (props) => {
     const { label, name, control, getValues, setValue, taskId } = props

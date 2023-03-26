@@ -1,5 +1,6 @@
 import { createInstance, handleError } from "services/base"
 import { buildQueryString } from "helpers"
+import { EStatusResponse } from 'configs/constants'
 import _ from 'lodash'
 
 const services = createInstance("/api")
@@ -36,11 +37,11 @@ export const get = async (baseUrl, param = null) => {
     return res
   } catch (error) {
     const { request, response } = error
-    if (request) {
-      return request
-    }
     if (response) {
-      return response
+      if (response.status === EStatusResponse.unauthorized) {
+        window.location.href = "http://localhost:3000/login";
+      }
+      return null
     }
     return error
   }

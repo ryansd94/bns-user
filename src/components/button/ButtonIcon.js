@@ -21,7 +21,9 @@ import {
   IconDown,
   IconUpload,
   IconComment,
-  IconFullScreen
+  IconFullScreen,
+  IconRequire,
+  IconSetting
 } from "components/icon/icon"
 import { EColor } from 'configs/constants'
 
@@ -89,6 +91,12 @@ const ButtonIcon = (props) => {
       case EButtonIconType.fullScreen:
         setTitle(t("Full màn hình"))
         break
+      case EButtonIconType.require:
+        setTitle(t("Bắt buộc nhập"))
+        break
+      case EButtonIconType.setting:
+        setTitle(t("Thiết lập"))
+        break
       default:
         break
     }
@@ -134,6 +142,10 @@ const ButtonIcon = (props) => {
     icon = <IconComment style={{ width: width, height: height }} />
   else if (type == EButtonIconType.fullScreen)
     icon = <IconFullScreen style={{ width: width, height: height }} />
+  else if (type == EButtonIconType.require)
+    icon = <IconRequire style={{ width: width, height: height }} />
+  else if (type == EButtonIconType.setting)
+    icon = <IconSetting style={{ width: width, height: height }} />
 
   button = (
     <IconButton

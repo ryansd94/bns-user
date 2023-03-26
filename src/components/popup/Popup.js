@@ -52,6 +52,7 @@ const BootstrapDialogTitle = (props) => {
 BootstrapDialogTitle.propTypes = {
   children: PropTypes.node,
 }
+
 function PaperComponent(props) {
   return (
     <Draggable
@@ -62,11 +63,13 @@ function PaperComponent(props) {
     </Draggable>
   )
 }
+
 const Popup = React.memo((props) => {
   const dispatch = useDispatch()
   const { ModalBody, open = null, title = null,
     onSave, widthSize = "sm", reset, typeSave = EButtonDetailType.save,
     isShowFooter = true, handleClose = null } = props
+
   const onClose = () => {
     if (_.isNil(handleClose)) {
       dispatch(close())

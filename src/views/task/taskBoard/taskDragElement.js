@@ -46,18 +46,30 @@ const TaskDragElement = ({ item, columnHeader, controls = [], droppableClassName
   }
 
   const renderRowInfo = (item) => {
-    let dueDate = ''
+    let dueDateItem = ''
     if (!_.isNil(item.dueDate)) {
-      dueDate = <Grid item>
-        <LabelDateControl value={formatDateTime(item.dueDate)} name={t('Ngày hết hạn')} />
+      let classDueDate = 'task-date-item'
+      const dueDate =new Date(item.dueDate)
+      const dateNow =new Date()
+      if (dueDate.toDateString() === dateNow.toDateString()) {
+        classDueDate = 'task-date-today-item'
+      }
+      else if (dueDate < dateNow) {
+        classDueDate = 'task-date-late-item'
+      }
+      dueDateItem = <Grid item>
+        <LabelDateControl className={classDueDate} value={formatDateTime(dueDate)} name={t('Ngày hết hạn')} />
       </Grid>
     }
-    return !_.isEmpty(dueDate) ? <Grid gap={1} item container direction='row'>
-      {dueDate}
+    return <Grid item container className="align-items-center" xs direction='row'> {
+      !_.isEmpty(dueDateItem) ? <Grid gap={1} item container>
+        {dueDateItem}
+      </Grid> : ''
+    }
       <Grid item>
         <TaskNoteItem item={item} title={t('Mô tả')} />
       </Grid>
-    </Grid> : ''
+    </Grid>
   }
 
   const renderRowAssign = (item) => {

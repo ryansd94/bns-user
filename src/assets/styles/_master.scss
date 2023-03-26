@@ -308,9 +308,6 @@ div[data-rbd-draggable-context-id] {
 .f-right {
     float: right;
 }
-.align-items-center {
-    align-items: center;
-}
 .span-item {
     overflow: hidden;
     text-overflow: ellipsis;
@@ -375,7 +372,7 @@ span[data-testid="alphaslider"] {
 // }
 
 .ag-body-viewport {
-    height: calc(100vh - 280px) !important;
+    height: 100% !important;
     overflow: auto !important;
 }
 .MuiAutocomplete-inputRoot {
@@ -571,25 +568,40 @@ a:hover {
 .task-board-header {
     padding: 1rem 0 0 1rem;
 }
-.flex-column {
-    display: flex;
-    flex-direction: column;
-}
-.flex-row {
-    display: flex;
-    flex-direction: row;
-}
-.overflow-hidden {
-    overflow: hidden;
-}
-.react-swipeable-view-container {
-    flex-flow: column nowrap;
-    flex-direction: column !important;
-    overflow: auto;
-}
 .ql-editor {
     padding: 1rem !important;
 }
 .editor-popover {
     min-width: 300px;
+}
+.grid-action {
+    padding: 0 !important;
+}
+.task-date-today-item {
+    padding: 10px;
+    background: $task-date-today-item;
+    color: white;
+    border-radius: 4px;
+}
+.task-date-item {
+    padding: 10px;
+    background: $task-date-item;
+    color: white;
+    border-radius: 4px;
+}
+.task-date-late-item {
+    padding: 10px;
+    background: $task-date-late-item;
+    color: white;
+    border-radius: 4px;
+}
+.grid-wrapper {
+    display: flex;
+}
+.body-content {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+    overflow: hidden;
+    gap: 1rem;
 }

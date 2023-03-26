@@ -60,7 +60,7 @@ const ButtonDetail = (props) => {
         color={color != null ? color : "primary"}
         autoFocus={autoFocus}
         variant="contained"
-        disabled={defaultLoading ? loading : disabled}
+        disabled={(defaultLoading ? loading : false) || disabled}
         className={className}
       >
         {text}

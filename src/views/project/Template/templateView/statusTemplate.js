@@ -56,9 +56,6 @@ const StatusTemplate = React.memo((props) => {
         const newStatus = statusData && statusData.length > 0 && { ...statusData[0] } || {}
         append(newStatus)
         statusTemplate.splice(statusTemplate.length > 0 ? statusTemplate.length + 1 : 0, 0, newStatus)
-        // const status = [...statusTemplate]
-        //statusTemplate.push(newStatus)
-        //setStatusTemplate([...x])
     }
 
     const onStatusChange = (index, value) => {
@@ -81,9 +78,6 @@ const StatusTemplate = React.memo((props) => {
         return (
             <Grid key={uuidv4()} item xs={12} container spacing={2} >
                 <Grid item xs={5}>
-                    {/* <TextInput fullWidth={false} name={`status[${index}].name`} 
-                    control={control} defaultValue={statusItem.name} /> */}
-                    {/* <SingleSelect fullWidth={true} data={statusData} name={`status[${index}].name`} control={control} /> */}
                     <StatusSelect
                         onChange={(value) => onStatusChange(index, value)}
                         options={[...statusData]}
@@ -92,9 +86,6 @@ const StatusTemplate = React.memo((props) => {
                         control={control}
                     />
                 </Grid>
-                {/* <Grid item  >
-                    <ColorPicker control={control} name={`status[${index}].color`} value={statusItem.color} onChange={(e) => onColorChange(e, index, statusItem)} hideTextfield defaultValue="transparent" />
-                </Grid> */}
                 <Grid item  >
                     <ButtonIcon
                         onClick={() => onStatusDelete(index, statusItem.id)}
@@ -107,20 +98,13 @@ const StatusTemplate = React.memo((props) => {
     }
 
     return (
-        <Grid container direction="column" item rowSpacing={2} >
-            <Grid item container xs={12} spacing={2} >
+        <Grid container gap={2} direction="column" item>
+            <Grid item container xs={12}>
                 <Grid className="flex-container" container item xs={5}>
                     <span className="text-note">
                         {t("Trạng thái")}
                     </span>
                     <ButtonIcon showTooltip={false} onClick={addNew} type={EButtonIconType.add} />
-                </Grid>
-                {/* <Grid className="flex-container" item  >
-                    <span className="text-note">
-                        {t("Màu sắc")}
-                    </span>
-                </Grid> */}
-                <Grid item >
                 </Grid>
             </Grid>
             {statusTemplate && statusTemplate.map((statusItem, index) => { return genderListStatus(statusItem, index) })}

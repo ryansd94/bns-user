@@ -9,9 +9,10 @@ import { uploadFile } from 'helpers'
 import _ from 'lodash'
 import { getUserInfo } from "helpers"
 import ReactQuill, { Quill } from "react-quill"
-import "react-quill/dist/quill.snow.css"
+// import "react-quill/dist/quill.snow.css"
 import "quill-mention"
 import ImageResize from 'quill-image-resize-module-react'
+import { FormHelperText } from '@mui/material'
 
 // Add sizes to whitelist and register them
 const Size = Quill.import("formats/size")
@@ -134,7 +135,7 @@ export const EditorToolbar = ({ hide, id }) => {
 
 const EditorControl = (props) => {
     const { label, name, control, size, isShowAccordion = true, onChange, value = null,
-        readOnly, className, userSuggest = [], isFullScreen = false } = props
+        readOnly, className, userSuggest = [], isFullScreen = false, isShowPlaceholder = true, required } = props
     const quillRef = useRef()
     const loadingPopup = useSelector((state) => state.master.loadingPopup)
     const user = getUserInfo()
@@ -253,9 +254,10 @@ const EditorControl = (props) => {
         }
     }
 
-    const renderEditor = (field) => {
+    const renderEditor = (field, error) => {
 
         return <div className={className} style={{ marginTop: isShowAccordion ? '1rem' : '0' }}>
+            <FormHelperText children={error?.message} error={!_.isNil(error) ? true : false} />
             <EditorToolbar hide={hideToolbar} id={`rte${id}`} />
             <ReactQuill
                 id={`rte${id}`}
@@ -270,7 +272,7 @@ const EditorControl = (props) => {
                     field && field.onChange(valueFormat)
                     onChange && onChange(valueFormat)
                 }}
-                placeholder={"Write something awesome..."}
+                placeholder={isShowPlaceholder ? "Write something awesome..." : ''}
                 modules={modules}
                 formats={formats}
             />
@@ -291,10 +293,11 @@ const EditorControl = (props) => {
                             <AccordionControl
                                 isFullScreen={isFullScreen}
                                 isExpand={true}
+                                required={required}
                                 title={label}
                                 name={name}
                                 details={
-                                    renderEditor(field)
+                                    renderEditor(field, error)
                                 }
                             />
                         </Skeleton>
@@ -303,12 +306,13 @@ const EditorControl = (props) => {
                             isFullScreen={isFullScreen}
                             isExpand={true}
                             title={label}
+                            required={required}
                             name={name}
                             details={
-                                renderEditor(field)
+                                renderEditor(field, error)
                             }
                         /> :
-                            renderEditor(field)
+                            renderEditor(field, error)
                     )
                 }
                 control={control}

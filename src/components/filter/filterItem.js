@@ -226,8 +226,8 @@ const FilterItem = React.memo((props) => {
     }, [conditionValue])
 
     return (
-        <Grid key={name} item container spacing={2} >
-            <Grid item width={200}>
+        <Grid key={name} item container gap={2} >
+            <Grid width={200}>
                 <SingleAddSelect
                     size={size}
                     onSelectChange={onColumnChange}
@@ -238,7 +238,7 @@ const FilterItem = React.memo((props) => {
                 >
                 </SingleAddSelect>
             </Grid>
-            <Grid item width={200}  >
+            <Grid width={200}  >
                 <SingleAddSelect
                     size={size}
                     onSelectChange={onConditionChange}
@@ -249,10 +249,10 @@ const FilterItem = React.memo((props) => {
                     data={conditionOption}>
                 </SingleAddSelect>
             </Grid>
-            <Grid display={display} item minWidth={width}  >
+            <Grid display={display} minWidth={width}  >
                 {valueComponent}
             </Grid>
-            <Grid item style={{ display: 'flex', alignItems: 'center' }}  >
+            <Grid style={{ display: 'flex', alignItems: 'center' }}  >
                 <ButtonIcon onClick={onDelete} type={EButtonIconType.delete}></ButtonIcon>
             </Grid>
         </Grid>

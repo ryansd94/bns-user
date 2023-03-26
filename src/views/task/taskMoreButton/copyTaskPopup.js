@@ -2,17 +2,14 @@
 import React, { useEffect, useState } from "react"
 import Popup from "components/popup/Popup"
 import { useTranslation } from "react-i18next"
-import { useSelector, useDispatch } from "react-redux"
+import { useDispatch } from "react-redux"
 import * as Yup from "yup"
 import { useForm } from "react-hook-form"
 import { yupResolver } from "@hookform/resolvers/yup"
-import { save, get } from "services"
-import { baseUrl, EButtonDetailType, message, ERROR_CODE } from "configs"
+import { EButtonDetailType, message, ERROR_CODE } from "configs"
 import SingleAddSelect from "components/select/SingleAddSelect"
 import Grid from "@mui/material/Grid"
 import _ from 'lodash'
-import { loading as loadingButton } from "stores/components/button"
-import { openMessage } from "stores/components/snackbar"
 import { LabelControl } from 'components/label'
 
 const CopyTaskPopup = React.memo((props) => {

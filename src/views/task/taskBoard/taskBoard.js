@@ -2,32 +2,40 @@ import React, { useEffect, useState, useMemo } from "react"
 import Grid from "@mui/material/Grid"
 import { get, save } from "services"
 import { baseUrl, ERROR_CODE } from "configs"
-import _ from "lodash"
 import { DragDropContext } from "react-beautiful-dnd"
 import { TaskDragElement } from '.'
 import Box from "@mui/material/Box"
+import { useSelector } from "react-redux"
+import _ from "lodash"
 
 const TaskBoard = React.memo((props) => {
+    console.log("render TaskBoard")
     const { onRowClicked } = props
     const [listStatus, setStatus] = useState([])
     const [listTask, setTask] = useState([])
+    const isReload = useSelector((state) => state.master.isReload)
 
     useEffect(() => {
+        let mounted = true
+        const getStatus = async () => {
+            await get(baseUrl.jm_status, { isGetAll: true }).then((data) => {
+                setStatus(data && data.data && data.data.items)
+            })
+        }
         getStatus()
-        getTask()
+        return () => { mounted = false }
     }, [])
 
-    const getStatus = async () => {
-        await get(baseUrl.jm_status, { isGetAll: true }).then((data) => {
-            setStatus(data && data.data && data.data.items)
-        })
-    }
-
-    const getTask = async () => {
-        await get(baseUrl.jm_task, { isGetAll: true }).then((data) => {
-            setTask(data && data.data && data.data.items)
-        })
-    }
+    useEffect(() => {
+        let mounted = true
+        const getTask = async () => {
+            await get(baseUrl.jm_task, { isGetAll: true }).then((data) => {
+                setTask(data && data.data && data.data.items)
+            })
+        }
+        getTask()
+        return () => { mounted = false }
+    }, [isReload])
 
     const onDragEnd = async (result) => {
         if (!result.destination) {

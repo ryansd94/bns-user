@@ -74,10 +74,22 @@ const IconHour = ({ style, className }) => {
 const IconDescription = ({ style, className, onClick }) => {
   return <i onClick={onClick} style={style} className={`far fa-file-invoice ${className}`}></i>
 }
+const IconTable = ({ style, className, onClick }) => {
+  return <i onClick={onClick} style={style} className={`far fa-table ${className}`}></i>
+}
+const IconList = ({ style, className, onClick }) => {
+  return <i onClick={onClick} style={style} className={`far fa-list ${className}`}></i>
+}
+const IconRequire = ({ style, className, onClick }) => {
+  return <i onClick={onClick} style={style} className={`far fa-exclamation-circle ${className}`}></i>
+}
+const IconSetting = ({ style, className, onClick }) => {
+  return <i onClick={onClick} style={style} className={`far fa-cog ${className}`}></i>
+}
 
 export {
   IconSave, IconDelete, IconEdit, IconCancel, IconEmail, IconActive, IconBlock,
   IconUnBlock, IconClean, IconApply, IconBack, IconMore, IconAdd, IconCricle, IconUp,
   IconDown, IconExpand, IconRemove, IconUpload, IconChange, IconCopy, IconComment, IconFullScreen,
-  IconHour, IconDescription
+  IconHour, IconDescription, IconTable, IconList, IconRequire, IconSetting
 }

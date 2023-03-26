@@ -4,7 +4,7 @@ import { OverflowTip } from 'components/tooltip'
 import { IconHour } from 'components/icon/icon'
 
 const LabelDateControl = (props) => {
-    const { name, id, value } = props
+    const { name, id, value, className } = props
 
     const genderTooltipContent = () => {
         return <Grid className="label-icon-control-container" item container gap={1}>
@@ -18,7 +18,7 @@ const LabelDateControl = (props) => {
     }
 
     return (
-        <Grid item className="label-icon-control-text">
+        <Grid item className={`label-icon-control-text ${className}`}>
             <OverflowTip disableHoverListener={false} value={name} genderTooltipContent={genderTooltipContent} />
         </Grid>
     )
