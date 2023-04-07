@@ -135,7 +135,7 @@ export const EditorToolbar = ({ hide, id }) => {
 
 const EditorControl = (props) => {
     const { label, name, control, size, isShowAccordion = true, onChange, value = null,
-        readOnly, className, userSuggest = [], isFullScreen = false, isShowPlaceholder = true, required } = props
+        readOnly, className, userSuggest = [], isFullScreen = false, isShowPlaceholder = true, required, isBorder = true } = props
     const quillRef = useRef()
     const loadingPopup = useSelector((state) => state.master.loadingPopup)
     const user = getUserInfo()
@@ -255,13 +255,13 @@ const EditorControl = (props) => {
     }
 
     const renderEditor = (field, error) => {
-
         return <div className={className} style={{ marginTop: isShowAccordion ? '1rem' : '0' }}>
-            <FormHelperText children={error?.message} error={!_.isNil(error) ? true : false} />
+            {!_.isNil(error) ? <FormHelperText children={error?.message} error={!_.isNil(error) ? true : false} /> : ''}
             <EditorToolbar hide={hideToolbar} id={`rte${id}`} />
             <ReactQuill
                 id={`rte${id}`}
                 ref={quillRef}
+                className={!isBorder ? 'no-border' : ''}
                 theme='snow'
                 onBlur={onBlur}
                 onFocus={onFocus}

@@ -13,6 +13,7 @@ import { open as openAlert } from "stores/components/alert-dialog"
 import GridData from "components/table/GridData"
 import Grid from "@mui/material/Grid"
 import { CheckBoxCellRender } from 'components/cellRender'
+import { CellButton } from 'components/cellRender'
 
 const StatusGrid = React.memo((props) => {
   const dispatch = useDispatch()
@@ -57,30 +58,21 @@ const StatusGrid = React.memo((props) => {
       resizable: false,
       cellRenderer: (params) => {
         const onEditClick = (e) => {
-          e.stopPropagation() // don't select this row after clicking
+          e.stopPropagation()
           if (!params) return
           dispatch(open())
           dispatch(setEditData(params.data.id))
         }
 
         const onDeleteClick = (e) => {
-          e.stopPropagation() // don't select this row after clicking
+          e.stopPropagation()
           dispatch(openAlert({ open: true }))
           setId(params.data.id)
         }
 
-        return (
-          <strong>
-            <Grid container gap={1} direction='row'>
-              <Grid item xs>
-                <ButtonIcon onClick={onEditClick} type={EButtonIconType.edit} />
-              </Grid>
-              <Grid item xs>
-                <ButtonIcon onClick={onDeleteClick} type={EButtonIconType.delete} />
-              </Grid>
-            </Grid>
-          </strong>
-        )
+        return <strong>
+          <CellButton onEditClick={onEditClick} onDeleteClick={onDeleteClick} />
+        </strong>
       },
       sortable: false,
     },

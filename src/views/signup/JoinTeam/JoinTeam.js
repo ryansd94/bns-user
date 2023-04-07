@@ -1,27 +1,18 @@
 import React, { useState, useEffect } from "react"
 import { useLocation } from "react-router-dom"
 import queryString from "query-string"
-import TextInput from "components/input/TextInput"
 import Grid from "@mui/material/Grid"
 import Box from "@mui/material/Box"
 import { useTranslation } from "react-i18next"
-import Button from "@mui/material/Button"
 import { useForm } from "react-hook-form"
-import InputAdornment from "@mui/material/InputAdornment"
-import { useSelector, useDispatch } from "react-redux"
-import IconButton from "@mui/material/IconButton"
 import * as Yup from "yup"
-import AccountCircle from "@mui/icons-material/AccountCircle"
 import { validateTokenSignup, signup } from "services"
 import { ERROR_CODE, EUserValidate } from "configs"
 import Alert from "@mui/material/Alert"
 
-import PasswordChecklist from "react-password-checklist"
 import Spinner from "components/shared/Spinner"
 import { message } from "configs"
 import { yupResolver } from "@hookform/resolvers/yup"
-import Visibility from "@mui/icons-material/Visibility"
-import VisibilityOff from "@mui/icons-material/VisibilityOff"
 import JointeamHasAccount from "./components/JointeamHasAccount"
 import JoinTeamNoAccount from "./components/JoinTeamNoAccount"
 
@@ -29,7 +20,6 @@ export default function JoinTeam() {
   const { search } = useLocation()
   const { t } = useTranslation()
   const { token } = queryString.parse(search)
-  const dispatch = useDispatch()
 
   const [error, setError] = useState(t("Token không hợp lệ"))
   const [password, setPassword] = useState("")

@@ -1,0 +1,100 @@
+import React, { useEffect, useState, useRef } from "react"
+import ButtonIcon from "components/button/ButtonIcon"
+import { useTranslation } from "react-i18next"
+import { useSelector, useDispatch } from "react-redux"
+import ConfirmDeleteDialog from "components/popup/confirmDeleteDialog"
+import { baseUrl, EButtonIconType } from "configs"
+import {
+    setEditData,
+} from "stores/views/master"
+import { open } from "components/popup/popupSlice"
+import { open as openAlert } from "stores/components/alert-dialog"
+import GridData from "components/table/GridData"
+import UploadIconImage from 'components/upload/uploadIcon/uploadIconImage'
+import { cellFormatDate } from "helpers/commonFunction"
+import { CellButton } from 'components/cellRender'
+
+const ProjectGrid = React.memo((props) => {
+    const { filterModels } = props
+    const dispatch = useDispatch()
+    const { t } = useTranslation()
+    const columnVisibility = { ...useSelector((state) => state.project.columnVisibility) }
+    const [id, setId] = useState(null)
+
+    const columns = [
+        {
+            checkboxSelection: true,
+            resizable: false, width: 40, headerCheckboxSelection: true,
+            pinned: 'left'
+        },
+        {
+            field: "name", headerName: t("Tên dự án"),
+            flex: 1,
+            pinned: 'left'
+        },
+        {
+            field: "startDate",
+            headerName: t("Ngày bắt đầu"),
+            suppressAutoSize: true,
+            valueFormatter: cellFormatDate
+        },
+        {
+            field: "endDate",
+            headerName: t("Ngày kết thúc"),
+            suppressAutoSize: true,
+            valueFormatter: cellFormatDate
+        },
+        // {
+        //     field: "icon", headerName: t("Biểu tượng"),
+        //     suppressAutoSize: true,
+        //     sortable: false,
+        //     cellRenderer: (params) => {
+        //         return params.data.icon ?
+        //             <UploadIconImage color={params.data.color} src={params.data.icon} /> : ''
+        //     }
+        // },
+        {
+            field: "description",
+            headerName: t("Mô tả"),
+            flex: 1,
+        },
+        {
+            field: "edit",
+            headerName: "",
+            width: 120,
+            suppressAutoSize: true,
+            cellRenderer: (params) => {
+                const onEditClick = (e) => {
+                    e.stopPropagation() // don't select this row after clicking
+                    if (!params) return
+                    dispatch(open())
+                    dispatch(setEditData(params.data.id))
+                }
+
+                const onDeleteClick = (e) => {
+                    e.stopPropagation() // don't select this row after clicking
+                    dispatch(openAlert({ open: true }))
+                    setId(params.data.id)
+                }
+
+                return <strong>
+                <CellButton onEditClick={onEditClick} onDeleteClick={onDeleteClick} />
+              </strong>
+            },
+            sortable: false,
+        },
+    ]
+
+    return (
+        <>
+            <ConfirmDeleteDialog url={baseUrl.jm_project} id={id} />
+            <GridData
+                url={baseUrl.jm_project}
+                columnVisibility={columnVisibility}
+                filterModels={filterModels}
+                columns={columns}></GridData>
+        </>
+    )
+})
+
+export default ProjectGrid

@@ -11,6 +11,8 @@ import statusReducer from "stores/views/status"
 import teamReducer from "stores/views/team"
 import taskTypeReducer from "stores/views/taskType"
 import taskReducer from "stores/views/task"
+import priorityReducer from "stores/views/priority"
+import projectReducer from "stores/views/project"
 
 const rootReducer = {
   popup: popupReducer,
@@ -25,6 +27,8 @@ const rootReducer = {
   team: teamReducer,
   taskType: taskTypeReducer,
   task: taskReducer,
+  priority: priorityReducer,
+  project: projectReducer
 }
 
 const store = configureStore({

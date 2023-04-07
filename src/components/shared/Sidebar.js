@@ -1,39 +1,61 @@
-﻿import React, { Component } from 'react';
-import { Link, withRouter } from 'react-router-dom';
-import { Collapse } from 'react-bootstrap';
-import { Trans } from 'react-i18next';
+﻿import React, { Component } from 'react'
+import { Link, withRouter } from 'react-router-dom'
+import { Collapse } from 'react-bootstrap'
+import { Trans } from 'react-i18next'
+import { getUserInfo } from "helpers"
+import Grid from "@mui/material/Grid"
+import { AvatarControl } from 'components/avatar'
+import { ESize, Evariant } from "configs"
+import _ from 'lodash'
 
 class Sidebar extends Component {
-    state = {};
+    state = { user: getUserInfo() }
+
+    getProjectPath(path) {
+        if (this.state.user) {
+            const code = this.state.user?.setting?.projectSetting?.current
+            return `/${code}${path}`
+        }
+        return path
+    }
+
+    getPath(path) {
+        if (this.state.user) {
+            const defaultOrganization = this.state.user.defaultOrganization
+            return !_.isNil(defaultOrganization) ? `/${this.state.user.defaultOrganization}${path}` : `${path}`
+        }
+        return path
+    }
 
     toggleMenuState(menuState) {
         if (this.state[menuState]) {
-            this.setState({ [menuState]: false });
+            this.setState({ [menuState]: false })
         } else if (Object.keys(this.state).length === 0) {
-            this.setState({ [menuState]: true });
+            this.setState({ [menuState]: true })
         } else {
-            Object.keys(this.state).forEach(i => {
-                this.setState({ [i]: false });
-            });
-            this.setState({ [menuState]: true });
+            // Object.keys(this.state).forEach(i => {
+            //     this.setState({ [i]: false })
+            // })
+            this.setState({ [menuState]: true })
         }
     }
 
     componentDidUpdate(prevProps) {
         if (this.props.location !== prevProps.location) {
-            this.onRouteChanged();
+            this.onRouteChanged()
         }
     }
 
     onRouteChanged() {
-        document.querySelector('#sidebar').classList.remove('active');
-        Object.keys(this.state).forEach(i => {
-            this.setState({ [i]: false });
-        });
+        document.querySelector('#sidebar').classList.remove('active')
+        // Object.keys(this.state).forEach(i => {
+        //     this.setState({ [i]: false })
+        // })
+
 
         const dropdownPaths = [
             { path: '/apps', state: 'appsMenuOpen' },
-            { path: '/basic-ui', state: 'basicUiMenuOpen' },
+            { path: '/basic-ui', state: 'category' },
             { path: '/advanced-ui', state: 'advancedUiMenuOpen' },
             { path: '/form-elements', state: 'formElementsMenuOpen' },
             { path: '/tables', state: 'tablesMenuOpen' },
@@ -45,111 +67,101 @@ class Sidebar extends Component {
             { path: '/general-pages', state: 'generalPagesMenuOpen' },
             { path: '/ecommerce', state: 'ecommercePagesMenuOpen' },
             { path: '/template', state: 'templatePagesMenuOpen' },
-        ];
+        ]
 
-        dropdownPaths.forEach((obj => {
-            if (this.isPathActive(obj.path)) {
-                this.setState({ [obj.state]: true })
-            }
-        }));
+        // dropdownPaths.forEach((obj => {
+        //     if (this.isPathActive(obj.path)) {
+        //         this.setState({ [obj.state]: true })
+        //     } else {
+        //         this.setState({ [obj.state]: false })
+        //     }
+        // }))
 
     }
+
     render() {
         return (
-            <nav className="sidebar sidebar-offcanvas ofy-auto" id="sidebar">
-                <ul className="nav">
-                    <li className="nav-item nav-category"><Trans>Main</Trans></li>
-                    <li className={this.isPathActive('/dashboard') ? 'nav-item active' : 'nav-item'}>
-                        <Link className="nav-link" to="/dashboard">
-                            <span className="icon-bg"><i className="mdi mdi-cube menu-icon"></i></span>
-                            <span className="menu-title"><Trans>Trang chủ</Trans></span>
-                        </Link>
-                    </li>
-                    <li className="nav-item nav-category"><Trans>Danh mục</Trans></li>
-                    <li className={this.isPathActive('/category/area') || this.isPathActive('/category/branch')? 'nav-item active hover-open' : 'nav-item hover-open'}>
-                        <div className={this.state.basicUiMenuOpen ? 'nav-link menu-expanded' : 'nav-link'} onClick={() => this.toggleMenuState('basicUiMenuOpen')} data-toggle="collapse">
-                            <span className="icon-bg"><i className="mdi mdi-crosshairs-gps menu-icon"></i></span>
-                            <span className="menu-title"><Trans>Danh mục</Trans></span>
-                            <i className="menu-arrow"></i>
-                        </div>
-                        <Collapse in={this.state.basicUiMenuOpen}>
-                            <ul className="nav flex-column sub-menu">
-                                <li className="nav-item"> <Link className={this.isPathActive('/category/area') ? 'nav-link active' : 'nav-link'} to="/category/area"><Trans>Khu vực</Trans></Link></li>
-                                <li className="nav-item"> <Link className={this.isPathActive('/category/branch') ? 'nav-link active' : 'nav-link'} to="/category/branch"><Trans>Chi nhánh</Trans></Link></li>
-                                <li className="nav-item"> <Link className={this.isPathActive('/category/team') ? 'nav-link active' : 'nav-link'} to="/category/team"><Trans>Nhóm</Trans></Link></li>
-                                <li className="nav-item"> <Link className={this.isPathActive('/basic-ui/typography') ? 'nav-link active' : 'nav-link'} to="/basic-ui/typography"><Trans>Typography</Trans></Link></li>
-                            </ul>
-                        </Collapse>
-                    </li>
-                    <li className={this.isPathActive('/icons') ? 'nav-item active' : 'nav-item'}>
-                        <div className={this.state.iconsMenuOpen ? 'nav-link menu-expanded' : 'nav-link'} onClick={() => this.toggleMenuState('iconsMenuOpen')} data-toggle="collapse">
-                            <span className="icon-bg"><i className="mdi mdi-contacts menu-icon"></i></span>
-                            <span className="menu-title"><Trans>Icons</Trans></span>
-                            <i className="menu-arrow"></i>
-                        </div>
-                        <Collapse in={this.state.iconsMenuOpen}>
-                            <ul className="nav flex-column sub-menu">
-                                <li className="nav-item"> <Link className={this.isPathActive('/icons/mdi') ? 'nav-link active' : 'nav-link'} to="/icons/mdi"><Trans>Material</Trans></Link></li>
-                            </ul>
-                        </Collapse>
-                    </li>
-                    <li className={this.isPathActive('/form-elements') ? 'nav-item active' : 'nav-item'}>
-                        <div className={this.state.formElementsMenuOpen ? 'nav-link menu-expanded' : 'nav-link'} onClick={() => this.toggleMenuState('formElementsMenuOpen')} data-toggle="collapse">
-                            <span className="icon-bg"><i className="mdi mdi-format-list-bulleted menu-icon"></i></span>
-                            <span className="menu-title"><Trans>Form elements</Trans></span>
-                            <i className="menu-arrow"></i>
-                        </div>
-                        <Collapse in={this.state.formElementsMenuOpen}>
-                            <ul className="nav flex-column sub-menu">
-                                <li className="nav-item"> <Link className={this.isPathActive('/form-elements/basic-elements') ? 'nav-link active' : 'nav-link'} to="/form-elements/basic-elements"><Trans>Basic Elements</Trans></Link></li>
-                            </ul>
-                        </Collapse>
-                    </li>
-                    <li className="nav-item nav-category"><Trans>Người dùng</Trans></li>
-                    <li className={this.isPathActive('/user') ? 'nav-item active' : 'nav-item'}>
-                        <Link className="nav-link" to="/user">
-                            <span className="icon-bg"><i className="mdi mdi-cube menu-icon"></i></span>
-                            <span className="menu-title"><Trans>Người dùng</Trans></span>
-                        </Link>
-                    </li>
-                    <li className={this.isPathActive('/tables') ? 'nav-item active' : 'nav-item'}>
-                        <div className={this.state.tablesMenuOpen ? 'nav-link menu-expanded' : 'nav-link'} onClick={() => this.toggleMenuState('tablesMenuOpen')} data-toggle="collapse">
-                            <span className="icon-bg"><i className="mdi mdi-table-large menu-icon"></i></span>
-                            <span className="menu-title"><Trans>Tables</Trans></span>
-                            <i className="menu-arrow"></i>
-                        </div>
-                        <Collapse in={this.state.tablesMenuOpen}>
-                            <ul className="nav flex-column sub-menu">
-                                <li className="nav-item"> <Link className={this.isPathActive('/tables/basic-table') ? 'nav-link active' : 'nav-link'} to="/tables/basic-table"><Trans>Basic Table</Trans></Link></li>
-                            </ul>
-                        </Collapse>
-                    </li>
-                    <li className="nav-item nav-category"><Trans>Dự án</Trans></li>
-                    <li className={this.isPathActive('/template') ? 'nav-item active' : 'nav-item'}>
-                        <Link className="nav-link" to="/template">
-                            <span className="icon-bg"><i className="mdi mdi-cube menu-icon"></i></span>
-                            <span className="menu-title"><Trans>Mẫu công việc</Trans></span>
-                        </Link>
-                    </li>
-                    <li className={this.isPathActive('/category/status') ? 'nav-item active' : 'nav-item'}>
-                        <Link className="nav-link" to="/category/status">
-                            <span className="icon-bg"><i className="mdi mdi-cube menu-icon"></i></span>
-                            <span className="menu-title"><Trans>Trạng thái</Trans></span>
-                        </Link>
-                    </li>
-                    <li className={this.isPathActive('/category/tasktype') ? 'nav-item active' : 'nav-item'}>
-                        <Link className="nav-link" to="/category/tasktype">
-                            <span className="icon-bg"><i className="mdi mdi-cube menu-icon"></i></span>
-                            <span className="menu-title"><Trans>Loại công việc</Trans></span>
-                        </Link>
-                    </li>
-                    <li className={this.isPathActive('/task') ? 'nav-item active' : 'nav-item'}>
-                        <Link className="nav-link" to="/task">
-                            <span className="icon-bg"><i className="mdi mdi-cube menu-icon"></i></span>
-                            <span className="menu-title"><Trans>Công việc</Trans></span>
-                        </Link>
-                    </li>
-                    <li className={this.isPathActive('/error-pages') ? 'nav-item active' : 'nav-item'}>
+            <Grid container item xs direction={'column'} className='no-wrap'>
+                <Grid container item xs gap={2} alignItems={'center'} className='box-container'>
+                    <Grid item><AvatarControl variant={Evariant.rounded} name={this.state.user?.setting?.projectSetting?.current} /></Grid>
+                    <Grid item xs>{this.state.user?.setting?.projectSetting?.current}</Grid>
+                </Grid>
+                <Grid item>
+                    <nav className="sidebar sidebar-offcanvas ofy-auto" id="sidebar">
+                        <ul className="nav">
+                            <li className={this.isPathActive(this.getPath(this.getProjectPath('/overview/summary'))) || this.isPathActive(this.getPath(this.getProjectPath('/overview/dashboard'))) ? 'nav-item active' : 'nav-item'}>
+                                <div className={this.state.overview ? 'nav-link menu-expanded' : 'nav-link'} onClick={() => this.toggleMenuState('overview')} data-toggle="collapse">
+                                    <span className="icon-bg"><i className="mdi mdi-crosshairs-gps menu-icon"></i></span>
+                                    <span className="menu-title"><Trans>Tổng quan</Trans></span>
+                                    <i className="menu-arrow"></i>
+                                </div>
+                                <Collapse in={this.state.overview}>
+                                    <ul className="nav flex-column sub-menu">
+                                        <li className="nav-item"> <Link className={this.isPathActive(this.getPath(this.getProjectPath('/overview/summary'))) ? 'nav-link active' : 'nav-link'} to={this.getPath(this.getProjectPath('/overview/summary'))}><Trans>Tóm tắt</Trans></Link></li>
+                                        <li className="nav-item"> <Link className={this.isPathActive(this.getPath(this.getProjectPath('/overview/dashboard'))) ? 'nav-link active' : 'nav-link'} to={this.getPath(this.getProjectPath("/overview/dashboard"))}><Trans>Tổng quan</Trans></Link></li>
+                                    </ul>
+                                </Collapse>
+                            </li>
+                            <li className={this.isPathActive(this.getPath('/project')) ? 'nav-item active' : 'nav-item'}>
+                                <Link className="nav-link" to={this.getPath('/project')}>
+                                    <span className="icon-bg"><i className="mdi mdi-cube menu-icon"></i></span>
+                                    <span className="menu-title"><Trans>Dự án</Trans></span>
+                                </Link>
+                            </li>
+                            <li className="nav-item nav-category"><Trans>Main</Trans></li>
+                            <li className={this.isPathActive(this.getPath(this.getProjectPath('/dashboard'))) ? 'nav-item active' : 'nav-item'}>
+                                <Link className="nav-link" to={this.getPath(this.getProjectPath('/dashboard'))}>
+                                    <span className="icon-bg"><i className="mdi mdi-cube menu-icon"></i></span>
+                                    <span className="menu-title"><Trans>Trang chủ</Trans></span>
+                                </Link>
+                            </li>
+                            <li className="nav-item nav-category"><Trans>Danh mục</Trans></li>
+                            <li className={this.isPathActive(this.getPath('/category/team')) || this.isPathActive(this.getPath('/category/priority')) ? 'nav-item active' : 'nav-item'}>
+                                <div className={this.state.category ? 'nav-link menu-expanded' : 'nav-link'} onClick={() => this.toggleMenuState('category')} data-toggle="collapse">
+                                    <span className="icon-bg"><i className="mdi mdi-crosshairs-gps menu-icon"></i></span>
+                                    <span className="menu-title"><Trans>Danh mục</Trans></span>
+                                    <i className="menu-arrow"></i>
+                                </div>
+                                <Collapse in={this.state.category}>
+                                    <ul className="nav flex-column sub-menu">
+                                        <li className="nav-item"> <Link className={this.isPathActive(this.getPath(this.getProjectPath('/category/team'))) ? 'nav-link active' : 'nav-link'} to={this.getPath('/category/team')}><Trans>Nhóm</Trans></Link></li>
+                                        <li className="nav-item"> <Link className={this.isPathActive(this.getPath(this.getProjectPath('/category/priority'))) ? 'nav-link active' : 'nav-link'} to={this.getPath("/category/priority")}><Trans>Độ ưu tiên</Trans></Link></li>
+                                    </ul>
+                                </Collapse>
+                            </li>
+                            <li className="nav-item nav-category"><Trans>Người dùng</Trans></li>
+                            <li className={this.isPathActive('/user') ? 'nav-item active' : 'nav-item'}>
+                                <Link className="nav-link" to={this.getPath("/user")}>
+                                    <span className="icon-bg"><i className="mdi mdi-cube menu-icon"></i></span>
+                                    <span className="menu-title"><Trans>Người dùng</Trans></span>
+                                </Link>
+                            </li>
+                            <li className="nav-item nav-category"><Trans>Dự án</Trans></li>
+                            <li className={this.isPathActive(this.getPath('/template')) ? 'nav-item active' : 'nav-item'}>
+                                <Link className="nav-link" to={this.getPath('/template')}>
+                                    <span className="icon-bg"><i className="mdi mdi-cube menu-icon"></i></span>
+                                    <span className="menu-title"><Trans>Mẫu công việc</Trans></span>
+                                </Link>
+                            </li>
+                            <li className={this.isPathActive('/category/status') ? 'nav-item active' : 'nav-item'}>
+                                <Link className="nav-link" to={this.getPath("/category/status")}>
+                                    <span className="icon-bg"><i className="mdi mdi-cube menu-icon"></i></span>
+                                    <span className="menu-title"><Trans>Trạng thái</Trans></span>
+                                </Link>
+                            </li>
+                            <li className={this.isPathActive('/category/tasktype') ? 'nav-item active' : 'nav-item'}>
+                                <Link className="nav-link" to={this.getPath("/category/tasktype")}>
+                                    <span className="icon-bg"><i className="mdi mdi-cube menu-icon"></i></span>
+                                    <span className="menu-title"><Trans>Loại công việc</Trans></span>
+                                </Link>
+                            </li>
+                            <li className={this.isPathActive(this.getPath(this.getProjectPath('/task'))) ? 'nav-item active' : 'nav-item'}>
+                                <Link className="nav-link" to={this.getPath(this.getProjectPath('/task'))}>
+                                    <span className="icon-bg"><i className="mdi mdi-cube menu-icon"></i></span>
+                                    <span className="menu-title"><Trans>Công việc</Trans></span>
+                                </Link>
+                            </li>
+                            {/* <li className={this.isPathActive('/error-pages') ? 'nav-item active' : 'nav-item'}>
                         <div className={this.state.errorPagesMenuOpen ? 'nav-link menu-expanded' : 'nav-link'} onClick={() => this.toggleMenuState('errorPagesMenuOpen')} data-toggle="collapse">
                             <span className="icon-bg"><i className="mdi mdi-security menu-icon"></i></span>
                             <span className="menu-title"><Trans>Error pages</Trans></span>
@@ -169,8 +181,8 @@ class Sidebar extends Component {
                             </span>
                             <span className="menu-title"><Trans>Documentation</Trans></span>
                         </a>
-                    </li>
-                    <li className="nav-item sidebar-user-actions">
+                    </li> */}
+                            {/* <li className="nav-item sidebar-user-actions">
                         <div className="user-details">
                             <div className="d-flex justify-content-between align-items-center">
                                 <div>
@@ -205,35 +217,37 @@ class Sidebar extends Component {
                             <a href="!#" onClick={event => event.preventDefault()} className="nav-link"><i className="mdi mdi-logout menu-icon"></i>
                                 <span className="menu-title"><Trans>Log Out</Trans></span></a>
                         </div>
-                    </li>
-                </ul>
-            </nav>
-        );
+                    </li> */}
+                        </ul>
+                    </nav>
+                </Grid>
+            </Grid>
+        )
     }
 
     isPathActive(path) {
-        return this.props.location.pathname.startsWith(path);
+        return this.props.location.pathname.startsWith(path)
     }
 
     componentDidMount() {
-        this.onRouteChanged();
+        this.onRouteChanged()
         // add className 'hover-open' to sidebar navitem while hover in sidebar-icon-only menu
-        const body = document.querySelector('body');
+        const body = document.querySelector('body')
         document.querySelectorAll('.sidebar .nav-item').forEach((el) => {
 
             el.addEventListener('mouseover', function () {
                 if (body.classList.contains('sidebar-icon-only')) {
-                    el.classList.add('hover-open');
+                    el.classList.add('hover-open')
                 }
-            });
+            })
             el.addEventListener('mouseout', function () {
                 if (body.classList.contains('sidebar-icon-only')) {
-                    el.classList.remove('hover-open');
+                    el.classList.remove('hover-open')
                 }
-            });
-        });
+            })
+        })
     }
 
 }
 
-export default withRouter(Sidebar);
+export default withRouter(Sidebar)

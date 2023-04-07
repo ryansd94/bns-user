@@ -7,7 +7,8 @@ import AddControl from './addControl'
 import SettingControl from './settingControl'
 
 const TooltipControl = React.memo((props) => {
-    const { onAction, index, isLastControl, onAddControlSubmit, onSettingSubmit, prefix, item, templateColumnData = [] } = props
+    const { onAction, index, isLastControl, onAddControlSubmit,
+        onSettingSubmit, prefix, item, templateColumnData = [], field } = props
     const [openAdd, setOpenAdd] = useState(null)
     const [openSetting, setOpenSetting] = useState(null)
 
@@ -18,18 +19,22 @@ const TooltipControl = React.memo((props) => {
     const handleAddClose = () => {
         setOpenAdd(null);
     }
-    
+
     const handleSettingOpen = (event) => {
         setOpenSetting(event.currentTarget);
     }
 
     const handleSettingClose = (data, index, prefix, item) => {
         setOpenSetting(null)
-        onSettingSubmit(data, index, prefix, item)
+        onSettingSubmit(data, index, prefix, item, field)
+    }
+
+    const onAddControl = (data, index, prefix, item) => {
+        onAddControlSubmit(data, index, prefix, item, field)
     }
 
     const renderAddControl = () => {
-        return <AddControl templateColumnData={templateColumnData} onApply={onAddControlSubmit} prefix={prefix} index={index} item={item} />
+        return <AddControl templateColumnData={templateColumnData} onApply={onAddControl} prefix={prefix} index={index} item={item} />
     }
 
     const renderSettingControl = () => {

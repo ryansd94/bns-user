@@ -9,12 +9,9 @@ import Button from "@mui/material/Button"
 import { useForm } from "react-hook-form"
 import InputAdornment from "@mui/material/InputAdornment"
 import { useSelector, useDispatch } from "react-redux"
-import FormControl from "@mui/material/FormControl"
 import Visibility from "@mui/icons-material/Visibility"
 import VisibilityOff from "@mui/icons-material/VisibilityOff"
-import InputLabel from "@mui/material/InputLabel"
 import IconButton from "@mui/material/IconButton"
-import OutlinedInput from "@mui/material/OutlinedInput"
 import * as Yup from "yup"
 import { message } from "configs"
 import { yupResolver } from "@hookform/resolvers/yup"
@@ -29,7 +26,7 @@ import {
 } from "helpers"
 import PasswordChecklist from "react-password-checklist"
 import Spinner from "components/shared/Spinner"
-import { openMessage } from "stores/components/snackbar"
+import { LabelControl } from 'components/label'
 
 export default function Signup() {
   const { search } = useLocation()
@@ -83,11 +80,17 @@ export default function Signup() {
 
   const validationSchema = Yup.object().shape({
     fullName: Yup.string().required(t(message.error.fieldNotEmpty)),
+    organization: Yup.string()
+      .min(3, 'Tên miền phải chứa ít nhất 3 ký tự')
+      .max(50, 'Tên miền phải chứa tối đa 50 ký tự')
+      .matches(/^[a-zA-Z0-9_]*$/, 'Tên miền chỉ bao gồm chữ cái thường, chữ in hoa, hoặc số')
+      .required(t('Tên miền không được trống'))
   })
   const defaultValues = {
     fullName: "",
     password: "",
     confirmPassword: "",
+    organization: ""
   }
   const handleMouseDownPassword = (event) => {
     event.preventDefault()
@@ -155,14 +158,30 @@ export default function Signup() {
                     <h3>{t("Tạo tài khoản BNS")}</h3>
                   </Grid>
                   {tokenIsvalid ? (
-                    <Grid container rowSpacing={2}>
-                      
+                    <Grid container gap={2}>
+                      <Grid item gap={2} container xs direction={'column'}>
+                        <Grid item xs>
+                          <span className="text-note">
+                            {t("Tên miền tổ chức của bạn")}
+                          </span>
+                        </Grid>
+                        <Grid item xs>
+                          <TextInput
+                            inputProps={{
+                              startAdornment: <InputAdornment position="start">{`${process.env.REACT_APP_DOMAIN}/`}</InputAdornment>,
+                            }}
+                            autoFocus={true}
+                            required={true}
+                            control={control}
+                            name="organization"
+                          />
+                        </Grid>
+                      </Grid>
                       <Grid item xs={12}>
                         <span className="text-note">
                           {t("Nhập Họ và tên bạn muốn hiển thị")}
                         </span>
                         <TextInput
-                          autoFocus={true}
                           required={true}
                           control={control}
                           label={t("Họ tên đầy đủ")}

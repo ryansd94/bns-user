@@ -18,6 +18,7 @@ import { DropDownItem } from 'components/dropdown'
 import { EButtonType } from 'configs/constants'
 import TaskChildPopup from './taskChildPopup'
 import { ActionButton } from 'components/cellRender'
+import { CellButton } from 'components/cellRender'
 
 const TaskGrid = React.memo((props) => {
     console.log("render TaskGrid")
@@ -101,21 +102,15 @@ const TaskGrid = React.memo((props) => {
             width: 110,
             resizable: false,
             cellRenderer: (params) => {
-
                 const onDeleteClick = (e) => {
                     e.stopPropagation() // don't select this row after clicking
                     dispatch(openAlert({ open: true }))
                     setId(params.data.id)
                 }
-
-                return (
-                    <strong>
-                        <ButtonIcon
-                            onClick={onDeleteClick}
-                            type={EButtonIconType.delete}
-                        ></ButtonIcon>
-                    </strong>
-                )
+                
+                return <strong>
+                    <CellButton isEditShow={false} onDeleteClick={onDeleteClick} />
+                </strong>
             },
             sortable: false,
         },

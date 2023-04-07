@@ -16,7 +16,7 @@ const Team = React.memo(() => {
   }
 
   return (
-    <div>
+    <div className="body-content">
       <TeamToolbar onApplyFilter={onApplyFilter} />
       <Resizable genderLeftComponent={genderLeftComponent} />
     </div>

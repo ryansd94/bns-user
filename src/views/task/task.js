@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback, useRef } from "react"
+import React, { useState, useEffect, useCallback } from "react"
 import TaskGrid from "./taskGrid"
 import TaskView from "./taskView"
 import TaskToolbar from "./taskToolbar"
@@ -12,7 +12,7 @@ import { EViewMode } from 'configs/constants'
 import Grid from "@mui/material/Grid"
 import { Alert } from 'components/alert'
 
-const Task = React.memo(() => {
+const Task = () => {
   console.log("render Task")
   const [filterModels, setFilterModels] = useState(null)
   const [customColumns, setCustomColumn] = useState(null)
@@ -61,7 +61,7 @@ const Task = React.memo(() => {
 
   const onFullScreen = useCallback((value) => {
     setHidenRight(value)
-    save(`${baseUrl.jm_user}/me`, { id: user.userId, key: 'TaskSetting.IsFullScreen', value: value })
+    save(`${baseUrl.jm_user}/me`, { id: user.userId, configs: [{ key: 'TaskSetting.IsFullScreen', value: value }] })
     user.setting.taskSetting.isFullScreen = value
     setUserInfo({ user: user })
   }, [hidenRight])
@@ -71,7 +71,7 @@ const Task = React.memo(() => {
     const viewMode = value === true ? EViewMode.list : EViewMode.board
     user.setting.taskSetting.viewMode = viewMode
     setUserInfo({ user: user })
-    save(`${baseUrl.jm_user}/me`, { id: user.userId, key: 'TaskSetting.ViewMode', value: viewMode })
+    save(`${baseUrl.jm_user}/me`, { id: user.userId, configs: [{ key: 'TaskSetting.ViewMode', value: viewMode }] })
   }, [isViewList])
 
   return (
@@ -80,6 +80,6 @@ const Task = React.memo(() => {
       <Resizable hidenRight={hidenRight} genderRightComponent={genderRightComponent} genderLeftComponent={genderLeftComponent} />
     </div>
   )
-})
+}
 
 export default Task

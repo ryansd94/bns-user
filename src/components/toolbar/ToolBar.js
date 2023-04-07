@@ -10,6 +10,7 @@ import { IconDelete } from "components/icon/icon"
 import {
     setReload,
 } from "stores/views/master"
+import Grid from "@mui/material/Grid"
 
 const ToolBar = React.memo(props => {
 
@@ -42,28 +43,27 @@ const ToolBar = React.memo(props => {
     }
 
     return (
-        <div>
-            <div className="row">
-                <div className="col-md-12 justify-content-end">
-                    <ConfigColumn onColumnConfigChange={onColumnConfigChange} columnModel={columnModel} anchorEl={anchorElColumn} handleClose={handleCloseColumn}></ConfigColumn>
-                    <ButtonFuntion spacingLeft={0} visible={visible.column} onClick={handleClickColumn} type={EButtonType.columnConfig} />
-                    <ButtonFuntion spacingLeft={1} visible={visible.column} open={anchorElFilter} onClick={handleClickFilter} type={EButtonType.filter} />
-                    <DropdownMenu visible={visible.function} type={EButtonType.function} genderDropdownItem={genderDropdownItem} />
-                    <ButtonFuntion spacingLeft={1} visible={visible.add} onClick={onAddClick} type={EButtonType.add} />
-                    <ButtonFuntion spacingLeft={1} visible={visible.delete} onClick={onDeleteClick} type={EButtonType.delete} />
-                    <ButtonFuntion spacingLeft={1} onClick={onRefreshClick} type={EButtonType.refresh} />
-                    {genarateCustomButton}
-                </div>
-            </div>
-            <Filter
-                component={component}
-                onApplyFilter={onApplyFilter}
-                onColumnConfigChange={onColumnConfigChange}
-                columnModel={columnModel}
-                anchorEl={anchorElFilter}>
-            </Filter>
-
-        </div>
+        <Grid container gap={2} item xs direction={'column'} className='no-wrap fg-initial'>
+            <Grid item xs>
+                <ConfigColumn onColumnConfigChange={onColumnConfigChange} columnModel={columnModel} anchorEl={anchorElColumn} handleClose={handleCloseColumn}></ConfigColumn>
+                <ButtonFuntion spacingLeft={0} visible={visible.column} onClick={handleClickColumn} type={EButtonType.columnConfig} />
+                <ButtonFuntion spacingLeft={1} visible={visible.column} open={anchorElFilter} onClick={handleClickFilter} type={EButtonType.filter} />
+                <DropdownMenu visible={visible.function} type={EButtonType.function} genderDropdownItem={genderDropdownItem} />
+                <ButtonFuntion spacingLeft={1} visible={visible.add} onClick={onAddClick} type={EButtonType.add} />
+                <ButtonFuntion spacingLeft={1} visible={visible.delete} onClick={onDeleteClick} type={EButtonType.delete} />
+                <ButtonFuntion spacingLeft={1} onClick={onRefreshClick} type={EButtonType.refresh} />
+                {genarateCustomButton}
+            </Grid>
+            <Grid item xs className=''>
+                <Filter
+                    component={component}
+                    onApplyFilter={onApplyFilter}
+                    onColumnConfigChange={onColumnConfigChange}
+                    columnModel={columnModel}
+                    anchorEl={anchorElFilter}>
+                </Filter>
+            </Grid>
+        </Grid>
     )
 
 })

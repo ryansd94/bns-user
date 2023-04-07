@@ -109,8 +109,7 @@ const Popup = React.memo((props) => {
         {isShowFooter ? <DialogActions>
 
           <ButtonDetail onClick={onClose} type={EButtonDetailType.undo} />
-          <ButtonDetail
-            onClick={onSave} type={typeSave} />
+          <ButtonDetail onClick={onSave} type={typeSave} />
         </DialogActions> : ''}
       </BootstrapDialog>
     </div>

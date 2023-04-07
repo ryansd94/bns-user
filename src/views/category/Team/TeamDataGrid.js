@@ -74,14 +74,14 @@ const TeamDataGrid = React.memo((props) => {
   ]
 
   return (
-    <div style={{ width: "100%", height: "100%" }}>
+    <>
       <ConfirmDeleteDialog url={baseUrl.jm_team} id={id} />
       <GridData
         url={baseUrl.jm_team}
         columnVisibility={columnVisibility}
         filterModels={filterModels}
         columns={columns}></GridData>
-    </div>
+    </>
   )
 })
 

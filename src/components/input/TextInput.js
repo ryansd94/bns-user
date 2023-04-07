@@ -39,7 +39,7 @@ export default function TextInput({
               {...field}
               fullWidth={fullWidth || false}
               type={type || "text"}
-              inputProps={inputProps}
+              InputProps={inputProps}
               required={required}
               variant={variant || EVariant.outlined}
               error={!!error}
@@ -67,7 +67,7 @@ export default function TextInput({
               {...field}
               fullWidth={fullWidth || false}
               type={type || "text"}
-              inputProps={inputProps}
+              InputProps={inputProps}
               required={required}
               variant={variant || EVariant.outlined}
               error={!!error}

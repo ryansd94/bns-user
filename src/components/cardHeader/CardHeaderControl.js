@@ -1,9 +1,9 @@
-import * as React from 'react';
-import CardHeader from '@mui/material/CardHeader';
+import * as React from 'react'
+import CardHeader from '@mui/material/CardHeader'
 import { AvatarControl } from 'components/avatar'
 
 const CardHeaderControl = (props) => {
-    const { title, subheader, avatar, style,cursor,onAvatarClick } = props;
+    const { title, subheader, avatar, style,cursor,onAvatarClick } = props
     return (
         <CardHeader
             style={style ? style : {}}

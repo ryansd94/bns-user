@@ -47,6 +47,7 @@ const TemplateAdd = React.memo((props) => {
       name: '',
       description: '',
       id: id,
+      assign: [1]
       // status: [{ id: uuidv4(), name: 'Mới', color: '#1976d2', isNew: true }]e 
     }
   })
@@ -97,6 +98,7 @@ const TemplateAdd = React.memo((props) => {
       setDataTemplate(data.data)
       setValue("name", data.data.name)
       setValue("id", data.data.id)
+      setValue("content", JSON.parse(data.data.content))
       setValue("description", data.data.description)
       // setValue('status', data.data.status)
       // setListStatus(data.data.status)
@@ -107,7 +109,7 @@ const TemplateAdd = React.memo((props) => {
     // alert(JSON.stringify(data))
     // return
     dispatch(loadingButton(true))
-    data.content = JSON.stringify(data.content)
+    data.content = data.content
     const res = await save(baseUrl.jm_template, data)
     dispatch(loadingButton(false))
     dispatch(openMessage({ ...res }))
@@ -117,12 +119,20 @@ const TemplateAdd = React.memo((props) => {
     return <InfoTemplate dataTemplate={dataTemplate} control={control} />
   }
 
+  const onTemplateChange = (isChange) => {
+    if (isChange === true) {
+      setDisabled(false)
+    } else {
+      setDisabled(true)
+    }
+  }
+
   const renderTabStatus = () => {
     return <StatusTemplate statusData={statusData} id={id} control={control} getValues={getValues} handleSubmit={handleSubmit} setValue={setValue} listStatus={(dataTemplate && dataTemplate.status) || []} />
   }
 
   const renderView = () => {
-    return <ContentTemplate templateColumnData={templateColumnData} statusData={statusData} dataTemplate={dataTemplate} control={control} setValue={setValue} />
+    return <ContentTemplate name={'content'} onTemplateChange={onTemplateChange} formState={formState} templateColumnData={templateColumnData} statusData={statusData} dataTemplate={dataTemplate} control={control} setValue={setValue} />
   }
 
   const getTabItems = () => {

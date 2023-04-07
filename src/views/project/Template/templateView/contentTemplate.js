@@ -15,6 +15,7 @@ import AssignSelect from 'components/select/assignSelect'
 import StatusSelect from 'components/select/statusSelect'
 import _ from "lodash"
 import { deepFind } from "helpers/commonFunction"
+import { Controller } from "react-hook-form"
 
 const DragDropContextContainer = styled.div`
 display:flex;
@@ -195,17 +196,11 @@ const generateListTitle = () => {
 
 const ContentTemplate = (props) => {
   console.log("render ContentTemplate")
-  const { setValue, dataTemplate = null, statusData = [], templateColumnData = [] } = props
+  const { setValue, dataTemplate = null, statusData = [], templateColumnData = [],
+    control, formState, onTemplateChange, name } = props
   const theme = useTheme()
   const [elementsTitle, setElementsTitle] = useState(generateListTitle())
   const { t } = useTranslation()
-  const {
-    control
-  } = useForm({
-    defaultValues: {
-      assign: [1]
-    }
-  })
 
   useEffect(() => {
     if (dataTemplate && dataTemplate.content) {
@@ -213,6 +208,14 @@ const ContentTemplate = (props) => {
       setElementsTitle(content)
     }
   }, [dataTemplate])
+
+  useEffect(() => {
+    if (!_.isNil(formState) && !_.isEmpty(formState.dirtyFields)) {
+      onTemplateChange(true)
+    } else {
+      onTemplateChange(false)
+    }
+  }, [formState])
 
   useEffect(() => {
     setValue('content', elementsTitle)
@@ -313,7 +316,7 @@ const ContentTemplate = (props) => {
     setElementsTitle(listCopy)
   }
 
-  const onMoveUpControl = (item, prefix) => {
+  const onMoveUpControl = (item, prefix, field) => {
     const listCopy = { ...elementsTitle }
     let sourceList = listCopy[prefix]
     //non group
@@ -336,10 +339,11 @@ const ContentTemplate = (props) => {
         sourceList.splice(index - 1, 0, removedElement)
       }
     }
+    field.onChange(listCopy)
     setElementsTitle(listCopy)
   }
 
-  const onMoveDownControl = (item, prefix) => {
+  const onMoveDownControl = (item, prefix, field) => {
     const listCopy = { ...elementsTitle }
     let sourceList = listCopy[prefix]
     //non group
@@ -359,20 +363,21 @@ const ContentTemplate = (props) => {
       )
       sourceList.splice(index + 1, 0, removedElement)
     }
+    field.onChange(listCopy)
     setElementsTitle(listCopy)
   }
 
-  const onAction = (type, item, prefix) => {
+  const onAction = (type, item, prefix, field) => {
     if (type === EButtonIconType.delete) {
       onDeleteControl(item, prefix)
     } else if (type === EButtonIconType.up) {
-      onMoveUpControl(item, prefix)
+      onMoveUpControl(item, prefix, field)
     } else if (type === EButtonIconType.down) {
-      onMoveDownControl(item, prefix)
+      onMoveDownControl(item, prefix, field)
     }
   }
 
-  const onSettingSubmit = (data, index, prefix, item) => {
+  const onSettingSubmit = (data, index, prefix, item, field) => {
     let listCopy = { ...elementsTitle }
     let sourceList = listCopy[prefix]
     let settingItem = deepFind(sourceList, function (obj) {
@@ -382,10 +387,11 @@ const ContentTemplate = (props) => {
       settingItem.label = data.label
       settingItem.required = data.required
     }
+    field.onChange(listCopy)
     setElementsTitle(listCopy)
   }
 
-  const onAddControlSubmit = (data, index, prefix, item) => {
+  const onAddControlSubmit = (data, index, prefix, item, field) => {
     const listCopy = { ...elementsTitle }
     const destinationList = listCopy[prefix]
     let prefixGroup = prefix
@@ -438,10 +444,11 @@ const ContentTemplate = (props) => {
         prefix: isNonGroup ? prefixGroup : null
       }
     )
+    field.onChange(listCopy)
     setElementsTitle(listCopy)
   }
 
-  const genderPopoverControl = (item, prefix, index, isLastControl) => {
+  const genderPopoverControl = (item, prefix, index, isLastControl, field) => {
     return <TooltipControl
       templateColumnData={templateColumnData}
       onAddControlSubmit={onAddControlSubmit}
@@ -450,53 +457,58 @@ const ContentTemplate = (props) => {
       index={index}
       item={item}
       prefix={prefix}
-      onAction={(type) => onAction(type, item, prefix)} />
+      field={field}
+      onAction={(type) => onAction(type, item, prefix, field)} />
   }
 
   return (
-    <div>
-      <Grid container spacing={2}>
-        <Grid className="flex-container" item xs={12}>
-          <span>1111111</span>
-          <TextInput control={control} name="title" disabled />
-        </Grid>
-        <Grid className="flex-container" container spacing={2} item xs={12}>
-          <Grid item>
-            <AssignSelect
-              control={control}
-              name={'assign'}
-              data={[{ id: 1, fullName: 'Người nhận 1' }, { id: 2, fullName: 'Người nhận 2' }, { id: 3, fullName: 'Người nhận 3' }]}
-            />
+    <Controller
+      name={name}
+      render={({ field, fieldState: { error } }) =>
+        <Grid container spacing={2}>
+          <Grid className="flex-container" item xs={12}>
+            <span>1111111</span>
+            <TextInput control={control} name="title" disabled />
           </Grid>
-          <Grid item>
-            <StatusSelect
-              options={[...statusData]}
-              name={'status'}
-              control={control}
-            />
+          <Grid className="flex-container" container spacing={2} item xs={12}>
+            <Grid item>
+              <AssignSelect
+                control={control}
+                name={'assign'}
+                data={[{ id: 1, fullName: 'Người nhận 1' }, { id: 2, fullName: 'Người nhận 2' }, { id: 3, fullName: 'Người nhận 3' }]}
+              />
+            </Grid>
+            <Grid item>
+              <StatusSelect
+                options={[...statusData]}
+                name={'status'}
+                control={control}
+              />
+            </Grid>
           </Grid>
-        </Grid>
-        <Grid item xs>
-          <DragDropContextContainer>
-            <DragDropContext onDragEnd={onDragEndTitle}>
-              <Grid className="task-column-content" container spacing={2} item xs={12} direction="row">
-                <Grid key={2} item xs={12} sm={getElementControls("column3").length > 0 ? 6 : 9}>
-                  <DraggableElement
-                    genderPopoverControl={genderPopoverControl}
-                    prefix={"column1"}
-                    control={control}
-                    controls={getElementControls("column1")}
-                  />
-                </Grid>
-                <Grid key={3} item xs={12} sm={3}>
-                  <DraggableElement
-                    genderPopoverControl={genderPopoverControl}
-                    prefix={"column2"}
-                    control={control}
-                    controls={getElementControls("column2")}
-                  />
-                </Grid>
-                {/* <Grid key={1} item xs={12} sm={3}>
+          <Grid item xs>
+            <DragDropContextContainer>
+              <DragDropContext onDragEnd={onDragEndTitle}>
+                <Grid className="task-column-content" container spacing={2} item xs={12} direction="row">
+                  <Grid key={2} item xs={12} sm={getElementControls("column3").length > 0 ? 6 : 9}>
+                    <DraggableElement
+                      field={field}
+                      genderPopoverControl={genderPopoverControl}
+                      prefix={"column1"}
+                      control={control}
+                      controls={getElementControls("column1")}
+                    />
+                  </Grid>
+                  <Grid key={3} item xs={12} sm={3}>
+                    <DraggableElement
+                      field={field}
+                      genderPopoverControl={genderPopoverControl}
+                      prefix={"column2"}
+                      control={control}
+                      controls={getElementControls("column2")}
+                    />
+                  </Grid>
+                  {/* <Grid key={1} item xs={12} sm={3}>
                   <DraggableElement
                     genderPopoverControl={genderPopoverControl}
                     prefix={"column3"}
@@ -504,12 +516,14 @@ const ContentTemplate = (props) => {
                     controls={getElementControls("column3")}
                   />
                 </Grid> */}
-              </Grid>
-            </DragDropContext>
-          </DragDropContextContainer>
+                </Grid>
+              </DragDropContext>
+            </DragDropContextContainer>
+          </Grid>
         </Grid>
-      </Grid>
-    </div >
+      }
+      control={control}
+    />
   )
 }
 

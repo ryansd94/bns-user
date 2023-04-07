@@ -145,7 +145,7 @@ const TeamPopup = React.memo((props) => {
 
   function ModalBody() {
     return (
-      <Grid container rowSpacing={2}>
+      <Grid container gap={2}>
         <Grid item xs={12}>
           <TextInput
             autoFocus={true}

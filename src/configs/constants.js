@@ -98,7 +98,7 @@ export const EButtonIconType = {
   comment: "Comment",
   fullScreen: "FullScreen",
   require: "Require",
-  setting:"Setting"
+  setting: "Setting"
 }
 
 export const EButtonDetailType = {
@@ -155,7 +155,9 @@ export const baseUrl = {
   jm_task: 'jm_task',
   jm_taskcolumn: 'jm_taskcolumn',
   jm_customcolumn: 'jm_customcolumn',
-  jm_comment: 'jm_comment'
+  jm_comment: 'jm_comment',
+  jm_priority: 'jm_priority',
+  jm_project: 'jm_project'
 }
 
 export const EViewMode = {
@@ -170,6 +172,11 @@ export const EStatusResponse = {
 export const EAlertType = {
   error: 'error',
   warning: 'warning'
+}
+
+export const Evariant = {
+  circular: 'circular',
+  rounded: 'rounded'
 }
 
 export const _TemplateVariant = EVariant.normal

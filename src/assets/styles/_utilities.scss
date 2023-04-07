@@ -233,8 +233,20 @@
   flex-basis: auto !important;
 }
 .of-auto {
-  overflow: auto;
+  overflow: auto !important;
 }
 .align-items-center {
-    align-items: center;
+  align-items: center;
+}
+.of-overlay {
+  overflow: overlay !important;
+}
+.f-right {
+  float: right;
+}
+.fg-initial {
+  flex-grow: initial !important;
+}
+.no-border {
+  border: none !important;
 }

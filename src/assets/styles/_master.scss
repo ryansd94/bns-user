@@ -238,7 +238,7 @@ h6,
     overflow: hidden;
     background: white;
     // padding: 1rem;
-    margin-bottom: 1rem;
+    // margin-bottom: 1rem;
     box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 1px 3px 1px;
 }
 .box-container {
@@ -304,9 +304,6 @@ div[data-rbd-draggable-context-id] {
 .upload-icon-image {
     width: 18px;
     height: 18px;
-}
-.f-right {
-    float: right;
 }
 .span-item {
     overflow: hidden;
@@ -603,5 +600,16 @@ a:hover {
     flex-direction: column;
     flex-grow: 1;
     overflow: hidden;
+    padding: 1rem;
     gap: 1rem;
+}
+.project-board-item {
+    padding: 1rem;
+    background: white;
+}
+
+.no-border {
+    .ql-container {
+        border: none !important;
+    }
 }

@@ -11,7 +11,6 @@ import { useSelector, useDispatch } from "react-redux"
 import Grid from "@mui/material/Grid"
 
 const ButtonDetail = (props) => {
-  const dispatch = useDispatch()
   const theme = createTheme({
     palette: {
       neutral: {
@@ -21,7 +20,7 @@ const ButtonDetail = (props) => {
     },
   })
   const { t } = useTranslation()
-  const { type, onClick, autoFocus, disabled, className } = props
+  const { type, onClick, autoFocus, disabled, className, isFloatRight = false } = props
   const [icon, setIcon] = useState("")
   const [text, setText] = useState("")
   const [color, setColor] = useState(null)
@@ -61,30 +60,34 @@ const ButtonDetail = (props) => {
         autoFocus={autoFocus}
         variant="contained"
         disabled={(defaultLoading ? loading : false) || disabled}
-        className={className}
+        className={`${className} ${isFloatRight == true ? 'f-right' : ''}`}
       >
         {text}
       </Button>
     )
     button = defaultLoading && loading ?
       (
-        <div>
-          <IconButton
-            className="icon-loading-container"
-            hidden={!loading}
-            style={{ padding: 0 }}
-            aria-label="delete"
-          >
-            <SpinningCircles
-              speed={1}
-              width={24}
-              height={24}
-              fill="#1976d2"
-              stroke="#1976d2"
-            />
-          </IconButton>
-          {themeButton}
-        </div>
+        <Grid item xs container justifyContent={isFloatRight ? 'flex-end' : 'flex-start'} direction={'row'} alignItems='center'>
+          <Grid item>
+            <IconButton
+              className="icon-loading-container"
+              hidden={!loading}
+              style={{ padding: 0 }}
+              aria-label="delete"
+            >
+              <SpinningCircles
+                speed={1}
+                width={24}
+                height={24}
+                fill="#1976d2"
+                stroke="#1976d2"
+              />
+            </IconButton>
+          </Grid>
+          <Grid item>
+            {themeButton}
+          </Grid>
+        </Grid>
       ) : themeButton
   } else {
     button = <ThemeProvider theme={theme}>

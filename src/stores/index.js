@@ -1,1 +1,1 @@
-export { default } from './stores';
+export { default } from './stores'

@@ -1,9 +1,10 @@
-import * as React from 'react';
-import Avatar from '@mui/material/Avatar';
-import { ESize } from "configs";
+import * as React from 'react'
+import Avatar from '@mui/material/Avatar'
+import { ESize, Evariant } from "configs"
 
 const AvatarControl = (props) => {
-    const { size = ESize.small, name, cursor, onClick, className = "avatar", image = '' } = props
+    const { size = ESize.small, name, cursor,
+        onClick, className = "avatar", image = '', variant = Evariant.circular } = props
     let width = 56
     let height = 56
     let fontSize = 24
@@ -67,7 +68,7 @@ const AvatarControl = (props) => {
             return `${names[0][0]}`
     }
     return (
-        <Avatar className={className} onClick={onClick} sx={{ color: 'white !important', width: width, height: height, cursor: cursor ? cursor : '' }}
+        <Avatar variant={variant} className={className} onClick={onClick} sx={{ color: 'white !important', width: width, height: height, cursor: cursor ? cursor : '' }}
             src={image} {...stringAvata(image ? '' : name, { color: 'white !important', width: width, height: height, cursor: cursor ?? '' })} aria-label="recipe"></Avatar>
     )
 }

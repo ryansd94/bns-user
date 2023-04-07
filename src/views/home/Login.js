@@ -13,6 +13,7 @@ import {
   resetUserToken,
   setTokenLoginSucceeded,
   getAccessToken,
+  getUserInfo
 } from "helpers"
 import { login, loginGoogle } from "services"
 import httpStatus from "http-status"
@@ -53,57 +54,57 @@ export default function Login() {
     event.preventDefault()
   }
 
-  const onLoginGoogleSuccess = () => { 
+  const onLoginGoogleSuccess = () => {
     const unregisterAuthObserver = firebase
-        .auth()
-        .onAuthStateChanged(async (user) => {
-          if (!user) {
-            return
-          }
-          const token = await user.getIdToken()
-          const res = await loginGoogle({
-            token: token,
-          })
-          switch (res.status) {
-            case httpStatus.OK: {
-              const { data } = res && res
-              if (data.errorCode == ERROR_CODE.userNotRegister) {
-                history.push(`/signup?token=${token}`)
-                break
-              } else if (data.errorCode != ERROR_CODE.success) {
-                setError({
-                  dirty: true,
-                  msg: "tài hkoản hoặc mật khẩu sai",
-                })
-                break
-              } else {
-                const { data } = res && res.data
-                const token = {
-                  accessToken: data.token,
-                  refreshToken: data.token,
-                  shopIndex: data.shopIndex,
-                }
-                const user = { ...data, isAdmin: true, acceptScreen: [] }
-                setTokenLoginSucceeded({ token, user })
-                setError({
-                  dirty: false,
-                  msg: "",
-                })
-                history.push(`/dashboard`)
-              }
+      .auth()
+      .onAuthStateChanged(async (user) => {
+        if (!user) {
+          return
+        }
+        const token = await user.getIdToken()
+        const res = await loginGoogle({
+          token: token,
+        })
+        switch (res.status) {
+          case httpStatus.OK: {
+            const { data } = res && res
+            if (data.errorCode == ERROR_CODE.userNotRegister) {
+              history.push(`/signup?token=${token}`)
               break
-            }
-            default: {
+            } else if (data.errorCode != ERROR_CODE.success) {
               setError({
                 dirty: true,
-                msg: "Đã có lỗi xảy ra. Vui lòng thử lại sau",
+                msg: "tài hkoản hoặc mật khẩu sai",
               })
-              resetUserToken()
               break
+            } else {
+              const { data } = res && res.data
+              const token = {
+                accessToken: data.token,
+                refreshToken: data.token,
+                shopIndex: data.shopIndex,
+              }
+              const user = { ...data, isAdmin: true, acceptScreen: [] }
+              setTokenLoginSucceeded({ token, user })
+              setError({
+                dirty: false,
+                msg: "",
+              })
+              history.push(`/${user.defaultOrganization}/dashboard`)
             }
+            break
           }
-        })
-        return () => unregisterAuthObserver()
+          default: {
+            setError({
+              dirty: true,
+              msg: "Đã có lỗi xảy ra. Vui lòng thử lại sau",
+            })
+            resetUserToken()
+            break
+          }
+        }
+      })
+    return () => unregisterAuthObserver()
   }
 
   function validate() {
@@ -112,7 +113,10 @@ export default function Login() {
   }
   useLayoutEffect(() => {
     const tokenWeb = getAccessToken()
-    if (tokenWeb) history.push(`/dashboard`)
+    if (tokenWeb) {
+      const user = getUserInfo()
+      history.push(`/${user.defaultOrganization}/dashboard`)
+    }
     else {
       // const unregisterAuthObserver = firebase
       //   .auth()
@@ -175,7 +179,7 @@ export default function Login() {
   firebase.initializeApp(config)
   const uiConfig = {
     signInFlow: "redirect",
-    signInSuccessUrl: "/login",
+    signInSuccessUrl: "/",
     signInOptions: [firebase.auth.GoogleAuthProvider.PROVIDER_ID],
     callbacks: {
       // Avoid redirects after sign-in.
@@ -216,7 +220,7 @@ export default function Login() {
               dirty: false,
               msg: "",
             })
-            history.push(`/dashboard`)
+            history.push(`${user.defaultOrganization}/dashboard`)
             //let checkRole = jwt_decode(data.jwToken)
             //if (Array.isArray(checkRole.roles) && checkRole.roles.length > 0) {
             //    const token = {

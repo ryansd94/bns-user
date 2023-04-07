@@ -1,6 +1,6 @@
-import React from 'react';
+import React from 'react'
 
-import './loading.scss';
+import './loading.scss'
 
 const Loading = props => {
     return (
@@ -13,4 +13,4 @@ const Loading = props => {
 }
 
 
-export default Loading;
+export default Loading

@@ -2,8 +2,7 @@ import React, { useEffect, useState } from "react"
 import _ from "lodash"
 import Grid from "@mui/material/Grid"
 import { AvatarControl } from "components/avatar"
-import { ESize } from 'configs'
-import { EditorControl, EditorControlCustom } from 'components/editor'
+import { EditorControl } from 'components/editor'
 import ButtonFuntion from 'components/button/ButtonFuntion'
 import { EButtonType } from 'configs'
 import { v4 as uuidv4 } from 'uuid'

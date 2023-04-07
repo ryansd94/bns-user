@@ -11,6 +11,7 @@ import { open } from "components/popup/popupSlice"
 import { open as openAlert } from "stores/components/alert-dialog"
 import GridData from "components/table/GridData"
 import UploadIconImage from 'components/upload/uploadIcon/uploadIconImage'
+import { CellButton } from 'components/cellRender'
 
 const TaskTypeGrid = React.memo((props) => {
     const { filterModels } = props
@@ -59,22 +60,15 @@ const TaskTypeGrid = React.memo((props) => {
                     dispatch(open())
                     dispatch(setEditData(params.data.id))
                 }
-
                 const onDeleteClick = (e) => {
                     e.stopPropagation() // don't select this row after clicking
                     dispatch(openAlert({ open: true }))
                     setId(params.data.id)
                 }
 
-                return (
-                    <strong>
-                        <ButtonIcon onClick={onEditClick} type={EButtonIconType.edit}></ButtonIcon>
-                        <ButtonIcon
-                            onClick={onDeleteClick}
-                            type={EButtonIconType.delete}
-                        ></ButtonIcon>
-                    </strong>
-                )
+                return <strong>
+                  <CellButton onEditClick={onEditClick} onDeleteClick={onDeleteClick} />
+                </strong>
             },
             sortable: false,
         },

@@ -180,55 +180,51 @@ const Filter = (props) => {
     }
 
     return (
-        <Collapse in={open} timeout="auto" unmountOnExit>
-            <div className="containerNew">
-                <Box className="box-container">
-                    <Grid width="auto" container
-                        direction="column" gap={2}  >
-                        <Grid key="header" container gap={2} item>
-                            <Grid item>
-                                <ButtonFuntion spacingLeft={0} onClick={onAdd} type={EButtonType.addFilter} />
-                            </Grid>
-                            <Grid item xs={3}>
-                                <SingleAddSelect
-                                    data={filterData}
-                                    control={control}
-                                    name='filterId'
-                                />
-                            </Grid>
+        <Collapse className="containerNew" in={open} timeout="auto" unmountOnExit>
+            <Box className="box-container">
+                <Grid width="auto" container
+                    direction="column" gap={2}  >
+                    <Grid key="header" container gap={2} item>
+                        <Grid item>
+                            <ButtonFuntion spacingLeft={0} onClick={onAdd} type={EButtonType.addFilter} />
                         </Grid>
-
-                        {
-                            fields.map((item, index) => {
-                                return (
-                                    <FilterItem onClearConditionValue={onClearConditionValue}
-                                        onClearValue={onClearValue} onDeleteItem={onDeleteItem}
-                                        control={control}
-                                        key={`item_${item.id}`}
-                                        item={item}
-                                        getValues={getValues}
-                                        setValue={setValue}
-                                        index={index} name={`item_${item.id}`}
-                                        columnModel={columnModel}></FilterItem>
-                                )
-                            })
-                        }
-                        {/* {inputList} */}
-                        <Grid key="footer" style={{ display: "flex" }} item xs={12}>
-                            <ButtonFuntion spacingLeft={0} onClick={onClear} type={EButtonType.clearFilter} />
-                            <ButtonFuntion spacingLeft={2} onClick={handleSubmit(onSubmit)} type={EButtonType.apply} />
-                            <ButtonFuntion style={{ marginLeft: "auto" }} onClick={handleClickSave} type={EButtonType.save} />
-                            <PopoverControl
-                                anchorEl={anchorSave}
-                                onClose={handleCloseSave}
-                                genderBody={genderPopoverControl}
-                            >
-
-                            </PopoverControl>
+                        <Grid item xs={3}>
+                            <SingleAddSelect
+                                data={filterData}
+                                control={control}
+                                name='filterId'
+                            />
                         </Grid>
                     </Grid>
-                </Box>
-            </div >
+                    {
+                        fields.map((item, index) => {
+                            return (
+                                <FilterItem onClearConditionValue={onClearConditionValue}
+                                    onClearValue={onClearValue} onDeleteItem={onDeleteItem}
+                                    control={control}
+                                    key={`item_${item.id}`}
+                                    item={item}
+                                    getValues={getValues}
+                                    setValue={setValue}
+                                    index={index} name={`item_${item.id}`}
+                                    columnModel={columnModel}></FilterItem>
+                            )
+                        })
+                    }
+                    <Grid key="footer" style={{ display: "flex" }} item xs={12}>
+                        <ButtonFuntion spacingLeft={0} onClick={onClear} type={EButtonType.clearFilter} />
+                        <ButtonFuntion spacingLeft={2} onClick={handleSubmit(onSubmit)} type={EButtonType.apply} />
+                        <ButtonFuntion style={{ marginLeft: "auto" }} onClick={handleClickSave} type={EButtonType.save} />
+                        <PopoverControl
+                            anchorEl={anchorSave}
+                            onClose={handleCloseSave}
+                            genderBody={genderPopoverControl}
+                        >
+
+                        </PopoverControl>
+                    </Grid>
+                </Grid>
+            </Box>
         </Collapse>
     )
 }

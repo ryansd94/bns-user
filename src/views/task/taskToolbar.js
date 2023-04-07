@@ -91,7 +91,7 @@ const TaskToolbar = (props) => {
         </>
     }
 
-    return <div>
+    return <>
         <ToolBar component={baseUrl.jm_task}
             visible={toolbarVisible}
             onApplyFilter={onApplyFilter}
@@ -99,7 +99,7 @@ const TaskToolbar = (props) => {
             onColumnConfigChange={handleColumnConfigChange}
             columnModel={columnModels}
             onAddClick={handleClickOpen} />
-    </div>
+    </>
 
 }
 
