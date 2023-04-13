@@ -15,7 +15,7 @@ const User = React.memo(() => {
   }
 
   return (
-    <div>
+    <div className="body-content">
       <UserToolbar onApplyFilter={onApplyFilter} />
       <Resizable genderLeftComponent={genderLeftComponent} />
     </div>

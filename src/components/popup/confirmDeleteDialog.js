@@ -1,6 +1,6 @@
 import * as React from "react"
 import AlertDialog from "components/popup/AlertDialog"
-import { useDispatch } from "react-redux"
+import { useDispatch, useSelector } from "react-redux"
 import { loading as loadingButton } from "stores/components/button"
 import { openMessage } from "stores/components/snackbar"
 import { open as openAlert } from "stores/components/alert-dialog"
@@ -11,12 +11,12 @@ import { deleteData } from "services"
 import { ERROR_CODE } from "configs"
 
 const ConfirmDeleteDialog = (props) => {
-    const { url, id } = props
     const dispatch = useDispatch()
+    const deleteItem = useSelector((state) => state.master.deleteData)
 
     const onAcceptDelete = async () => {
         dispatch(loadingButton(true))
-        const res = await deleteData(url, id)
+        const res = await deleteData(deleteItem?.url, deleteItem?.id)
         if (res.errorCode == ERROR_CODE.success) {
             dispatch(setReload())
         }

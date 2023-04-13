@@ -3,26 +3,27 @@ import ButtonIcon from "components/button/ButtonIcon"
 import _ from 'lodash'
 import { EButtonIconType } from "configs"
 import { open as openAlert } from "stores/components/alert-dialog"
-import { useSelector, useDispatch } from "react-redux"
+import { setDeleteData, setEditData } from "stores/views/master"
+import { useDispatch } from "react-redux"
+import { open } from "components/popup/popupSlice"
 
 const CellButton = (props) => {
-    const { listButton = [], isEditShow = true, isDeleteShow = true, onEditClick, onDeleteClick } = props
-    const [id, setId] = useState(null)
-
+    const { listButton = [], isEditShow = true, isDeleteShow = true, url, id } = props
     const dispatch = useDispatch()
-    // const onEditClick = (e) => {
-    //     e.stopPropagation()
-    //     if (!params) return
-    //     dispatch(open())
-    //     dispatch(setEditData(params.data.id))
-    // }
 
-    // const onDeleteClick = (e) => {
-    //     e.stopPropagation()
-    //     dispatch(openAlert({ open: true }))
-    //     setId(params.data.id)
-    // }
+    const onEditClick = (e) => {
+        e.stopPropagation()
+        if (_.isNil(id)) return
+        dispatch(open())
+        dispatch(setEditData(id))
+    }
 
+    const onDeleteClick = (e) => {
+        e.stopPropagation()
+        if (_.isNil(id)) return
+        dispatch(setDeleteData({ id: id, url: url }))
+        dispatch(openAlert({ open: true }))
+    }
 
     const renderButtonItems = () => {
         return <>
@@ -39,7 +40,7 @@ const CellButton = (props) => {
             {
                 _.map(listButton, (item) => {
                     return <Grid key={item.type} item xs>
-                        <ButtonIcon onClick={item.onClick} type={item.type} />
+                        <ButtonIcon disabled={!_.isNil(item.disabled) ? item.disabled : false} onClick={item.onClick} type={item.type} />
                     </Grid>
                 })
             }

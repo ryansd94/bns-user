@@ -1,11 +1,8 @@
 import React, { useEffect, useState, useMemo } from "react"
-import ButtonIcon from "components/button/ButtonIcon"
 import { useTranslation } from "react-i18next"
 import { useSelector, useDispatch } from "react-redux"
-import ConfirmDeleteDialog from "components/popup/confirmDeleteDialog"
-import { baseUrl, EButtonIconType } from "configs"
+import { baseUrl } from "configs"
 import { open, change_title } from "components/popup/popupSlice"
-import { open as openAlert } from "stores/components/alert-dialog"
 import GridData from "components/table/GridData"
 import StatusItem from 'views/category/status/statusItem'
 import { cellFormatDate, cellFormatDateTime } from "helpers/commonFunction"
@@ -19,6 +16,7 @@ import { EButtonType } from 'configs/constants'
 import TaskChildPopup from './taskChildPopup'
 import { ActionButton } from 'components/cellRender'
 import { CellButton } from 'components/cellRender'
+import { getUserInfo } from "helpers"
 
 const TaskGrid = React.memo((props) => {
     console.log("render TaskGrid")
@@ -27,6 +25,7 @@ const TaskGrid = React.memo((props) => {
     const { t } = useTranslation()
     const columnVisibility = { ...useSelector((state) => state.task.columnVisibility) }
     const [id, setId] = useState(null)
+    const user = getUserInfo()
     const [taskTypeId, setTaskTypeId] = useState(null)
     const [columns, setColumn] = useState([
         {
@@ -102,14 +101,8 @@ const TaskGrid = React.memo((props) => {
             width: 110,
             resizable: false,
             cellRenderer: (params) => {
-                const onDeleteClick = (e) => {
-                    e.stopPropagation() // don't select this row after clicking
-                    dispatch(openAlert({ open: true }))
-                    setId(params.data.id)
-                }
-                
                 return <strong>
-                    <CellButton isEditShow={false} onDeleteClick={onDeleteClick} />
+                    <CellButton id={params.data.id} url={baseUrl.jm_task} isEditShow={false} />
                 </strong>
             },
             sortable: false,
@@ -172,17 +165,24 @@ const TaskGrid = React.memo((props) => {
         ])
     }, [customColumns])
 
+    const getDefaultFilter = () => {
+        if (!_.isNil(user.setting?.projectSetting?.currentId)) {
+            return [{ column: 'projectId', condition: 0, value: user.setting?.projectSetting?.currentId }]
+        }
+        return []
+    }
+
     return (
         <>
-            <ConfirmDeleteDialog url={baseUrl.jm_task} id={id} />
             <GridData
+                defaultFilters={getDefaultFilter()}
                 frameworkComponents={{ ActionBtnRenderer: ActionBtnRenderer }}
                 onRowClicked={onRowClicked}
                 // autoGroupColumnDef={autoGroupColumnDef}
                 url={baseUrl.jm_task}
                 columnVisibility={columnVisibility}
                 filterModels={filterModels}
-                columns={columns}></GridData>
+                columns={columns} />
             <TaskChildPopup taskParentId={id} taskTypeId={taskTypeId} />
         </>
     )

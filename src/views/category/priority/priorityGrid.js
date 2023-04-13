@@ -1,7 +1,6 @@
-import React, { useEffect, useState } from "react"
+import React, { useState } from "react"
 import { useTranslation } from "react-i18next"
 import { useSelector, useDispatch } from "react-redux"
-import ConfirmDeleteDialog from "components/popup/confirmDeleteDialog"
 import { ColorPickerControl } from "components/colorPicker"
 import { baseUrl } from "configs"
 import {
@@ -10,8 +9,6 @@ import {
 import { open } from "components/popup/popupSlice"
 import { open as openAlert } from "stores/components/alert-dialog"
 import GridData from "components/table/GridData"
-import Grid from "@mui/material/Grid"
-import { CheckBoxCellRender } from 'components/cellRender'
 import { CellButton } from 'components/cellRender'
 
 const PriorityGrid = React.memo((props) => {
@@ -42,21 +39,8 @@ const PriorityGrid = React.memo((props) => {
       suppressAutoSize: true,
       resizable: false,
       cellRenderer: (params) => {
-        const onEditClick = (e) => {
-          e.stopPropagation() // don't select this row after clicking
-          if (!params) return
-          dispatch(open())
-          dispatch(setEditData(params.data.id))
-        }
-
-        const onDeleteClick = (e) => {
-          e.stopPropagation() // don't select this row after clicking
-          dispatch(openAlert({ open: true }))
-          setId(params.data.id)
-        }
-
         return <strong>
-          <CellButton onEditClick={onEditClick} onDeleteClick={onDeleteClick} />
+          <CellButton id={params.data.id} url={baseUrl.jm_priority}/>
         </strong>
       },
       sortable: false,
@@ -65,7 +49,6 @@ const PriorityGrid = React.memo((props) => {
 
   return (
     <>
-      <ConfirmDeleteDialog url={baseUrl.jm_priority} id={id} />
       <GridData
         columnVisibility={columnVisibility}
         columns={columns}

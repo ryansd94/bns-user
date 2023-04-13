@@ -80,7 +80,7 @@ export const updateUserStatus = async (param) => {
 }
 export const signup = async (param) => {
   try {
-    const query = `${baseUrl}/signup`
+    const query = `account/signup`
     const res = await services.post(query, param)
     return res
   } catch (error) {
@@ -128,7 +128,7 @@ export const sendMailUser = async (param) => {
 }
 export const validateTokenSignup = async (param) => {
   try {
-    const query = `${baseUrl}/validate-signup`
+    const query = `account/validate-signup`
     const res = await services.post(query, param)
     return res
   } catch (error) {

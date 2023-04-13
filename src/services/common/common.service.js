@@ -1,9 +1,10 @@
 import { createInstance, handleError } from "services/base"
-import { buildQueryString } from "helpers"
+import { buildQueryString,getUserInfo } from "helpers"
 import { EStatusResponse } from 'configs/constants'
 import _ from 'lodash'
 
-const services = createInstance("/api")
+const user = getUserInfo() 
+const services = createInstance(user.defaultOrganization)
 
 export const save = async (baseUrl, param) => {
   try {

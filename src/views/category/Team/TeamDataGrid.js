@@ -1,23 +1,15 @@
-﻿import React, { useEffect, useState } from "react"
-import ButtonIcon from "components/button/ButtonIcon"
+﻿import React from "react"
 import { useTranslation } from "react-i18next"
-import { useSelector, useDispatch } from "react-redux"
-import ConfirmDeleteDialog from "components/popup/confirmDeleteDialog"
-import { baseUrl, EButtonIconType } from "configs"
-import {
-  setEditData,
-} from "stores/views/master"
-import { open } from "components/popup/popupSlice"
-import { open as openAlert } from "stores/components/alert-dialog"
+import { useSelector } from "react-redux"
+import { baseUrl } from "configs"
 import GridData from "components/table/GridData"
+import { CellButton } from 'components/cellRender'
 
 const TeamDataGrid = React.memo((props) => {
   console.log("render TeamDataGrid")
   const { filterModels } = props
-  const dispatch = useDispatch()
   const { t } = useTranslation()
   const columnVisibility = { ...useSelector((state) => state.team.columnVisibility) }
-  const [id, setId] = useState(null)
 
   const columns = [
     {
@@ -46,28 +38,9 @@ const TeamDataGrid = React.memo((props) => {
       headerName: "",
       width: 150,
       cellRenderer: (params) => {
-        const onEditClick = (e) => {
-          e.stopPropagation() // don't select this row after clicking
-          if (!params) return
-          dispatch(open())
-          dispatch(setEditData(params.data.id))
-        }
-
-        const onDeleteClick = (e) => {
-          e.stopPropagation() // don't select this row after clicking
-          dispatch(openAlert({ open: true }))
-          setId(params.data.id)
-        }
-
-        return (
-          <strong>
-            <ButtonIcon onClick={onEditClick} type={EButtonIconType.edit}></ButtonIcon>
-            <ButtonIcon
-              onClick={onDeleteClick}
-              type={EButtonIconType.delete}
-            ></ButtonIcon>
-          </strong>
-        )
+        return <strong>
+          <CellButton id={params.data.id} isEditShow={false} url={baseUrl.jm_template} />
+        </strong>
       },
       sortable: false,
     },
@@ -75,7 +48,6 @@ const TeamDataGrid = React.memo((props) => {
 
   return (
     <>
-      <ConfirmDeleteDialog url={baseUrl.jm_team} id={id} />
       <GridData
         url={baseUrl.jm_team}
         columnVisibility={columnVisibility}

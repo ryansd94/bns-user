@@ -1,22 +1,17 @@
-import React, { useEffect, useState } from "react"
+import React, { useState } from "react"
 import GridData from "components/table/GridData"
-import ButtonIcon from "components/button/ButtonIcon"
 import { useTranslation } from "react-i18next"
-import { useSelector, useDispatch } from "react-redux"
-import ConfirmDeleteDialog from "components/popup/confirmDeleteDialog"
+import { useSelector } from "react-redux"
 import { baseUrl } from "configs"
-import { open as openAlert } from "stores/components/alert-dialog"
 import { formatDate } from "helpers/commonFunction"
 import { LinkControl } from 'components/link'
-
+import { CellButton } from 'components/cellRender'
 
 const TemplateGrid = React.memo((props) => {
     console.log("render TemplateGrid")
     const { filterModels } = props
-    const dispatch = useDispatch()
     const { t } = useTranslation()
     const columnVisibility = { ...useSelector((state) => state.template.columnVisibility) }
-    const [id, setId] = useState(null)
     const loading = useSelector((state) => state.master.loading)
 
     const [column, setColumn] = useState([
@@ -54,27 +49,9 @@ const TemplateGrid = React.memo((props) => {
             suppressAutoSize: true,
             resizable: false,
             cellRenderer: (params) => {
-                const onDeleteClick = (e) => {
-                    setId(params.data.id)
-                    dispatch(openAlert({ open: true }))
-                }
-
-                const _status = params.data.status
-                const _isMainAccount = params.data.isMainAccount
-
-                const deleteElement = (
-                    <ButtonIcon
-                        disabled={_isMainAccount}
-                        onClick={onDeleteClick}
-                        type="Delete"
-                    ></ButtonIcon>
-                )
-
-                return React.createElement(
-                    "div",
-                    {},
-                    deleteElement,
-                )
+                return <strong>
+                    <CellButton id={params.data.id} isEditShow={false} url={baseUrl.jm_template} />
+                </strong>
             },
             sortable: false,
         },
@@ -82,7 +59,6 @@ const TemplateGrid = React.memo((props) => {
 
     return (
         <>
-            <ConfirmDeleteDialog url={baseUrl.jm_template} id={id} />
             <GridData
                 filterModels={filterModels}
                 url={baseUrl.jm_template}

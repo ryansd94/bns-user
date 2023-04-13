@@ -1,4 +1,4 @@
-﻿import React, { useState, useEffect, useStateIfMounted } from "react"
+﻿import React, { useState, useEffect } from "react"
 import Button from "@mui/material/Button"
 import { useTranslation } from "react-i18next"
 import PropTypes from "prop-types"
@@ -7,7 +7,7 @@ import { createTheme, ThemeProvider } from "@mui/material/styles"
 import { EColor, EButtonDetailType } from "configs"
 import IconButton from "@mui/material/IconButton"
 import { SpinningCircles } from "react-loading-icons"
-import { useSelector, useDispatch } from "react-redux"
+import { useSelector } from "react-redux"
 import Grid from "@mui/material/Grid"
 
 const ButtonDetail = (props) => {

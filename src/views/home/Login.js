@@ -13,7 +13,9 @@ import {
   resetUserToken,
   setTokenLoginSucceeded,
   getAccessToken,
-  getUserInfo
+  getUserInfo,
+  setKeepMeUser,
+  getKeepMeUser
 } from "helpers"
 import { login, loginGoogle } from "services"
 import httpStatus from "http-status"
@@ -22,6 +24,7 @@ import { ERROR_CODE } from "configs"
 import firebase from "firebase/compat/app"
 import StyledFirebaseAuth from "react-firebaseui/StyledFirebaseAuth"
 import "firebase/compat/auth"
+import _ from 'lodash'
 
 export default function Login() {
   const history = useHistory()
@@ -32,12 +35,20 @@ export default function Login() {
     username: "",
     weightRange: "",
     showPassword: false,
+    keepMe: false
   })
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [error, setError] = useState({
     dirty: false,
     msg: "",
   })
+
+  useEffect(() => {
+    const { username, password } = getKeepMeUser()
+    if (!_.isNil(username)) {
+      setValues({ ...values, ['username']: username, password: password, keepMe: true })
+    }
+  }, [])
 
   const handleChange = (prop) => (event) => {
     setValues({ ...values, [prop]: event.target.value })
@@ -215,6 +226,11 @@ export default function Login() {
               shopIndex: data.shopIndex,
             }
             const user = { ...data, isAdmin: true, acceptScreen: [] }
+            if (values.keepMe) {
+              setKeepMeUser({ user: values.username, password: values.password })
+            } else {
+              setKeepMeUser({ user: null, password: null })
+            }
             setTokenLoginSucceeded({ token, user })
             setError({
               dirty: false,
@@ -288,6 +304,7 @@ export default function Login() {
                 <FormControl fullWidth>
                   <InputLabel htmlFor="component-outlined">UserName</InputLabel>
                   <OutlinedInput
+                    autoComplete="new-password"
                     id="component-outlined"
                     value={values.username}
                     onChange={handleChange("username")}
@@ -299,6 +316,7 @@ export default function Login() {
                     Password
                   </InputLabel>
                   <OutlinedInput
+                    autoComplete="new-password"
                     id="outlined-adornment-password"
                     type={values.showPassword ? "text" : "password"}
                     value={values.password}
@@ -330,7 +348,7 @@ export default function Login() {
                 <div className="my-2 d-flex justify-content-between align-items-center">
                   <div className="form-check">
                     <label className="form-check-label text-muted">
-                      <input type="checkbox" className="form-check-input" />
+                      <input checked={values['keepMe']} onChange={handleChange("keepMe")} type="checkbox" className="form-check-input" />
                       <i className="input-helper"></i>
                       Keep me signed in
                     </label>

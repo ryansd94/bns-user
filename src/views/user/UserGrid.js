@@ -1,21 +1,15 @@
-import React, { useEffect, useState, useRef, useCallback } from "react"
+import React, { useState } from "react"
 import GridData from "components/table/GridData"
-
-import ButtonIcon from "components/button/ButtonIcon"
 import { useTranslation } from "react-i18next"
-import { sendMailUser, updateUserStatus, deleteData, get } from "services"
+import { sendMailUser } from "services"
 import { useSelector, useDispatch } from "react-redux"
-import ConfirmDeleteDialog from "components/popup/confirmDeleteDialog"
 import { openMessage } from "stores/components/snackbar"
-import { ERROR_CODE, EUserStatus, EAlertPopupType, baseUrl } from "configs"
-import {
-  setLoading,
-  setReload,
-} from "stores/views/master"
+import { ERROR_CODE, EUserStatus, baseUrl } from "configs"
 import { open as openAlert } from "stores/components/alert-dialog"
 import { formatDate } from "helpers/commonFunction"
 import { UserProfile, UserStatus } from './userGridComponents'
-
+import { CellButton } from 'components/cellRender'
+import { EButtonIconType } from "configs"
 
 const UserGrid = React.memo((props) => {
   console.log("render user grid")
@@ -25,8 +19,6 @@ const UserGrid = React.memo((props) => {
   const columnVisibility = { ...useSelector((state) => state.user.columnVisibility) }
   const [id, setId] = useState(null)
   const [status, setStatus] = useState(null)
-
-
 
   const onSendMail = async (email) => {
     const res = await sendMailUser({ emails: [email] })
@@ -85,10 +77,6 @@ const UserGrid = React.memo((props) => {
           if (!params) return
           onSendMail(params.data.email)
         }
-        const onDeleteClick = (e) => {
-          setId(params.data.id)
-          dispatch(openAlert({ open: true }))
-        }
         const onBlockClick = (sta) => {
           setId(params.data.id)
           setStatus(sta)
@@ -101,47 +89,20 @@ const UserGrid = React.memo((props) => {
         }
         const _status = params.data.status
         const _isMainAccount = params.data.isMainAccount
-        const deleteElement = (
-          <ButtonIcon
-            disabled={_isMainAccount}
-            onClick={onDeleteClick}
-            type="Delete"
-          ></ButtonIcon>
-        )
-        const emailElement = (
-          <ButtonIcon
-            onClick={onSendMailClick}
-            disabled={
-              _status == EUserStatus.WAILTING_CONFIRM_MAIL ? false : true
-            }
-            title={t("Gửi mail xác nhận")}
-            type="Email"
-          />
-        )
 
-        const blockElement = (
-          <ButtonIcon
-            onClick={() => onBlockClick(EUserStatus.BLOCK)}
-            disabled={_isMainAccount ? _isMainAccount : (_status == EUserStatus.WAILTING_CONFIRM_MAIL ? true : false)}
-            type="Lock"
-            title={t("Khóa")}
-          />
-        )
-        const unBlockElement = (
-          <ButtonIcon
-            onClick={() => onBlockClick(EUserStatus.ACTIVE)}
-            disabled={_isMainAccount ? _isMainAccount : (_status == EUserStatus.WAILTING_CONFIRM_MAIL ? true : false)}
-            type="UnLock"
-            title={t("Mở khóa")}
-          />
-        )
-        return React.createElement(
-          "div",
-          { style: { display: 'flex', gap: '1rem' } },
-          deleteElement,
-          emailElement,
-          _status == EUserStatus.ACTIVE ? blockElement : unBlockElement
-        )
+        const listButton = [
+          { type: EButtonIconType.email, onClick: onSendMailClick, disabled: _status == EUserStatus.WAILTING_CONFIRM_MAIL ? false : true }
+        ]
+
+        if (_status == EUserStatus.ACTIVE) {
+          listButton.push({ type: EButtonIconType.lock, onClick: () => onBlockClick(EUserStatus.BLOCK), disabled: _isMainAccount ? _isMainAccount : (_status == EUserStatus.WAILTING_CONFIRM_MAIL ? true : false) })
+        } else {
+          listButton.push({ type: EButtonIconType.unLock, onClick: () => onBlockClick(EUserStatus.ACTIVE), disabled: _isMainAccount ? _isMainAccount : (_status == EUserStatus.WAILTING_CONFIRM_MAIL ? true : false) })
+        }
+
+        return <strong>
+          <CellButton isDeleteShow={!_isMainAccount} listButton={listButton} id={params.data.id} isEditShow={false} url={baseUrl.jm_template} />
+        </strong>
       },
       sortable: false,
     },
@@ -149,7 +110,6 @@ const UserGrid = React.memo((props) => {
 
   return (
     <div style={{ width: "100%" }}>
-      <ConfirmDeleteDialog url={baseUrl.jm_user} id={id} />
       <GridData
         url={baseUrl.jm_user}
         columnVisibility={columnVisibility}

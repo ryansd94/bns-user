@@ -36,6 +36,7 @@ const AlertDialog = (props) => {
           <ButtonDetail onClick={handleClose} type="Undo" />
           <ButtonDetail
             disabled={loading}
+            isFloatRight={true}
             onClick={onSubmit}
             type="Accpet"
             autoFocus={true}

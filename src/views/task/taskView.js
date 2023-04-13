@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react"
-import { EditorControl, EditorControlCustom } from 'components/editor'
-import { EControlType, ESize, EButtonDetailType, EButtonIconType } from 'configs'
+import { EditorControl } from 'components/editor'
+import { EControlType, ESize, EButtonDetailType } from 'configs'
 import Grid from "@mui/material/Grid"
 import { TextInput, NumberInput } from 'components/input'
 import SingleAddSelect from 'components/select/SingleAddSelect'
@@ -37,6 +37,7 @@ import { MultipleFileUploadField } from 'components/upload/uploadFile'
 import { TaskMoreButton } from '../task/taskMoreButton'
 import { Comment } from 'components/comment'
 import { deepFindAll } from "helpers/commonFunction"
+import { getUserInfo } from "helpers"
 
 const TaskView = (props) => {
     console.log("render TaskView")
@@ -57,6 +58,7 @@ const TaskView = (props) => {
         dynamicData: Yup.object().shape({
         })
     })
+    const user = getUserInfo()
 
     const validationSchema = Yup.object().shape(validateData)
     const [taskTypeId2, settaskTypeId2] = useState(taskTypeId)
@@ -314,8 +316,10 @@ const TaskView = (props) => {
         // return;
         dispatch(loadingButton(true))
         let postData = data
-        if (!_.isNil(taskEditId) || !_.isNil(taskId)) {
+        if (!_.isNil(taskEditId) || !_.isNil(taskId)) { //case edit task
             postData.id = taskEditId || taskId
+        } else { //case add task
+            postData.defaultData.projectId = user?.setting?.projectSetting?.currentId
         }
         if (!_.isNil(data.defaultData?.taskParent)) {
             postData.defaultData.parentId = data.defaultData.taskParent.id

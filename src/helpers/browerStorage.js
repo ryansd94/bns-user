@@ -30,6 +30,15 @@ export const setTokenLoginSucceeded = ({ token, user }) => {
     localStorage.setItem(LOCAL_STORAGE_KEYS.shopIndex, token.shopIndex);
 }
 
+export const getKeepMeUser = () => {
+    return { username: localStorage.getItem(LOCAL_STORAGE_KEYS.userName), password: localStorage.getItem(LOCAL_STORAGE_KEYS.password) }
+}
+
+export const setKeepMeUser = ({ user, password }) => {
+    localStorage.setItem(LOCAL_STORAGE_KEYS.userName, user)
+    localStorage.setItem(LOCAL_STORAGE_KEYS.password, password)
+}
+
 export const setUserInfo = ({ user }) => {
     localStorage.setItem(LOCAL_STORAGE_KEYS.user, JSON.stringify(user))
 }

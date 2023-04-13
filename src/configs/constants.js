@@ -5,6 +5,8 @@ export const LOCAL_STORAGE_KEYS = {
   courses: "courses",
   i18nextLng: "i18nextLng",
   shopIndex: "shopIndex",
+  userName: "userName",
+  password: "password"
 };
 export const VisibleDefault = {
   add: true,
@@ -98,7 +100,10 @@ export const EButtonIconType = {
   comment: "Comment",
   fullScreen: "FullScreen",
   require: "Require",
-  setting: "Setting"
+  setting: "Setting",
+  email: "Email",
+  lock: "Lock",
+  unLock: "UnLock"
 }
 
 export const EButtonDetailType = {

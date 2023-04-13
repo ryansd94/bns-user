@@ -25,7 +25,7 @@ const GridData = (props) => {
     const gridRef = useRef()
     const dispatch = useDispatch()
     const { columns = [], rowHeight,
-        columnVisibility, filterModels, url, onRowClicked, frameworkComponents, autoGroupColumnDef } = props
+        columnVisibility, filterModels, url, onRowClicked, frameworkComponents, autoGroupColumnDef, defaultFilters = [] } = props
     const [columnsDef, setColumnsDef] = useState([...columns]);
     const gridStyle = useMemo(() => ({ width: '100%', display: "flex", flexDirection: "column", flexGrow: 1 }), [])
     const [currentPage, setCurrentPage] = useState(null)
@@ -129,7 +129,8 @@ const GridData = (props) => {
             fieldSort:
                 sortModel != null && sortModel.length > 0 ? sortModel[0].field : "",
             sort: sortModel != null && sortModel.length > 0 ? sortModel[0].sort : "",
-            filters: filterParams
+            filters: filterParams,
+            defaultFilters: !_.isEmpty(defaultFilters) ? JSON.stringify(defaultFilters) : null
 
         }).then((data) => {
             if (gridRef && gridRef.current.api) {

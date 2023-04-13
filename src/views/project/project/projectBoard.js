@@ -28,7 +28,7 @@ const ProjectBoard = () => {
 
     const onProjectClick = (item) => {
         console.log({ ...item })
-        save(`${baseUrl.jm_user}/me`, { id: user.userId, configs: [{ key: 'ProjectSetting.Current', value: item.code },{ key: 'ProjectSetting.CurrentId', value: item.id }] })
+        save(`${baseUrl.jm_user}/me`, { id: user.userId, configs: [{ key: 'ProjectSetting.Current', value: item.code }, { key: 'ProjectSetting.CurrentId', value: item.id }] })
         user.setting.projectSetting.current = item.code
         user.setting.projectSetting.currentId = item.id
         setUserInfo({ user: user })
@@ -37,15 +37,15 @@ const ProjectBoard = () => {
 
     const renderData = () => {
         return _.map(projects, (item) => {
-            return <Grid xs key={item.id} onClick={() => onProjectClick(item)} item gap={2} className='project-board-item'>
+            return <Grid item key={item.id} onClick={() => onProjectClick(item)} className='project-board-item'>
                 {item.name}
             </Grid>
         })
     }
 
     const renderProjectGrid = () => {
-        return <Grid xs container item><div>{renderData()}</div>
-        </Grid>
+        return <div><Grid container gap={2}>{renderData()}
+        </Grid></div>
     }
 
     return isLoading ? <Spinner /> : (_.isEmpty(projects) ? <ProjectEmptyView /> : renderProjectGrid())

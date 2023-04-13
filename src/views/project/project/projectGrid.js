@@ -1,14 +1,7 @@
-import React, { useEffect, useState, useRef } from "react"
-import ButtonIcon from "components/button/ButtonIcon"
+import React from "react"
 import { useTranslation } from "react-i18next"
-import { useSelector, useDispatch } from "react-redux"
-import ConfirmDeleteDialog from "components/popup/confirmDeleteDialog"
-import { baseUrl, EButtonIconType } from "configs"
-import {
-    setEditData,
-} from "stores/views/master"
-import { open } from "components/popup/popupSlice"
-import { open as openAlert } from "stores/components/alert-dialog"
+import { useSelector } from "react-redux"
+import { baseUrl } from "configs"
 import GridData from "components/table/GridData"
 import UploadIconImage from 'components/upload/uploadIcon/uploadIconImage'
 import { cellFormatDate } from "helpers/commonFunction"
@@ -16,10 +9,8 @@ import { CellButton } from 'components/cellRender'
 
 const ProjectGrid = React.memo((props) => {
     const { filterModels } = props
-    const dispatch = useDispatch()
     const { t } = useTranslation()
     const columnVisibility = { ...useSelector((state) => state.project.columnVisibility) }
-    const [id, setId] = useState(null)
 
     const columns = [
         {
@@ -64,22 +55,9 @@ const ProjectGrid = React.memo((props) => {
             width: 120,
             suppressAutoSize: true,
             cellRenderer: (params) => {
-                const onEditClick = (e) => {
-                    e.stopPropagation() // don't select this row after clicking
-                    if (!params) return
-                    dispatch(open())
-                    dispatch(setEditData(params.data.id))
-                }
-
-                const onDeleteClick = (e) => {
-                    e.stopPropagation() // don't select this row after clicking
-                    dispatch(openAlert({ open: true }))
-                    setId(params.data.id)
-                }
-
                 return <strong>
-                <CellButton onEditClick={onEditClick} onDeleteClick={onDeleteClick} />
-              </strong>
+                    <CellButton id={params.data.id} url={baseUrl.jm_project}/>
+                </strong>
             },
             sortable: false,
         },
@@ -87,7 +65,6 @@ const ProjectGrid = React.memo((props) => {
 
     return (
         <>
-            <ConfirmDeleteDialog url={baseUrl.jm_project} id={id} />
             <GridData
                 url={baseUrl.jm_project}
                 columnVisibility={columnVisibility}

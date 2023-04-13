@@ -61,10 +61,10 @@ const ButtonIcon = (props) => {
       case EButtonIconType.delete:
         setTitle(t("Xóa"))
         break
-      case "Lock":
+      case EButtonIconType.lock:
         setTitle(t("Khóa"))
         break
-      case "UnLock":
+      case EButtonIconType.unLock:
         setTitle(t("Mở khóa"))
         break
       case EButtonIconType.apply:

@@ -1,24 +1,14 @@
-import React, { useEffect, useState, useRef } from "react"
-import ButtonIcon from "components/button/ButtonIcon"
 import { useTranslation } from "react-i18next"
-import { useSelector, useDispatch } from "react-redux"
-import ConfirmDeleteDialog from "components/popup/confirmDeleteDialog"
-import { baseUrl, EButtonIconType } from "configs"
-import {
-    setEditData,
-} from "stores/views/master"
-import { open } from "components/popup/popupSlice"
-import { open as openAlert } from "stores/components/alert-dialog"
+import { useSelector } from "react-redux"
+import { baseUrl } from "configs"
 import GridData from "components/table/GridData"
 import UploadIconImage from 'components/upload/uploadIcon/uploadIconImage'
 import { CellButton } from 'components/cellRender'
 
-const TaskTypeGrid = React.memo((props) => {
+const TaskTypeGrid = (props) => {
     const { filterModels } = props
-    const dispatch = useDispatch()
     const { t } = useTranslation()
     const columnVisibility = { ...useSelector((state) => state.taskType.columnVisibility) }
-    const [id, setId] = useState(null)
 
     const columns = [
         {
@@ -54,20 +44,8 @@ const TaskTypeGrid = React.memo((props) => {
             width: 120,
             suppressAutoSize: true,
             cellRenderer: (params) => {
-                const onEditClick = (e) => {
-                    e.stopPropagation() // don't select this row after clicking
-                    if (!params) return
-                    dispatch(open())
-                    dispatch(setEditData(params.data.id))
-                }
-                const onDeleteClick = (e) => {
-                    e.stopPropagation() // don't select this row after clicking
-                    dispatch(openAlert({ open: true }))
-                    setId(params.data.id)
-                }
-
                 return <strong>
-                  <CellButton onEditClick={onEditClick} onDeleteClick={onDeleteClick} />
+                    <CellButton id={params.data.id} url={baseUrl.jm_taskType}/>
                 </strong>
             },
             sortable: false,
@@ -76,7 +54,6 @@ const TaskTypeGrid = React.memo((props) => {
 
     return (
         <>
-            <ConfirmDeleteDialog url={baseUrl.jm_taskType} id={id} />
             <GridData
                 url={baseUrl.jm_taskType}
                 columnVisibility={columnVisibility}
@@ -84,6 +61,6 @@ const TaskTypeGrid = React.memo((props) => {
                 columns={columns}></GridData>
         </>
     )
-})
+}
 
 export default TaskTypeGrid

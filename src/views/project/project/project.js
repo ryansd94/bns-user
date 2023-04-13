@@ -12,8 +12,8 @@ const Project = () => {
   }
 
   const genderLeftComponent = () => {
-    // return <ProjectBoard filterModels={filterModels} />
-    return <ProjectGrid filterModels={filterModels} />
+    return <ProjectBoard filterModels={filterModels} />
+    // return <ProjectGrid filterModels={filterModels} />
   }
 
   return (

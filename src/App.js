@@ -10,6 +10,7 @@ import AppRoutes from './AppRoutes'
 import Progress from "react-progress-2"
 import CustomizedSnackbar from 'components/snackbar/CustomizedSnackbar'
 import { MuiThemeProvider, createTheme } from '@material-ui/core/styles'
+import ConfirmDeleteDialog from "components/popup/confirmDeleteDialog"
 
 const theme = createTheme({
     palette: {
@@ -30,6 +31,7 @@ class App extends Component {
         this.onRouteChanged()
     }
     render() {
+        console.log('render app')
         let navbarComponent = !this.state.isFullPageLayout ? <Navbar /> : ''
         let sidebarComponent = !this.state.isFullPageLayout ? <Sidebar /> : ''
         let SettingsPanelComponent = !this.state.isFullPageLayout ? <SettingsPanel /> : ''
@@ -39,6 +41,7 @@ class App extends Component {
                 <MuiThemeProvider theme={theme}>
                     <Progress.Component />
                     <CustomizedSnackbar />
+                    <ConfirmDeleteDialog />
                     {navbarComponent}
                     <div className="container-fluid page-body-wrapper">
                         {sidebarComponent}

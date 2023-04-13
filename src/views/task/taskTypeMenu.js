@@ -1,15 +1,20 @@
-import React, { useEffect, useState } from "react"
 import MenuItem from '@mui/material/MenuItem'
 import { DropdownMenu } from 'components/dropdown'
-import { get } from "services"
-import { baseUrl } from "configs"
 import TaskTypeMenuItem from './taskTypeMenuItem'
+import { getUserInfo } from "helpers"
+import _ from 'lodash'
 
 const TaskTypeMenu = (props) => {
     const { taskTypes = [] } = props
+    const user = getUserInfo()
 
     const openTaskView = (item) => {
-        window.open(`/task/create/${item.id}`)
+        const projectCode = user.setting?.projectSetting?.current
+        if (_.isNil(projectCode)) {
+            window.open(`/${user.defaultOrganization}/${projectCode}/task/create/${item.id}`)
+        } else {
+            window.open(`/${user.defaultOrganization}/task/create/${item.id}`)
+        }
     }
 
     const genderDropdownItem = () => {
