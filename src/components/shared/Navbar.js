@@ -1,4 +1,4 @@
-import React, { Component, useState } from 'react'
+import React, { Component, useState, useEffect } from 'react'
 import { Dropdown } from 'react-bootstrap'
 import { Link, useHistory } from 'react-router-dom'
 import { Trans } from 'react-i18next'
@@ -9,8 +9,7 @@ import {
     getUserInfo
 } from "helpers"
 import firebase from "firebase/compat/app"
-import { ESize } from "configs"
-// import { getAuth, signOut } from "firebase/auth"
+
 function MyComponent() {
     const [languageIcon, setLanguageIcon] = useState('flag-icon flag-icon-vn')
     const [language, setLanguage] = useState('Vietnamese')
@@ -20,10 +19,11 @@ function MyComponent() {
     function toggleOffcanvas() {
         document.querySelector('.sidebar-offcanvas').classList.toggle('active')
     }
-    //useEffect(() => {
-    //    debugger
-    //    i18n.changeLanguage(languageKey)
-    //}, [])
+
+    useEffect(() => {
+        i18n.changeLanguage('vi')
+    }, [])
+
     const changeLanguage = (lng) => {
         if (lng === 'vi') {
             setLanguageIcon('flag-icon flag-icon-vn')

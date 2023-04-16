@@ -92,13 +92,13 @@ const Popup = React.memo((props) => {
       <BootstrapDialog
         maxWidth={widthSize}
         fullWidth={true}
-        aria-labelledby="customized-dialog-title"
+        aria-labelledby="draggable-dialog-title"
         PaperComponent={PaperComponent}
         open={stateOpen}
         onClose={onClose}
       >
         <BootstrapDialogTitle
-          id="customized-dialog-title"
+          id="draggable-dialog-title"
           onClose={onClose}
         >
           {stateTitle}

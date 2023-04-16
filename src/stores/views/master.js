@@ -1,5 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit"
 import { VisibleDefault } from 'configs/constants'
+import { getUserInfo } from "helpers"
+import _ from 'lodash'
 
 const initialState = {
   page: 0,
@@ -11,7 +13,8 @@ const initialState = {
   editData: "",
   filterModel: [],
   toolbarVisible: { ...VisibleDefault },
-  deleteData: {}
+  deleteData: {},
+  userSetting: {}
 }
 
 const slice = createSlice({
@@ -59,9 +62,17 @@ const slice = createSlice({
     setDeleteData: (state, action) => {
       state.deleteData = action.payload
     },
+    setUserSetting: (state, action) => {
+      if (_.isEmpty(state.userSetting)) {
+        const user = getUserInfo()
+        state.userSetting = { ...user, ...action.payload }
+      } else {
+        state.userSetting = { ...state.userSetting, ...action.payload }
+      }
+    }
   },
 })
 const { reducer, actions } = slice
 export const { setData, setLoading, setPage, setReload, setSort,
-  setLoadingPopup, setEditData, setPageSize, setFilter, setToolbarVisibility, setReloadNull, setDeleteData } = actions
+  setLoadingPopup, setEditData, setPageSize, setFilter, setToolbarVisibility, setReloadNull, setDeleteData, setUserSetting } = actions
 export default reducer

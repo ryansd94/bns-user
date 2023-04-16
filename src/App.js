@@ -70,14 +70,6 @@ class App extends Component {
         Progress.show()
         const { i18n } = this.props
         const body = document.querySelector('body')
-        if (this.props.location.pathname === '/layout/RtlLayout') {
-            body.classList.add('rtl')
-            i18n.changeLanguage('ar')
-        }
-        else {
-            body.classList.remove('rtl')
-            i18n.changeLanguage('en')
-        }
         window.scrollTo(0, 0)
         const fullPageLayoutRoutes = ['/login', '/signup/jointeam', '/signup', '/grid']
         for (let i = 0; i < fullPageLayoutRoutes.length; i++) {

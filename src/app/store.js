@@ -13,6 +13,9 @@ import taskTypeReducer from "stores/views/taskType"
 import taskReducer from "stores/views/task"
 import priorityReducer from "stores/views/priority"
 import projectReducer from "stores/views/project"
+import permissionReducer from "stores/views/permission"
+import menuReducer from "stores/components/menu"
+
 
 const rootReducer = {
   popup: popupReducer,
@@ -28,7 +31,9 @@ const rootReducer = {
   taskType: taskTypeReducer,
   task: taskReducer,
   priority: priorityReducer,
-  project: projectReducer
+  project: projectReducer,
+  permission: permissionReducer,
+  menu: menuReducer
 }
 
 const store = configureStore({

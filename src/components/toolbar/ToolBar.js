@@ -13,7 +13,6 @@ import {
 import Grid from "@mui/material/Grid"
 
 const ToolBar = React.memo(props => {
-
     const { onAddClick, visible, onDeleteClick, columnModel,
         onColumnConfigChange, onApplyFilter, component, genarateCustomButton } = props
     const [anchorElColumn, setAnchorElColumn] = useState(null)
@@ -43,7 +42,7 @@ const ToolBar = React.memo(props => {
     }
 
     return (
-        <Grid container gap={2} item xs direction={'column'} className='no-wrap fg-initial'>
+        <Grid container gap={2} item xs direction={'column'} className='no-wrap fg-initial body-content-item'>
             <Grid item xs>
                 <ConfigColumn onColumnConfigChange={onColumnConfigChange} columnModel={columnModel} anchorEl={anchorElColumn} handleClose={handleCloseColumn}></ConfigColumn>
                 <ButtonFuntion spacingLeft={0} visible={visible.column} onClick={handleClickColumn} type={EButtonType.columnConfig} />

@@ -1,10 +1,8 @@
 import React, { useState } from "react"
-import ProjectGrid from "./projectGrid"
-import ProjectBoard from "./projectBoard"
-import ProjectToolbar from "./projectToolbar"
+import PermissionToolbar from "./permissionToolbar"
 import { Resizable } from 'components/resizable'
 
-const Project = () => {
+const Permission = () => {
   const [filterModels, setFilterModels] = useState(null)
 
   const onApplyFilter = (value) => {
@@ -12,16 +10,15 @@ const Project = () => {
   }
 
   const genderLeftComponent = () => {
-    return <ProjectBoard filterModels={filterModels} />
-    // return <ProjectGrid filterModels={filterModels} />
+    return ''
   }
 
   return (
     <div className="body-content">
-      <ProjectToolbar onApplyFilter={onApplyFilter} />
+      <PermissionToolbar onApplyFilter={onApplyFilter} />
       <Resizable className='' genderLeftComponent={genderLeftComponent} />
     </div>
   )
 }
 
-export default Project
+export default Permission

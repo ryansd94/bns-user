@@ -14,74 +14,92 @@ import _ from 'lodash'
 import { FormHelperText } from '@mui/material'
 
 const DatePickerInput = ({ size, onChange, disabled, control, name, label,
-    formatDate = EFormatDate.ddmmyyyy, isViewMode = false, required }) => {
+    formatDate = EFormatDate.ddmmyyyy, isViewMode = false, required, defaultValue = null, readOnly, isShowPlacholder = true }) => {
     const loadingPopup = useSelector((state) => state.master.loadingPopup)
     const { t } = useTranslation()
-    const [value, setValue] = React.useState(null)
+    const [value, setValue] = React.useState(defaultValue)
+
+    const renderControl = ({ onChange, value, error }) => {
+        return loadingPopup ? (
+            <Skeleton
+                width={"100%"}
+                variant="text"
+                size={size ? size : _ControlSizeDefault}
+            >
+                <div className="containerControl">
+                    {_TemplateVariant === EVariant.normal ? (label ? <LabelControl required={required} label={label} /> : '') : ''}
+                    <LocalizationProvider dateAdapter={AdapterDateFns}>
+                        <DesktopDatePicker
+                            clearable
+                            value={null}
+                            size={size ? size : _ControlSizeDefault}
+                            disabled={disabled ? disabled : false}
+                            inputFormat={EFormatDate.ddmmyyyy}
+                            renderInput={(params) =>
+                                <TextField
+                                    size={size ? size : _ControlSizeDefault} {...params} />}
+                        />
+                    </LocalizationProvider >
+                </div>
+            </Skeleton>
+
+        ) : (
+            <div className="containerControl">
+                {_TemplateVariant === EVariant.normal ? (label ? <LabelControl required={required} label={label} /> : '') : ''}
+                {
+                    isViewMode === false ? <FormHelperText children={error?.message} error={!_.isNil(error) ? true : false} /> : ''
+                }
+                {
+                    isViewMode === true ? value : <LocalizationProvider dateAdapter={AdapterDateFns}>
+                        <DesktopDatePicker
+                            label={_TemplateVariant === EVariant.outlined ? label : ''}
+                            clearable
+                            value={value}
+                            readOnly={readOnly}
+                            disabled={disabled ? disabled : false}
+                            inputFormat={formatDate}
+                            mask={""}
+                            onChange={onChange}
+                            renderInput={(params) => <TextField
+                                fullWidth
+                                size={size ? size : _ControlSizeDefault}
+                                InputProps={params.InputProps}
+                                disabled={params.inputProps.disabled}
+                                onChange={params.inputProps.onChange}
+                                placeholder={isShowPlacholder ? params.inputProps.placeholder : ''}
+                                readOnly={params.inputProps.readOnly}
+                                value={params.inputProps.value}
+                                inputRef={params.inputRef}
+                            />
+                            }
+                        />
+                    </LocalizationProvider >
+                }
+            </div>
+        )
+    }
 
     return (
-        <Controller
+        control ? <Controller
             name={name}
             render={({ field, fieldState: { error } }) =>
-                loadingPopup ? (
-                    <Skeleton
-                        width={"100%"}
-                        variant="text"
-                        size={size ? size : _ControlSizeDefault}
-                    >
-                        <div className="containerControl">
-                            {_TemplateVariant === EVariant.normal ? (label ? <LabelControl required={required} label={label} /> : '') : ''}
-                            <LocalizationProvider dateAdapter={AdapterDateFns}>
-                                <DesktopDatePicker
-                                    clearable
-                                    value={null}
-                                    size={size ? size : _ControlSizeDefault}
-                                    disabled={disabled ? disabled : false}
-                                    inputFormat={EFormatDate.ddmmyyyy}
-                                    onChange={(newValue) => {
-                                        setValue(newValue)
-                                        field.onChange(newValue)
-                                        onChange && onChange(newValue)
-                                    }}
-                                    renderInput={(params) =>
-                                        <TextField
-                                            size={size ? size : _ControlSizeDefault} {...params} />}
-                                />
-                            </LocalizationProvider >
-                        </div>
-                    </Skeleton>
-
-                ) : (
-                    <div className="containerControl">
-                        {_TemplateVariant === EVariant.normal ? (label ? <LabelControl required={required} label={label} /> : '') : ''}
-                        {
-                            isViewMode === false ? <FormHelperText children={error?.message} error={!_.isNil(error) ? true : false} /> : ''
-                        }
-                        {
-                            isViewMode === true ? (value || field?.value) : <LocalizationProvider dateAdapter={AdapterDateFns}>
-                                <DesktopDatePicker
-                                    label={_TemplateVariant === EVariant.outlined ? label : ''}
-                                    clearable
-                                    value={value || !_.isNil(field?.value) ? field?.value : null}
-                                    disabled={disabled ? disabled : false}
-                                    inputFormat={formatDate}
-                                    mask={""}
-                                    onChange={(newValue) => {
-                                        setValue(newValue)
-                                        field.onChange(newValue)
-                                        onChange && onChange(newValue)
-                                    }}
-                                    renderInput={(params) => <TextField
-                                        fullWidth
-                                        size={size ? size : _ControlSizeDefault} {...params} />}
-                                />
-                            </LocalizationProvider >
-                        }
-                    </div>
-                )
+                renderControl({
+                    value: value || !_.isNil(field?.value) ? field?.value : null,
+                    onChange: (newValue) => {
+                        setValue(newValue)
+                        field.onChange(newValue)
+                        onChange && onChange(newValue)
+                    },
+                    error: error
+                })
             }
             control={control}
-        />
+        /> : renderControl({
+            value: value,
+            onChange: (newValue) => {
+                onChange && onChange(newValue)
+            }
+        })
     )
 }
 

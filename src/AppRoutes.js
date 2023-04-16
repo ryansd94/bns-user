@@ -17,6 +17,7 @@ const TaskView = lazy(() => import('./views/task/taskView'))
 const Priority = lazy(() => import('./views/category/priority'))
 const Project = lazy(() => import('./views/project/project'))
 const Summary = lazy(() => import('./views/dashboard/summary'))
+const Permission = lazy(() => import('./views/permission/permission'))
 
 const AppRoutes = React.memo(() => {
     return (
@@ -38,6 +39,7 @@ const AppRoutes = React.memo(() => {
                 <Route exact path="/:organization/signup" render={(props) => (<Signup {...props} />)} component={Signup} />
                 <Route exact path="/:organization/signup/jointeam" render={(props) => (<JoinTeam {...props} />)} component={JoinTeam} />
                 <Route exact path="/:organization/project" component={Project} />
+                <Route exact path="/:organization/permission" component={Permission} />
                 <Route exact path="/:organization/overview/summary" component={Summary} />
 
 

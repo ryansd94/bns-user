@@ -1,25 +1,17 @@
-﻿import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Link, withRouter } from 'react-router-dom'
 import { Collapse } from 'react-bootstrap'
 import { Trans } from 'react-i18next'
 import { getUserInfo } from "helpers"
 import Grid from "@mui/material/Grid"
 import { AvatarControl } from 'components/avatar'
-import { Evariant, EMenuType } from "configs"
-import { useSelector } from "react-redux"
+import { Evariant } from "configs"
 import _ from 'lodash'
-import { useTranslation } from "react-i18next"
 
 const Sidebar = (props) => {
     const { location } = props
+    const user = getUserInfo()
     const [state, setState] = useState({})
-    const userFromState = { ...useSelector((state) => state.master.userSetting) }
-    const menu = useSelector((state) => state.menu.menu)
-    const getUser = () => {
-        return !_.isEmpty(userFromState) ? userFromState : getUserInfo()
-    }
-    const user = getUser()
-    const { t } = useTranslation()
 
     useEffect(() => {
         onRouteChanged()
@@ -59,109 +51,54 @@ const Sidebar = (props) => {
         return path
     }
 
-    const getPathItem = (item) => {
-        let path = item.path
-        if (item.isHasProjectPath) {
-            path = getProjectPath(path)
-        }
-        if (user) {
-            const defaultOrganization = user.defaultOrganization
-            return !_.isNil(defaultOrganization) ? `/${user.defaultOrganization}${path}` : `${path}`
-        }
-        return path
-    }
-
     const toggleMenuState = (menuState) => {
         if (state[menuState]) {
-            setState({ ...state, [menuState]: false })
+            setState({ [menuState]: false })
         } else if (Object.keys(state).length === 0) {
-            setState({ ...state, [menuState]: true })
+            setState({ [menuState]: true })
         } else {
-            setState({ ...state, [menuState]: true })
+            setState({ [menuState]: true })
         }
     }
 
     const onRouteChanged = () => {
         document.querySelector('#sidebar').classList.remove('active')
+        // Object.keys(state).forEach(i => {
+        //     setState({ [i]: false })
+        // })
+
+        const dropdownPaths = [
+            { path: '/apps', state: 'appsMenuOpen' },
+            { path: '/basic-ui', state: 'category' },
+            { path: '/advanced-ui', state: 'advancedUiMenuOpen' },
+            { path: '/form-elements', state: 'formElementsMenuOpen' },
+            { path: '/tables', state: 'tablesMenuOpen' },
+            { path: '/maps', state: 'mapsMenuOpen' },
+            { path: '/icons', state: 'iconsMenuOpen' },
+            { path: '/charts', state: 'chartsMenuOpen' },
+            { path: '/user-pages', state: 'userPagesMenuOpen' },
+            { path: '/error-pages', state: 'errorPagesMenuOpen' },
+            { path: '/general-pages', state: 'generalPagesMenuOpen' },
+            { path: '/ecommerce', state: 'ecommercePagesMenuOpen' },
+            { path: '/template', state: 'templatePagesMenuOpen' },
+        ]
     }
 
     const isPathActive = (path) => {
         return location.pathname.startsWith(path)
     }
 
-    const isPathActiveCollapse = (items) => {
-        let isActive = false
-        _.map(items, (item) => {
-            if (_.includes(location.pathname, item.path)) {
-                isActive = true
-                return isActive
-            }
-        })
-        return isActive
-    }
-
-    const getAriaExpanded = (menuState) => {
-        return state[menuState]
-    }
-
-    const renderMenuItem = (item, isChild = false) => {
-        switch (item.type) {
-            case EMenuType.group:
-                return <>
-                    <li key={item.key} className="nav-item nav-category"><span>{t(item.title)}</span></li>
-                    {
-                        _.map(item.childs, (child) => {
-                            return renderMenuItem(child)
-                        })
-                    }
-                </>
-            case EMenuType.action:
-                return <li key={item.key} className={`nav-item ${isChild === false ? (isPathActiveCollapse([item]) ? 'active' : '') : ''}`}>
-                    <Link className={`nav-link ${isChild == true ? (isPathActiveCollapse([item]) ? 'active' : '') : ''}`} to={getPathItem(item)}>
-                        {!_.isEmpty(item.icon) ? <span className="icon-bg"><i className={`${item.icon} menu-icon`}></i></span> : ''}
-                        <span className={`menu-title ${isChild === true ? 'item' : ''}`}>{t(item.title)}</span>
-                    </Link>
-                </li>
-            case EMenuType.collapse:
-                return <li key={item.key} className={isPathActiveCollapse(item.childs) ? 'nav-item active' : 'nav-item'}>
-                    <div aria-expanded={getAriaExpanded(item.key)} className={getAriaExpanded(item.key) ? 'nav-link menu-expanded' : 'nav-link'} onClick={() => toggleMenuState(item.key)} data-toggle="collapse">
-                        {!_.isEmpty(item.icon) ? <span className="icon-bg"><i className={`${item.icon} menu-icon`}></i></span> : ''}
-                        <span className="menu-title">{t(item.title)}</span>
-                        <i className="menu-arrow"></i>
-                    </div>
-                    <Collapse in={getAriaExpanded(item.key)}>
-                        <ul className="nav flex-column sub-menu">
-                            {
-                                _.map(item.childs, (child) => {
-                                    return renderMenuItem(child, true)
-                                })
-                            }
-                        </ul>
-                    </Collapse>
-                </li>
-            default:
-                break
-        }
-    }
-
-    const renderMenu = () => {
-        return <nav className="sidebar sidebar-offcanvas" id="sidebar">
-            <ul className="nav">{_.map(menu, (item) => renderMenuItem(item))}</ul>
-        </nav>
-    }
-
     return <div className="flex-column">
         <Grid container item xs direction={'column'} className='no-wrap'>
             <Grid container item xs gap={2} alignItems={'center'} className='box-container'>
                 <Grid item><AvatarControl variant={Evariant.rounded} name={user?.setting?.projectSetting?.current} /></Grid>
-                <Grid item xs className="project-title">{user?.setting?.projectSetting?.current}</Grid>
+                <Grid item xs>{user?.setting?.projectSetting?.current}</Grid>
             </Grid>
         </Grid>
-        {renderMenu()}
-        {/* <nav className="sidebar sidebar-offcanvas" id="sidebar">
+        <nav className="sidebar sidebar-offcanvas" id="sidebar">
             <ul className="nav">
                 <li className={isPathActive(getPath(getProjectPath('/overview/summary'))) || isPathActive(getPath(getProjectPath('/overview/dashboard'))) ? 'nav-item active' : 'nav-item'}>
-                    <div aria-expanded={getAriaExpanded('overview')} className={state.overview ? 'nav-link menu-expanded' : 'nav-link'} onClick={() => toggleMenuState('overview')} data-toggle="collapse">
+                    <div className={state.overview ? 'nav-link menu-expanded' : 'nav-link'} onClick={() => toggleMenuState('overview')} data-toggle="collapse">
                         <span className="icon-bg"><i className="mdi mdi-crosshairs-gps menu-icon"></i></span>
                         <span className="menu-title"><Trans>Tổng quan</Trans></span>
                         <i className="menu-arrow"></i>
@@ -188,15 +125,15 @@ const Sidebar = (props) => {
                 </li>
                 <li className="nav-item nav-category"><Trans>Danh mục</Trans></li>
                 <li className={isPathActive(getPath('/category/team')) || isPathActive(getPath('/category/priority')) ? 'nav-item active' : 'nav-item'}>
-                    <div aria-expanded={getAriaExpanded('category')} className={state.category ? 'nav-link menu-expanded' : 'nav-link'} onClick={() => toggleMenuState('category')} data-toggle="collapse">
+                    <div className={state.category ? 'nav-link menu-expanded' : 'nav-link'} onClick={() => toggleMenuState('category')} data-toggle="collapse">
                         <span className="icon-bg"><i className="mdi mdi-crosshairs-gps menu-icon"></i></span>
                         <span className="menu-title"><Trans>Danh mục</Trans></span>
                         <i className="menu-arrow"></i>
                     </div>
                     <Collapse in={state.category}>
                         <ul className="nav flex-column sub-menu">
-                            <li className="nav-item"> <Link className={isPathActive(getPath('/category/team')) ? 'nav-link active' : 'nav-link'} to={getPath('/category/team')}><Trans>Nhóm</Trans></Link></li>
-                            <li className="nav-item"> <Link className={isPathActive(getPath('/category/priority')) ? 'nav-link active' : 'nav-link'} to={getPath("/category/priority")}><Trans>Độ ưu tiên</Trans></Link></li>
+                            <li className="nav-item"> <Link className={isPathActive(getPath(getProjectPath('/category/team'))) ? 'nav-link active' : 'nav-link'} to={getPath('/category/team')}><Trans>Nhóm</Trans></Link></li>
+                            <li className="nav-item"> <Link className={isPathActive(getPath(getProjectPath('/category/priority'))) ? 'nav-link active' : 'nav-link'} to={getPath("/category/priority")}><Trans>Độ ưu tiên</Trans></Link></li>
                         </ul>
                     </Collapse>
                 </li>
@@ -207,7 +144,7 @@ const Sidebar = (props) => {
                         <span className="menu-title"><Trans>Người dùng</Trans></span>
                     </Link>
                 </li>
-                <li className="nav-item nav-category"><Trans>Công việc</Trans></li>
+                <li className="nav-item nav-category"><Trans>Dự án</Trans></li>
                 <li className={isPathActive(getPath('/template')) ? 'nav-item active' : 'nav-item'}>
                     <Link className="nav-link" to={getPath('/template')}>
                         <span className="icon-bg"><i className="mdi mdi-cube menu-icon"></i></span>
@@ -233,7 +170,7 @@ const Sidebar = (props) => {
                     </Link>
                 </li>
             </ul>
-        </nav> */}
+        </nav>
     </div>
 }
 

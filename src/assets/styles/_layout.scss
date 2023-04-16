@@ -8,7 +8,6 @@
   }
 }
 
-
 // Sidebar Mini
 .sidebar-mini {
   @media (min-width: 992px) {
@@ -38,7 +37,7 @@
               display: block;
               margin: auto;
             }
-            .menu-sub-title{
+            .menu-sub-title {
               margin: auto;
             }
             .badge {
@@ -47,7 +46,7 @@
             }
             i {
               &.menu-icon {
-                display:block;
+                display: block;
                 margin-right: auto;
                 margin-left: auto;
               }
@@ -63,9 +62,9 @@
                 }
               }
             }
-            &[aria-expanded="true"]{
-              .menu-arrow{
-                &:before{
+            &[aria-expanded="true"] {
+              .menu-arrow {
+                &:before {
                   content: "\f143";
                 }
               }
@@ -84,13 +83,13 @@
         .nav {
           &:not(.sub-menu) {
             > .nav-item {
-              border-bottom: 1px solid rgba($sidebar-dark-menu-color, .2);
+              border-bottom: 1px solid rgba($sidebar-dark-menu-color, 0.2);
               .nav-link {
                 height: auto;
                 padding: $sidebar-mini-menu-padding;
                 i {
                   &.menu-icon {
-                    margin-bottom: .5rem;
+                    margin-bottom: 0.5rem;
                   }
                 }
               }
@@ -119,6 +118,9 @@
 // Sidebar Icon Only
 .sidebar-icon-only {
   @media (min-width: 992px) {
+    .project-title {
+      display: none;
+    }
     .navbar {
       .navbar-brand-wrapper {
         width: $sidebar-width-icon;
@@ -143,8 +145,10 @@
           .nav-link {
             display: block;
             text-align: center;
+            display: flex;
             .menu-title,
-            .badge,.menu-sub-title {
+            .badge,
+            .menu-sub-title {
               display: none;
             }
             .menu-title {
@@ -164,7 +168,7 @@
             }
 
             &[data-toggle="collapse"] {
-              .menu-title{
+              .menu-title {
                 @include border-radius(0 5px 0 0px);
                 @at-root #{selector-append(".rtl", &)} {
                   @include border-radius(5px 0 0 0);
@@ -172,11 +176,11 @@
               }
             }
 
-            .icon-bg{
+            .icon-bg {
               margin-right: auto;
               margin-left: auto;
               margin-bottom: 10px;
-              i{
+              i {
                 margin-left: auto;
                 margin-right: auto;
               }
@@ -198,76 +202,76 @@
             display: none;
           }
           &.hover-open {
-              .nav-link {
-                .menu-title {
-                  @include display-flex;
-                  @include align-items(center);
-                  background: $icon-only-menu-bg-light;
-                  @at-root #{selector-append(".sidebar-dark", &)} {
-                      background: $sidebar-dark-menu-active-bg;
-                  }
-                  padding: 0.5rem 1.4rem;
-                  left: $sidebar-width-icon;
-                  position: absolute;
-                  text-align: left;
-                  top: 0;
-                  bottom: 0;
-                  width: $icon-only-collapse-width;
-                  z-index: 1;
-                  line-height: 1.8;
-                  @at-root #{selector-append(".rtl", &)} {
-                    left: auto;
-                    right: $sidebar-width-icon;
-                    text-align: left;
-                  }
-                  @at-root #{selector-append(".sidebar-dark", &)} {
-                    color: $white;
-                  }
-                  &:after {
-                    display: none;
-                  }
-                }
-              }
-              .collapse,
-              .collapsing {
-                display: block;
+            .nav-link {
+              .menu-title {
+                @include display-flex;
+                @include align-items(center);
                 background: $icon-only-menu-bg-light;
-                @include border-radius(0 0 5px 0);
                 @at-root #{selector-append(".sidebar-dark", &)} {
-                  background: $sidebar-dark-bg;
+                  background: $sidebar-dark-menu-active-bg;
                 }
-                position: absolute;
+                padding: 0.5rem 1.4rem;
                 left: $sidebar-width-icon;
+                position: absolute;
+                text-align: left;
+                top: 0;
+                bottom: 0;
                 width: $icon-only-collapse-width;
-                margin-bottom: 0;
-                padding-bottom: 1rem;
+                z-index: 1;
+                line-height: 1.8;
                 @at-root #{selector-append(".rtl", &)} {
                   left: auto;
-                  right:$sidebar-width-icon;
-                  @include border-radius(0 0 0 5px);
+                  right: $sidebar-width-icon;
+                  text-align: left;
+                }
+                @at-root #{selector-append(".sidebar-dark", &)} {
+                  color: $white;
+                }
+                &:after {
+                  display: none;
                 }
               }
             }
-            &.sidebar-user-actions {
-              .user-details {
-                display: none;
+            .collapse,
+            .collapsing {
+              display: block;
+              background: $icon-only-menu-bg-light;
+              @include border-radius(0 0 5px 0);
+              @at-root #{selector-append(".sidebar-dark", &)} {
+                background: $sidebar-dark-bg;
               }
-              .sidebar-user-menu {
-                padding: 0 1.5rem;
+              position: absolute;
+              left: $sidebar-width-icon;
+              width: $icon-only-collapse-width;
+              margin-bottom: 0;
+              padding-bottom: 1rem;
+              @at-root #{selector-append(".rtl", &)} {
+                left: auto;
+                right: $sidebar-width-icon;
+                @include border-radius(0 0 0 5px);
               }
             }
-            &.documentation-link {
-              margin: 0;
-              .nav-link {
-                background: transparent;
-                .icon-bg {
-                  display: block;
-                }
-                .menu-title {
-                  background: $sidebar-light-bg;
-                }
+          }
+          &.sidebar-user-actions {
+            .user-details {
+              display: none;
+            }
+            .sidebar-user-menu {
+              padding: 0 1.5rem;
+            }
+          }
+          &.documentation-link {
+            margin: 0;
+            .nav-link {
+              background: transparent;
+              .icon-bg {
+                display: block;
+              }
+              .menu-title {
+                background: $sidebar-light-bg;
               }
             }
+          }
         }
         &.sub-menu {
           padding: $sidebar-icon-only-submenu-padding;
@@ -283,7 +287,7 @@
               margin-left: 0;
               .nav-link {
                 text-align: right;
-                &:before{
+                &:before {
                   left: 0;
                   right: unset;
                 }
@@ -351,10 +355,9 @@
   }
 }
 
-
 //Fixed sidebar
 .sidebar-fixed {
-  @media(min-width: 992px) {
+  @media (min-width: 992px) {
     .sidebar {
       position: fixed;
       max-height: auto;
@@ -419,7 +422,7 @@
     }
 
     &::-webkit-scrollbar-track {
-      -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+      -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
     }
 
     &::-webkit-scrollbar-thumb {
@@ -427,4 +430,9 @@
       outline: 1px solid slategrey;
     }
   }
+}
+.menu-title.item {
+  left: 0 !important;
+  width: auto !important;
+  position: relative !important;
 }

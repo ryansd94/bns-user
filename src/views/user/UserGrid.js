@@ -109,13 +109,13 @@ const UserGrid = React.memo((props) => {
   ])
 
   return (
-    <div style={{ width: "100%" }}>
+    <>
       <GridData
         url={baseUrl.jm_user}
         columnVisibility={columnVisibility}
         columns={columns}
         filterModels={filterModels}></GridData>
-    </div>
+    </>
   )
 })
 

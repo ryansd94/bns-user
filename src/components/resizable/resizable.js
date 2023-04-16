@@ -5,7 +5,7 @@ import classNames from "classnames/bind"
 let cx = classNames.bind(style)
 
 const Resizable = React.memo((props) => {
-    const { genderLeftComponent, genderRightComponent, hidenRight = true } = props
+    const { genderLeftComponent, genderRightComponent, hidenRight = true, className = "body-content-item" } = props
     const display = hidenRight ? 'none' : 'flex'
     return (
         // <div className={cx("containerNew")} style={{ flexFlow: "column" }}>
@@ -26,7 +26,7 @@ const Resizable = React.memo((props) => {
         //     </div>
         // </div>
 
-        <div className="body">
+        <div className={`body ${className}`}>
             <div className={cx("content", "panelNew")}>
                 {genderLeftComponent()}
             </div>

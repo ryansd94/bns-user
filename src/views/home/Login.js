@@ -25,9 +25,12 @@ import firebase from "firebase/compat/app"
 import StyledFirebaseAuth from "react-firebaseui/StyledFirebaseAuth"
 import "firebase/compat/auth"
 import _ from 'lodash'
+import { setUserSetting } from "stores/views/master"
+import { useDispatch } from "react-redux"
 
 export default function Login() {
   const history = useHistory()
+  const dispatch = useDispatch()
   const [values, setValues] = React.useState({
     amount: "",
     password: "",
@@ -101,6 +104,7 @@ export default function Login() {
                 dirty: false,
                 msg: "",
               })
+              dispatch(setUserSetting({ ...user }))
               history.push(`/${user.defaultOrganization}/dashboard`)
             }
             break
@@ -232,6 +236,7 @@ export default function Login() {
               setKeepMeUser({ user: null, password: null })
             }
             setTokenLoginSucceeded({ token, user })
+            dispatch(setUserSetting({ ...user }))
             setError({
               dirty: false,
               msg: "",

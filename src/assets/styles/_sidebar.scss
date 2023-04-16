@@ -15,7 +15,7 @@
     overflow: hidden;
     flex-wrap: nowrap;
     flex-direction: column;
-    margin-bottom: 60px;
+    // margin-bottom: 60px;
 
     .nav-item {
       text-align: left;
@@ -128,9 +128,8 @@
 
         &[aria-expanded="true"]{
           .menu-arrow{
-            &:before{
-              content: "\f140";
-            }
+            transform: rotate(90deg);
+            transition: all $action-transition-rotate;
           }
         }
       }
@@ -321,7 +320,7 @@
           height: auto;
           border-top: 0;
           &:before {
-            content: "\F054";
+            // content: "\F054";
             font-family: "Material Design Icons";
             display: block;
             position: absolute;
