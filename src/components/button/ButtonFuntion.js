@@ -2,7 +2,7 @@
 import Button from '@mui/material/Button'
 import { useTranslation } from 'react-i18next'
 import PropTypes from 'prop-types'
-import { EButtonType, EColor } from 'configs/constants'
+import { EButtonType, EColor } from 'configs/enums'
 import { makeStyles } from "@material-ui/core/styles"
 import { createTheme, ThemeProvider } from "@mui/material/styles"
 import Tooltip from "@mui/material/Tooltip"

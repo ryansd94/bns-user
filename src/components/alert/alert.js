@@ -1,6 +1,6 @@
 import * as React from 'react'
 import MuiAlert from '@mui/material/Alert'
-import { EAlertType } from 'configs/constants'
+import { EAlertType } from 'configs/enums'
 import _ from 'lodash'
 
 const Alert = (props) => {

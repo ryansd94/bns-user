@@ -1,5 +1,5 @@
 import React from "react"
-import { EButtonType } from 'configs/constants'
+import { EButtonType } from 'configs/enums'
 import { DropdownMenu } from 'components/dropdown'
 
 const ActionButton = (props) => {

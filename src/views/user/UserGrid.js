@@ -1,7 +1,7 @@
 import React, { useState } from "react"
 import GridData from "components/table/GridData"
 import { useTranslation } from "react-i18next"
-import { sendMailUser } from "services"
+import { post } from "services"
 import { useSelector, useDispatch } from "react-redux"
 import { openMessage } from "stores/components/snackbar"
 import { ERROR_CODE, EUserStatus, baseUrl } from "configs"
@@ -21,7 +21,7 @@ const UserGrid = React.memo((props) => {
   const [status, setStatus] = useState(null)
 
   const onSendMail = async (email) => {
-    const res = await sendMailUser({ emails: [email] })
+    const res = await post(`${baseUrl.jm_user}/add-user`,{ emails: [email] })
     if (res.errorCode == ERROR_CODE.success) {
     }
     dispatch(openMessage({ ...res }))

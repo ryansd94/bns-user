@@ -25,7 +25,7 @@ const theme = createTheme({
 })
 
 class App extends Component {
-    state = {}
+    state = { isFullPageLayout: true }
     componentDidMount() {
         //Progress.hide()
         this.onRouteChanged()

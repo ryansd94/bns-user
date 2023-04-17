@@ -1,12 +1,12 @@
 import { createInstance, handleError } from "services/base"
-import { buildQueryString,getUserInfo } from "helpers"
-import { EStatusResponse } from 'configs/constants'
+import { buildQueryString, getUserInfo } from "helpers"
+import { EStatusResponse } from 'configs/enums'
 import _ from 'lodash'
 
-const user = getUserInfo() 
-const services = createInstance(user.defaultOrganization)
 
 export const save = async (baseUrl, param) => {
+  const user = getUserInfo()
+  const services = createInstance(user.defaultOrganization)
   try {
     const query = `${baseUrl}`
     if (_.isEmpty(param.id)) {
@@ -29,6 +29,8 @@ export const save = async (baseUrl, param) => {
 }
 
 export const get = async (baseUrl, param = null) => {
+  const user = getUserInfo()
+  const services = createInstance(user.defaultOrganization)
   try {
     let query = `${baseUrl}`
     if (param) {
@@ -49,6 +51,8 @@ export const get = async (baseUrl, param = null) => {
 }
 
 export const getByID = async (baseUrl, id) => {
+  const user = getUserInfo()
+  const services = createInstance(user.defaultOrganization)
   try {
     let query = `${baseUrl}/${id}`
     const res = await services.get(query)
@@ -66,6 +70,8 @@ export const getByID = async (baseUrl, id) => {
 }
 
 export const deleteData = async (baseUrl, id) => {
+  const user = getUserInfo()
+  const services = createInstance(user.defaultOrganization)
   try {
     let query = `${baseUrl}/${id}`;
     const res = await services.delete(query);
@@ -83,6 +89,8 @@ export const deleteData = async (baseUrl, id) => {
 }
 
 export const post = async (baseUrl, param) => {
+  const user = getUserInfo()
+  const services = createInstance(user.defaultOrganization)
   try {
     const query = `${baseUrl}`
     const res = await services.post(query, param)

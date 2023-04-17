@@ -25,7 +25,7 @@ import {
   IconRequire,
   IconSetting
 } from "components/icon/icon"
-import { EColor } from 'configs/constants'
+import { EColor } from 'configs/enums'
 
 const useStyles = makeStyles({
   root: {

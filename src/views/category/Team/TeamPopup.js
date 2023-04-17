@@ -16,7 +16,7 @@ import {
   setLoadingPopup,
   setReload,
 } from "stores/views/master"
-import { getTeamByID, saveTeam, get } from "services"
+import { getByID, save, get } from "services"
 import { ERROR_CODE, baseUrl } from "configs"
 import { loading as loadingButton } from "stores/components/button"
 
@@ -93,7 +93,7 @@ const TeamPopup = React.memo((props) => {
     dispatch(change_title(t("Chỉnh sửa Nhóm")))
     dispatch(setLoadingPopup(true))
     dispatch(open())
-    await getTeamByID(editData).then((res) => {
+    await getByID(baseUrl.jm_team, editData).then((res) => {
       //dispatch(setEditData(res.data))
       setValue("id", res.data.id || "")
       setValue("name", res.data.name || "")
@@ -133,7 +133,7 @@ const TeamPopup = React.memo((props) => {
       postData.members = data.members.map((item, index) => item.id)
     // alert(JSON.stringify(postData))
     // return
-    const res = await saveTeam(postData)
+    const res = await save(baseUrl.jm_team, postData)
     dispatch(loadingButton(false))
     dispatch(openMessage({ ...res }))
     if (res.errorCode == ERROR_CODE.success) {

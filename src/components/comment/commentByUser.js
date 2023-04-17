@@ -26,7 +26,7 @@ const CommentByUser = (props) => {
             }
         } else { //case reply comment
             var commentReply = deepFind(comments, function (obj) {
-                return obj.id === parentId;
+                return obj.id === parentId
             })
             if (!_.isNil(commentReply)) {
                 newComment.level = commentReply.level + 1

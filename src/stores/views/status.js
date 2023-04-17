@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit"
-import { VisibleDefault } from 'configs/constants'
+import { VisibleDefault } from 'configs/enums'
 
 const initialState = {
     columnVisibility: {

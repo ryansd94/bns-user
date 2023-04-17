@@ -1,14 +1,11 @@
-const ADD_NEW = 'ADD_NEW'
-const HIDE_SHOW_COLUMN = 'HIDE_SHOW_COLUMN'
-const EDIT = 'EDIT'
-const DELETE = 'DELETE'
+import { constants } from "configs"
 
-export default {
+export const buttonKey = {
     defaultKeys: [
-        ADD_NEW,
-        HIDE_SHOW_COLUMN,
-        EDIT,
-        DELETE
+        constants.add_new,
+        constants.hidw_show_column,
+        constants.edit,
+        constants.delete
     ],
     menu: {
     }

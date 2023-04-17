@@ -13,8 +13,8 @@ import {
   setReload,
   setEditData,
 } from "stores/views/master"
-import { sendMailUser } from "services"
-import { ERROR_CODE } from "configs"
+import { post } from "services"
+import { ERROR_CODE, baseUrl } from "configs"
 import { loading as loadingButton } from "stores/components/button"
 
 const UserPopup = React.memo((props) => {
@@ -42,7 +42,7 @@ const UserPopup = React.memo((props) => {
     // alert(JSON.stringify(data))
     // return
     dispatch(loadingButton(true))
-    const res = await sendMailUser(data)
+    const res = await post(`${baseUrl.jm_user}/add-user`, data)
     dispatch(loadingButton(false))
     dispatch(openMessage({ ...res }))
     if (res.errorCode == ERROR_CODE.success) {

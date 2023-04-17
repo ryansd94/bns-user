@@ -8,9 +8,7 @@ import _ from "lodash"
 import { baseUrl } from "configs"
 import { TaskBoard } from './taskBoard'
 import { getUserInfo, setUserInfo } from "helpers"
-import { EViewMode } from 'configs/constants'
-import Grid from "@mui/material/Grid"
-import { Alert } from 'components/alert'
+import { EViewMode } from 'configs/enums'
 
 const Task = () => {
   console.log("render Task")

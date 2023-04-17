@@ -8,7 +8,7 @@ import {
 import { useTranslation } from "react-i18next"
 import { EFilterType, baseUrl } from "configs"
 import TaskTypeMenu from './taskTypeMenu'
-import { EButtonType } from 'configs/constants'
+import { EButtonType } from 'configs/enums'
 import ButtonFuntion from 'components/button/ButtonFuntion'
 import _ from 'lodash'
 

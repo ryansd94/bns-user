@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import Grid from "@mui/material/Grid"
 import ButtonFuntion from 'components/button/ButtonFuntion'
-import { EButtonType } from 'configs/constants'
+import { EButtonType } from 'configs/enums'
 import SingleAddSelect from 'components/select/SingleAddSelect'
 import { useTranslation } from "react-i18next"
 import ClickAwayListener from '@mui/material/ClickAwayListener'

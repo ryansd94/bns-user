@@ -15,7 +15,8 @@ i18n
                     "ADD_NEW": "Thêm mới",
                     "HIDE_SHOW_COLUMN": "Ẩn/hiện cột",
                     "EDIT": "Chỉnh sửa",
-                    "DELETE": "Xóa"
+                    "DELETE": "Xóa",
+                    "VIEW": "Hiển thị"
                 }
             },
             en: {
@@ -24,7 +25,8 @@ i18n
                     "ADD_NEW": "Add new",
                     "HIDE_SHOW_COLUMN": "Hide/show column",
                     "EDIT": "Edit",
-                    "DELETE": "Delete"
+                    "DELETE": "Delete",
+                    "VIEW": "View"
                 }
             },
             ar: {

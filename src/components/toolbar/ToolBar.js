@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { useSelector, useDispatch } from "react-redux"
 import ButtonFuntion from 'components/button/ButtonFuntion'
 import PropTypes from 'prop-types'
-import { EButtonType } from 'configs/constants'
+import { EButtonType } from 'configs/enums'
 import { ConfigColumn, DropdownMenu } from 'components/dropdown'
 import { Filter } from 'components/filter'
 import MenuItem from '@mui/material/MenuItem'

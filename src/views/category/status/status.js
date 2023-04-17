@@ -6,7 +6,7 @@ import { useDispatch, useSelector } from "react-redux"
 import { Resizable } from 'components/resizable'
 import StatusToolbar from "./statusToolbar"
 import { Alert } from 'components/alert'
-import { EAlertType } from 'configs/constants'
+import { EAlertType } from 'configs/enums'
 import { get } from "services"
 import { baseUrl } from "configs"
 import _ from 'lodash'
