@@ -1,6 +1,6 @@
 import React, { Component, useState, useEffect } from 'react'
 import { Dropdown } from 'react-bootstrap'
-import { Link, useHistory } from 'react-router-dom'
+import { Link, useHistory, Redirect } from 'react-router-dom'
 import { Trans } from 'react-i18next'
 import i18n from '../../i18n'
 import { AvatarControl } from 'components/avatar'
@@ -9,6 +9,8 @@ import {
     getUserInfo
 } from "helpers"
 import firebase from "firebase/compat/app"
+import "firebase/compat/auth"
+import _ from 'lodash'
 
 function MyComponent() {
     const [languageIcon, setLanguageIcon] = useState('flag-icon flag-icon-vn')
@@ -19,6 +21,12 @@ function MyComponent() {
     function toggleOffcanvas() {
         document.querySelector('.sidebar-offcanvas').classList.toggle('active')
     }
+    // Configure Firebase.
+    const config = {
+        apiKey: process.env.REACT_APP_FIREBASE_API_KEY,
+        authDomain: process.env.REACT_APP_FIREBASE_AUTH_DOMAIN,
+    }
+    firebase.initializeApp(config)
 
     useEffect(() => {
         i18n.changeLanguage('vi')
@@ -35,16 +43,15 @@ function MyComponent() {
         }
         i18n.changeLanguage(lng)
     }
+
     const onLogOut = () => {
         resetUserToken()
-        // signOut(auth).then(() => {
-
-        // }).catch((error) => {
-        //     // An error happened.
-        // })
-        firebase.auth().signOut()
-        history.push(`/login`)
+        if (!_.isNil(firebase)) {
+            firebase.auth().signOut()
+        }
+        history.push('/login')
     }
+
     return (
         <nav className="navbar default-layout-navbar col-lg-12 col-12 p-0 fixed-top d-flex flex-row">
             <div className="text-center navbar-brand-wrapper d-flex align-items-center justify-content-center">
@@ -172,7 +179,7 @@ function MyComponent() {
                                         <span><Trans>Lock Account</Trans></span>
                                         <i className="mdi mdi-lock ml-1"></i>
                                     </Dropdown.Item>
-                                    <Dropdown.Item onClick={onLogOut} className="dropdown-item d-flex align-items-center justify-content-between" href="!#">
+                                    <Dropdown.Item onClick={onLogOut} className="dropdown-item d-flex align-items-center justify-content-between">
                                         <span><Trans>Log Out</Trans></span>
                                         <i className="mdi mdi-logout ml-1"></i>
                                     </Dropdown.Item>

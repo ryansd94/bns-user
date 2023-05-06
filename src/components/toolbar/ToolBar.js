@@ -44,7 +44,7 @@ const ToolBar = React.memo(props => {
     return (
         <Grid container gap={2} item xs direction={'column'} className='no-wrap fg-initial body-content-item'>
             <Grid item xs>
-                <ConfigColumn onColumnConfigChange={onColumnConfigChange} columnModel={columnModel} anchorEl={anchorElColumn} handleClose={handleCloseColumn}></ConfigColumn>
+                <ConfigColumn onColumnConfigChange={onColumnConfigChange} columnModel={columnModel} anchorEl={anchorElColumn} handleClose={handleCloseColumn} />
                 <ButtonFuntion spacingLeft={0} visible={visible.column} onClick={handleClickColumn} type={EButtonType.columnConfig} />
                 <ButtonFuntion spacingLeft={1} visible={visible.column} open={anchorElFilter} onClick={handleClickFilter} type={EButtonType.filter} />
                 <DropdownMenu visible={visible.function} type={EButtonType.function} genderDropdownItem={genderDropdownItem} />

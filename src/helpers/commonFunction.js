@@ -1,5 +1,3 @@
-
-
 import Moment from 'moment'
 import _ from 'lodash'
 
@@ -52,4 +50,22 @@ export const deepFindAll = (arr, search, keyChildItem = 'childrens') => {
         }
     }
     return data
+}
+
+export const convertObjectToArray = (objectData, objectKeyName = 'key', objectDataName = 'value') => {
+    return Object.keys(objectData).map(function (name) {
+        var obj = {}
+        obj[objectKeyName] = name
+        obj[objectDataName] = objectData[name]
+        return obj
+    })
+}
+
+export const getLastPathUrl = () => {
+    let path = window.location.pathname
+    if (_.includes(path, '/')) {
+        const pathSplits = path.split('/')
+        path = pathSplits[pathSplits.length - 1]
+    }
+    return path
 }

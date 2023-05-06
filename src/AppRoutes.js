@@ -17,18 +17,20 @@ const TaskView = lazy(() => import('./views/task/taskView'))
 const Priority = lazy(() => import('./views/category/priority'))
 const Project = lazy(() => import('./views/project/project'))
 const Summary = lazy(() => import('./views/dashboard/summary'))
-const Permission = lazy(() => import('./views/permission/permission'))
+const ViewPermission = lazy(() => import('./views/permission/viewPermission/viewPermission'))
+const NotPermission = lazy(() => import('./views/permission/notPermission/notPermission'))
 
 const AppRoutes = React.memo(() => {
     return (
         <Suspense fallback={<Spinner />}>
             <Switch>
+                <Route exact path="/login" component={Login} />
+                <Route exact path="/access-denied" component={NotPermission} />
                 <Route exact path="/:organization/dashboard" component={Dashboard} />
                 <Route exact path="/:organization/category/team" component={Team} />
                 <Route exact path="/:organization/category/status" component={Status} />
                 <Route exact path="/:organization/category/priority" component={Priority} />
                 <Route exact path="/:organization/category/tasktype" component={TaskType} />
-                <Route exact path="/login" component={Login} />
                 <Route exact path="/:organization/user" component={User} />
                 <Route exact path="/:organization/template" component={Template} />
                 <Route exact path="/:organization/task" component={Task} />
@@ -39,7 +41,7 @@ const AppRoutes = React.memo(() => {
                 <Route exact path="/:organization/signup" render={(props) => (<Signup {...props} />)} component={Signup} />
                 <Route exact path="/:organization/signup/jointeam" render={(props) => (<JoinTeam {...props} />)} component={JoinTeam} />
                 <Route exact path="/:organization/project" component={Project} />
-                <Route exact path="/:organization/permission" component={Permission} />
+                <Route exact path="/:organization/viewPermission" component={ViewPermission} />
                 <Route exact path="/:organization/overview/summary" component={Summary} />
 
 
@@ -48,7 +50,7 @@ const AppRoutes = React.memo(() => {
                 <Route exact path="/:organization/:projectCode/task" component={Task} />
                 <Route exact path="/:organization/:projectCode/task/create/:id" component={TaskView} />
                 <Route exact path="/:organization/:projectCode/task/edit/:taskEditId" component={TaskView} />
-                <Redirect to="/login" />
+                <Redirect to="/access-denied" />
             </Switch>
         </Suspense>
     )

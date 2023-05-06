@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useStateIfMounted } from "react"
+import { useState, useEffect } from "react"
 import { useTranslation } from "react-i18next"
 import PropTypes from "prop-types"
 import Tooltip from "@mui/material/Tooltip"
@@ -23,8 +23,11 @@ import {
   IconComment,
   IconFullScreen,
   IconRequire,
-  IconSetting
+  IconSetting,
+  IconSwitchRight,
+  IconSwitchLeft
 } from "components/icon/icon"
+import { isHasPermissionForButton } from "helpers"
 import { EColor } from 'configs/enums'
 
 const useStyles = makeStyles({
@@ -38,8 +41,11 @@ const useStyles = makeStyles({
 const ButtonIcon = (props) => {
   const classes = useStyles()
   const { t } = useTranslation()
-  const { type, onClick, title, disabled, color, size, showTooltip = true, style, refs, className = 'button-icon' } = props
+  const { type, onClick, title, disabled, color, size, showTooltip = true,
+    style, refs, className = 'button-icon', isCheckPermissionDefault = false } = props
   const [titleDefault, setTitle] = useState("")
+  const [isCheckPermission, setIsCheckPermission] = useState(isCheckPermissionDefault)
+  const [isShow, setIsShow] = useState(true)
   const theme = createTheme({
     palette: {
       neutral: {
@@ -57,9 +63,11 @@ const ButtonIcon = (props) => {
     switch (type) {
       case EButtonIconType.edit:
         setTitle(t("Chỉnh sửa"))
+        setIsCheckPermission(true)
         break
       case EButtonIconType.delete:
         setTitle(t("Xóa"))
+        setIsCheckPermission(true)
         break
       case EButtonIconType.lock:
         setTitle(t("Khóa"))
@@ -97,10 +105,22 @@ const ButtonIcon = (props) => {
       case EButtonIconType.setting:
         setTitle(t("Thiết lập"))
         break
+      case EButtonIconType.switchLeft:
+        setTitle(t("Chuyển sang trái"))
+        break
+      case EButtonIconType.switchRight:
+        setTitle(t("Chuyển sang phải"))
+        break
       default:
         break
     }
   }, [])
+
+  useEffect(() => {
+    if (isCheckPermission === true) {
+      setIsShow(isHasPermissionForButton(type))
+    }
+  }, [isCheckPermission])
 
   let button
   let icon
@@ -146,6 +166,10 @@ const ButtonIcon = (props) => {
     icon = <IconRequire style={{ width: width, height: height }} />
   else if (type == EButtonIconType.setting)
     icon = <IconSetting style={{ width: width, height: height }} />
+  else if (type == EButtonIconType.switchLeft)
+    icon = <IconSwitchLeft style={{ width: width, height: height }} />
+  else if (type == EButtonIconType.switchRight)
+    icon = <IconSwitchRight style={{ width: width, height: height }} />
 
   button = (
     <IconButton
@@ -161,9 +185,9 @@ const ButtonIcon = (props) => {
     </IconButton>
   )
 
-  return showTooltip ? <ThemeProvider theme={theme}>
+  return isShow === true ? (showTooltip ? <ThemeProvider theme={theme}>
     <Tooltip title={title ? title : titleDefault}>{button}</Tooltip>
-  </ThemeProvider> : <ThemeProvider theme={theme}>{button}</ThemeProvider>
+  </ThemeProvider> : <ThemeProvider theme={theme}>{button}</ThemeProvider>) : ''
 }
 ButtonIcon.propTypes = {
   type: PropTypes.string.isRequired,

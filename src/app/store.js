@@ -13,7 +13,7 @@ import taskTypeReducer from "stores/views/taskType"
 import taskReducer from "stores/views/task"
 import priorityReducer from "stores/views/priority"
 import projectReducer from "stores/views/project"
-import permissionReducer from "stores/views/permission"
+import viewPermissionReducer from "stores/views/viewPermission"
 import menuReducer from "stores/components/menu"
 
 
@@ -32,7 +32,7 @@ const rootReducer = {
   task: taskReducer,
   priority: priorityReducer,
   project: projectReducer,
-  permission: permissionReducer,
+  viewPermission: viewPermissionReducer,
   menu: menuReducer
 }
 

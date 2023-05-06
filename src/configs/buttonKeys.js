@@ -1,11 +1,10 @@
-import { constants } from "configs"
+import { EButtonType } from 'configs/enums'
 
 export const buttonKey = {
     defaultKeys: [
-        constants.add_new,
-        constants.hidw_show_column,
-        constants.edit,
-        constants.delete
+        EButtonType.add,
+        EButtonType.edit,
+        EButtonType.delete
     ],
     menu: {
     }

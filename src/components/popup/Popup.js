@@ -103,7 +103,7 @@ const Popup = React.memo((props) => {
         >
           {stateTitle}
         </BootstrapDialogTitle>
-        <DialogContent dividers>
+        <DialogContent dividers className="flex">
           <ModalBody />
         </DialogContent>
         {isShowFooter ? <DialogActions>

@@ -49,7 +49,7 @@ export const EAlertPopupType = {
 export const EButtonType = {
   add: "Add",
   delete: "Delete",
-  columnConfig: "COLUMN_CONFIG",
+  columnConfig: "ColumnConfig",
   function: "FUNCTION",
   filter: "FILTER",
   addFilter: "Add_Filter",
@@ -65,7 +65,8 @@ export const EButtonType = {
   full: "Full",
   split: "Split",
   list: "List",
-  board: "Board"
+  board: "Board",
+  edit: "Edit",
 }
 
 export const EColumnType = {
@@ -109,7 +110,9 @@ export const EButtonIconType = {
   setting: "Setting",
   email: "Email",
   lock: "Lock",
-  unLock: "UnLock"
+  unLock: "UnLock",
+  switchLeft: "SwitchLeft",
+  switchRight: "SwitchRight"
 }
 
 export const EButtonDetailType = {
@@ -168,7 +171,8 @@ export const baseUrl = {
   jm_customcolumn: 'jm_customcolumn',
   jm_comment: 'jm_comment',
   jm_priority: 'jm_priority',
-  jm_project: 'jm_project'
+  jm_project: 'jm_project',
+  sys_viewPermission: 'sys_viewPermission'
 }
 
 export const EViewMode = {
@@ -194,6 +198,11 @@ export const EMenuType = {
   group: 'Group',
   collapse: 'Collapse',
   action: 'Action'
+}
+
+export const EPermissionObject = {
+  user: 0,
+  team: 1
 }
 
 export const _TemplateVariant = EVariant.normal

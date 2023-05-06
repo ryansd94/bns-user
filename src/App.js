@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { withRouter } from 'react-router-dom'
+import { withRouter, useHistory } from 'react-router-dom'
 import './App.scss'
 import Footer from './components/shared/Footer'
 import Navbar from './components/shared/Navbar'
@@ -11,6 +11,8 @@ import Progress from "react-progress-2"
 import CustomizedSnackbar from 'components/snackbar/CustomizedSnackbar'
 import { MuiThemeProvider, createTheme } from '@material-ui/core/styles'
 import ConfirmDeleteDialog from "components/popup/confirmDeleteDialog"
+import { isHasPermissionForAction, getLastPathUrl } from "helpers"
+import _ from 'lodash'
 
 const theme = createTheme({
     palette: {
@@ -62,16 +64,15 @@ class App extends Component {
         Progress.hide()
         if (this.props.location !== prevProps.location) {
             this.onRouteChanged()
-
         }
     }
 
     onRouteChanged() {
+        const { history } = this.props
         Progress.show()
-        const { i18n } = this.props
-        const body = document.querySelector('body')
         window.scrollTo(0, 0)
-        const fullPageLayoutRoutes = ['/login', '/signup/jointeam', '/signup', '/grid']
+        const fullPageLayoutRoutes = ['/login', '/signup/jointeam', '/signup']
+        const notCheckPermissions = ['login', 'jointeam', 'signup', 'access-denied']
         for (let i = 0; i < fullPageLayoutRoutes.length; i++) {
             if (this.props.location.pathname === fullPageLayoutRoutes[i]) {
                 this.setState({
@@ -84,6 +85,14 @@ class App extends Component {
                     isFullPageLayout: false
                 })
                 document.querySelector('.page-body-wrapper').classList.remove('full-page-wrapper')
+            }
+        }
+        const currentPath = getLastPathUrl()
+        if (!_.includes(notCheckPermissions, currentPath)) {
+            const isHasPermission = isHasPermissionForAction()
+            if (isHasPermission === false) {
+                history.push('/access-denied')
+                return
             }
         }
     }

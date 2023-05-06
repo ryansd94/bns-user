@@ -15,7 +15,7 @@ const initialState = {
 }
 
 const slice = createSlice({
-    name: "permission",
+    name: "viewPermission",
     initialState: initialState,
     reducers: {
         setColumnVisibility: (state, action) => {

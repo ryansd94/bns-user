@@ -1,14 +1,15 @@
 ﻿import React, { useEffect, useState } from 'react'
 import { Link, withRouter } from 'react-router-dom'
 import { Collapse } from 'react-bootstrap'
-import { Trans } from 'react-i18next'
-import { getUserInfo } from "helpers"
+import { getUserInfo, deepFindAll } from "helpers"
 import Grid from "@mui/material/Grid"
 import { AvatarControl } from 'components/avatar'
-import { Evariant, EMenuType } from "configs"
+import { Evariant, EMenuType, constants } from "configs"
 import { useSelector } from "react-redux"
 import _ from 'lodash'
 import { useTranslation } from "react-i18next"
+import { setActionActive } from "stores/views/master"
+import { useDispatch } from "react-redux"
 
 const Sidebar = (props) => {
     const { location } = props
@@ -19,7 +20,9 @@ const Sidebar = (props) => {
         return !_.isEmpty(userFromState) ? userFromState : getUserInfo()
     }
     const user = getUser()
+    const viewPermissions = user.viewPermissions
     const { t } = useTranslation()
+    const dispatch = useDispatch()
 
     useEffect(() => {
         onRouteChanged()
@@ -47,14 +50,6 @@ const Sidebar = (props) => {
         if (user) {
             const code = user?.setting?.projectSetting?.current
             return `/${code}${path}`
-        }
-        return path
-    }
-
-    const getPath = (path) => {
-        if (user) {
-            const defaultOrganization = user.defaultOrganization
-            return !_.isNil(defaultOrganization) ? `/${user.defaultOrganization}${path}` : `${path}`
         }
         return path
     }
@@ -92,7 +87,8 @@ const Sidebar = (props) => {
     const isPathActiveCollapse = (items) => {
         let isActive = false
         _.map(items, (item) => {
-            if (_.includes(location.pathname, item.path)) {
+            const path = getPathItem(item)
+            if (location.pathname === path) {
                 isActive = true
                 return isActive
             }
@@ -104,26 +100,41 @@ const Sidebar = (props) => {
         return state[menuState]
     }
 
+    const onActionClick = (action) => {
+        dispatch(setActionActive(action.key))
+    }
+
     const renderMenuItem = (item, isChild = false) => {
         switch (item.type) {
             case EMenuType.group:
-                return <>
+                const childGroups = deepFindAll(item.childs, function (obj) {
+                    return _.isEqual(_.toLower(obj.parent), _.toLower(item.key))
+                }, 'childs')
+                const childKeys = _.map(childGroups, (x) => { return _.toLower(x.key) })
+                const isActiveGroup = _.some(viewPermissions, (x) => _.includes(childKeys, _.toLower(x.view)) && _.find(x.actions, (a) => _.isEqual(a.key, constants.view) && a.value === true))
+                return isActiveGroup || user.isMainAccount ? <>
                     <li key={item.key} className="nav-item nav-category"><span>{t(item.title)}</span></li>
                     {
                         _.map(item.childs, (child) => {
                             return renderMenuItem(child)
                         })
                     }
-                </>
+                </> : ''
             case EMenuType.action:
-                return <li key={item.key} className={`nav-item ${isChild === false ? (isPathActiveCollapse([item]) ? 'active' : '') : ''}`}>
-                    <Link className={`nav-link ${isChild == true ? (isPathActiveCollapse([item]) ? 'active' : '') : ''}`} to={getPathItem(item)}>
+                const isActiveAction = _.some(viewPermissions, (x) => _.isEqual(_.toLower(x.view), _.toLower(item.key)) && _.find(x.actions, (a) => _.isEqual(a.key, constants.view) && a.value === true))
+                return isActiveAction || user.isMainAccount ? <li key={item.key} className={`nav-item ${isChild === false ? (isPathActiveCollapse([item]) ? 'active' : '') : ''}`}>
+                    <Link onClick={() => onActionClick(item)} className={`nav-link ${isChild == true ? (isPathActiveCollapse([item]) ? 'active' : '') : ''}`} to={getPathItem(item)}>
                         {!_.isEmpty(item.icon) ? <span className="icon-bg"><i className={`${item.icon} menu-icon`}></i></span> : ''}
                         <span className={`menu-title ${isChild === true ? 'item' : ''}`}>{t(item.title)}</span>
                     </Link>
-                </li>
+                </li> : ''
             case EMenuType.collapse:
-                return <li key={item.key} className={isPathActiveCollapse(item.childs) ? 'nav-item active' : 'nav-item'}>
+                const childCollapses = deepFindAll(item.childs, function (obj) {
+                    return _.isEqual(_.toLower(obj.parent), _.toLower(item.key))
+                }, 'childs')
+                const childCollapseKeys = _.map(childCollapses, (x) => { return _.toLower(x.key) })
+                const isActiveCollapse = _.some(viewPermissions, (x) => _.includes(childCollapseKeys, _.toLower(x.view)) && _.find(x.actions, (a) => _.isEqual(a.key, constants.view) && a.value === true))
+                return isActiveCollapse || user.isMainAccount ? <li key={item.key} className={isPathActiveCollapse(item.childs) ? 'nav-item active' : 'nav-item'}>
                     <div aria-expanded={getAriaExpanded(item.key)} className={getAriaExpanded(item.key) ? 'nav-link menu-expanded' : 'nav-link'} onClick={() => toggleMenuState(item.key)} data-toggle="collapse">
                         {!_.isEmpty(item.icon) ? <span className="icon-bg"><i className={`${item.icon} menu-icon`}></i></span> : ''}
                         <span className="menu-title">{t(item.title)}</span>
@@ -138,7 +149,7 @@ const Sidebar = (props) => {
                             }
                         </ul>
                     </Collapse>
-                </li>
+                </li> : ''
             default:
                 break
         }
@@ -158,82 +169,6 @@ const Sidebar = (props) => {
             </Grid>
         </Grid>
         {renderMenu()}
-        {/* <nav className="sidebar sidebar-offcanvas" id="sidebar">
-            <ul className="nav">
-                <li className={isPathActive(getPath(getProjectPath('/overview/summary'))) || isPathActive(getPath(getProjectPath('/overview/dashboard'))) ? 'nav-item active' : 'nav-item'}>
-                    <div aria-expanded={getAriaExpanded('overview')} className={state.overview ? 'nav-link menu-expanded' : 'nav-link'} onClick={() => toggleMenuState('overview')} data-toggle="collapse">
-                        <span className="icon-bg"><i className="mdi mdi-crosshairs-gps menu-icon"></i></span>
-                        <span className="menu-title"><Trans>Tổng quan</Trans></span>
-                        <i className="menu-arrow"></i>
-                    </div>
-                    <Collapse in={state.overview}>
-                        <ul className="nav flex-column sub-menu">
-                            <li className="nav-item"> <Link className={isPathActive(getPath(getProjectPath('/overview/summary'))) ? 'nav-link active' : 'nav-link'} to={getPath(getProjectPath('/overview/summary'))}><Trans>Tóm tắt</Trans></Link></li>
-                            <li className="nav-item"> <Link className={isPathActive(getPath(getProjectPath('/overview/dashboard'))) ? 'nav-link active' : 'nav-link'} to={getPath(getProjectPath("/overview/dashboard"))}><Trans>Tổng quan</Trans></Link></li>
-                        </ul>
-                    </Collapse>
-                </li>
-                <li className={isPathActive(getPath('/project')) ? 'nav-item active' : 'nav-item'}>
-                    <Link className="nav-link" to={getPath('/project')}>
-                        <span className="icon-bg"><i className="mdi mdi-cube menu-icon"></i></span>
-                        <span className="menu-title"><Trans>Dự án</Trans></span>
-                    </Link>
-                </li>
-                <li className="nav-item nav-category"><Trans>Main</Trans></li>
-                <li className={isPathActive(getPath(getProjectPath('/dashboard'))) ? 'nav-item active' : 'nav-item'}>
-                    <Link className="nav-link" to={getPath(getProjectPath('/dashboard'))}>
-                        <span className="icon-bg"><i className="mdi mdi-cube menu-icon"></i></span>
-                        <span className="menu-title"><Trans>Trang chủ</Trans></span>
-                    </Link>
-                </li>
-                <li className="nav-item nav-category"><Trans>Danh mục</Trans></li>
-                <li className={isPathActive(getPath('/category/team')) || isPathActive(getPath('/category/priority')) ? 'nav-item active' : 'nav-item'}>
-                    <div aria-expanded={getAriaExpanded('category')} className={state.category ? 'nav-link menu-expanded' : 'nav-link'} onClick={() => toggleMenuState('category')} data-toggle="collapse">
-                        <span className="icon-bg"><i className="mdi mdi-crosshairs-gps menu-icon"></i></span>
-                        <span className="menu-title"><Trans>Danh mục</Trans></span>
-                        <i className="menu-arrow"></i>
-                    </div>
-                    <Collapse in={state.category}>
-                        <ul className="nav flex-column sub-menu">
-                            <li className="nav-item"> <Link className={isPathActive(getPath('/category/team')) ? 'nav-link active' : 'nav-link'} to={getPath('/category/team')}><Trans>Nhóm</Trans></Link></li>
-                            <li className="nav-item"> <Link className={isPathActive(getPath('/category/priority')) ? 'nav-link active' : 'nav-link'} to={getPath("/category/priority")}><Trans>Độ ưu tiên</Trans></Link></li>
-                        </ul>
-                    </Collapse>
-                </li>
-                <li className="nav-item nav-category"><Trans>Người dùng</Trans></li>
-                <li className={isPathActive('/user') ? 'nav-item active' : 'nav-item'}>
-                    <Link className="nav-link" to={getPath("/user")}>
-                        <span className="icon-bg"><i className="mdi mdi-cube menu-icon"></i></span>
-                        <span className="menu-title"><Trans>Người dùng</Trans></span>
-                    </Link>
-                </li>
-                <li className="nav-item nav-category"><Trans>Công việc</Trans></li>
-                <li className={isPathActive(getPath('/template')) ? 'nav-item active' : 'nav-item'}>
-                    <Link className="nav-link" to={getPath('/template')}>
-                        <span className="icon-bg"><i className="mdi mdi-cube menu-icon"></i></span>
-                        <span className="menu-title"><Trans>Mẫu công việc</Trans></span>
-                    </Link>
-                </li>
-                <li className={isPathActive('/category/status') ? 'nav-item active' : 'nav-item'}>
-                    <Link className="nav-link" to={getPath("/category/status")}>
-                        <span className="icon-bg"><i className="mdi mdi-cube menu-icon"></i></span>
-                        <span className="menu-title"><Trans>Trạng thái</Trans></span>
-                    </Link>
-                </li>
-                <li className={isPathActive('/category/tasktype') ? 'nav-item active' : 'nav-item'}>
-                    <Link className="nav-link" to={getPath("/category/tasktype")}>
-                        <span className="icon-bg"><i className="mdi mdi-cube menu-icon"></i></span>
-                        <span className="menu-title"><Trans>Loại công việc</Trans></span>
-                    </Link>
-                </li>
-                <li className={isPathActive(getPath(getProjectPath('/task'))) ? 'nav-item active' : 'nav-item'}>
-                    <Link className="nav-link" to={getPath(getProjectPath('/task'))}>
-                        <span className="icon-bg"><i className="mdi mdi-cube menu-icon"></i></span>
-                        <span className="menu-title"><Trans>Công việc</Trans></span>
-                    </Link>
-                </li>
-            </ul>
-        </nav> */}
     </div>
 }
 

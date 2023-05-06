@@ -132,59 +132,6 @@ export default function Login() {
       const user = getUserInfo()
       history.push(`/${user.defaultOrganization}/dashboard`)
     }
-    else {
-      // const unregisterAuthObserver = firebase
-      //   .auth()
-      //   .onAuthStateChanged(async (user) => {
-      //     if (!user) {
-      //       return
-      //     }
-      //     const token = await user.getIdToken()
-      //     const res = await loginGoogle({
-      //       token: token,
-      //     })
-      //     switch (res.status) {
-      //       case httpStatus.OK: {
-      //         const { data } = res && res
-      //         if (data.errorCode == ERROR_CODE.userNotRegister) {
-      //           history.push(`/signup?token=${token}`)
-      //           break
-      //         } else if (data.errorCode != ERROR_CODE.success) {
-      //           setError({
-      //             dirty: true,
-      //             msg: "tài hkoản hoặc mật khẩu sai",
-      //           })
-      //           break
-      //         } else {
-      //           const { data } = res && res.data
-      //           const token = {
-      //             accessToken: data.token,
-      //             refreshToken: data.token,
-      //             shopIndex: data.shopIndex,
-      //           }
-      //           const user = { ...data, isAdmin: true, acceptScreen: [] }
-      //           setTokenLoginSucceeded({ token, user })
-      //           setError({
-      //             dirty: false,
-      //             msg: "",
-      //           })
-      //           history.push(`/dashboard`)
-      //         }
-      //         break
-      //       }
-      //       default: {
-      //         setError({
-      //           dirty: true,
-      //           msg: "Đã có lỗi xảy ra. Vui lòng thử lại sau",
-      //         })
-      //         resetUserToken()
-      //         break
-      //       }
-      //     }
-      //   })
-      //   return () => unregisterAuthObserver()
-    }
-
   }, [])
   // Configure Firebase.
   const config = {
@@ -243,33 +190,6 @@ export default function Login() {
               msg: "",
             })
             history.push(`${user.defaultOrganization}/dashboard`)
-            //let checkRole = jwt_decode(data.jwToken)
-            //if (Array.isArray(checkRole.roles) && checkRole.roles.length > 0) {
-            //    const token = {
-            //        accessToken: data.jwToken,
-            //        refreshToken: data.refreshToken,
-            //    }
-            //    const user = { ...data, isAdmin: true, acceptScreen: [] }
-            //    setTokenLoginSucceeded({ token, user })
-            //    setError({
-            //        dirty: false,
-            //        msg: '',
-            //    })
-            //    history.push(`/`)
-            //} else {
-            //    let acceptScreen = JSON.parse(checkRole.api_access)
-            //    const token = {
-            //        accessToken: data.jwToken,
-            //        refreshToken: data.refreshToken,
-            //    }
-            //    const user = { ...data, isAdmin: false, acceptScreen }
-            //    setTokenLoginSucceeded({ token, user })
-            //    setError({
-            //        dirty: false,
-            //        msg: '',
-            //    })
-            //    history.push(`/`)
-            //}
           }
           break
         }

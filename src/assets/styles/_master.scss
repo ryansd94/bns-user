@@ -1,5 +1,3 @@
-$font_size_normal: "1rem";
-$border_control: 1px solid rgba(234, 234, 234, 1);
 button {
     text-transform: none !important;
 }
@@ -622,4 +620,16 @@ a:hover {
 .permission-child-item,
 .permission-button-content {
     margin-left: 2rem;
+}
+.group-container {
+    border: $border_control;
+    border-radius: $group-border-radius;
+    box-shadow: rgba(67, 71, 85, 0.27) 0px 0px 0.25em, rgba(90, 125, 188, 0.05) 0px 0.25em 1em;
+    .group-header {
+        padding: 1rem;
+        border-bottom: $border_control;
+    }
+}
+#draggable-dialog-title {
+    cursor: move;
 }

@@ -10,7 +10,6 @@ import { LabelControl } from 'components/label'
 import { FullScreen, useFullScreenHandle } from "react-full-screen"
 
 const AccordionControl = (props) => {
-
     const { title, name, details, isExpand, className = 'accordion-container',
         genderPopoverControl = null, isFullScreen = false, required } = props
     const [expanded, setExpanded] = useState(isExpand ? name : '')

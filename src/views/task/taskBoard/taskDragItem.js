@@ -1,6 +1,6 @@
+import { useState } from "react"
 import { Draggable } from "react-beautiful-dnd"
-import React, { useState } from "react"
-import styled, { css } from "styled-components"
+import styled from "styled-components"
 import { PopoverControl } from 'components/popover'
 
 const DragItem = styled.div`

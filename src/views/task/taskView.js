@@ -152,7 +152,7 @@ const TaskView = (props) => {
         }
 
         const fetchDataUserSuggest = async () => {
-            await get(`${baseUrl.jm_user}/suggest`, {
+            await get(`${baseUrl.jm_task}/user-suggest`, {
                 isGetAll: true
             }).then((data) => {
                 setUserSuggest(data && data.data && _.map(data.data.items, (item) => {

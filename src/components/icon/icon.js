@@ -86,10 +86,16 @@ const IconRequire = ({ style, className, onClick }) => {
 const IconSetting = ({ style, className, onClick }) => {
   return <i onClick={onClick} style={style} className={`far fa-cog ${className}`}></i>
 }
+const IconSwitchLeft = ({ style, className, onClick }) => {
+  return <i onClick={onClick} style={style} className={`far fa-arrow-alt-left ${className}`}></i>
+}
+const IconSwitchRight = ({ style, className, onClick }) => {
+  return <i onClick={onClick} style={style} className={`far fa-arrow-alt-right ${className}`}></i>
+}
 
 export {
   IconSave, IconDelete, IconEdit, IconCancel, IconEmail, IconActive, IconBlock,
   IconUnBlock, IconClean, IconApply, IconBack, IconMore, IconAdd, IconCricle, IconUp,
   IconDown, IconExpand, IconRemove, IconUpload, IconChange, IconCopy, IconComment, IconFullScreen,
-  IconHour, IconDescription, IconTable, IconList, IconRequire, IconSetting
+  IconHour, IconDescription, IconTable, IconList, IconRequire, IconSetting, IconSwitchLeft, IconSwitchRight
 }

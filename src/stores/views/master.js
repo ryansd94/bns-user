@@ -14,7 +14,8 @@ const initialState = {
   filterModel: [],
   toolbarVisible: { ...VisibleDefault },
   deleteData: {},
-  userSetting: {}
+  userSetting: {},
+  actionActive: ''
 }
 
 const slice = createSlice({
@@ -69,10 +70,14 @@ const slice = createSlice({
       } else {
         state.userSetting = { ...state.userSetting, ...action.payload }
       }
-    }
+    },
+    setActionActive: (state, action) => {
+      state.actionActive = action.payload
+    },
   },
 })
 const { reducer, actions } = slice
 export const { setData, setLoading, setPage, setReload, setSort,
-  setLoadingPopup, setEditData, setPageSize, setFilter, setToolbarVisibility, setReloadNull, setDeleteData, setUserSetting } = actions
+  setLoadingPopup, setEditData, setPageSize, setFilter, setToolbarVisibility,
+  setReloadNull, setDeleteData, setUserSetting, setActionActive } = actions
 export default reducer

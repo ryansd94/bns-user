@@ -133,7 +133,7 @@ const GridData = (props) => {
             defaultFilters: !_.isEmpty(defaultFilters) ? JSON.stringify(defaultFilters) : null
 
         }).then((data) => {
-            if (gridRef && gridRef.current.api) {
+            if (gridRef && gridRef.current && gridRef.current.api) {
                 gridRef.current.api.hideOverlay()
             }
             return data

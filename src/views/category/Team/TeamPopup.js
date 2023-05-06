@@ -68,7 +68,7 @@ const TeamPopup = React.memo((props) => {
   }, [editData])
 
   const fetchDataUser = async () => {
-    await get(baseUrl.jm_user, {
+    await get(`${baseUrl.jm_team}/users`, {
       draw: 0,
       start: 0,
       length: 10000,

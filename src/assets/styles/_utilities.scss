@@ -250,3 +250,13 @@
 .no-border {
   border: none !important;
 }
+.italic {
+  font-style: italic;
+  color: $color-italic;
+}
+.faint {
+  color: $color-italic;
+}
+.border-bottom {
+  border-bottom: $border-color;
+}

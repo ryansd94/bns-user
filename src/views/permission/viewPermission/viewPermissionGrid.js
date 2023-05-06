@@ -2,13 +2,12 @@ import { useTranslation } from "react-i18next"
 import { useSelector } from "react-redux"
 import { baseUrl } from "configs"
 import GridData from "components/table/GridData"
-import UploadIconImage from 'components/upload/uploadIcon/uploadIconImage'
 import { CellButton } from 'components/cellRender'
 
-const TaskTypeGrid = (props) => {
+const ViewPermissionGrid = (props) => {
     const { filterModels } = props
     const { t } = useTranslation()
-    const columnVisibility = { ...useSelector((state) => state.taskType.columnVisibility) }
+    const columnVisibility = { ...useSelector((state) => state.viewPermission.columnVisibility) }
 
     const columns = [
         {
@@ -17,21 +16,9 @@ const TaskTypeGrid = (props) => {
             pinned: 'left'
         },
         {
-            field: "name", headerName: t("Tên loại công việc"),
+            field: "name", headerName: t("Tên quyền"),
             flex: 1,
             pinned: 'left'
-        },
-        {
-            field: "templateName", headerName: t("Mẫu công việc"),
-        },
-        {
-            field: "icon", headerName: t("Biểu tượng"),
-            suppressAutoSize: true,
-            sortable: false,
-            cellRenderer: (params) => {
-                return params.data.icon ?
-                    <UploadIconImage color={params.data.color} src={params.data.icon} /> : ''
-            }
         },
         {
             field: "description",
@@ -45,7 +32,7 @@ const TaskTypeGrid = (props) => {
             suppressAutoSize: true,
             cellRenderer: (params) => {
                 return <strong>
-                    <CellButton id={params.data.id} url={baseUrl.jm_taskType} />
+                    <CellButton id={params.data.id} url={baseUrl.sys_viewPermission} />
                 </strong>
             },
             sortable: false,
@@ -54,11 +41,11 @@ const TaskTypeGrid = (props) => {
 
     return (
         <GridData
-            url={baseUrl.jm_taskType}
+            url={baseUrl.sys_viewPermission}
             columnVisibility={columnVisibility}
             filterModels={filterModels}
             columns={columns}></GridData>
     )
 }
 
-export default TaskTypeGrid
+export default ViewPermissionGrid

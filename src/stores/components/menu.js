@@ -5,13 +5,14 @@ import { buttonKey } from "configs"
 const initialState = {
     menu: [
         {
-            key: 'overview',
+            key: 'Overview',
             title: 'Tổng quan',
             icon: 'mdi mdi-crosshairs-gps',
             type: EMenuType.collapse,
             childs: [
                 {
-                    key: 'summary',
+                    key: 'Summary',
+                    parent: 'Overview',
                     title: 'Tóm tắt',
                     path: '/overview/summary',
                     icon: 'mdi mdi-crosshairs-gps',
@@ -23,6 +24,7 @@ const initialState = {
                 },
                 {
                     key: 'dashboard',
+                    parent: 'Overview',
                     title: 'Tổng quan',
                     path: '/overview/dashboard',
                     icon: 'mdi mdi-crosshairs-gps',
@@ -35,26 +37,28 @@ const initialState = {
             ]
         },
         {
-            key: 'project',
+            key: 'Project',
             title: 'Dự án',
             path: '/project',
             icon: 'mdi mdi-crosshairs-gps',
             type: EMenuType.action
         },
         {
-            key: 'category',
+            key: 'Category',
             type: EMenuType.collapse,
             icon: 'mdi mdi-crosshairs-gps',
             title: 'Danh mục',
             childs: [
                 {
-                    key: 'team',
+                    key: 'Team',
+                    parent: 'Category',
                     title: 'Nhóm',
                     path: '/category/team',
                     type: EMenuType.action
                 },
                 {
-                    key: 'priority',
+                    key: 'Priority',
+                    parent: 'Category',
                     title: 'Độ ưu tiên',
                     path: '/category/priority',
                     type: EMenuType.action
@@ -62,40 +66,44 @@ const initialState = {
             ]
         },
         {
-            key: 'user',
+            key: 'User',
             title: 'Người dùng',
             icon: 'mdi mdi-crosshairs-gps',
             path: '/user',
             type: EMenuType.action
         },
         {
-            key: 'task-group',
+            key: 'TaskGroup',
             title: 'Công việc',
             type: EMenuType.group,
             childs: [
                 {
-                    key: 'template',
+                    key: 'Template',
+                    parent: 'TaskGroup',
                     title: 'Mẫu công việc',
                     path: '/template',
                     icon: 'mdi mdi-crosshairs-gps',
                     type: EMenuType.action
                 },
                 {
-                    key: 'status',
+                    key: 'Status',
+                    parent: 'TaskGroup',
                     title: 'Trạng thái',
                     path: '/category/status',
                     icon: 'mdi mdi-crosshairs-gps',
                     type: EMenuType.action
                 },
                 {
-                    key: 'tasktype',
+                    key: 'Tasktype',
+                    parent: 'TaskGroup',
                     title: 'Loại công việc',
                     path: '/category/tasktype',
                     icon: 'mdi mdi-crosshairs-gps',
                     type: EMenuType.action
                 },
                 {
-                    key: 'task',
+                    key: 'Task',
+                    parent: 'TaskGroup',
                     title: 'Công việc',
                     path: '/task',
                     icon: 'mdi mdi-crosshairs-gps',
@@ -105,14 +113,15 @@ const initialState = {
             ]
         },
         {
-            key: 'permission-group',
+            key: 'PermissionGroup',
             title: 'Phân quyền',
             type: EMenuType.group,
             childs: [
                 {
-                    key: 'permission',
+                    key: 'Permission',
+                    parent: 'PermissionGroup',
                     title: 'Phân quyền',
-                    path: '/permission',
+                    path: '/viewPermission',
                     icon: 'far fa-shield',
                     type: EMenuType.action
                 }

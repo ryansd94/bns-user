@@ -8,6 +8,7 @@ import { createTheme, ThemeProvider } from "@mui/material/styles"
 import Tooltip from "@mui/material/Tooltip"
 import ClickAwayListener from '@mui/material/ClickAwayListener'
 import Box from '@mui/material/Box'
+import { isHasPermissionForButton } from "helpers"
 import _ from 'lodash'
 
 const useStyles = props => makeStyles(theme => ({
@@ -78,9 +79,12 @@ const ButtonFuntion = React.memo(props => {
     const classes = useStyles(props)()
     const { t } = useTranslation()
     const { type, onClick, visible = true, open,
-        label = '', style, refs, endIcon, onClickAway = null, isFloatLeft = false, className, disabled, isTextAndIcon = true } = props
+        label = '', style, refs, endIcon, onClickAway = null,
+        isFloatLeft = false, className, disabled, isTextAndIcon = true, isCheckPermissionDefault = false } = props
     const [icon, setIcon] = useState('')
     const [text, setText] = useState('')
+    const [show, setShow] = useState(true)
+    const [isCheckPermission, setIsCheckPermission] = useState(isCheckPermissionDefault)
     const [float, setFloat] = useState(isFloatLeft ? ' float-left' : ' float-right')
     const [startIcon, setStartIcon] = useState(true)
     const [color, setColor] = useState(null)
@@ -98,11 +102,13 @@ const ButtonFuntion = React.memo(props => {
             case EButtonType.add:
                 setIcon('far fa-plus' + sizeDefault)
                 setText(t('Thêm mới'))
+                setIsCheckPermission(true)
                 break
             case EButtonType.save:
                 setIcon('far fa-save' + sizeDefault)
                 setText(t('Lưu'))
                 setFloat(' float-left')
+                setIsCheckPermission(true)
                 break
             case EButtonType.addFilter:
                 setIcon('far fa-plus' + sizeDefault)
@@ -112,6 +118,7 @@ const ButtonFuntion = React.memo(props => {
             case EButtonType.delete:
                 setIcon('fas fa-trash-alt' + sizeDefault)
                 setText(t('Xóa'))
+                setIsCheckPermission(true)
                 break
             case EButtonType.columnConfig:
                 setIcon('far fa-line-columns' + sizeDefault)
@@ -142,6 +149,7 @@ const ButtonFuntion = React.memo(props => {
                 setIcon('far fa-check' + sizeDefault)
                 setText(t('Áp dụng'))
                 setFloat(' float-left')
+                setIsCheckPermission(true)
                 break
             case EButtonType.refresh:
                 setIcon('far fa-sync-alt' + sizeDefault)
@@ -196,6 +204,13 @@ const ButtonFuntion = React.memo(props => {
                 break
         }
     }
+
+    useEffect(() => {
+        if (isCheckPermission === true) {
+            setShow(isHasPermissionForButton(type))
+        }
+    }, [isCheckPermission])
+
     useEffect(() => {
         setButton()
     }, [open])
@@ -230,9 +245,9 @@ const ButtonFuntion = React.memo(props => {
     }
     else
         button = ''
-    return !_.isNil(onClickAway) ? <ClickAwayListener onClickAway={onClickAway}>
+    return show === true ? (!_.isNil(onClickAway) ? <ClickAwayListener onClickAway={onClickAway}>
         <Box sx={{ position: 'relative' }}> {button} </Box>
-    </ClickAwayListener> : button
+    </ClickAwayListener> : button) : ''
 })
 ButtonFuntion.propTypes = {
     type: PropTypes.string.isRequired,

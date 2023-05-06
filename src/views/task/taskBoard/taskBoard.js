@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useMemo } from "react"
+import React, { useEffect, useState } from "react"
 import Grid from "@mui/material/Grid"
 import { get, save } from "services"
 import { baseUrl, ERROR_CODE } from "configs"
@@ -7,6 +7,7 @@ import { TaskDragElement } from '.'
 import Box from "@mui/material/Box"
 import { useSelector } from "react-redux"
 import _ from "lodash"
+import { getUserInfo } from "helpers"
 
 const TaskBoard = React.memo((props) => {
     console.log("render TaskBoard")
@@ -14,6 +15,7 @@ const TaskBoard = React.memo((props) => {
     const [listStatus, setStatus] = useState([])
     const [listTask, setTask] = useState([])
     const isReload = useSelector((state) => state.master.isReload)
+    const user = getUserInfo()
 
     useEffect(() => {
         let mounted = true
@@ -29,13 +31,20 @@ const TaskBoard = React.memo((props) => {
     useEffect(() => {
         let mounted = true
         const getTask = async () => {
-            await get(baseUrl.jm_task, { isGetAll: true }).then((data) => {
+            await get(baseUrl.jm_task, { isGetAll: true, defaultFilters: JSON.stringify(getDefaultFilter()) }).then((data) => {
                 setTask(data && data.data && data.data.items)
             })
         }
         getTask()
         return () => { mounted = false }
-    }, [isReload])
+    }, [])
+
+    const getDefaultFilter = () => {
+        if (!_.isNil(user.setting?.projectSetting?.currentId)) {
+            return [{ column: 'projectId', condition: 0, value: user.setting?.projectSetting?.currentId }]
+        }
+        return []
+    }
 
     const onDragEnd = async (result) => {
         if (!result.destination) {
