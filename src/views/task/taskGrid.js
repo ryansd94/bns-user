@@ -16,7 +16,7 @@ import { EButtonType } from 'configs/enums'
 import TaskChildPopup from './taskChildPopup'
 import { ActionButton } from 'components/cellRender'
 import { CellButton } from 'components/cellRender'
-import { getUserInfo } from "helpers"
+import { getUserInfo, getProjectPath } from "helpers"
 
 const TaskGrid = React.memo((props) => {
     console.log("render TaskGrid")
@@ -42,7 +42,7 @@ const TaskGrid = React.memo((props) => {
             pinned: 'left',
             cellRenderer: (params) => {
                 const titleTask = <LabelIconControl id={params.data.id} name={params.data.title} color={params.data.taskType.color} icon={params.data.taskType.icon} />
-                const href = `/task/edit/${params.data.id}`
+                const href = getPathItem(`/task/edit/${params.data.id}`)
                 return <div className="select-item">
                     <LinkControl href={href} title={titleTask}></LinkControl>
                 </div>
@@ -115,6 +115,16 @@ const TaskGrid = React.memo((props) => {
             cellRenderer: 'ActionBtnRenderer',
         },
     ])
+
+    const getPathItem = (url) => {
+        let path = url
+        path = getProjectPath(path)
+        if (user) {
+            const defaultOrganization = user.defaultOrganization
+            path = !_.isNil(defaultOrganization) ? `/${user.defaultOrganization}${path}` : `${path}`
+        }
+        return path
+    }
 
     const addChildTask = (data) => {
         setId(data.id)

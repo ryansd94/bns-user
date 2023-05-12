@@ -11,6 +11,7 @@ import {
 import firebase from "firebase/compat/app"
 import "firebase/compat/auth"
 import _ from 'lodash'
+import BreadCrumb from './breadCrumb'
 
 function MyComponent() {
     const [languageIcon, setLanguageIcon] = useState('flag-icon flag-icon-vn')
@@ -62,7 +63,8 @@ function MyComponent() {
                 <button className="navbar-toggler navbar-toggler align-self-center" type="button" onClick={() => document.body.classList.toggle('sidebar-icon-only')}>
                     <span className="mdi mdi-menu"></span>
                 </button>
-                <div className="search-field d-none d-md-block">
+                <BreadCrumb />
+                {/* <div className="search-field d-none d-md-block">
                     <form className="d-flex align-items-center h-100" action="#">
                         <div className="input-group">
                             <div className="input-group-prepend bg-transparent">
@@ -71,44 +73,8 @@ function MyComponent() {
                             <input type="text" className="form-control bg-transparent border-0" placeholder="Search products" />
                         </div>
                     </form>
-                </div>
+                </div> */}
                 <ul className="navbar-nav navbar-nav-right">
-                    <li className="nav-item nav-profile d-none d-xl-flex">
-                        <Dropdown alignRight>
-                            <Dropdown.Toggle className="nav-link count-indicator">
-                                <Trans>Reports</Trans>
-                            </Dropdown.Toggle>
-                            <Dropdown.Menu className="preview-list navbar-dropdown">
-                                <Dropdown.Item className="dropdown-item d-flex align-items-center" href="!#" onClick={evt => evt.preventDefault()}>
-                                    <i className="mdi mdi-file-pdf mr-2"></i><Trans>PDF</Trans>
-                                </Dropdown.Item>
-                                <div className="dropdown-divider"></div>
-                                <Dropdown.Item className="dropdown-item d-flex align-items-center" href="!#" onClick={evt => evt.preventDefault()}>
-                                    <i className="mdi mdi-file-excel mr-2"></i><Trans>Excel</Trans>
-                                </Dropdown.Item>
-                                <div className="dropdown-divider"></div>
-                                <Dropdown.Item className="dropdown-item d-flex align-items-center" href="!#" onClick={evt => evt.preventDefault()}>
-                                    <i className="mdi mdi-file-word mr-2"></i><Trans>doc</Trans>
-                                </Dropdown.Item>
-                            </Dropdown.Menu>
-                        </Dropdown>
-                    </li>
-                    <li className="nav-item nav-profile d-none d-xl-flex">
-                        <Dropdown alignRight>
-                            <Dropdown.Toggle className="nav-link count-indicator">
-                                <Trans>Projects</Trans>
-                            </Dropdown.Toggle>
-                            <Dropdown.Menu className="preview-list navbar-dropdown">
-                                <Dropdown.Item className="dropdown-item d-flex align-items-center" href="!#" onClick={evt => evt.preventDefault()}>
-                                    <i className="mdi mdi-eye-outline mr-2"></i><Trans>View Project</Trans>
-                                </Dropdown.Item>
-                                <div className="dropdown-divider"></div>
-                                <Dropdown.Item className="dropdown-item d-flex align-items-center" href="!#" onClick={evt => evt.preventDefault()}>
-                                    <i className="mdi mdi-pencil-outline mr-2"></i><Trans>Edit Project</Trans>
-                                </Dropdown.Item>
-                            </Dropdown.Menu>
-                        </Dropdown>
-                    </li>
                     <li className="nav-item nav-profile nav-language d-none d-lg-flex">
                         <Dropdown alignRight>
                             <Dropdown.Toggle className="nav-link count-indicator">

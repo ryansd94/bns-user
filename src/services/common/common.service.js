@@ -1,8 +1,7 @@
 import { createInstance, handleError } from "services/base"
-import { buildQueryString, getUserInfo } from "helpers"
-import { EStatusResponse } from 'configs/enums'
+import { buildQueryString, getUserInfo, resetUserToken } from "helpers"
+import { EStatusResponse, EErrorCodeResponse } from 'configs'
 import _ from 'lodash'
-
 
 export const save = async (baseUrl, param) => {
   const user = getUserInfo()
@@ -18,10 +17,8 @@ export const save = async (baseUrl, param) => {
     }
   } catch (error) {
     const { request, response } = error
-    if (request) {
-      return request
-    }
     if (response) {
+      validateResponse(response)
       return response
     }
     return error
@@ -41,9 +38,7 @@ export const get = async (baseUrl, param = null) => {
   } catch (error) {
     const { request, response } = error
     if (response) {
-      if (response.status === EStatusResponse.unauthorized) {
-        window.location.href = "http://localhost:3000/login";
-      }
+      validateResponse(response)
       return null
     }
     return error
@@ -59,10 +54,8 @@ export const getByID = async (baseUrl, id) => {
     return res
   } catch (error) {
     const { request, response } = error
-    if (request) {
-      return request
-    }
     if (response) {
+      validateResponse(response)
       return response
     }
     return error
@@ -73,18 +66,16 @@ export const deleteData = async (baseUrl, id) => {
   const user = getUserInfo()
   const services = createInstance(user.defaultOrganization)
   try {
-    let query = `${baseUrl}/${id}`;
-    const res = await services.delete(query);
-    return res;
+    let query = `${baseUrl}/${id}`
+    const res = await services.delete(query)
+    return res
   } catch (error) {
-    const { request, response } = error;
-    if (request) {
-      return request;
-    }
+    const { request, response } = error
     if (response) {
-      return response;
+      validateResponse(response)
+      return response
     }
-    return error;
+    return error
   }
 }
 
@@ -97,12 +88,22 @@ export const post = async (baseUrl, param) => {
     return res
   } catch (error) {
     const { request, response } = error
-    if (request) {
-      return request
-    }
     if (response) {
+      validateResponse(response)
       return response
     }
     return error
   }
+}
+
+export const validateResponse = (response) => {
+  if (response.status === EStatusResponse.unauthorized) {
+    if (response.errorCode === EErrorCodeResponse.notPermission) {
+      window.location.href = `${process.env.REACT_APP_DOMAIN}/access-denied`
+    } else {
+      resetUserToken()
+      window.location.href = `${process.env.REACT_APP_DOMAIN}/login`
+    }
+  }
+  return
 }

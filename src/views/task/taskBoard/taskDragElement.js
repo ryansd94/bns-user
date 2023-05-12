@@ -12,6 +12,7 @@ import { useTranslation } from "react-i18next"
 import { LabelDateControl } from 'components/label'
 import { formatDateTime } from 'helpers'
 import { TaskNoteItem } from './../taskBoardItem'
+import { Loading } from 'components/loading'
 
 const ColumnHeader = styled.div`
   text-transform: uppercase;
@@ -22,7 +23,7 @@ const DroppableStyles = styled.div`
 padding:0;
 `
 
-const TaskDragElement = ({ item, columnHeader, controls = [], droppableClassName, onRowClicked }) => {
+const TaskDragElement = ({ item, columnHeader, controls = [], droppableClassName, onRowClicked, loading = true }) => {
   const { t } = useTranslation()
   const {
     control,
@@ -49,8 +50,8 @@ const TaskDragElement = ({ item, columnHeader, controls = [], droppableClassName
     let dueDateItem = ''
     if (!_.isNil(item.dueDate)) {
       let classDueDate = 'task-date-item'
-      const dueDate =new Date(item.dueDate)
-      const dateNow =new Date()
+      const dueDate = new Date(item.dueDate)
+      const dateNow = new Date()
       if (dueDate.toDateString() === dateNow.toDateString()) {
         classDueDate = 'task-date-today-item'
       }
@@ -94,23 +95,25 @@ const TaskDragElement = ({ item, columnHeader, controls = [], droppableClassName
       <StatusItem status={item} />
     </Grid>
     <Grid className="group" item>
-      <DroppableStyles>
-        {columnHeader ? (<ColumnHeader>{columnHeader}</ColumnHeader>) : ''}
-        <Droppable droppableId={`${item.id}`}>
-          {(provided) => (
-            <div className={droppableClassName} {...provided.droppableProps} ref={provided.innerRef}>
-              {
-                <Grid item xs gap={2} flexWrap={'nowrap'} container flexDirection={'column'}>{
-                  controls && controls.map((item, index) => {
-                    return genderElement(item, index)
-                  })
+      {
+        loading ? <Loading isShowTitle={false} /> : <DroppableStyles>
+          {columnHeader ? (<ColumnHeader>{columnHeader}</ColumnHeader>) : ''}
+          <Droppable droppableId={`${item.id}`}>
+            {(provided) => (
+              <div className={droppableClassName} {...provided.droppableProps} ref={provided.innerRef}>
+                {
+                  <Grid item xs gap={2} flexWrap={'nowrap'} container flexDirection={'column'}>{
+                    controls && controls.map((item, index) => {
+                      return genderElement(item, index)
+                    })
+                  }
+                  </Grid>
                 }
-                </Grid>
-              }
-            </div>
-          )}
-        </Droppable>
-      </DroppableStyles>
+              </div>
+            )}
+          </Droppable>
+        </DroppableStyles>
+      }
     </Grid>
   </Grid>
 }

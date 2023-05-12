@@ -46,6 +46,7 @@ const CommentByUser = (props) => {
             const res = await post(`${baseUrl.jm_comment}`, newComment)
             if (res.errorCode == ERROR_CODE.success) {
                 setValue('comments', comments)
+                setCommentLocal(null)
             }
         }
         if (isReplyComment) {

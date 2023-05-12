@@ -40,7 +40,7 @@ const initialState = {
             key: 'Project',
             title: 'Dự án',
             path: '/project',
-            icon: 'mdi mdi-crosshairs-gps',
+            icon: 'far fa-project-diagram',
             type: EMenuType.action
         },
         {
@@ -68,7 +68,7 @@ const initialState = {
         {
             key: 'User',
             title: 'Người dùng',
-            icon: 'mdi mdi-crosshairs-gps',
+            icon: 'far fa-users',
             path: '/user',
             type: EMenuType.action
         },
@@ -106,7 +106,7 @@ const initialState = {
                     parent: 'TaskGroup',
                     title: 'Công việc',
                     path: '/task',
-                    icon: 'mdi mdi-crosshairs-gps',
+                    icon: 'far fa-tasks',
                     isHasProjectPath: true,
                     type: EMenuType.action
                 }

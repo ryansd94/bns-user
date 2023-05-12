@@ -1,4 +1,5 @@
 import Moment from 'moment'
+import { getUserInfo } from "helpers"
 import _ from 'lodash'
 
 export const formatDate = (value) => {
@@ -66,6 +67,15 @@ export const getLastPathUrl = () => {
     if (_.includes(path, '/')) {
         const pathSplits = path.split('/')
         path = pathSplits[pathSplits.length - 1]
+    }
+    return path
+}
+
+export const getProjectPath = (path) => {
+    const user = getUserInfo()
+    if (user) {
+        const code = user?.setting?.projectSetting?.current
+        return `/${code}${path}`
     }
     return path
 }

@@ -15,9 +15,9 @@ const AvatarControl = (props) => {
         fontSize = 12
     }
     else if (size == ESize.small) {
-        width = 42
-        height = 42
-        fontSize = 18
+        width = 36
+        height = 36
+        fontSize = 14
     }
     else if (size == ESize.large) {
         width = 100

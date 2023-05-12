@@ -14,6 +14,7 @@ const TaskBoard = React.memo((props) => {
     const { onRowClicked } = props
     const [listStatus, setStatus] = useState([])
     const [listTask, setTask] = useState([])
+    const [loading, setLoading] = useState(true)
     const isReload = useSelector((state) => state.master.isReload)
     const user = getUserInfo()
 
@@ -33,11 +34,12 @@ const TaskBoard = React.memo((props) => {
         const getTask = async () => {
             await get(baseUrl.jm_task, { isGetAll: true, defaultFilters: JSON.stringify(getDefaultFilter()) }).then((data) => {
                 setTask(data && data.data && data.data.items)
+                setLoading(false)
             })
         }
         getTask()
         return () => { mounted = false }
-    }, [])
+    }, [isReload])
 
     const getDefaultFilter = () => {
         if (!_.isNil(user.setting?.projectSetting?.currentId)) {
@@ -81,6 +83,7 @@ const TaskBoard = React.memo((props) => {
                             key={item.id}
                             onRowClicked={onRowClicked}
                             item={item}
+                            loading={loading}
                             controls={getElementControls(item.id)}
                         />
                     })

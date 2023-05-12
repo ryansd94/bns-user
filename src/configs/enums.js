@@ -112,7 +112,8 @@ export const EButtonIconType = {
   lock: "Lock",
   unLock: "UnLock",
   switchLeft: "SwitchLeft",
-  switchRight: "SwitchRight"
+  switchRight: "SwitchRight",
+  close: "Close"
 }
 
 export const EButtonDetailType = {
@@ -178,10 +179,6 @@ export const baseUrl = {
 export const EViewMode = {
   list: 0,
   board: 1
-}
-
-export const EStatusResponse = {
-  unauthorized: 401
 }
 
 export const EAlertType = {

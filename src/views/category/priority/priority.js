@@ -8,19 +8,13 @@ import PriorityToolbar from "./priorityToolbar"
 import { get } from "services"
 import { baseUrl } from "configs"
 import _ from 'lodash'
-import Connector from 'helpers/signalRConnection'
 
 const Priority = React.memo(() => {
   const { t } = useTranslation()
   const [filterModels, setFilterModels] = useState(null)
   const [checkStatus, setCheckStatus] = useState({})
   const isReload = useSelector((state) => state.master.isReload)
-  const { newMessage, events } = Connector();
-  const [message, setMessage] = useState("initial value");
-
-  useEffect(() => {
-    events((_, message) => setMessage(message));
-  });
+  const [message, setMessage] = useState("initial value")
 
   const onApplyFilter = (value) => {
     setFilterModels(value)

@@ -1,7 +1,7 @@
 ﻿import React, { useEffect, useState } from 'react'
 import { Link, withRouter } from 'react-router-dom'
 import { Collapse } from 'react-bootstrap'
-import { getUserInfo, deepFindAll } from "helpers"
+import { getUserInfo, deepFindAll, getProjectPath } from "helpers"
 import Grid from "@mui/material/Grid"
 import { AvatarControl } from 'components/avatar'
 import { Evariant, EMenuType, constants } from "configs"
@@ -45,14 +45,6 @@ const Sidebar = (props) => {
             })
         })
     })
-
-    const getProjectPath = (path) => {
-        if (user) {
-            const code = user?.setting?.projectSetting?.current
-            return `/${code}${path}`
-        }
-        return path
-    }
 
     const getPathItem = (item) => {
         let path = item.path

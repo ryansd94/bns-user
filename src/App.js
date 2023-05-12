@@ -1,5 +1,5 @@
-import React, { Component } from 'react'
-import { withRouter, useHistory } from 'react-router-dom'
+import { useEffect } from 'react'
+import { withRouter } from 'react-router-dom'
 import './App.scss'
 import Footer from './components/shared/Footer'
 import Navbar from './components/shared/Navbar'
@@ -8,10 +8,12 @@ import SettingsPanel from './components/shared/SettingsPanel'
 import { withTranslation } from "react-i18next"
 import AppRoutes from './AppRoutes'
 import Progress from "react-progress-2"
-import CustomizedSnackbar from 'components/snackbar/CustomizedSnackbar'
+import { CustomizedSnackbar, NotifySnackbar } from 'components/snackbar'
 import { MuiThemeProvider, createTheme } from '@material-ui/core/styles'
 import ConfirmDeleteDialog from "components/popup/confirmDeleteDialog"
 import { isHasPermissionForAction, getLastPathUrl } from "helpers"
+import { useParams } from 'react-router'
+import { SignalRProvider } from 'helpers'
 import _ from 'lodash'
 
 const theme = createTheme({
@@ -26,77 +28,80 @@ const theme = createTheme({
     }
 })
 
-class App extends Component {
-    state = { isFullPageLayout: true }
-    componentDidMount() {
-        //Progress.hide()
-        this.onRouteChanged()
-    }
-    render() {
-        console.log('render app')
-        let navbarComponent = !this.state.isFullPageLayout ? <Navbar /> : ''
-        let sidebarComponent = !this.state.isFullPageLayout ? <Sidebar /> : ''
-        let SettingsPanelComponent = !this.state.isFullPageLayout ? <SettingsPanel /> : ''
-        let footerComponent = !this.state.isFullPageLayout ? <Footer /> : ''
-        return (
-            <div className="container-scroller">
-                <MuiThemeProvider theme={theme}>
-                    <Progress.Component />
-                    <CustomizedSnackbar />
-                    <ConfirmDeleteDialog />
-                    {navbarComponent}
-                    <div className="container-fluid page-body-wrapper">
-                        {sidebarComponent}
-                        <div className="main-panel">
-                            <div className="content-wrapper flex-column flex-grow">
-                                <AppRoutes />
-                                {SettingsPanelComponent}
-                            </div>
-                            {/* {footerComponent} */}
-                        </div>
-                    </div>
-                </MuiThemeProvider>
-            </div>
-        )
-    }
+const App = ({ location, history }) => {
+    const isFullPageLayoutRoutes = ['/login', '/signup/jointeam', '/signup']
+    const pathname = location.pathname
+    console.log('render app')
 
-    componentDidUpdate(prevProps) {
-        Progress.hide()
-        if (this.props.location !== prevProps.location) {
-            this.onRouteChanged()
+    useEffect(() => {
+        onRouteChanged()
+
+        // Progress.hide()
+        return () => {
+            Progress.hide()
         }
-    }
+    }, [location])
 
-    onRouteChanged() {
-        const { history } = this.props
-        Progress.show()
+    const onRouteChanged = () => {
+        const taskEditId = null
+        if (!_.includes(isFullPageLayoutRoutes, pathname)) {
+            Progress.show()
+        }
         window.scrollTo(0, 0)
-        const fullPageLayoutRoutes = ['/login', '/signup/jointeam', '/signup']
+        const currentPath = getLastPathUrl()
         const notCheckPermissions = ['login', 'jointeam', 'signup', 'access-denied']
-        for (let i = 0; i < fullPageLayoutRoutes.length; i++) {
-            if (this.props.location.pathname === fullPageLayoutRoutes[i]) {
-                this.setState({
-                    isFullPageLayout: true
-                })
+
+        for (let i = 0; i < isFullPageLayoutRoutes.length; i++) {
+            if (location.pathname === isFullPageLayoutRoutes[i]) {
                 document.querySelector('.page-body-wrapper').classList.add('full-page-wrapper')
-                break
+                return
             } else {
-                this.setState({
-                    isFullPageLayout: false
-                })
                 document.querySelector('.page-body-wrapper').classList.remove('full-page-wrapper')
             }
         }
-        const currentPath = getLastPathUrl()
-        if (!_.includes(notCheckPermissions, currentPath)) {
-            const isHasPermission = isHasPermissionForAction()
-            if (isHasPermission === false) {
-                history.push('/access-denied')
-                return
+
+        if (_.isNil(taskEditId)) {
+            if (!_.includes(notCheckPermissions, currentPath)) {
+                const isHasPermission = isHasPermissionForAction()
+                if (isHasPermission === false) {
+                    history.push('/access-denied')
+                    return
+                }
             }
+        }
+        if (!_.includes(isFullPageLayoutRoutes, pathname)) {
+            Progress.hide()
         }
     }
 
+    const isFullPageLayout = _.includes(isFullPageLayoutRoutes, pathname)
+    const isNotify = !_.includes(isFullPageLayoutRoutes, pathname)
+
+    return (
+        <div className="container-scroller">
+            <MuiThemeProvider theme={theme}>
+                <Progress.Component />
+                {!isFullPageLayout ? (
+                    <SignalRProvider>
+                        {isNotify ? <NotifySnackbar /> : ''}
+                    </SignalRProvider>
+                ) : ''}
+                <CustomizedSnackbar />
+                <ConfirmDeleteDialog />
+                {isFullPageLayout ? '' : <Navbar />}
+                <div className="container-fluid page-body-wrapper">
+                    {isFullPageLayout ? '' : <Sidebar />}
+                    <div className="main-panel">
+                        <div className="content-wrapper flex-column flex-grow">
+                            <AppRoutes />
+                            {isFullPageLayout ? '' : <SettingsPanel />}
+                        </div>
+                        {/* {footerComponent} */}
+                    </div>
+                </div>
+            </MuiThemeProvider>
+        </div>
+    )
 }
 
 export default withTranslation()(withRouter(App))

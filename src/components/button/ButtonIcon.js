@@ -25,7 +25,8 @@ import {
   IconRequire,
   IconSetting,
   IconSwitchRight,
-  IconSwitchLeft
+  IconSwitchLeft,
+  IconClose
 } from "components/icon/icon"
 import { isHasPermissionForButton } from "helpers"
 import { EColor } from 'configs/enums'
@@ -111,6 +112,9 @@ const ButtonIcon = (props) => {
       case EButtonIconType.switchRight:
         setTitle(t("Chuyển sang phải"))
         break
+      case EButtonIconType.close:
+        setTitle(t("Đóng"))
+        break
       default:
         break
     }
@@ -170,6 +174,8 @@ const ButtonIcon = (props) => {
     icon = <IconSwitchLeft style={{ width: width, height: height }} />
   else if (type == EButtonIconType.switchRight)
     icon = <IconSwitchRight style={{ width: width, height: height }} />
+  else if (type == EButtonIconType.close)
+    icon = <IconClose style={{ width: width, height: height }} />
 
   button = (
     <IconButton

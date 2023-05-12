@@ -99,13 +99,12 @@ export default function Login() {
                 shopIndex: data.shopIndex,
               }
               const user = { ...data, isAdmin: true, acceptScreen: [] }
-              setTokenLoginSucceeded({ token, user })
+              setTokenLoginSucceeded({ token, user }, () => { history.push(`/${user.defaultOrganization}/dashboard`) })
               setError({
                 dirty: false,
                 msg: "",
               })
               dispatch(setUserSetting({ ...user }))
-              history.push(`/${user.defaultOrganization}/dashboard`)
             }
             break
           }
@@ -150,7 +149,7 @@ export default function Login() {
       },
     },
   }
-  
+
   async function handleSubmit() {
     const valid = validate()
     if (valid) {

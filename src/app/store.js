@@ -15,7 +15,7 @@ import priorityReducer from "stores/views/priority"
 import projectReducer from "stores/views/project"
 import viewPermissionReducer from "stores/views/viewPermission"
 import menuReducer from "stores/components/menu"
-
+import notifyReducer from "stores/components/notify"
 
 const rootReducer = {
   popup: popupReducer,
@@ -33,7 +33,8 @@ const rootReducer = {
   priority: priorityReducer,
   project: projectReducer,
   viewPermission: viewPermissionReducer,
-  menu: menuReducer
+  menu: menuReducer,
+  notify: notifyReducer
 }
 
 const store = configureStore({

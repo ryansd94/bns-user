@@ -23,11 +23,14 @@ export const getLanguage = () => {
     return language ? language : null;
 }
 
-export const setTokenLoginSucceeded = ({ token, user }) => {
+export const setTokenLoginSucceeded = ({ token, user }, callback = null) => {
     localStorage.setItem(LOCAL_STORAGE_KEYS.user, JSON.stringify(user));
     localStorage.setItem(LOCAL_STORAGE_KEYS.accessToken, token.accessToken);
     localStorage.setItem(LOCAL_STORAGE_KEYS.refreshToken, token.refreshToken);
     localStorage.setItem(LOCAL_STORAGE_KEYS.shopIndex, token.shopIndex);
+    if (callback) {
+        callback()
+    }
 }
 
 export const getKeepMeUser = () => {
