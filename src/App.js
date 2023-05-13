@@ -12,7 +12,6 @@ import { CustomizedSnackbar, NotifySnackbar } from 'components/snackbar'
 import { MuiThemeProvider, createTheme } from '@material-ui/core/styles'
 import ConfirmDeleteDialog from "components/popup/confirmDeleteDialog"
 import { isHasPermissionForAction, getLastPathUrl } from "helpers"
-import { useParams } from 'react-router'
 import { SignalRProvider } from 'helpers'
 import _ from 'lodash'
 

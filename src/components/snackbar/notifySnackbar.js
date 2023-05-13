@@ -3,7 +3,6 @@ import { SnackbarProvider, useSnackbar, closeSnackbar } from 'notistack'
 import ButtonIcon from "components/button/ButtonIcon"
 import { EButtonIconType, ENotifyObjectType } from "configs"
 import { TaskCommentNotify } from './'
-import { CustomizedSnackbar } from 'components/snackbar'
 import { SignalRContext } from 'helpers'
 import _ from 'lodash'
 
@@ -11,7 +10,7 @@ function NotifySnackbarContent() {
   const { enqueueSnackbar } = useSnackbar()
   const [message, setMessage] = useState({})
   const connection = useContext(SignalRContext)
-  const autoHideDuration = 30000
+  const autoHideDuration = 3000
 
   useEffect(() => {
     if (connection) {
@@ -26,19 +25,6 @@ function NotifySnackbarContent() {
       }
     }
   }, [connection])
-
-  const handleBeforeUnload = () => {
-    if (connection) {
-      connection.stop()
-        .catch((error) => {
-          console.log('Failed to disconnect from SignalR server:', error)
-        })
-    }
-  }
-
-  window.onbeforeunload = function (event) {
-    return handleBeforeUnload()
-  }
 
   useEffect(() => {
     if (!_.isNil(message.id)) {
