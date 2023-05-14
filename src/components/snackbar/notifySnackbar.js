@@ -10,7 +10,7 @@ function NotifySnackbarContent() {
   const { enqueueSnackbar } = useSnackbar()
   const [message, setMessage] = useState({})
   const connection = useContext(SignalRContext)
-  const autoHideDuration = 3000
+  const autoHideDuration = 300000
 
   useEffect(() => {
     if (connection) {

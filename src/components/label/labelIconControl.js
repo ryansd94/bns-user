@@ -2,9 +2,10 @@ import React from "react"
 import UploadIconImage from 'components/upload/uploadIcon/uploadIconImage'
 import Grid from "@mui/material/Grid"
 import { OverflowTip } from 'components/tooltip'
+import _ from 'lodash'
 
 const LabelIconControl = (props) => {
-    const { icon, name, color, id } = props
+    const { icon, name = '', color } = props
 
     const genderTooltipContent = () => {
         return <span style={{ textOverflow: 'ellipsis' }}>{name}</span>
@@ -15,9 +16,11 @@ const LabelIconControl = (props) => {
             <Grid item>
                 <UploadIconImage color={color} src={icon} />
             </Grid>
-            <Grid item xs={12} className="label-icon-control-text">
-                <OverflowTip value={name} genderTooltipContent={genderTooltipContent} />
-            </Grid>
+            {
+                !_.isEmpty(name) ? <Grid item xs={12} className="label-icon-control-text">
+                    <OverflowTip value={name} genderTooltipContent={genderTooltipContent} />
+                </Grid> : ''
+            }
         </Grid>
     )
 }

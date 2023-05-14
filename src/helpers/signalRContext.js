@@ -12,8 +12,23 @@ const SignalRProvider = ({ children }) => {
         .withUrl(URL, {
             headers: { "Authorization": `${token}` },
         })
+        .withAutomaticReconnect()
         .configureLogging(LogLevel.Information)
         .build()
+
+
+    connection.onclose((error) => {
+        // Thực hiện các hành động tại đây khi kết nối bị đóng, ví dụ: thử kết nối lại
+    });
+
+    connection.onreconnecting((error) => {
+        // Thực hiện các hành động tại đây khi đang thử kết nối lại
+    });
+
+    connection.onreconnected((connectionId) => {
+        // Thực hiện các hành động tại đây khi kết nối đã được khôi phục
+        connection.invoke("OnConnected", user.accountCompanyId);
+    });
 
     const checkNegotiate = async () => {
         try {
@@ -22,7 +37,7 @@ const SignalRProvider = ({ children }) => {
                     await connection.invoke("OnConnected", user.accountCompanyId);
                     connection.on('notify', (message) => {
                         console.log(message)
-                      })
+                    })
                 })
                 .catch((error) => {
                     console.log(`Error starting SignalR connection: ${error}`)
