@@ -45,7 +45,7 @@ const Summary = () => {
             </Grid>
         </Grid>
         <Grid item className="containerNew">
-            <EditorControl label={t('Mô tả')} isShowAccordion={false} isBorder={false} control={control} isShowPlaceholder={false} name={'description'} readOnly={true} value={project?.description}/>
+            <EditorControl label={t('Description')} isShowAccordion={false} isBorder={false} control={control} isShowPlaceholder={false} name={'description'} readOnly={true} value={project?.description}/>
         </Grid>
     </Grid>
 

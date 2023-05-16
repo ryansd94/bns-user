@@ -14,16 +14,16 @@ const TaskChildAddButton = (props) => {
     const genderDropdownItem = () => {
         return <div>
             <MenuItem disabled={!_.isNil(taskId) ? false : true} key={'addNew'} onClick={() => addNewTask()}>
-                {t('Tạo mới công việc')}
+                {t('Add new task')}
             </MenuItem>
             <MenuItem key={'existing'} onClick={() => addNewTask()}>
-                {t('Công việc đã có')}
+                {t('Task existing')}
             </MenuItem>
         </div >
     }
     return (
         <div>
-            <DropdownMenu spacingLeft={0} isFloatLeft={true} label={t('Thêm công việc con')} isShowEndIcon={false} visible={true} genderDropdownItem={genderDropdownItem} />
+            <DropdownMenu spacingLeft={0} isFloatLeft={true} label={t('Add child task')} isShowEndIcon={false} visible={true} genderDropdownItem={genderDropdownItem} />
         </div>
     )
 }

@@ -5,6 +5,7 @@ import _ from 'lodash'
 
 export const save = async (baseUrl, param) => {
   const user = getUserInfo()
+  validateUser(user)
   const services = createInstance(user.defaultOrganization)
   try {
     const query = `${baseUrl}`
@@ -27,6 +28,7 @@ export const save = async (baseUrl, param) => {
 
 export const get = async (baseUrl, param = null) => {
   const user = getUserInfo()
+  validateUser(user)
   const services = createInstance(user.defaultOrganization)
   try {
     let query = `${baseUrl}`
@@ -47,6 +49,7 @@ export const get = async (baseUrl, param = null) => {
 
 export const getByID = async (baseUrl, id) => {
   const user = getUserInfo()
+  validateUser(user)
   const services = createInstance(user.defaultOrganization)
   try {
     let query = `${baseUrl}/${id}`
@@ -64,6 +67,7 @@ export const getByID = async (baseUrl, id) => {
 
 export const deleteData = async (baseUrl, id) => {
   const user = getUserInfo()
+  validateUser(user)
   const services = createInstance(user.defaultOrganization)
   try {
     let query = `${baseUrl}/${id}`
@@ -81,6 +85,7 @@ export const deleteData = async (baseUrl, id) => {
 
 export const post = async (baseUrl, param) => {
   const user = getUserInfo()
+  validateUser(user)
   const services = createInstance(user.defaultOrganization)
   try {
     const query = `${baseUrl}`
@@ -106,4 +111,11 @@ export const validateResponse = (response) => {
     }
   }
   return
+}
+
+export const validateUser = (user) => {
+  if (_.isEmpty(user)) {
+    window.location.href = `${process.env.REACT_APP_DOMAIN}/login`
+    return
+  }
 }

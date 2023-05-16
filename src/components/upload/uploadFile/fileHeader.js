@@ -18,7 +18,7 @@ const FileHeader = (props) => {
     }
 
     const renderDeleteIcon = () => {
-        return <OverflowTip disableHoverListener={false} className='delete-icon-root' value={t('Xóa file')} genderTooltipContent={() => renderTooltipRemoveIcon()} />
+        return <OverflowTip disableHoverListener={false} className='delete-icon-root' value={t('Delete file')} genderTooltipContent={() => renderTooltipRemoveIcon()} />
     }
 
     return (

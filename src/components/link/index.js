@@ -1,1 +1,1 @@
-export { default as LinkControl } from './LinkControl';
+export { default as LinkControl } from './LinkControl'

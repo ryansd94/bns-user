@@ -1,3 +1,4 @@
 export const ENotifyObjectType = {
-    taskComment: 0
+    taskComment: 0,
+    taskAssigned : 1
 }

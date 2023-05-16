@@ -10,7 +10,7 @@ const StatusSelect = (props) => {
         options={options}
         {...props}
         isSearchText={false}
-        placeholder={t('Trạng thái')}
+        placeholder={t('Status')}
         renderOptions={
             (option) => {
                 return <StatusItem status={option} />

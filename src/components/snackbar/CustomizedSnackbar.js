@@ -29,7 +29,7 @@ export default function CustomizedSnackbar() {
     return (
         <Stack spacing={2} sx={{ width: '100%' }}>
             <Snackbar anchorOrigin={{ vertical: "top", horizontal: "right" }} open={open} autoHideDuration={2000} onClose={handleClose}>
-                <Alert onClose={handleClose} severity={severity} sx={{ width: '100%' }}>{severity == "success" ? t('Cập nhật thành công') : title}
+                <Alert onClose={handleClose} severity={severity} sx={{ width: '100%' }}>{severity == "success" ? t('Update successful') : title}
                 </Alert>
             </Snackbar>
         </Stack>

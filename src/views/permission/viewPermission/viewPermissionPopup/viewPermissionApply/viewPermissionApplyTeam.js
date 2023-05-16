@@ -127,7 +127,7 @@ const ViewPermissionApplyTeam = (props) => {
         return <Grid container gap={2} direction='column'>
             <Grid item container direction='row' className="border-bottom">
                 <Grid item>
-                    <CheckBoxControl disabled={_.isEmpty(lstTeamAll) ? true : false} onChange={onCheckAllTeam} control={control} name='team-all' label={t('Tất cả')} />
+                    <CheckBoxControl disabled={_.isEmpty(lstTeamAll) ? true : false} onChange={onCheckAllTeam} control={control} name='team-all' label={t('All')} />
                 </Grid>
             </Grid>
             {
@@ -158,7 +158,7 @@ const ViewPermissionApplyTeam = (props) => {
         return <Grid container gap={2} direction='column'>
             <Grid item container direction='row' className="border-bottom">
                 <Grid item>
-                    <CheckBoxControl  disabled={_.isEmpty(lstTeamApply) ? true : false} onChange={onCheckAllUserApply} control={control} name='team-all-apply' label={t('Tất cả')} />
+                    <CheckBoxControl  disabled={_.isEmpty(lstTeamApply) ? true : false} onChange={onCheckAllUserApply} control={control} name='team-all-apply' label={t('All')} />
                 </Grid>
             </Grid>
             {
@@ -187,7 +187,7 @@ const ViewPermissionApplyTeam = (props) => {
 
     return <Grid container direction='row'>
         <Grid item xs className='body-content'>
-            <Group content={renderAllTeams()} title={t('Danh sách nhóm')} />
+            <Group content={renderAllTeams()} title={t('Team list')} />
         </Grid>
         <Grid item className='body-content' gap={2} justifyContent='center' flexDirection={'column'} flexGrow={0}>
             <Grid item>
@@ -198,7 +198,7 @@ const ViewPermissionApplyTeam = (props) => {
             </Grid>
         </Grid>
         <Grid item xs className='body-content'>
-            <Group content={renderTeamApply()} title={t('Danh sách nhóm được áp dụng')} />
+            <Group content={renderTeamApply()} title={t('List of applicable teams')} />
         </Grid>
     </Grid>
 }

@@ -81,7 +81,7 @@ const MultipleFileUploadField = ({ name, control, setValue, getValues }) => {
                             <input {...getInputProps()} />
                         </Grid>
                         <Grid item xs>
-                            <span>{t('Kéo và thả file vào đây hoặc nhấn để chọn file')}</span>
+                            <span>{t('Drag and drop files here or tap to select files')}</span>
                         </Grid>
                         <Grid item xs>
                             <ButtonIcon type={EButtonIconType.upload} />

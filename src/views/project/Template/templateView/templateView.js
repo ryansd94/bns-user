@@ -138,15 +138,15 @@ const TemplateAdd = React.memo((props) => {
   const getTabItems = () => {
     const data = [
       {
-        label: t('Thông tin cơ bản'),
+        label: t('Basic information'),
         Content: renderTabInfo()
       },
       {
-        label: t('Danh sách trạng thái'),
+        label: t('Status list'),
         Content: renderTabStatus()
       },
       {
-        label: t('Giao diện'),
+        label: t('Display'),
         Content: renderView()
       }
     ]

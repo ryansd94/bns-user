@@ -47,7 +47,6 @@ const TaskView = (props) => {
     const dispatch = useDispatch()
     const [data, setData] = useState({})
     const [userAssign, setUserAssign] = useState([])
-    const [userSuggest, setUserSuggest] = useState([])
     const [templateContent, setTemplateContent] = useState('')
     const { t } = useTranslation()
     const { id, taskEditId } = useParams()
@@ -139,7 +138,6 @@ const TaskView = (props) => {
         }
     }, [isCreate, id, taskTypeId2])
 
-
     useEffect(() => {
         const fetchDataUserAssign = async () => {
             await get(`${baseUrl.jm_task}/user-assign`, {
@@ -150,26 +148,13 @@ const TaskView = (props) => {
                 }))
             })
         }
-
-        const fetchDataUserSuggest = async () => {
-            await get(`${baseUrl.jm_task}/user-suggest`, {
-                isGetAll: true
-            }).then((data) => {
-                setUserSuggest(data && data.data && _.map(data.data.items, (item) => {
-                    return { id: item.id, value: item.fullName }
-                }))
-            })
-        }
         fetchDataUserAssign()
-        fetchDataUserSuggest()
-        return () => {
-            settaskTypeId2(null)
-        }
-    }, [])
-
-    useEffect(() => {
         if (!_.isNil(taskId) || !_.isNil(taskEditId) || !_.isNil(copyTaskId)) {
             loadData()
+        }
+
+        return () => {
+            settaskTypeId2(null)
         }
     }, [taskId, taskEditId, copyTaskId])
 
@@ -222,7 +207,7 @@ const TaskView = (props) => {
                 component = <span>{item.id}</span>
                 break
             case EControlType.editor:
-                component = (<EditorControl required={item.required} isFullScreen={true} userSuggest={userSuggest} label={item.label} name={name} control={control} className="editor-container" />)
+                component = (<EditorControl required={item.required} isFullScreen={true} label={item.label} name={name} control={control} className="editor-container" />)
                 break
             case EControlType.select:
                 component = (<SingleAddSelect required={item.required} fullWidth={true} label={item.label} name={name} control={control} />)
@@ -300,7 +285,7 @@ const TaskView = (props) => {
                 />
                 break
             case EControlType.comment:
-                component = <Comment userSuggest={userSuggest} taskId={taskId || taskEditId} getValues={getValues} label={item.label} name={'comments'} setValue={setValue} control={control} />
+                component = <Comment taskId={taskId || taskEditId} getValues={getValues} label={item.label} name={'comments'} setValue={setValue} control={control} />
                 break
             default:
                 break
@@ -358,11 +343,11 @@ const TaskView = (props) => {
     const getTabItems = () => {
         const data = [
             {
-                label: t('Chi tiết'),
+                label: t('Detail'),
                 Content: renderDetailTabContent()
             },
             {
-                label: t('Thời gian làm việc'),
+                label: t('Working time'),
                 Content: renderTimeLogTabContent()
             }
         ]
@@ -372,10 +357,10 @@ const TaskView = (props) => {
     const renderTimeLogTabContent = () => {
         return <Grid container item spacing={2} direction="row">
             <Grid item>
-                <DatePickerInput label={t('Ngày')} name={'date'} control={control} />
+                <DatePickerInput label={t('Date')} name={'date'} control={control} />
             </Grid>
             <Grid item>
-                <NumberInput label={t('Giờ')} name={'hour'} control={control} />
+                <NumberInput label={t('Time')} name={'hour'} control={control} />
             </Grid>
 
         </Grid>
@@ -386,7 +371,7 @@ const TaskView = (props) => {
             <Box className="task-view-container">
                 <Grid container item spacing={2} flexWrap="nowrap" direction="column">
                     <Grid item xs={12} className="flex-basis-auto">
-                        <TextInput autoFocus={true} focused={true} control={control} placeholder={t('Tiêu đề')} name="defaultData.title" />
+                        <TextInput autoFocus={true} focused={true} control={control} placeholder={t('Title')} name="defaultData.title" />
                     </Grid>
                     <Grid className="flex-container flex-basis-auto" flexWrap={'nowrap'} container gap={2} item xs={12}>
                         <Grid item xs>

@@ -81,10 +81,10 @@ export default function Signup() {
   const validationSchema = Yup.object().shape({
     fullName: Yup.string().required(t(message.error.fieldNotEmpty)),
     organization: Yup.string()
-      .min(3, 'Tên miền phải chứa ít nhất 3 ký tự')
-      .max(50, 'Tên miền phải chứa tối đa 50 ký tự')
-      .matches(/^[a-zA-Z0-9_]*$/, 'Tên miền chỉ bao gồm chữ cái thường, chữ in hoa, hoặc số')
-      .required(t('Tên miền không được trống'))
+      .min(3, t('Domain name must contain at least 3 characters'))
+      .max(30, t('Domain names can only contain up to 30 characters'))
+      .matches(/^[a-zA-Z0-9_]*$/, 'Domain names contain only lowercase letters, uppercase letters, or numbers')
+      .required(t('Domain name cannot be empty'))
   })
   const defaultValues = {
     fullName: "",

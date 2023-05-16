@@ -30,7 +30,7 @@ const TaskItem = (props) => {
     const renderItem = () => {
         const titleTask = <OverflowTip value={item.title} genderTooltipContent={() => renderTooltipTitleContent(item.title)} />
         const titleTaskType = <OverflowTip disableHoverListener={false} value={item.taskType.name} genderTooltipContent={() => renderTooltipTaskTypeContent(item.taskType)} />
-        const titleRemoveIcon = <OverflowTip disableHoverListener={false} className='delete-icon-root' value={t('Xóa liên kết')} genderTooltipContent={() => renderTooltipRemoveIcon(item)} />
+        const titleRemoveIcon = <OverflowTip disableHoverListener={false} className='delete-icon-root' value={t('Delete link')} genderTooltipContent={() => renderTooltipRemoveIcon(item)} />
 
         const href = `/task/edit/${item.id}`
         return <Grid className='child-task-item' container gap={1} item key={item.id} direction='column'>
@@ -38,7 +38,7 @@ const TaskItem = (props) => {
                 <TaskTitle item={item} />
                 <Grid item container gap={1} direction='row'>
                     <Grid item>
-                        <LabelControl label={`${t('Cập nhật')} ${cellFormatDateTime({ value: item.updatedDate || item.createdDate })}, `} />
+                        <LabelControl label={`${t('Update')} ${cellFormatDateTime({ value: item.updatedDate || item.createdDate })}, `} />
                     </Grid>
                     <Grid item>
                         <StatusItem status={item.status} />

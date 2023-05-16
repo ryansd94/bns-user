@@ -51,7 +51,7 @@ const CommentItem = (props) => {
 
     const renderChildComment = (comment) => {
         if (!_.isEmpty(comment.childrens)) {
-            return <Grid item container gap={2} direction='column'>
+            return <Grid id={comment.id} item container gap={2} direction='column'>
                 {
                     _.map(comment.childrens, (child) => {
                         return <CommentItem {...props} key={child.id} comment={child} />
@@ -91,7 +91,7 @@ const CommentItem = (props) => {
     const genderPopoverControl = () => {
         return <Grid item container gap={2} className='box-container'>
             <Grid item>
-                {t('Bạn có muốn xóa bình luận này?')}
+                {t('Do you want to delete this comment?')}
             </Grid>
             <Grid item container justifyContent='space-between'>
                 <Grid item>
@@ -143,7 +143,7 @@ const CommentItem = (props) => {
                 <Grid item>
                     <LabelControl className='comment-header' label={`${commentLocal.user?.fullName}, ${commentLocal.updatedTime}`} />
                 </Grid>
-                <Grid item>
+                <Grid item id={comment.id}>
                     <EditorControl onChange={onChangeComment} className={!isEditComment ? 'editor-comment' : ''} readOnly={!isEditComment} value={commentLocal.value} name={`rte${commentLocal.id}`} isShowAccordion={false} />
                 </Grid>
                 <Grid item>
@@ -163,11 +163,11 @@ const CommentItem = (props) => {
             <DropDownItem
                 icon={<IconDelete className="icon-dropdown-menu" />}
                 onClick={onDeleteComment}
-                title={t('Xóa bình luận')} />
+                title={t('Delete comment')} />
             <DropDownItem
                 icon={<IconEdit className="icon-dropdown-menu" />}
                 onClick={onEditComment}
-                title={t('Chỉnh sửa bình luận')} />
+                title={t('Edit comment')} />
         </div>
     }
 

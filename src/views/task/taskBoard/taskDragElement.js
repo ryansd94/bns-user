@@ -59,7 +59,7 @@ const TaskDragElement = ({ item, columnHeader, controls = [], droppableClassName
         classDueDate = 'task-date-late-item'
       }
       dueDateItem = <Grid item>
-        <LabelDateControl className={classDueDate} value={formatDateTime(dueDate)} name={t('Ngày hết hạn')} />
+        <LabelDateControl className={classDueDate} value={formatDateTime(dueDate)} name={t('Expiration date')} />
       </Grid>
     }
     return <Grid item container className="align-items-center" xs direction='row'> {
@@ -68,7 +68,7 @@ const TaskDragElement = ({ item, columnHeader, controls = [], droppableClassName
       </Grid> : ''
     }
       <Grid item>
-        <TaskNoteItem item={item} title={t('Mô tả')} />
+        <TaskNoteItem item={item} title={t('Description')} />
       </Grid>
     </Grid>
   }

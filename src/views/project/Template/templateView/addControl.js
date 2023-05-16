@@ -16,8 +16,8 @@ const AddControl = React.memo((props) => {
     const validationSchema = Yup.object().shape({
         // title: Yup.string().required(t(message.error.fieldNotEmpty))
     })
-    const optionPositionItem = [{ id: '1', label: t('Trên') }, { id: '2', label: t('Dưới') }]
-    const optionPositionGroup = [{ id: '1', label: t('Trên') }, { id: '2', label: t('Dưới') }, { id: '3', label: t('Bên trong') }]
+    const optionPositionItem = [{ id: '1', label: t('Above') }, { id: '2', label: t('Under') }]
+    const optionPositionGroup = [{ id: '1', label: t('Above') }, { id: '2', label: t('Under') }, { id: '3', label: t('Inside') }]
     const defaultValues = {
         position: '1',
         type: EControlType.textField,
@@ -37,10 +37,10 @@ const AddControl = React.memo((props) => {
 
     function getControlType() {
         return [
-            { id: EControlType.textField, name: t('Văn bản') },
-            { id: EControlType.dateTimePicker, name: t('Ngày tháng') },
-            { id: EControlType.editor, name: t('Mô tả') },
-            { id: EControlType.number, name: t('Nhập số') }
+            { id: EControlType.textField, name: t('Input text') },
+            { id: EControlType.dateTimePicker, name: t('Date') },
+            { id: EControlType.editor, name: t('Description') },
+            { id: EControlType.number, name: t('Input number') }
         ]
     }
     const onSave = (data) => {

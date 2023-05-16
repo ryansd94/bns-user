@@ -14,7 +14,7 @@ const AssignSelect = (props) => {
     const { } = props
     return <MultiSelect multiple={true}
         fullWidth={false}
-        placeholder={t('Người nhận')}
+        placeholder={t('Assigned')}
         {...props}
         renderOption=
         {

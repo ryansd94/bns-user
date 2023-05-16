@@ -101,28 +101,28 @@ const ButtonFuntion = React.memo(props => {
         switch (type) {
             case EButtonType.add:
                 setIcon('far fa-plus' + sizeDefault)
-                setText(t('Thêm mới'))
+                setText(t('Add new'))
                 setIsCheckPermission(true)
                 break
             case EButtonType.save:
                 setIcon('far fa-save' + sizeDefault)
-                setText(t('Lưu'))
+                setText(t('Save'))
                 setFloat(' float-left')
                 setIsCheckPermission(true)
                 break
             case EButtonType.addFilter:
                 setIcon('far fa-plus' + sizeDefault)
-                setText(t('Thêm điều kiện lọc'))
+                setText(t('Add filter'))
                 setFloat(' float-left')
                 break
             case EButtonType.delete:
                 setIcon('fas fa-trash-alt' + sizeDefault)
-                setText(t('Xóa'))
+                setText(t('Delete'))
                 setIsCheckPermission(true)
                 break
             case EButtonType.columnConfig:
                 setIcon('far fa-line-columns' + sizeDefault)
-                setText(t('Ẩn / hiện cột'))
+                setText(t('Hide / show column'))
                 setFloat(' float-left')
                 break
             case EButtonType.filter:
@@ -130,74 +130,74 @@ const ButtonFuntion = React.memo(props => {
                     setIcon("far fa-angle-up" + sizeDefault)
                 else
                     setIcon("far fa-angle-down" + sizeDefault)
-                setText(t('Tìm kiếm'))
+                setText(t('Search'))
                 setFloat(' float-left')
                 setStartIcon(false)
                 break
             case EButtonType.clearFilter:
                 setIcon('far fa-undo' + sizeDefault)
-                setText(t('Xóa hết'))
+                setText(t('Delete all'))
                 setFloat(' float-left')
                 setColor("neutral")
                 break
             case EButtonType.function:
                 setIcon('far fa-angle-down' + sizeDefault)
-                setText(t('Thao tác'))
+                setText(t('Action'))
                 setFloat(' float-left')
                 break
             case EButtonType.apply:
                 setIcon('far fa-check' + sizeDefault)
-                setText(t('Áp dụng'))
+                setText(t('Apply'))
                 setFloat(' float-left')
                 setIsCheckPermission(true)
                 break
             case EButtonType.refresh:
                 setIcon('far fa-sync-alt' + sizeDefault)
                 setFloat(' float-left')
-                setText(t('Tải lại'))
+                setText(t('Reload'))
                 break
             case EButtonType.addTag:
                 setIcon('far fa-tags' + sizeDefault)
                 setFloat(' float-left')
-                setText(t('Thêm nhãn'))
+                setText(t('Add tags'))
                 break
             case EButtonType.more:
                 setIcon('far fa-ellipsis-h' + sizeDefault)
-                setText(t('Chức năng'))
+                setText(t('Function'))
                 setFloat(' float-left')
                 break
             case EButtonType.comment:
                 setIcon('far fa-comment-alt' + sizeDefault)
-                setText(t('Bình luận'))
+                setText(t('Comment'))
                 break
             case EButtonType.reply:
                 setIcon('far fa-reply' + sizeDefault)
-                setText(t('Trả lời'))
+                setText(t('Reply'))
                 break
             case EButtonType.cancel:
                 setIcon('far fa-times' + sizeDefault)
-                setText(t('Hủy'))
+                setText(t('Cancel'))
                 setFloat(' float-left')
                 setColor("neutral")
                 break
             case EButtonType.full:
                 setIcon('far fa-square-full' + sizeDefault)
-                setText(t('Toàn khung'))
+                setText(t('Full frame'))
                 setFloat(' float-left')
                 break
             case EButtonType.split:
                 setIcon('far fa-columns' + sizeDefault)
-                setText(t('Phân nữa'))
+                setText(t('Half frame'))
                 setFloat(' float-left')
                 break
             case EButtonType.list:
                 setIcon('far fa-list' + sizeDefault)
-                setText(t('Chế độ xem lưới'))
+                setText(t('Grid view'))
                 setFloat(' float-left')
                 break
             case EButtonType.board:
                 setIcon('far fa-table' + sizeDefault)
-                setText(t('Chế độ xem bảng'))
+                setText(t('Tabular view'))
                 setFloat(' float-left')
                 break
             default:

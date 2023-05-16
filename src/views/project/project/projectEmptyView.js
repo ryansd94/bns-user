@@ -49,7 +49,7 @@ const ProjectEmptyView = () => {
         <Grid item xs container className="containerNew no-wrap" direction={'column'}>
             <Grid item className="of-overlay">
                 <Grid item xs className="box-container">
-                    <h1>{t('Để bắt đầu hãy tạo dự án đầu tiên của bạn!')}</h1>
+                    <h1>{t('To get started, create your first project!')}</h1>
                     <Grid item xs>
                         <ProjectCreateContent control={control} />
                     </Grid>

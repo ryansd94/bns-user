@@ -9,10 +9,11 @@ import { uploadFile } from 'helpers'
 import _ from 'lodash'
 import { getUserInfo } from "helpers"
 import ReactQuill, { Quill } from "react-quill"
-// import "react-quill/dist/quill.snow.css"
+import { baseUrl } from "configs"
 import "quill-mention"
 import ImageResize from 'quill-image-resize-module-react'
 import { FormHelperText } from '@mui/material'
+import { get } from "services"
 
 // Add sizes to whitelist and register them
 const Size = Quill.import("formats/size")
@@ -135,12 +136,12 @@ export const EditorToolbar = ({ hide, id }) => {
 
 const EditorControl = (props) => {
     const { label, name, control, size, isShowAccordion = true, onChange, value = null,
-        readOnly, className, userSuggest = [], isFullScreen = false, isShowPlaceholder = true, required, isBorder = true } = props
-    const quillRef = useRef()
+        readOnly, className, isFullScreen = false, isShowPlaceholder = true, required, isBorder = true } = props
     const loadingPopup = useSelector((state) => state.master.loadingPopup)
     const user = getUserInfo()
     const id = name.includes('.') ? _.split(name, '.')[1] : name
     const [hideToolbar, setHideToolbar] = useState(true)
+    const [userSuggest, setUserSuggest] = useState([])
 
     async function insertImage() {
         const input = document.createElement('input')
@@ -174,24 +175,31 @@ const EditorControl = (props) => {
             parchment: Quill.import('parchment'),
             modules: ['Resize', 'DisplaySize']
         },
-        mention: useMemo(
+        mention: React.useMemo(
             () => ({
                 allowedChars: /^[A-Za-z\sÅÄÖåäö]*$/,
                 mentionDenotationChars: ['@', '#'],
-                source: (searchTerm, renderList, mentionChar) => {
-                    const list = mentionChar === '@' ? userSuggest : tags
-                    const includesSearchTerm = list.filter((item) =>
-                        item.value.toLowerCase().includes(searchTerm.toLowerCase())
-                    )
-                    renderList(includesSearchTerm)
+                source: async (searchTerm, renderList, mentionChar) => {
+                    if (mentionChar === '@') {
+                        const list = await get(`${baseUrl.jm_task}/user-suggest`, {
+                            isGetAll: true
+                        }).then((data) => {
+                            return data && data.data && _.map(data.data.items, (item) => {
+                                return { id: item.id, value: item.fullName }
+                            })
+                        })
+                        const includesSearchTerm = list.filter((item) =>
+                            item.value.toLowerCase().includes(searchTerm.toLowerCase())
+                        )
+                        renderList(includesSearchTerm)
+                        setUserSuggest([...list])
+                    }
                 },
                 onSelect: (item, insertItem) => {
                     let link = document.createElement("a")
-                    let editor = quillRef.current.getEditor()
-                    const rootItem = _.find(userSuggest, (x) => x.id === item.id)
-                    let linkText = document.createTextNode(rootItem && rootItem.value)
+                    let linkText = document.createTextNode(item && item.value)
                     link.appendChild(linkText)
-                    link.title = rootItem && rootItem.value
+                    link.title = item && item.value
                     link.href = item.link
                     item.value = link.innerHTML
                     insertItem(item)
@@ -260,7 +268,6 @@ const EditorControl = (props) => {
             <EditorToolbar hide={hideToolbar} id={`rte${id}`} />
             <ReactQuill
                 id={`rte${id}`}
-                ref={quillRef}
                 className={!isBorder ? 'no-border' : ''}
                 theme='snow'
                 onBlur={onBlur}

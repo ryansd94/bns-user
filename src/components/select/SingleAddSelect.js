@@ -84,7 +84,7 @@ const SingleAddSelect = React.memo(
                   if (isAddWhenNoOption && params.inputValue !== '' && (!filtered || filtered.length == 0)) {
                     filtered.push({
                       id: uuidv4(),
-                      name: `${t('Thêm')} "${params.inputValue}"`,
+                      name: `${t('Add')} "${params.inputValue}"`,
                       value: params.inputValue,
                       isAddNew: true
                     })

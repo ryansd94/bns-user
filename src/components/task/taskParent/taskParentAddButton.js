@@ -41,7 +41,7 @@ const TaskParentAddButton = (props) => {
                     data={data}
                     freeSolo
                     onSelectChange={onSelectChange}
-                    placeholder={t('Nhập Id hoặc tiêu đề')}
+                    placeholder={t('Enter Id or title')}
                     renderOption={renderOption}
                     isAddWhenNoOption={false}
                     onInputChange={onInputChangeTaskChange}

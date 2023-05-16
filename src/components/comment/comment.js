@@ -1,4 +1,3 @@
-import React, { useEffect, useState } from "react"
 import _ from "lodash"
 import Grid from "@mui/material/Grid"
 import { AccordionControl } from 'components/accordion'
@@ -7,7 +6,7 @@ import { Controller } from "react-hook-form"
 import { getUserInfo } from "helpers"
 
 const Comment = (props) => {
-    const { label, name, control, getValues, setValue, taskId } = props
+    const { label, name, control } = props
     const user = getUserInfo()
 
     const renderItem = (comments = []) => {

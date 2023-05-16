@@ -16,7 +16,7 @@ import { EButtonType } from 'configs/enums'
 import TaskChildPopup from './taskChildPopup'
 import { ActionButton } from 'components/cellRender'
 import { CellButton } from 'components/cellRender'
-import { getUserInfo, getProjectPath } from "helpers"
+import { getUserInfo, getPathItem } from "helpers"
 
 const TaskGrid = React.memo((props) => {
     console.log("render TaskGrid")
@@ -116,16 +116,6 @@ const TaskGrid = React.memo((props) => {
         },
     ])
 
-    const getPathItem = (url) => {
-        let path = url
-        path = getProjectPath(path)
-        if (user) {
-            const defaultOrganization = user.defaultOrganization
-            path = !_.isNil(defaultOrganization) ? `/${user.defaultOrganization}${path}` : `${path}`
-        }
-        return path
-    }
-
     const addChildTask = (data) => {
         setId(data.id)
         setTaskTypeId(data.taskTypeId)
@@ -135,7 +125,7 @@ const TaskGrid = React.memo((props) => {
     }
 
     const genderDropdownItem = (data) => {
-        return <DropDownItem onClick={() => addChildTask(data)} title={t('Tạo công việc con')} />
+        return <DropDownItem onClick={() => addChildTask(data)} title={t('Create a new task')} />
     }
 
     const ActionBtnRenderer = (params) => {

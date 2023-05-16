@@ -1,5 +1,5 @@
 import { useEffect } from 'react'
-import { withRouter } from 'react-router-dom'
+import { withRouter, useParams } from 'react-router-dom'
 import './App.scss'
 import Footer from './components/shared/Footer'
 import Navbar from './components/shared/Navbar'
@@ -30,6 +30,7 @@ const theme = createTheme({
 const App = ({ location, history }) => {
     const isFullPageLayoutRoutes = ['/login', '/signup/jointeam', '/signup']
     const pathname = location.pathname
+    const { taskEditId } = useParams()
     console.log('render app')
 
     useEffect(() => {
@@ -42,7 +43,6 @@ const App = ({ location, history }) => {
     }, [location])
 
     const onRouteChanged = () => {
-        const taskEditId = null
         if (!_.includes(isFullPageLayoutRoutes, pathname)) {
             Progress.show()
         }
@@ -59,15 +59,15 @@ const App = ({ location, history }) => {
             }
         }
 
-        if (_.isNil(taskEditId)) {
-            if (!_.includes(notCheckPermissions, currentPath)) {
-                const isHasPermission = isHasPermissionForAction()
-                if (isHasPermission === false) {
-                    history.push('/access-denied')
-                    return
-                }
-            }
-        }
+        // if (_.isNil(taskEditId)) {
+        //     if (!_.includes(notCheckPermissions, currentPath)) {
+        //         const isHasPermission = isHasPermissionForAction()
+        //         if (isHasPermission === false) {
+        //             history.push('/access-denied')
+        //             return
+        //         }
+        //     }
+        // }
         if (!_.includes(isFullPageLayoutRoutes, pathname)) {
             Progress.hide()
         }

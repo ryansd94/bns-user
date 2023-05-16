@@ -39,11 +39,11 @@ const TaskMoreButton = (props) => {
                             <DropDownItem
                                 onClick={onOpenTaskTypePopup}
                                 icon={<IconChange />}
-                                title={t('Đổi loại công việc')} />
+                                title={t('Change task type')} />
                             <DropDownItem
                                 onClick={onOpenCopyTaskPopup}
                                 icon={<IconCopy />}
-                                title={t('Sao chép công việc')} />
+                                title={t('Copy task')} />
                         </div>
                     )
                     : ''

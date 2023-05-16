@@ -12,7 +12,7 @@ import { LabelControl } from 'components/label'
 import _ from 'lodash'
 
 const MultiSelect = React.memo(
-  ({ control, required, data, label, name, placeholder, disabled, size, fullWidth, renderOption, renderTags }) => {
+  ({ control, required, data = [], label, name, placeholder, disabled, size, fullWidth, renderOption, renderTags }) => {
     const loadingPopup = useSelector((state) => state.master.loadingPopup)
     const [value, setValue] = React.useState([])
     const [text, setText] = React.useState("")

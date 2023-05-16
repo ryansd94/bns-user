@@ -14,7 +14,7 @@ const ViewPermissionApply = (props) => {
             <Grid item>
                 <AccordionControl
                     isExpand={true}
-                    title={t('Người dùng')}
+                    title={t('Users')}
                     name={'users'}
                     details={
                         <ViewPermissionApplyUser users={users} control={control} setValue={setValue} getValues={getValues} />
@@ -24,8 +24,8 @@ const ViewPermissionApply = (props) => {
             <Grid item>
                 <AccordionControl
                     isExpand={true}
-                    title={t('Nhóm')}
-                    name={'users'}
+                    title={t('Team')}
+                    name={'teams'}
                     details={
                         <ViewPermissionApplyTeam teams={teams} control={control} setValue={setValue} getValues={getValues} />
                     }

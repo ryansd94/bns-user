@@ -132,15 +132,15 @@ const ViewPermissionPopup = (props) => {
     const getTabItems = () => {
         const data = [
             {
-                label: t('Chi tiết'),
+                label: t('Detail'),
                 Content: renderInfoTabContent()
             },
             {
-                label: t('Phân quyền'),
+                label: t('Decentralization'),
                 Content: <ViewPermissionFunction control={control} setValue={setValue} getValues={getValues} />
             },
             {
-                label: t('Áp dụng'),
+                label: t('Apply'),
                 Content: <ViewPermissionApply control={control} setValue={setValue} getValues={getValues} {...props} />
             }
         ]

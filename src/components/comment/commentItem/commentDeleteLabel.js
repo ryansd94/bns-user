@@ -20,7 +20,7 @@ const CommentDeleteLabel = (props) => {
                 <IconDelete className="label-title" />
             </Grid>
             <Grid item xs={12}>
-                <LabelControl label={t('Bình luận đã xóa')} />
+                <LabelControl label={t('Comment has been deleted')} />
             </Grid>
         </Grid>
     )
