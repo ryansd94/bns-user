@@ -16,13 +16,13 @@ const ViewPermissionToolbar = (props) => {
     const toolbarVisible = { ...useSelector((state) => state.master.toolbarVisible) }
     const columnVisibility = { ...useSelector((state) => state.viewPermission.columnVisibility) }
     const columnModel = [{
-        field: "name", isShow: true, label: t("Tên quyền"), type: EFilterType.text
+        field: "name", isShow: true, label: t("Permission name"), type: EFilterType.text
     },
     {
-        field: "description", isShow: true, label: t("Mô tả"), type: EFilterType.text
+        field: "description", isShow: true, label: t("Description"), type: EFilterType.text
     },
     {
-        field: "createdDate", isShow: true, label: t("Ngày tạo"), type: EFilterType.datetime
+        field: "createdDate", isShow: true, label: t("Date created"), type: EFilterType.datetime
     }]
 
     const handleColumnConfigChange = (event) => {
@@ -31,7 +31,7 @@ const ViewPermissionToolbar = (props) => {
     }
 
     const handleClickOpen = () => {
-        dispatch(change_title(t("Thêm mới quyền")))
+        dispatch(change_title(t("Add new permission")))
         dispatch(open())
     }
 

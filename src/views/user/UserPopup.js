@@ -56,15 +56,13 @@ const UserPopup = React.memo((props) => {
       <Grid container rowSpacing={2}>
         <Grid item xs={12}>
           <span className="text-note">
-            {t(
-              "Nhập Email người dùng bạn muốn thêm vào hệ thống, bấm Enter để thêm nhiều người dùng. Hệ thống sẽ gửi email xác nhận đến email của người dùng"
-            )}
+            {t("Enter the User Email you want to add to the system, press Enter to add more users. The system will send a confirmation email to the user's email")}
           </span>
           <MultiSelectText
             control={control}
             name="emails"
-            label={t("Email người dùng")}
-            placeholder={t("Nhập Email người dùng")}
+            label={t("User email")}
+            placeholder={t("Enter user email")}
           />
         </Grid>
       </Grid>

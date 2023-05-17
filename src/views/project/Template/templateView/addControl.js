@@ -53,7 +53,7 @@ const AddControl = React.memo((props) => {
         </Grid>
         <Grid item>
             <SingleAddSelect
-                label={t("Tiêu đề")}
+                label={t("Title")}
                 control={control}
                 name='title'
                 freeSolo={true}
@@ -63,7 +63,7 @@ const AddControl = React.memo((props) => {
         </Grid>
         <Grid item>
             <SingleAddSelect
-                label={t("Loại")}
+                label={t("Type")}
                 control={control}
                 name='type'
                 data={getControlType()}

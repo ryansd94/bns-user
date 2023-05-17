@@ -72,7 +72,7 @@ const ChangeTaskTypePopup = React.memo((props) => {
                         data={taskTypies}
                         control={control}
                         name="taskTypeId"
-                        label={t("Chọn loại công việc")}
+                        label={t("Choose the type of task")}
                     />
                 </Grid>
             </Grid>
@@ -81,7 +81,7 @@ const ChangeTaskTypePopup = React.memo((props) => {
 
     return (
         <Popup
-            title={t("Đổi loại công việc")}
+            title={t("Change task type")}
             open={stateOpen}
             reset={reset}
             ModalBody={ModalBody}

@@ -21,7 +21,7 @@ const TemplateGrid = React.memo((props) => {
         },
         {
             field: "name",
-            headerName: t("Tên mẫu"),
+            headerName: t("Template name"),
             pinned: 'left',
             flex: 1,
             cellRenderer: (params) => {
@@ -32,13 +32,13 @@ const TemplateGrid = React.memo((props) => {
             },
         },
         {
-            field: "description", headerName: t("Mô tả"),
+            field: "description", headerName: t("Description"),
             flex: 1
         },
         {
             field: "createdDate",
             suppressAutoSize: true,
-            headerName: t("Ngày tạo"),
+            headerName: t("Date created"),
             cellRenderer: (params) => {
                 return formatDate(params.data.createdDate)
             },

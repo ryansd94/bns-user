@@ -19,34 +19,29 @@ const ProjectGrid = React.memo((props) => {
             pinned: 'left'
         },
         {
-            field: "name", headerName: t("Tên dự án"),
+            field: "name", headerName: t("Project name"),
             flex: 1,
             pinned: 'left'
         },
         {
+            field: "code", headerName: t("Project code"),
+            flex: 1,
+        },
+        {
             field: "startDate",
-            headerName: t("Ngày bắt đầu"),
+            headerName: t("Start date"),
             suppressAutoSize: true,
             valueFormatter: cellFormatDate
         },
         {
             field: "endDate",
-            headerName: t("Ngày kết thúc"),
+            headerName: t("End date"),
             suppressAutoSize: true,
             valueFormatter: cellFormatDate
         },
-        // {
-        //     field: "icon", headerName: t("Biểu tượng"),
-        //     suppressAutoSize: true,
-        //     sortable: false,
-        //     cellRenderer: (params) => {
-        //         return params.data.icon ?
-        //             <UploadIconImage color={params.data.color} src={params.data.icon} /> : ''
-        //     }
-        // },
         {
             field: "description",
-            headerName: t("Mô tả"),
+            headerName: t("Description"),
             flex: 1,
         },
         {

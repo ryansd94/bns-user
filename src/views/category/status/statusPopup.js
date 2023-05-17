@@ -47,7 +47,7 @@ const StatusPopup = React.memo((props) => {
 
     const onEditClick = async () => {
         if (!editData) return
-        dispatch(change_title(t("Chỉnh sửa Trạng thái")))
+        dispatch(change_title(t("Edit status")))
         dispatch(setLoadingPopup(true))
         dispatch(open())
         await getByID(baseUrl.jm_status, editData).then((res) => {
@@ -107,21 +107,21 @@ const StatusPopup = React.memo((props) => {
                         autoFocus={true}
                         required={true}
                         control={control}
-                        label={t("Tên trạng thái")}
+                        label={t("Status name")}
                         name="name"
                     />
                 </Grid>
                 <Grid item xs={12}>
                     <ColorPickerControl
                         control={control}
-                        label={t("Màu sắc")}
+                        label={t("Color")}
                         name="color"
                     />
                 </Grid>
                 <Grid item xs={12}>
                     <TextInput
                         control={control}
-                        label={t("Mô tả")}
+                        label={t("Description")}
                         name="description"
                     />
                 </Grid>
@@ -130,7 +130,7 @@ const StatusPopup = React.memo((props) => {
                         disabled={statusStartDisable}
                         onChange={onStatusStartChange}
                         control={control}
-                        label={t("Trạng thái bắt đầu")}
+                        label={t("Start status")}
                         name="isStatusStart"
                     />
                 </Grid>
@@ -139,7 +139,7 @@ const StatusPopup = React.memo((props) => {
                         disabled={statusEndDisable}
                         onChange={onStatusEndChange}
                         control={control}
-                        label={t("Trạng thái kết thúc")}
+                        label={t("End status")}
                         name="isStatusEnd"
                     />
                 </Grid>

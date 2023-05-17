@@ -42,14 +42,14 @@ const SettingControl = React.memo((props) => {
         <Grid item>
             <TextInput
                 required={true}
-                label={t("Tiêu đề")}
+                label={t("Title")}
                 control={control}
                 name='label' />
         </Grid>
         {
             item.defaultReadonly === true ? '' : <Grid item>
                 <CheckBoxControl
-                    label={t("Bắt buộc nhập")}
+                    label={t("Required")}
                     control={control}
                     name='required'
                 />

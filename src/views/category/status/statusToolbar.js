@@ -17,16 +17,16 @@ const StatusToolbar = (props) => {
     const columnVisibility = { ...useSelector((state) => state.status.columnVisibility) }
 
     const columnModel = [{
-        field: "name", isShow: true, label: t("Tên trạng thái"), type: EFilterType.text
+        field: "name", isShow: true, label: t("Status name"), type: EFilterType.text
     },
     {
-        field: "color", isShow: true, label: t("Màu sắc"), type: EFilterType.text
+        field: "color", isShow: true, label: t("Color"), type: EFilterType.text
     },
     {
-        field: "description", isShow: true, label: t("Mô tả"), type: EFilterType.text
+        field: "description", isShow: true, label: t("Description"), type: EFilterType.text
     },
     {
-        field: "createdDate", isShow: true, label: t("Ngày tạo"), type: EFilterType.datetime
+        field: "createdDate", isShow: true, label: t("Date created"), type: EFilterType.datetime
     }]
 
     const handleColumnConfigChange = (event) => {
@@ -35,7 +35,7 @@ const StatusToolbar = (props) => {
     }
 
     const handleClickOpen = () => {
-        dispatch(change_title(t("Thêm mới trạng thái")))
+        dispatch(change_title(t("Add new status")))
         dispatch(open())
     }
 

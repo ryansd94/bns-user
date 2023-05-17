@@ -21,7 +21,7 @@ export default function JoinTeam() {
   const { t } = useTranslation()
   const { token } = queryString.parse(search)
 
-  const [error, setError] = useState(t("Token không hợp lệ"))
+  const [error, setError] = useState(t(""))
   const [password, setPassword] = useState("")
   const [loading, setLoading] = useState(true)
   const [hasMainAccount, setHasMainAccount] = useState(false)

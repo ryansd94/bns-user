@@ -37,7 +37,7 @@ const TaskGrid = React.memo((props) => {
         },
         {
             field: "title",
-            headerName: t("Tiêu đề"),
+            headerName: t("Title"),
             width: 400,
             pinned: 'left',
             cellRenderer: (params) => {
@@ -49,22 +49,22 @@ const TaskGrid = React.memo((props) => {
             }
         },
         {
-            field: "status.name", headerName: t("Trạng thái"),
+            field: "status.name", headerName: t("Status"),
             suppressAutoSize: true,
             cellRenderer: (params) => {
                 return <StatusItem status={params.data.status} />
             }
         },
         {
-            field: "estimatedhour", headerName: t("Thời gian ước tính"),
+            field: "estimatedhour", headerName: t("Estimated time"),
             suppressAutoSize: true,
         },
         {
-            field: "taskType.name", headerName: t("Loại công việc"),
+            field: "taskType.name", headerName: t("Task type"),
             suppressAutoSize: true,
         },
         {
-            field: "tags", headerName: t("Nhãn"),
+            field: "tags", headerName: t("Tags"),
             width: 200,
             cellRenderer: (params) => {
                 return <CellMuliValue values={params.value} />
@@ -72,25 +72,25 @@ const TaskGrid = React.memo((props) => {
         },
         {
             field: "startDate",
-            headerName: t("Ngày bắt đầu"),
+            headerName: t("Start date"),
             suppressAutoSize: true,
             valueFormatter: cellFormatDate
         },
         {
             field: "dueDate",
-            headerName: t("Ngày hết hạn"),
+            headerName: t("Expiration date"),
             suppressAutoSize: true,
             valueFormatter: cellFormatDate
         },
         {
             field: "createdDate",
-            headerName: t("Ngày tạo"),
+            headerName: t("Date created"),
             suppressAutoSize: true,
             valueFormatter: cellFormatDateTime
         },
         {
             field: "createdUser.fullName",
-            headerName: t("Người tạo"),
+            headerName: t("User created"),
             suppressAutoSize: true,
             cellRenderer: (params) => {
                 return <UserItem {...params.data.createdUser} />
@@ -119,7 +119,7 @@ const TaskGrid = React.memo((props) => {
     const addChildTask = (data) => {
         setId(data.id)
         setTaskTypeId(data.taskTypeId)
-        dispatch(change_title(t("Thêm công việc")))
+        dispatch(change_title(t("Add new task")))
         dispatch(open())
         // window.open(`/task/create/${data.taskTypeId}?parentId=${data.id}`)
     }

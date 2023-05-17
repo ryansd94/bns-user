@@ -155,14 +155,14 @@ export default function Signup() {
               >
                 <Grid container rowSpacing={2}>
                   <Grid item xs={12}>
-                    <h3>{t("Tạo tài khoản BNS")}</h3>
+                    <h3>{t("Create account")}</h3>
                   </Grid>
                   {tokenIsvalid ? (
                     <Grid container gap={2}>
                       <Grid item gap={2} container xs direction={'column'}>
                         <Grid item xs>
                           <span className="text-note">
-                            {t("Tên miền tổ chức của bạn")}
+                            {t("organization domain name")}
                           </span>
                         </Grid>
                         <Grid item xs>
@@ -179,12 +179,12 @@ export default function Signup() {
                       </Grid>
                       <Grid item xs={12}>
                         <span className="text-note">
-                          {t("Nhập Họ và tên bạn muốn hiển thị")}
+                          {t("Enter the first and last name you want to display")}
                         </span>
                         <TextInput
                           required={true}
                           control={control}
-                          label={t("Họ tên đầy đủ")}
+                          label={t("Full name")}
                           name="fullName"
                         />
                       </Grid>
@@ -192,7 +192,7 @@ export default function Signup() {
                         <TextInput
                           required={true}
                           control={control}
-                          label={t("Mật khẩu")}
+                          label={t("Password")}
                           name="password"
                           type={"password"}
                           onChange={onChangePassword}
@@ -229,7 +229,7 @@ export default function Signup() {
                         <TextInput
                           required={true}
                           control={control}
-                          label={t("Nhập lại mật khẩu")}
+                          label={t("Re-enter password")}
                           name="confirmPassword"
                           type={"password"}
                           onChange={onChangePasswordAgain}
@@ -255,13 +255,11 @@ export default function Signup() {
                           valueAgain={passwordAgain}
                           onChange={(isValid) => setPasswordIsvalid(isValid)}
                           messages={{
-                            minLength: t("Mật khẩu tối thiểu 6 ký tự"),
-                            notEmpty: t(
-                              "Mật khẩu và nhập lại mật khẩu không được trống"
-                            ),
-                            number: t("Mật khẩu phải chứa 1 chữ số"),
-                            lowercase: t("Mật khẩu phải chứa 1 ký tự"),
-                            match: t("Nhập lại mật khẩu không trùng khớp"),
+                            minLength: t("Password minimum 6 characters"),
+                            notEmpty: t("Password and re-enter password must not be empty"),
+                            number: t("Password must contain at least 1 digit"),
+                            lowercase: t("Password must contain at least 1 character"),
+                            match: t("Re-enter password does not match"),
                           }}
                         />
                       </Grid>
@@ -272,7 +270,7 @@ export default function Signup() {
                 </Grid>
                 {tokenIsvalid ? (
                   <Button onClick={handleSubmit(onSubmit)} variant="contained">
-                    Sign in
+                    {t('Sign up')}
                   </Button>
                 ) : (
                   <div></div>

@@ -42,13 +42,14 @@ const ProjectPopup = (props) => {
 
     const onEditClick = async () => {
         if (!editData) return
-        dispatch(change_title(t("Chỉnh sửa dự án")))
+        dispatch(change_title(t("Edit project")))
         dispatch(setLoadingPopup(true))
         dispatch(open())
         await getByID(baseUrl.jm_project, editData).then((res) => {
             //dispatch(setEditData(res.data))
             setValue("id", res.data.id)
             setValue("name", res.data.name)
+            setValue("code", res.data.code)
             setValue("description", res.data.description)
             setValue("icon", res.data.icon)
             setValue("templateId", res.data.templateId)

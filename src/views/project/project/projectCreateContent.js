@@ -16,7 +16,7 @@ const ProjectCreateContent = (props) => {
                     autoFocus={true}
                     required={true}
                     control={control}
-                    label={t("Tên dự án")}
+                    label={t("Project name")}
                     name="name"
                 />
             </Grid>
@@ -24,7 +24,7 @@ const ProjectCreateContent = (props) => {
                 <TextInput
                     required={true}
                     control={control}
-                    label={t("Mã dự án")}
+                    label={t("Project code")}
                     name="code"
                 />
             </Grid>
@@ -38,13 +38,13 @@ const ProjectCreateContent = (props) => {
             <Grid item container direction={'row'} gap={2}>
                 <Grid item xs>
                     <DatePickerInput
-                        label={t("Ngày bắt đầu")}
+                        label={t("Start date")}
                         control={control}
                         name={`startDate`} />
                 </Grid>
                 <Grid item xs>
                     <DatePickerInput
-                        label={t("Ngày kết thúc")}
+                        label={t("End date")}
                         control={control}
                         name={`endDate`} />
                 </Grid>
@@ -53,7 +53,7 @@ const ProjectCreateContent = (props) => {
                 <EditorControl
                     control={control}
                     isFullScreen={true}
-                    label={t("Mô tả")}
+                    label={t("Description")}
                     name="description"
                     isShowAccordion={true} />
             </Grid>

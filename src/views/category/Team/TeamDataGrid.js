@@ -17,19 +17,19 @@ const TeamDataGrid = React.memo((props) => {
       resizable: false, width: 40, headerCheckboxSelection: true, pinned: 'left'
     },
     {
-      field: "name", headerName: t("Tên nhóm"),
+      field: "name", headerName: t("Team name"),
       flex: 1,
       pinned: 'left',
     },
     {
       field: "description",
-      headerName: t("Mô tả"),
+      headerName: t("Description"),
       width: 450,
       flex: 2,
     },
     {
       field: "parentName",
-      headerName: t("Nhóm cha"),
+      headerName: t("Team parent"),
       width: 400,
       flex: 2,
     },

@@ -59,7 +59,7 @@ const TaskTypePopup = React.memo((props) => {
 
     const onEditClick = async () => {
         if (!editData) return
-        dispatch(change_title(t("Chỉnh sửa loại công việc")))
+        dispatch(change_title(t("Edit job type")))
         dispatch(setLoadingPopup(true))
         dispatch(open())
         await getByID(baseUrl.jm_taskType, editData).then((res) => {
@@ -109,13 +109,13 @@ const TaskTypePopup = React.memo((props) => {
                         autoFocus={true}
                         required={true}
                         control={control}
-                        label={t("Tên loại công việc")}
+                        label={t("Task type name")}
                         name="name"
                     />
                 </Grid>
                 <Grid item xs={12}>
                     <UploadIcon
-                        label={t("Biểu tượng")}
+                        label={t("Icon")}
                         control={control}
                         name="icon"
                         color={color}
@@ -124,7 +124,7 @@ const TaskTypePopup = React.memo((props) => {
                 <Grid item xs={12}>
                     <ColorPickerControl
                         control={control}
-                        label={t("Màu sắc")}
+                        label={t("Color")}
                         name="color"
                         onChange={onColorChange}
                     />
@@ -134,13 +134,13 @@ const TaskTypePopup = React.memo((props) => {
                         data={dataTemplaties}
                         control={control}
                         name="templateId"
-                        label={t("Mẫu công việc")}
+                        label={t("Task template")}
                     />
                 </Grid>
                 <Grid item xs={12}>
                     <TextInput
                         control={control}
-                        label={t("Mô tả")}
+                        label={t("Description")}
                         name="description"
                     />
                 </Grid>

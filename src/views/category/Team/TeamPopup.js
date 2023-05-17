@@ -90,7 +90,7 @@ const TeamPopup = React.memo((props) => {
 
   const onEditClick = async () => {
     if (!editData) return
-    dispatch(change_title(t("Chỉnh sửa Nhóm")))
+    dispatch(change_title(t("Edit team")))
     dispatch(setLoadingPopup(true))
     dispatch(open())
     await getByID(baseUrl.jm_team, editData).then((res) => {
@@ -151,14 +151,14 @@ const TeamPopup = React.memo((props) => {
             autoFocus={true}
             required={true}
             control={control}
-            label={t("Tên nhóm")}
+            label={t("Team name")}
             name="name"
           />
         </Grid>
         <Grid item xs={12}>
           <TextInput
             control={control}
-            label={t("Mô tả")}
+            label={t("Description")}
             name="description"
           />
         </Grid>
@@ -167,13 +167,13 @@ const TeamPopup = React.memo((props) => {
             data={dataTeam}
             control={control}
             name="parentId"
-            label={t("Nhóm cha")}
+            label={t("Team parent")}
           />
         </Grid>
         <Grid item xs={12}>
           <span className="text-note">
             {t(
-              "Nhập Email người dùng bạn muốn thêm vào nhóm, bấm Enter để thêm nhiều người dùng"
+              "Enter the Email of the user you want to add to the group, press Enter to add more users"
             )}
           </span>
         </Grid>
@@ -182,8 +182,8 @@ const TeamPopup = React.memo((props) => {
             control={control}
             name="members"
             data={dataUser}
-            label={t("Email người dùng")}
-            placeholder={t("Nhập Email người dùng")}
+            label={t("User email")}
+            placeholder={t("Enter user email")}
           />
 
         </Grid>

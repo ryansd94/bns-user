@@ -24,16 +24,16 @@ const UserToolbar = (props) => {
         field: "email", isShow: true, label: t("Email"), type: EFilterType.text
     },
     {
-        field: "fullName", isShow: true, label: t("Họ tên"), type: EFilterType.text
+        field: "fullName", isShow: true, label: t("Full name"), type: EFilterType.text
     },
     {
-        field: "teamName", isShow: true, label: t("Nhóm"), type: EFilterType.text
+        field: "teamName", isShow: true, label: t("Team"), type: EFilterType.text
     },
     {
-        field: "status", isShow: true, label: t("Trạng thái"), type: EFilterType.select
+        field: "status", isShow: true, label: t("Status"), type: EFilterType.select
     },
     {
-        field: "createdDate", isShow: true, label: t("Ngày tạo"), type: EFilterType.datetime
+        field: "createdDate", isShow: true, label: t("Date created"), type: EFilterType.datetime
     }]
 
     const handleColumnConfigChange = (event) => {
@@ -42,7 +42,7 @@ const UserToolbar = (props) => {
     }
 
     const handleClickOpen = () => {
-        dispatch(change_title(t("Thêm mới người dùng")))
+        dispatch(change_title(t("Add new user")))
         dispatch(open())
     }
 

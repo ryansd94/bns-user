@@ -69,7 +69,7 @@ const TagControl = React.memo(props => {
                                 freeSolo
                                 control={control}
                                 name="templateId"
-                                placeholder={t("Thêm nhãn")}
+                                placeholder={t("Add tags")}
                             />
                         </Grid> : ''}
                         <Grid item>

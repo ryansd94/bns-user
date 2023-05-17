@@ -44,17 +44,17 @@ const UserGrid = React.memo((props) => {
       },
     },
     {
-      field: "fullName", headerName: t("Họ tên"),
+      field: "fullName", headerName: t("Full name"),
       flex: 1
     },
     {
-      field: "teamName", headerName: t("Nhóm"),
+      field: "teamName", headerName: t("Team"),
       width: 170,
     },
     {
       field: "status",
       width: 170,
-      headerName: t("Trạng thái"),
+      headerName: t("Status"),
       cellRenderer: (params) => {
         return <UserStatus status={params.data.status} />
       },
@@ -62,7 +62,7 @@ const UserGrid = React.memo((props) => {
     {
       field: "createdDate",
       width: 150,
-      headerName: t("Ngày tạo"),
+      headerName: t("Date created"),
       cellRenderer: (params) => {
         return formatDate(params.data.createdDate)
       },
@@ -83,7 +83,7 @@ const UserGrid = React.memo((props) => {
           dispatch(
             openAlert({
               open: true,
-              title: sta == EUserStatus.BLOCK ? t("Bạn có chắc khóa người dùng này?") : t("Bạn có chắc mở khóa người dùng này?"),
+              title: sta == EUserStatus.BLOCK ? t("Are you sure to lock this user?") : t("Are you sure to unlock this user?"),
             })
           )
         }

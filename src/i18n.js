@@ -1,6 +1,8 @@
 ﻿import i18n from "i18next"
 import LanguageDetector from "i18next-browser-languagedetector"
 import { initReactI18next } from "react-i18next"
+import viLang from 'assets/lang/vi.json'
+import enLang from 'assets/lang/en.json'
 
 i18n
     .use(LanguageDetector)
@@ -9,33 +11,18 @@ i18n
         debug: false,
         resources: {
             vi: {
-                translations: {
-                    "Overview dashboard": "Overview dashboard",
-                    "Dashboard": "Trang chủ",
-                    "ADD_NEW": "Thêm mới",
-                    "HIDE_SHOW_COLUMN": "Ẩn/hiện cột",
-                    "EDIT": "Chỉnh sửa",
-                    "DELETE": "Xóa",
-                    "VIEW": "Hiển thị"
-                }
+                translations: viLang
             },
             en: {
-                translations: {
-                    "Overview dashboard": "Overview dashboard",
-                    "ADD_NEW": "Add new",
-                    "HIDE_SHOW_COLUMN": "Hide/show column",
-                    "EDIT": "Edit",
-                    "DELETE": "Delete",
-                    "VIEW": "View"
-                }
+                translations: enLang
             },
             ar: {
                 translations: {
                 }
             }
         },
-        fallbackLng: "vi",
-        lng: 'vi', // default language
+        fallbackLng: "en",
+        lng: 'en', // default language
 
         // have a common namespace used around the full app
         defaultNS: "translations",

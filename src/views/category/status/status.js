@@ -40,14 +40,14 @@ const Status = React.memo(() => {
     if (!_.isEmpty(checkStatus)) {
       let messageArray = []
       if (checkStatus.isStatusStart === false) {
-        messageArray.push('trạng thái bắt đầu')
+        messageArray.push(t('Start status'))
       }
       if (checkStatus.isStatusEnd === false) {
-        messageArray.push('trạng thái kết thúc')
+        messageArray.push(t('End status'))
       }
       if (!_.isEmpty(messageArray)) {
         let message = _.join(messageArray, ', ')
-        return <div>Hệ thống chưa tồn tại {<b>{message}</b>}, vui lòng thêm mới</div>
+        return <div>{`${t('The system does not yet have')} `}{<b>{message}</b>}, {t('Please add new')}</div>
       }
     }
     return ''
@@ -58,7 +58,7 @@ const Status = React.memo(() => {
       <StatusToolbar onApplyFilter={onApplyFilter} />
       <Alert type={EAlertType.warning} message={renderMessageStatus()} />
       <Resizable genderLeftComponent={genderLeftComponent} />
-      <StatusPopup checkStatus={checkStatus}/>
+      <StatusPopup checkStatus={checkStatus} />
     </div>
   )
 })

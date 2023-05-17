@@ -6,14 +6,14 @@ const initialState = {
     menu: [
         {
             key: 'Overview',
-            title: 'Tổng quan',
+            title: 'Dashboard',
             icon: 'mdi mdi-crosshairs-gps',
             type: EMenuType.collapse,
             childs: [
                 {
                     key: 'Summary',
                     parent: 'Overview',
-                    title: 'Tóm tắt',
+                    title: 'Summary',
                     path: '/overview/summary',
                     icon: 'mdi mdi-crosshairs-gps',
                     isHasProjectPath: true,
@@ -25,7 +25,7 @@ const initialState = {
                 {
                     key: 'dashboard',
                     parent: 'Overview',
-                    title: 'Tổng quan',
+                    title: 'Dashboard',
                     path: '/overview/dashboard',
                     icon: 'mdi mdi-crosshairs-gps',
                     isHasProjectPath: true,
@@ -38,7 +38,7 @@ const initialState = {
         },
         {
             key: 'Project',
-            title: 'Dự án',
+            title: 'Project',
             path: '/project',
             icon: 'far fa-project-diagram',
             type: EMenuType.action
@@ -47,19 +47,19 @@ const initialState = {
             key: 'Category',
             type: EMenuType.collapse,
             icon: 'mdi mdi-crosshairs-gps',
-            title: 'Danh mục',
+            title: 'Category',
             childs: [
                 {
                     key: 'Team',
                     parent: 'Category',
-                    title: 'Nhóm',
+                    title: 'Team',
                     path: '/category/team',
                     type: EMenuType.action
                 },
                 {
                     key: 'Priority',
                     parent: 'Category',
-                    title: 'Độ ưu tiên',
+                    title: 'Priority',
                     path: '/category/priority',
                     type: EMenuType.action
                 }
@@ -67,20 +67,20 @@ const initialState = {
         },
         {
             key: 'User',
-            title: 'Người dùng',
+            title: 'Users',
             icon: 'far fa-users',
             path: '/user',
             type: EMenuType.action
         },
         {
             key: 'TaskGroup',
-            title: 'Công việc',
+            title: 'Task',
             type: EMenuType.group,
             childs: [
                 {
                     key: 'Template',
                     parent: 'TaskGroup',
-                    title: 'Mẫu công việc',
+                    title: 'Task template',
                     path: '/template',
                     icon: 'mdi mdi-crosshairs-gps',
                     type: EMenuType.action
@@ -88,7 +88,7 @@ const initialState = {
                 {
                     key: 'Status',
                     parent: 'TaskGroup',
-                    title: 'Trạng thái',
+                    title: 'Status',
                     path: '/category/status',
                     icon: 'mdi mdi-crosshairs-gps',
                     type: EMenuType.action
@@ -96,7 +96,7 @@ const initialState = {
                 {
                     key: 'Tasktype',
                     parent: 'TaskGroup',
-                    title: 'Loại công việc',
+                    title: 'Task type',
                     path: '/category/tasktype',
                     icon: 'mdi mdi-crosshairs-gps',
                     type: EMenuType.action
@@ -104,7 +104,7 @@ const initialState = {
                 {
                     key: 'Task',
                     parent: 'TaskGroup',
-                    title: 'Công việc',
+                    title: 'Task',
                     path: '/task',
                     icon: 'far fa-tasks',
                     isHasProjectPath: true,
@@ -114,13 +114,13 @@ const initialState = {
         },
         {
             key: 'PermissionGroup',
-            title: 'Phân quyền',
+            title: 'Permission',
             type: EMenuType.group,
             childs: [
                 {
                     key: 'Permission',
                     parent: 'PermissionGroup',
-                    title: 'Phân quyền',
+                    title: 'Permission',
                     path: '/viewPermission',
                     icon: 'far fa-shield',
                     type: EMenuType.action

@@ -17,15 +17,15 @@ const TaskTypeGrid = (props) => {
             pinned: 'left'
         },
         {
-            field: "name", headerName: t("Tên loại công việc"),
+            field: "name", headerName: t("Task type name"),
             flex: 1,
             pinned: 'left'
         },
         {
-            field: "templateName", headerName: t("Mẫu công việc"),
+            field: "templateName", headerName: t("Task template"),
         },
         {
-            field: "icon", headerName: t("Biểu tượng"),
+            field: "icon", headerName: t("Icon"),
             suppressAutoSize: true,
             sortable: false,
             cellRenderer: (params) => {
@@ -35,7 +35,7 @@ const TaskTypeGrid = (props) => {
         },
         {
             field: "description",
-            headerName: t("Mô tả"),
+            headerName: t("Description"),
             flex: 1,
         },
         {

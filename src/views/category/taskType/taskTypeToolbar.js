@@ -17,19 +17,19 @@ const TaskTypeToolbar = (props) => {
     const toolbarVisible = { ...useSelector((state) => state.master.toolbarVisible) }
     const columnVisibility = { ...useSelector((state) => state.taskType.columnVisibility) }
     const columnModel = [{
-        field: "name", isShow: true, label: t("Tên loại công việc"), type: EFilterType.text
+        field: "name", isShow: true, label: t("Task type name"), type: EFilterType.text
     },
     {
-        field: "templateName", isShow: true, label: t("Mẫu công việc"), type: EFilterType.text
+        field: "templateName", isShow: true, label: t("Task template"), type: EFilterType.text
     },
     {
-        field: "description", isShow: true, label: t("Mô tả"), type: EFilterType.text
+        field: "description", isShow: true, label: t("Description"), type: EFilterType.text
     },
     {
-        field: "icon", isShow: true, label: t("Biểu tượng"), type: EFilterType.text, isHideFilter: true
+        field: "icon", isShow: true, label: t("Icon"), type: EFilterType.text, isHideFilter: true
     },
     {
-        field: "createdDate", isShow: true, label: t("Ngày tạo"), type: EFilterType.datetime
+        field: "createdDate", isShow: true, label: t("Date created"), type: EFilterType.datetime
     }]
     
     const handleColumnConfigChange = (event) => {
@@ -38,7 +38,7 @@ const TaskTypeToolbar = (props) => {
     }
 
     const handleClickOpen = () => {
-        dispatch(change_title(t("Thêm mới Loại công việc")))
+        dispatch(change_title(t("Add new task type")))
         dispatch(open())
     }
 

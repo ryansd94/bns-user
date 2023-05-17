@@ -12,13 +12,16 @@ import firebase from "firebase/compat/app"
 import "firebase/compat/auth"
 import _ from 'lodash'
 import BreadCrumb from './breadCrumb'
+import { setLang } from "stores/views/master"
+import { useDispatch } from "react-redux"
 
 function MyComponent() {
-    const [languageIcon, setLanguageIcon] = useState('flag-icon flag-icon-vn')
-    const [language, setLanguage] = useState('Vietnamese')
+    const [languageIcon, setLanguageIcon] = useState('flag-icon flag-icon-gb')
+    const [language, setLanguage] = useState('English')
     const history = useHistory()
     const user = getUserInfo()
-    // const auth = getAuth()
+    const dispatch = useDispatch()
+
     function toggleOffcanvas() {
         document.querySelector('.sidebar-offcanvas').classList.toggle('active')
     }
@@ -30,7 +33,7 @@ function MyComponent() {
     firebase.initializeApp(config)
 
     useEffect(() => {
-        i18n.changeLanguage('vi')
+        i18n.changeLanguage('en')
     }, [])
 
     const changeLanguage = (lng) => {
@@ -43,6 +46,7 @@ function MyComponent() {
             setLanguage('English')
         }
         i18n.changeLanguage(lng)
+        dispatch(setLang(lng))
     }
 
     const onLogOut = () => {

@@ -18,7 +18,7 @@ const AlertDialog = (props) => {
   const { onSubmit } = props
 
   const handleClose = () => {
-    dispatch(openAlert({ open: false, title: title ? title : t("Bạn có chắc muốn xóa dữ liệu này?") }))
+    dispatch(openAlert({ open: false, title: title ? title : t("Are you sure you want to delete this data?") }))
   }
 
   return (
@@ -30,7 +30,7 @@ const AlertDialog = (props) => {
         aria-describedby="alert-dialog-description"
       >
         <DialogTitle id="alert-dialog-title">
-          {title ? title : t("Bạn có chắc muốn xóa dữ liệu này?")}
+          {title ? title : t("Are you sure you want to delete this data?")}
         </DialogTitle>
         <DialogActions>
           <ButtonDetail onClick={handleClose} type="Undo" />

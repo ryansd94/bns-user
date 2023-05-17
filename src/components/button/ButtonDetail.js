@@ -30,7 +30,7 @@ const ButtonDetail = (props) => {
     switch (type) {
       case EButtonDetailType.save:
         setIcon(<IconSave />)
-        setText(t("Lưu"))
+        setText(t("Save"))
         setDefaultLoading(true)
         break
       case EButtonDetailType.ok:
@@ -39,12 +39,12 @@ const ButtonDetail = (props) => {
         break
       case EButtonDetailType.undo:
         setIcon(<IconCancel></IconCancel>)
-        setText(t("Hủy bỏ"))
+        setText(t("Cancel"))
         setColor("neutral")
         break
       case EButtonDetailType.accpet:
         setIcon(<IconSave />)
-        setText(t("Xác nhận"))
+        setText(t("Confirm"))
         setDefaultLoading(true)
         break
       default:

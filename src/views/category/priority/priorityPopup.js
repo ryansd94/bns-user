@@ -43,7 +43,7 @@ const PriorityPopup = React.memo((props) => {
 
     const onEditClick = async () => {
         if (!editData) return
-        dispatch(change_title(t("Chỉnh sửa Trạng thái")))
+        dispatch(change_title(t("Edit status")))
         dispatch(setLoadingPopup(true))
         dispatch(open())
         await getByID(baseUrl.jm_priority, editData).then((res) => {
@@ -90,21 +90,21 @@ const PriorityPopup = React.memo((props) => {
                         autoFocus={true}
                         required={true}
                         control={control}
-                        label={t("Độ ưu tiên")}
+                        label={t("Priority")}
                         name="name"
                     />
                 </Grid>
                 <Grid item xs={12}>
                     <ColorPickerControl
                         control={control}
-                        label={t("Màu sắc")}
+                        label={t("Color")}
                         name="color"
                     />
                 </Grid>
                 <Grid item xs={12}>
                     <TextInput
                         control={control}
-                        label={t("Mô tả")}
+                        label={t("Description")}
                         name="description"
                     />
                 </Grid>

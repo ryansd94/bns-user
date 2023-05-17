@@ -70,7 +70,7 @@ const CopyTaskPopup = React.memo((props) => {
                         data={taskTypies}
                         control={control}
                         name="taskTypeId"
-                        label={t("Chọn loại công việc")}
+                        label={t("Choose the type of task")}
                     />
                 </Grid>
             </Grid>
@@ -79,7 +79,7 @@ const CopyTaskPopup = React.memo((props) => {
 
     return (
         <Popup
-            title={t("Sao chép công việc")}
+            title={t("Copy task")}
             open={stateOpen}
             reset={reset}
             ModalBody={ModalBody}

@@ -17,16 +17,19 @@ const ProjectToolbar = (props) => {
     const toolbarVisible = { ...useSelector((state) => state.master.toolbarVisible) }
     const columnVisibility = { ...useSelector((state) => state.project.columnVisibility) }
     const columnModel = [{
-        field: "name", isShow: true, label: t("Tên loại công việc"), type: EFilterType.text
+        field: "name", isShow: true, label: t("Project name"), type: EFilterType.text
     },
     {
-        field: "templateName", isShow: true, label: t("Mẫu công việc"), type: EFilterType.text
+        field: "code", isShow: true, label: t("Project code"), type: EFilterType.text
     },
     {
-        field: "description", isShow: true, label: t("Mô tả"), type: EFilterType.text
+        field: "startDate", isShow: true, label: t("Start date"), type: EFilterType.datetime
     },
     {
-        field: "icon", isShow: true, label: t("Biểu tượng"), type: EFilterType.text, isHideFilter: true
+        field: "endDate", isShow: true, label: t("End date"), type: EFilterType.datetime
+    },
+    {
+        field: "description", isShow: true, label: t("Description"), type: EFilterType.text
     },
     {
         field: "createdDate", isShow: true, label: t("Ngày tạo"), type: EFilterType.datetime
@@ -38,7 +41,7 @@ const ProjectToolbar = (props) => {
     }
 
     const handleClickOpen = () => {
-        dispatch(change_title(t("Thêm mới dự án")))
+        dispatch(change_title(t("Add new project")))
         dispatch(open())
     }
 

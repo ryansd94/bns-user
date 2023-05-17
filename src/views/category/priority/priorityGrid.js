@@ -23,15 +23,15 @@ const PriorityGrid = React.memo((props) => {
       checkboxSelection: true,
       resizable: false, width: 40, headerCheckboxSelection: true, pinned: 'left'
     },
-    { field: "name", headerName: t("Độ ưu tiên"), flex: 1, pinned: 'left' },
+    { field: "name", headerName: t("Priority"), flex: 1, pinned: 'left' },
     {
       field: "color",
-      headerName: t("Màu sắc"),
+      headerName: t("Color"),
       cellRenderer: (params) => {
         return <ColorPickerControl readOnly={true} defaultValue={params.value} />
       }
     },
-    { field: "description", headerName: t("Mô tả"), flex: 2 },
+    { field: "description", headerName: t("Description"), flex: 2 },
     {
       field: "edit",
       headerName: "",

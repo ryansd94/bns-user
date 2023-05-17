@@ -8,6 +8,7 @@ import { CheckBoxCellRender } from 'components/cellRender'
 import { CellButton } from 'components/cellRender'
 
 const StatusGrid = React.memo((props) => {
+  const lang = useSelector((state) => state.master.lang)
   const dispatch = useDispatch()
   const { t } = useTranslation()
   const { filterModels } = props
@@ -19,29 +20,29 @@ const StatusGrid = React.memo((props) => {
       checkboxSelection: true,
       resizable: false, width: 40, headerCheckboxSelection: true, pinned: 'left'
     },
-    { field: "name", headerName: t("Tên trạng thái"), flex: 1, pinned: 'left' },
+    { field: "name", headerName: t("Status name"), flex: 1, pinned: 'left' },
     {
       field: "color",
-      headerName: t("Màu sắc"),
+      headerName: t("Color"),
       cellRenderer: (params) => {
         return <ColorPickerControl readOnly={true} defaultValue={params.value} />
       }
     },
     {
       field: "isStatusStart",
-      headerName: t("Trạng thái bắt đầu"),
+      headerName: t("Start status"),
       cellRenderer: (params) => {
         return <CheckBoxCellRender disabled={true} checked={params.value} />
       }
     },
     {
       field: "isStatusEnd",
-      headerName: t("Trạng thái kết thúc"),
+      headerName: t("End status"),
       cellRenderer: (params) => {
         return <CheckBoxCellRender disabled={true} checked={params.value} />
       }
     },
-    { field: "description", headerName: t("Mô tả"), flex: 2 },
+    { field: "description", headerName: t("Description"), flex: 2 },
     {
       field: "edit",
       headerName: "",
@@ -66,6 +67,6 @@ const StatusGrid = React.memo((props) => {
         url={baseUrl.jm_status} />
     </>
   )
-})
+}) 
 
 export default StatusGrid

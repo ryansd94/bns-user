@@ -16,13 +16,13 @@ const ViewPermissionGrid = (props) => {
             pinned: 'left'
         },
         {
-            field: "name", headerName: t("Tên quyền"),
+            field: "name", headerName: t("Permission name"),
             flex: 1,
             pinned: 'left'
         },
         {
             field: "description",
-            headerName: t("Mô tả"),
+            headerName: t("Description"),
             flex: 1,
         },
         {

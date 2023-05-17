@@ -9,6 +9,7 @@ import Tooltip from "@mui/material/Tooltip"
 import ClickAwayListener from '@mui/material/ClickAwayListener'
 import Box from '@mui/material/Box'
 import { isHasPermissionForButton } from "helpers"
+import { useSelector } from "react-redux"
 import _ from 'lodash'
 
 const useStyles = props => makeStyles(theme => ({
@@ -77,7 +78,6 @@ const useStyles = props => makeStyles(theme => ({
 }))
 const ButtonFuntion = React.memo(props => {
     const classes = useStyles(props)()
-    const { t } = useTranslation()
     const { type, onClick, visible = true, open,
         label = '', style, refs, endIcon, onClickAway = null,
         isFloatLeft = false, className, disabled, isTextAndIcon = true, isCheckPermissionDefault = false } = props
@@ -88,6 +88,8 @@ const ButtonFuntion = React.memo(props => {
     const [float, setFloat] = useState(isFloatLeft ? ' float-left' : ' float-right')
     const [startIcon, setStartIcon] = useState(true)
     const [color, setColor] = useState(null)
+    const lang = useSelector((state) => state.master.lang)
+    const { t } = useTranslation()
     const theme = createTheme({
         palette: {
             neutral: {
@@ -213,11 +215,13 @@ const ButtonFuntion = React.memo(props => {
 
     useEffect(() => {
         setButton()
-    }, [open])
+    }, [open, type])
 
     useEffect(() => {
-        setButton()
-    }, [type])
+        if (lang) {
+            setButton()
+        }
+    }, [lang])
 
     let button = <Button
         ref={refs}

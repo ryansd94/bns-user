@@ -12,7 +12,7 @@ import {
 } from "stores/views/master"
 import Grid from "@mui/material/Grid"
 
-const ToolBar = React.memo(props => {
+const ToolBar = (props) => {
     const { onAddClick, visible, onDeleteClick, columnModel,
         onColumnConfigChange, onApplyFilter, component, genarateCustomButton } = props
     const [anchorElColumn, setAnchorElColumn] = useState(null)
@@ -65,7 +65,8 @@ const ToolBar = React.memo(props => {
         </Grid>
     )
 
-})
+}
+
 ToolBar.propTypes = {
     onAddClick: PropTypes.func,
     onDeleteClick: PropTypes.func,

@@ -46,7 +46,7 @@ const ViewPermissionPopup = (props) => {
 
     const onEditClick = async () => {
         if (!editData) return
-        dispatch(change_title(t("Chỉnh sửa quyền")))
+        dispatch(change_title(t("Edit permission")))
         dispatch(setLoadingPopup(true))
         dispatch(open())
         await getByID(baseUrl.sys_viewPermission, editData).then((res) => {
@@ -114,7 +114,7 @@ const ViewPermissionPopup = (props) => {
                     autoFocus={true}
                     required={true}
                     control={control}
-                    label={t("Tên quyền")}
+                    label={t("Permission name")}
                     name="name"
                 />
             </Grid>
@@ -122,7 +122,7 @@ const ViewPermissionPopup = (props) => {
                 <EditorControl
                     control={control}
                     isFullScreen={true}
-                    label={t("Mô tả")}
+                    label={t("Description")}
                     name="description"
                     isShowAccordion={true} />
             </Grid>

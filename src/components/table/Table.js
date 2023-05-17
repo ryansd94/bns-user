@@ -42,19 +42,19 @@ const Table = React.memo((props) => {
         columns={columns}
         pageSize={10}
         localeText={{
-          columnMenuSortAsc: t("Tăng dần"),
-          columnMenuSortDesc: t("Giảm dần"),
-          columnMenuFilter: t("Tìm kiếm"),
-          columnMenuHideColumn: t("Ẩn cột"),
-          columnMenuShowColumns: t("Hiển thị cột"),
-          columnsPanelHideAllButton: t("Ẩn tất cả"),
-          columnsPanelShowAllButton: t("Hiện tất cả"),
-          columnsPanelTextFieldPlaceholder: t("Nhập tên cột cần tìm"),
-          columnsPanelTextFieldLabel: t("Tìm kiếm cột"),
-          noRowsLabel: "Không có dữ liệu",
-          columnMenuUnsort: "Không sắp xếp",
+          columnMenuSortAsc: t("Ascending"),
+          columnMenuSortDesc: t("Decrease"),
+          columnMenuFilter: t("Search"),
+          columnMenuHideColumn: t("Hide column"),
+          columnMenuShowColumns: t("Show column"),
+          columnsPanelHideAllButton: t("Hide all"),
+          columnsPanelShowAllButton: t("Show all"),
+          columnsPanelTextFieldPlaceholder: t("Enter search column name "),
+          columnsPanelTextFieldLabel: t("Search column"),
+          noRowsLabel: "Empty data",
+          columnMenuUnsort: "Disable sort",
           footerRowSelected: (count) =>
-            `${count.toLocaleString()} ` + t("dòng được chọn"),
+            `${count.toLocaleString()} ` + t("selected rows"),
         }}
         // onCellClick={param => onCellClick(currentlySelected(param))}
         sortModel={sortModel}

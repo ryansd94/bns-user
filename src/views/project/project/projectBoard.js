@@ -55,7 +55,7 @@ const ProjectBoard = () => {
                 <Grid item container direction={'row'} gap={2}>
                     <Grid item xs>
                         <DatePickerInput
-                            label={t("Ngày bắt đầu")}
+                            label={t("Start date")}
                             disabled={true}
                             readOnly={true}
                             isShowPlacholder={false}
@@ -63,7 +63,7 @@ const ProjectBoard = () => {
                     </Grid>
                     <Grid item xs>
                         <DatePickerInput
-                            label={t("Ngày kết thúc")}
+                            label={t("End date")}
                             readOnly={true}
                             disabled={true}
                             isShowPlacholder={false}

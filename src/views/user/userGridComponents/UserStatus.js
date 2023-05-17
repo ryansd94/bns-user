@@ -1,4 +1,3 @@
-import React, { useState } from "react"
 import { useTranslation } from "react-i18next"
 import { IconActive, IconEmail, IconBlock } from "components/icon/icon"
 import { EUserStatus } from "configs"
@@ -15,15 +14,15 @@ const UserStatus = (props) => {
     if (status == EUserStatus.ACTIVE) {
         userStatusClassName = "text-active"
         icon2 = <IconActive className={userStatusClassName} />
-        label = t("Kích hoạt")
+        label = t("Active")
     } else if (status == EUserStatus.WAILTING_CONFIRM_MAIL) {
         userStatusClassName = "text-wait-confirm-mail"
         icon2 = <IconEmail className={userStatusClassName} />
-        label = t("Chờ xác nhận")
+        label = t("Waiting for confirm")
     } else if (status == EUserStatus.BLOCK) {
         userStatusClassName = "text-block"
         icon2 = <IconBlock className={userStatusClassName} />
-        label = t("Tạm khóa")
+        label = t("Temporarily locked")
     }
     return (
         <Grid container item gap={2} direction="row" >

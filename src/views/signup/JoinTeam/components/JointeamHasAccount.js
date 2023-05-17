@@ -19,7 +19,7 @@ const JointeamHasAccount = (props) => {
   const { token } = queryString.parse(search)
   const dispatch = useDispatch()
 
-  const [error, setError] = useState(t("Token không hợp lệ"))
+  const [error, setError] = useState(t("Invalid token"))
   const [password, setPassword] = useState("")
   const [loading, setLoading] = useState(true)
   const [hasMainAccount, setHasMainAccount] = useState(false)
@@ -81,12 +81,12 @@ const JointeamHasAccount = (props) => {
     <Grid container rowSpacing={2}>
       <Grid item xs={12}>
         <soan>
-          Bạn nhận được lời mời gia nhập, nhấn vào nút bên dưới để tham gia
+          {t('You received an invitation to join, click the button below to join')}
         </soan>
       </Grid>
       <Grid item xs={12}>
         <Button onClick={handleSubmit(onSubmit)} variant="contained">
-          {t("Tham gia")}
+          {t("Join")}
         </Button>
       </Grid>
     </Grid>

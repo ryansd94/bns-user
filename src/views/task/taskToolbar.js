@@ -20,31 +20,31 @@ const TaskToolbar = (props) => {
     const columnVisibility = { ...useSelector((state) => state.task.columnVisibility) }
 
     const [columnModels, setColumnModel] = useState([{
-        field: "title", isShow: true, label: t("Tiêu đề"), type: EFilterType.text
+        field: "title", isShow: true, label: t("Title"), type: EFilterType.text
     },
     {
-        field: "status.Name", isShow: true, label: t("Trạng thái"), type: EFilterType.text
+        field: "status.Name", isShow: true, label: t("Status"), type: EFilterType.text
     },
     {
-        field: "estimatedhour", isShow: true, label: t("Thời gian ước tính"), type: EFilterType.text
+        field: "estimatedhour", isShow: true, label: t("Estimated time"), type: EFilterType.text
     },
     {
-        field: "tags", isShow: true, label: t("Nhãn"), type: EFilterType.text
+        field: "tags", isShow: true, label: t("Tags"), type: EFilterType.text
     },
     {
-        field: "taskType.name", isShow: true, label: t("Loại công việc"), type: EFilterType.text
+        field: "taskType.name", isShow: true, label: t("Task type"), type: EFilterType.text
     },
     {
-        field: "startDate", isShow: true, label: t("Ngày bắt đầu"), type: EFilterType.datetime
+        field: "startDate", isShow: true, label: t("Start date"), type: EFilterType.datetime
     },
     {
-        field: "dueDate", isShow: true, label: t("Ngày hết hạn"), type: EFilterType.datetime
+        field: "dueDate", isShow: true, label: t("Expiration date"), type: EFilterType.datetime
     },
     {
-        field: "createdDate", isShow: true, label: t("Ngày tạo"), type: EFilterType.datetime
+        field: "createdDate", isShow: true, label: t("Date created"), type: EFilterType.datetime
     },
     {
-        field: "createdUser.fullName", isShow: true, label: t("Người tạo"), type: EFilterType.text
+        field: "createdUser.fullName", isShow: true, label: t("User created"), type: EFilterType.text
     }
     ])
 

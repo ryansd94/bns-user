@@ -63,57 +63,57 @@ const ButtonIcon = (props) => {
   useEffect(() => {
     switch (type) {
       case EButtonIconType.edit:
-        setTitle(t("Chỉnh sửa"))
+        setTitle(t("Edit"))
         setIsCheckPermission(true)
         break
       case EButtonIconType.delete:
-        setTitle(t("Xóa"))
+        setTitle(t("Delete"))
         setIsCheckPermission(true)
         break
       case EButtonIconType.lock:
-        setTitle(t("Khóa"))
+        setTitle(t("Lock"))
         break
       case EButtonIconType.unLock:
-        setTitle(t("Mở khóa"))
+        setTitle(t("Un lock"))
         break
       case EButtonIconType.apply:
-        setTitle(t("Xác nhận"))
+        setTitle(t("Confirm"))
         break
       case EButtonIconType.cancel:
-        setTitle(t("Hủy bỏ"))
+        setTitle(t("Cancel"))
         break
       case EButtonIconType.back:
-        setTitle(t("Quay về"))
+        setTitle(t("Back to"))
         break
       case EButtonIconType.add:
-        setTitle(t("Thêm mới"))
+        setTitle(t("Add new"))
         break
       case EButtonIconType.up:
-        setTitle(t("Lên"))
+        setTitle(t("Up"))
         break
       case EButtonIconType.down:
-        setTitle(t("Xuống"))
+        setTitle(t("Down"))
         break
       case EButtonIconType.comment:
-        setTitle(t("Trả lời"))
+        setTitle(t("Reply"))
         break
       case EButtonIconType.fullScreen:
-        setTitle(t("Full màn hình"))
+        setTitle(t("Full screen"))
         break
       case EButtonIconType.require:
-        setTitle(t("Bắt buộc nhập"))
+        setTitle(t("Required"))
         break
       case EButtonIconType.setting:
-        setTitle(t("Thiết lập"))
+        setTitle(t("Setting"))
         break
       case EButtonIconType.switchLeft:
-        setTitle(t("Chuyển sang trái"))
+        setTitle(t("Move left"))
         break
       case EButtonIconType.switchRight:
-        setTitle(t("Chuyển sang phải"))
+        setTitle(t("Move right"))
         break
       case EButtonIconType.close:
-        setTitle(t("Đóng"))
+        setTitle(t("Close"))
         break
       default:
         break

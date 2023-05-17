@@ -18,56 +18,56 @@ const FilterItem = React.memo((props) => {
     const textOptions = [
         {
             id: 0,
-            name: t("Bằng")
+            name: t("Equal")
         },
         {
             id: 1,
-            name: t("Không bằng")
+            name: t("Not equal")
         },
         {
             id: 2,
-            name: t("Có chứa")
+            name: t("Contains")
         },
         {
             id: 9,
-            name: t("Không chứa")
+            name: t("Not contains")
         },
     ]
     const selectOptions = [{
         id: 0,
-        name: t("Bằng")
+        name: t("Equal")
     },
     {
         id: 1,
-        name: t("Không bằng")
+        name: t("Not equal")
     }]
     const dateOptions = [{
         id: 3,
-        name: t("Lớn hơn")
+        name: t("Greater than")
     },
     {
         id: 5,
-        name: t("Nhỏ hơn")
+        name: t("Less than")
     },
     {
         id: 4,
-        name: t("Lớn hơn hoặc bằng")
+        name: t("Greater than or equal")
     },
     {
         id: 6,
-        name: t("Nhỏ hơn hoặc bằng")
+        name: t("Less than or equal")
     }]
     const status = [{
         id: 1,
-        name: t("Kích hoạt")
+        name: t("Active")
     },
     {
         id: 3,
-        name: t("Chờ xác nhận")
+        name: t("Waiting for confirm")
     },
     {
         id: 4,
-        name: t("Tạm khóa")
+        name: t("Temporarily locked")
     }]
     const [conditionOption, setConditionOption] = React.useState([])
     const [conditionValue, setConditionValue] = React.useState(null)
@@ -124,7 +124,7 @@ const FilterItem = React.memo((props) => {
                 setWidth(300)
                 setValueComponent(
                     <TextInput
-                        label={t("Giá trị")}
+                        label={t("Value")}
                         disabled={disabled}
                         size={size}
                         name={`test[${index}].value`}
@@ -138,7 +138,7 @@ const FilterItem = React.memo((props) => {
                     <MultiSelect size={size} multiple={true}
                         disabled={disabled}
                         control={control}
-                        label={t("Giá trị")}
+                        label={t("Value")}
                         name={`test[${index}].selectValue`}
                         data={status}>
                     </MultiSelect>
@@ -148,7 +148,7 @@ const FilterItem = React.memo((props) => {
                 setWidth(200)
                 setValueComponent(
                     <DatePickerInput
-                        label={t("Giá trị")}
+                        label={t("Value")}
                         control={control}
                         disabled={disabled}
                         name={`test[${index}].value`}
@@ -195,7 +195,7 @@ const FilterItem = React.memo((props) => {
             if (type == EFilterType.text) {
                 setValueComponent(
                     <TextInput
-                        label={t("Giá trị")}
+                        label={t("Value")}
                         disabled={disabled}
                         size={size}
                         fullWidth
@@ -210,14 +210,14 @@ const FilterItem = React.memo((props) => {
                         control={control}
                         size={size}
                         name={`test[${index}].selectValue`}
-                        label={t("Giá trị")}
+                        label={t("Value")}
                         data={status}></MultiSelect>
                 )
             }
             else if (type == EFilterType.datetime) {
                 setValueComponent(<DatePickerInput
                     disabled={disabled}
-                    label={t("Giá trị")}
+                    label={t("Value")}
                     control={control}
                     name={`test[${index}].value`}
                     size="small"></DatePickerInput>)
@@ -231,7 +231,7 @@ const FilterItem = React.memo((props) => {
                 <SingleAddSelect
                     size={size}
                     onSelectChange={onColumnChange}
-                    label={t("Cột")}
+                    label={t("Column")}
                     data={setColumnModelData()}
                     control={control}
                     name={`test[${index}].column`}
@@ -244,7 +244,7 @@ const FilterItem = React.memo((props) => {
                     onSelectChange={onConditionChange}
                     disabled={item && item.condition != null ? false : disableCondition}
                     control={control}
-                    label={t("So sánh")}
+                    label={t("Compare")}
                     name={`test[${index}].condition`}
                     data={conditionOption}>
                 </SingleAddSelect>

@@ -95,7 +95,7 @@ const Filter = (props) => {
 
     const onSave = async (data) => {
         if (!data.name) {
-            setError('name', { type: 'focus', message: t("Nhập tên bộ lọc") })
+            setError('name', { type: 'focus', message: t("Enter filter name") })
         }
         const value = getDataFilter(data)
         if (value) {
@@ -154,7 +154,7 @@ const Filter = (props) => {
             <Grid className='box-container' flexWrap='nowrap' width="auto" container
             >
                 <Grid item  >
-                    <TextInput label={t("Nhập tên bộ lọc")}
+                    <TextInput label={t("Enter filter name")}
                         fullWidth
                         required={true}
                         size={"small"}

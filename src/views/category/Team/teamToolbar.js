@@ -18,19 +18,19 @@ const TeamToolbar = (props) => {
     const toolbarVisible = { ...useSelector((state) => state.master.toolbarVisible) }
     const columnVisibility = { ...useSelector((state) => state.team.columnVisibility) }
     const columnModel = [{
-        field: "name", isShow: true, label: t("Tên nhóm"), type: EFilterType.text
+        field: "name", isShow: true, label: t("Team name"), type: EFilterType.text
     },
     {
-        field: "description", isShow: true, label: t("Mô tả"), type: EFilterType.text
+        field: "description", isShow: true, label: t("Description"), type: EFilterType.text
     },
     {
-        field: "parentName", isShow: true, label: t("Nhóm cha"), type: EFilterType.text
+        field: "parentName", isShow: true, label: t("Team parent"), type: EFilterType.text
     },
     // {
     //     field: "status", value: true, label: t("Trạng thái"), type: EFilterType.select
     // },
     {
-        field: "createdDate", isShow: true, label: t("Ngày tạo"), type: EFilterType.datetime
+        field: "createdDate", isShow: true, label: t("Date created"), type: EFilterType.datetime
     }]
 
     const handleColumnConfigChange = (event) => {
@@ -39,7 +39,7 @@ const TeamToolbar = (props) => {
     }
 
     const handleClickOpen = () => {
-        dispatch(change_title(t("Thêm mới Nhóm")))
+        dispatch(change_title(t("Add new team")))
         dispatch(open())
     }
 

@@ -15,7 +15,8 @@ const initialState = {
   toolbarVisible: { ...VisibleDefault },
   deleteData: {},
   userSetting: {},
-  actionActive: ''
+  actionActive: '',
+  lang: 'en'
 }
 
 const slice = createSlice({
@@ -74,10 +75,13 @@ const slice = createSlice({
     setActionActive: (state, action) => {
       state.actionActive = action.payload
     },
+    setLang: (state, action) => {
+      state.lang = action.payload
+    },
   },
 })
 const { reducer, actions } = slice
 export const { setData, setLoading, setPage, setReload, setSort,
   setLoadingPopup, setEditData, setPageSize, setFilter, setToolbarVisibility,
-  setReloadNull, setDeleteData, setUserSetting, setActionActive } = actions
+  setReloadNull, setDeleteData, setUserSetting, setActionActive, setLang } = actions
 export default reducer
