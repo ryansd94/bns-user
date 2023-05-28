@@ -1,6 +1,6 @@
-import React, { Component, useState, useEffect } from 'react'
+import React, { Component, useState, useEffect, useRef } from 'react'
 import { Dropdown } from 'react-bootstrap'
-import { Link, useHistory, Redirect } from 'react-router-dom'
+import { Link, useHistory } from 'react-router-dom'
 import { Trans } from 'react-i18next'
 import i18n from '../../i18n'
 import { AvatarControl } from 'components/avatar'
@@ -12,8 +12,12 @@ import firebase from "firebase/compat/app"
 import "firebase/compat/auth"
 import _ from 'lodash'
 import BreadCrumb from './breadCrumb'
-import { setLang } from "stores/views/master"
+import { setLang, setNotifyData } from "stores/views/master"
 import { useDispatch } from "react-redux"
+import { Notify } from 'components/notify'
+import { get } from "services"
+import axios from 'axios'
+import { baseUrl } from "configs"
 
 function MyComponent() {
     const [languageIcon, setLanguageIcon] = useState('flag-icon flag-icon-gb')
@@ -21,6 +25,8 @@ function MyComponent() {
     const history = useHistory()
     const user = getUserInfo()
     const dispatch = useDispatch()
+    const cancelToken = useRef(null)
+    const lengthRowNotify = 20
 
     function toggleOffcanvas() {
         document.querySelector('.sidebar-offcanvas').classList.toggle('active')
@@ -34,6 +40,26 @@ function MyComponent() {
 
     useEffect(() => {
         i18n.changeLanguage('en')
+        let mounted = true
+        cancelToken.current = new axios.CancelToken.source()
+
+        const getNotifies = async () => {
+            await get(baseUrl.jm_notifyUser, {
+                start: 0,
+                length: lengthRowNotify
+            }, cancelToken).then((data) => {
+                const notifyData = { ...data.data, total: data.recordsTotal, currentPage: 2 }
+                dispatch(setNotifyData(notifyData))
+            })
+        }
+
+        getNotifies()
+
+        return () => {
+            if (cancelToken.current) {
+                cancelToken.current.cancel()
+            }
+        }
     }, [])
 
     const changeLanguage = (lng) => {
@@ -207,57 +233,7 @@ function MyComponent() {
                         </Dropdown>
                     </li>
                     <li className="nav-item">
-                        <Dropdown alignRight>
-                            <Dropdown.Toggle className="nav-link count-indicator hide-carret">
-                                <i className="mdi mdi-bell-outline"></i>
-                                <span className="count-symbol bg-danger"></span>
-                            </Dropdown.Toggle>
-                            <Dropdown.Menu className="dropdown-menu navbar-dropdown preview-list">
-                                <h6 className="p-3 mb-0 bg-primary text-white py-4"><Trans>Notifications</Trans></h6>
-                                <div className="dropdown-divider"></div>
-                                <Dropdown.Item className="dropdown-item preview-item" onClick={evt => evt.preventDefault()}>
-                                    <div className="preview-thumbnail">
-                                        <div className="preview-icon bg-success">
-                                            <i className="mdi mdi-calendar"></i>
-                                        </div>
-                                    </div>
-                                    <div className="preview-item-content d-flex align-items-start flex-column justify-content-center">
-                                        <h6 className="preview-subject font-weight-normal mb-1"><Trans>Event today</Trans></h6>
-                                        <p className="text-gray ellipsis mb-0"> <Trans>Just a reminder that you have an event today</Trans> </p>
-                                    </div>
-                                </Dropdown.Item>
-                                <div className="dropdown-divider"></div>
-                                <Dropdown.Item className="dropdown-item preview-item" onClick={evt => evt.preventDefault()}>
-                                    <div className="preview-thumbnail">
-                                        <div className="preview-icon bg-warning">
-                                            <i className="mdi mdi-settings"></i>
-                                        </div>
-                                    </div>
-                                    <div className="preview-item-content d-flex align-items-start flex-column justify-content-center">
-                                        <h6 className="preview-subject font-weight-normal mb-1"><Trans>Settings</Trans></h6>
-                                        <p className="text-gray ellipsis mb-0">
-                                            <Trans>Update dashboard</Trans>
-                                        </p>
-                                    </div>
-                                </Dropdown.Item>
-                                <div className="dropdown-divider"></div>
-                                <Dropdown.Item className="dropdown-item preview-item" onClick={evt => evt.preventDefault()}>
-                                    <div className="preview-thumbnail">
-                                        <div className="preview-icon bg-info">
-                                            <i className="mdi mdi-link-variant"></i>
-                                        </div>
-                                    </div>
-                                    <div className="preview-item-content d-flex align-items-start flex-column justify-content-center">
-                                        <h6 className="preview-subject font-weight-normal mb-1"><Trans>Launch Admin</Trans></h6>
-                                        <p className="text-gray ellipsis mb-0">
-                                            <Trans>New admin wow!</Trans>
-                                        </p>
-                                    </div>
-                                </Dropdown.Item>
-                                <div className="dropdown-divider"></div>
-                                <h6 className="p-3 mb-0 text-center cursor-pointer"><Trans>See all notifications</Trans></h6>
-                            </Dropdown.Menu>
-                        </Dropdown>
+                        <Notify />
                     </li>
                 </ul>
                 <button className="navbar-toggler navbar-toggler-right d-lg-none align-self-center" type="button" onClick={toggleOffcanvas}>

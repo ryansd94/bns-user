@@ -14,10 +14,11 @@ const CommentByUser = (props) => {
     const { label, name, user = {}, control, getValues, setValue,
         isShow = true, isReplyComment = false, onCancel, parentId = null, taskId, userSuggest } = props
     const [commentLocal, setCommentLocal] = useState(null)
+    
     const onComment = async () => {
         if (_.isEmpty(commentLocal)) return
         let comments = getValues && getValues('comments') || []
-        const newComment = { value: commentLocal, id: uuidv4(), user: user, isAddNew: true, childrens: [] }
+        const newComment = { value: commentLocal, id: uuidv4(), user: user, isAddNew: true, childrens: [], createdDate: new Date() }
         if (_.isNil(parentId)) { //case add new comment
             newComment.level = 0
             comments.unshift(newComment)
@@ -71,7 +72,7 @@ const CommentByUser = (props) => {
                     <EditorControl isFullScreen={true} userSuggest={userSuggest} value={commentLocal} onChange={onChange} label={label} name={parentId ? parentId : name} isShowAccordion={false} />
                 </Grid>
                 {
-                    isReplyComment ? <Grid item xs>
+                    isReplyComment === true ? <Grid item xs>
                         <ButtonFuntion onClick={onCancel} type={EButtonType.cancel} />
                         <ButtonFuntion disabled={_.isEmpty(commentLocal) ? true : false} onClick={onComment} type={EButtonType.reply} />
                     </Grid> : ''
@@ -80,7 +81,7 @@ const CommentByUser = (props) => {
         </Grid>
         <Grid item xs>
             {
-                isReplyComment ? '' : <ButtonFuntion disabled={_.isEmpty(commentLocal) ? true : false} onClick={onComment} type={EButtonType.comment} />
+                isReplyComment === true ? '' : <ButtonFuntion disabled={_.isEmpty(commentLocal) ? true : false} onClick={onComment} type={EButtonType.comment} />
             }
         </Grid>
     </Grid> : ''

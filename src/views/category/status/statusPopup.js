@@ -22,7 +22,7 @@ import { message } from "configs"
 import { CheckBoxControl } from 'components/checkbox'
 import _ from "lodash"
 
-const StatusPopup = React.memo((props) => {
+const StatusPopup = (props) => {
     const { t } = useTranslation()
     const dispatch = useDispatch()
     const { } = props
@@ -157,6 +157,6 @@ const StatusPopup = React.memo((props) => {
             />
         </div>
     )
-})
+}
 
 export default StatusPopup

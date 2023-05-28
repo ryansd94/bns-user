@@ -15,7 +15,8 @@ import { useTranslation } from "react-i18next"
 import { DropdownMenu, DropDownItem } from 'components/dropdown'
 import { IconDelete, IconEdit } from 'components/icon/icon'
 import {
-    getUserInfo
+    getUserInfo,
+    formatDistanceDate
 } from "helpers"
 
 const CommentItem = (props) => {
@@ -141,7 +142,7 @@ const CommentItem = (props) => {
         if (!comment.isDelete) {
             return <Grid item xs className="comment-root" container flexDirection={'column'} gap={2}>
                 <Grid item>
-                    <LabelControl className='comment-header' label={`${commentLocal.user?.fullName}, ${commentLocal.updatedTime}`} />
+                    <LabelControl className='comment-header' label={`${commentLocal.user?.fullName}, ${formatDistanceDate(commentLocal.createdDate)}`} />
                 </Grid>
                 <Grid item id={comment.id}>
                     <EditorControl onChange={onChangeComment} className={!isEditComment ? 'editor-comment' : ''} readOnly={!isEditComment} value={commentLocal.value} name={`rte${commentLocal.id}`} isShowAccordion={false} />

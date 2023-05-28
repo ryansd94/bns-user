@@ -1,4 +1,3 @@
-import * as React from "react"
 import Dialog from "@mui/material/Dialog"
 import DialogActions from "@mui/material/DialogActions"
 import DialogTitle from "@mui/material/DialogTitle"
@@ -6,8 +5,6 @@ import { open as openAlert } from "stores/components/alert-dialog"
 import { useSelector, useDispatch } from "react-redux"
 import { useTranslation } from "react-i18next"
 import ButtonDetail from "components/button/ButtonDetail"
-import IconButton from "@mui/material/IconButton"
-import { SpinningCircles } from "react-loading-icons"
 
 const AlertDialog = (props) => {
   const open = useSelector((state) => state.alertDialog.open)

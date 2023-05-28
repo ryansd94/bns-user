@@ -26,6 +26,8 @@ const ButtonDetail = (props) => {
   const [color, setColor] = useState(null)
   const [defaultLoading, setDefaultLoading] = useState(false)
   const loading = useSelector((state) => state.button.loading)
+  const lang = useSelector((state) => state.master.lang)
+
   useEffect(() => {
     switch (type) {
       case EButtonDetailType.save:
@@ -50,7 +52,7 @@ const ButtonDetail = (props) => {
       default:
         break
     }
-  }, [])
+  }, [lang])
   let button
   if (type != "Undo") {
     const themeButton = (

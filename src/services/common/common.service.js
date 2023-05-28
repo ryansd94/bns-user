@@ -2,6 +2,7 @@ import { createInstance, handleError } from "services/base"
 import { buildQueryString, getUserInfo, resetUserToken } from "helpers"
 import { EStatusResponse, EErrorCodeResponse } from 'configs'
 import _ from 'lodash'
+import axios from 'axios'
 
 export const save = async (baseUrl, param) => {
   const user = getUserInfo()
@@ -26,7 +27,7 @@ export const save = async (baseUrl, param) => {
   }
 }
 
-export const get = async (baseUrl, param = null) => {
+export const get = async (baseUrl, param = null, cancelToken = null) => {
   const user = getUserInfo()
   validateUser(user)
   const services = createInstance(user.defaultOrganization)
@@ -35,13 +36,18 @@ export const get = async (baseUrl, param = null) => {
     if (param) {
       query += buildQueryString(param)
     }
-    const res = await services.get(query)
+    const res = await services.get(query, { token: cancelToken?.current?.token })
     return res
   } catch (error) {
     const { request, response } = error
     if (response) {
       validateResponse(response)
       return null
+    }
+    if (axios.isCancel(error)) {
+      console.log('Request canceled:', error.message);
+    } else {
+      console.error('Error fetching data:', error);
     }
     return error
   }
@@ -90,6 +96,24 @@ export const post = async (baseUrl, param) => {
   try {
     const query = `${baseUrl}`
     const res = await services.post(query, param)
+    return res
+  } catch (error) {
+    const { request, response } = error
+    if (response) {
+      validateResponse(response)
+      return response
+    }
+    return error
+  }
+}
+
+export const put = async (baseUrl, param) => {
+  const user = getUserInfo()
+  validateUser(user)
+  const services = createInstance(user.defaultOrganization)
+  try {
+    const query = `${baseUrl}/${param.id}`
+    const res = await services.put(query, param)
     return res
   } catch (error) {
     const { request, response } = error

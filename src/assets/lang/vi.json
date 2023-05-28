@@ -10,7 +10,7 @@
     "Apply": "Áp dụng",
     "Reload": "Tải lại",
     "Add tags": "Thêm nhãn",
-    "Function": "Chức năng'",
+    "Function": "Chức năng",
     "Comment": "Bình luận",
     "Reply": "Trả lời",
     "Cancel": "Hủy",
@@ -169,5 +169,8 @@
     "The system does not yet have" :"Hệ thống chưa tồn tại",
     "Please add new":"vui lòng thêm mới",
     "Compare":"So sánh",
-    "Column":"Cột"
+    "Column":"Cột",
+    "Permission" :"Phân quyền",
+    "Please wait a moment":"Xin vui lòng chờ trong giây lát",
+    "Notify":"Thông báo"
 }

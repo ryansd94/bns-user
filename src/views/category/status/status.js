@@ -11,7 +11,7 @@ import { get } from "services"
 import { baseUrl } from "configs"
 import _ from 'lodash'
 
-const Status = React.memo(() => {
+const Status = () => {
   const { t } = useTranslation()
   const [filterModels, setFilterModels] = useState(null)
   const [checkStatus, setCheckStatus] = useState({})
@@ -61,6 +61,6 @@ const Status = React.memo(() => {
       <StatusPopup checkStatus={checkStatus} />
     </div>
   )
-})
+}
 
 export default Status

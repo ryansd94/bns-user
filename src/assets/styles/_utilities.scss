@@ -207,7 +207,7 @@
   overflow-y: hidden;
 }
 .ofy-auto {
-  overflow-y: auto;
+  overflow-y: auto !important;
 }
 .none {
   display: none;

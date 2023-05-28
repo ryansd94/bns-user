@@ -16,7 +16,8 @@ const initialState = {
   deleteData: {},
   userSetting: {},
   actionActive: '',
-  lang: 'en'
+  lang: 'en',
+  notifyData: { items: [], unread: 0, total: 0, currentPage: 0 }
 }
 
 const slice = createSlice({
@@ -78,10 +79,16 @@ const slice = createSlice({
     setLang: (state, action) => {
       state.lang = action.payload
     },
+    setNotifyData: (state, action) => {
+      state.notifyData = { ...state.notifyData, ...action.payload }
+    },
+    newNotify: (state, action) => {
+      state.notifyData = { unread: state.notifyData.unread + 1, items: [action.payload, ...state.notifyData.items] }
+    }
   },
 })
 const { reducer, actions } = slice
 export const { setData, setLoading, setPage, setReload, setSort,
   setLoadingPopup, setEditData, setPageSize, setFilter, setToolbarVisibility,
-  setReloadNull, setDeleteData, setUserSetting, setActionActive, setLang } = actions
+  setReloadNull, setDeleteData, setUserSetting, setActionActive, setLang, setNotifyData, newNotify } = actions
 export default reducer

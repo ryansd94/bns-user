@@ -39,7 +39,7 @@ const IconAdd = ({ style, className }) => {
   return <i style={style} className="far fa-plus fa-sm"></i>
 }
 const IconCricle = ({ style, className }) => {
-  return <i style={style} className="fas fa-circle fa-xs"></i>
+  return <i style={style} className={`fas fa-circle fa-xs ${className}`}></i>
 }
 const IconUp = ({ style, className }) => {
   return <i style={style} className="far fa-arrow-up fa-sm"></i>

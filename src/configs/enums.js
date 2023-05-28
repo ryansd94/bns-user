@@ -173,7 +173,8 @@ export const baseUrl = {
   jm_comment: 'jm_comment',
   jm_priority: 'jm_priority',
   jm_project: 'jm_project',
-  sys_viewPermission: 'sys_viewPermission'
+  sys_viewPermission: 'sys_viewPermission',
+  jm_notifyUser: 'jm_notifyuser'
 }
 
 export const EViewMode = {

@@ -7,7 +7,7 @@ import ButtonIcon from 'components/button/ButtonIcon'
 import ButtonFuntion from 'components/button/ButtonFuntion'
 
 const CommentFooter = (props) => {
-    const { label, name, user = {}, control, getValues, setValue, id, isEditComment, comment, onCancelEdit, onConfrimChangeComment } = props
+    const { label, name, user = {}, control, getValues, setValue, id, isEditComment = false, comment, onCancelEdit, onConfrimChangeComment } = props
     const [isShowComment, setIsShowComment] = useState(false)
     const [isShowReply, setIsShowReply] = useState(true)
 
@@ -28,9 +28,13 @@ const CommentFooter = (props) => {
             </Grid> : ''
         }
         {
-            isEditComment ? <Grid item container justifyContent={'space-between'}>
-                <ButtonFuntion onClick={onCancelEdit} type={EButtonType.cancel} />
-                <ButtonFuntion onClick={onConfrimChangeComment} disabled={_.isEmpty(comment?.value) ? true : false} type={EButtonType.save} />
+            isEditComment === true ? <Grid item container justifyContent={'space-between'}>
+                <Grid item>
+                    <ButtonFuntion onClick={onCancelEdit} type={EButtonType.cancel} />
+                </Grid>
+                <Grid item>
+                    <ButtonFuntion onClick={onConfrimChangeComment} disabled={_.isEmpty(comment?.value) ? true : false} type={EButtonType.save} />
+                </Grid>
             </Grid> : ''
         }
         {isShowReply ? <Grid item xs container justifyContent={'flex-end'}>

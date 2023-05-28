@@ -22,7 +22,8 @@ const NotPermission = lazy(() => import('./views/permission/notPermission/notPer
 
 const AppRoutes = React.memo(() => {
     return (
-        <Suspense fallback={<Spinner />}>
+        // <Suspense fallback={<Spinner />}>
+        <Suspense fallback={''}>
             <Switch>
                 <Route exact path="/login" component={Login} />
                 <Route exact path="/access-denied" component={NotPermission} />
@@ -50,7 +51,7 @@ const AppRoutes = React.memo(() => {
                 <Route exact path="/:organization/:projectCode/task" component={Task} />
                 <Route exact path="/:organization/:projectCode/task/create/:id" component={TaskView} />
                 <Route exact path="/:organization/:projectCode/task/edit/:taskEditId" component={TaskView} />
-                <Redirect to="/access-denied" />
+                <Redirect to="/login" />
             </Switch>
         </Suspense>
     )

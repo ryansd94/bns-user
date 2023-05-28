@@ -4,6 +4,7 @@ import ButtonIcon from "components/button/ButtonIcon"
 import { EButtonIconType, ENotifyObjectType } from "configs"
 import { TaskCommentNotify } from './'
 import { SignalRContext } from 'helpers'
+import eventEmitter from 'helpers/eventEmitter'
 import _ from 'lodash'
 
 function NotifySnackbarContent() {
@@ -35,6 +36,7 @@ function NotifySnackbarContent() {
   const onNewNotify = (message) => {
     if (message.type === ENotifyObjectType.taskComment || message.type === ENotifyObjectType.taskAssigned) {
       enqueueSnackbar('', { data: message, variant: 'taskCommentNotify', autoHideDuration: autoHideDuration })
+      eventEmitter.emit('newNotify', message)
     }
   }
 

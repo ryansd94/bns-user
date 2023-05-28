@@ -110,7 +110,6 @@ const ButtonFuntion = React.memo(props => {
                 setIcon('far fa-save' + sizeDefault)
                 setText(t('Save'))
                 setFloat(' float-left')
-                setIsCheckPermission(true)
                 break
             case EButtonType.addFilter:
                 setIcon('far fa-plus' + sizeDefault)

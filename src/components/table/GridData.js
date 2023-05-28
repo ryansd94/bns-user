@@ -17,6 +17,7 @@ import { Loading } from 'components/loading'
 import { get } from "services"
 import _ from 'lodash'
 import './styles.scss'
+import axios from 'axios'
 
 // Register the required feature modules with the Grid
 ModuleRegistry.registerModules([ClientSideRowModelModule])
@@ -35,6 +36,7 @@ const GridData = (props) => {
     const [data, setData] = useState(null)
     const loading = useSelector((state) => state.master.loading)
     const pageSize = useSelector((state) => state.master.pageSize)
+    const cancelToken = useRef(null)
 
     const defaultColDef = useMemo(() => {
         return {
@@ -122,8 +124,9 @@ const GridData = (props) => {
         }
         const params = new URLSearchParams(window.location.search)
         const filterParams = params.get("filters")
+        cancelToken.current = new axios.CancelToken.source()
+
         return await get(url, {
-            draw: currentPage || 0,
             start: currentPage ? currentPage * (_.isNil(pageSize) ? 10 : pageSize) : 0,
             length: _.isNil(pageSize) ? 10 : pageSize,
             fieldSort:
@@ -132,7 +135,7 @@ const GridData = (props) => {
             filters: filterParams,
             defaultFilters: !_.isEmpty(defaultFilters) ? JSON.stringify(defaultFilters) : null
 
-        }).then((data) => {
+        }, cancelToken).then((data) => {
             if (gridRef && gridRef.current && gridRef.current.api) {
                 gridRef.current.api.hideOverlay()
             }
@@ -150,26 +153,20 @@ const GridData = (props) => {
     }
 
     useEffect(async () => {
-        if (currentPage != null) {
-            setData(await fetchData())
-        }
-    }, [currentPage])
-
-    useEffect(async () => {
         dispatch(setReloadNull())
     }, [])
 
     useEffect(async () => {
-        if (sortModel != null || filterModels != null || isReload != null) {
-            setData(await fetchData())
+        if (sortModel != null || filterModels != null || isReload != null || currentPage != null || !_.isNil(pageSize)) {
+            const res = await fetchData()
+            setData(res)
+            return () => {
+                if (cancelToken.current) {
+                    cancelToken.current.cancel('Component unmounted or dependencies changed')
+                }
+            }
         }
-    }, [sortModel, filterModels, isReload])
-
-    useEffect(async () => {
-        if (!_.isNil(pageSize)) {
-            setData(await fetchData())
-        }
-    }, [pageSize])
+    }, [sortModel, filterModels, isReload, currentPage, pageSize])
 
     return (
         <div style={{ width: "100%" }} className="grid-wrapper">

@@ -1,13 +1,19 @@
-import Moment from 'moment'
 import { getUserInfo } from "helpers"
+import { format, formatDistance } from 'date-fns'
+import { enCA, ru, vi } from 'date-fns/locale'
 import _ from 'lodash'
 
+export const formatDistanceDate = (date, ago = false) => {
+    const localDate = new Date(date)
+    return formatDistance(localDate, new Date(), { addSuffix: true, locale: enCA })
+}
+
 export const formatDate = (value) => {
-    return _.isNil(value) ? '' : Moment(value).format('DD-MM-YYYY')
+    return _.isNil(value) ? '' : format(value, 'DD-MM-YYYY')
 }
 
 export const formatDateTime = (value) => {
-    return _.isNil(value) ? '' : Moment(value).format('DD-MM-YYYY HH:mm')
+    return _.isNil(value) ? '' : format(value, 'DD-MM-YYYY HH:mm')
 }
 
 export const capitalize = (str) => {

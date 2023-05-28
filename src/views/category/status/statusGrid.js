@@ -7,7 +7,7 @@ import GridData from "components/table/GridData"
 import { CheckBoxCellRender } from 'components/cellRender'
 import { CellButton } from 'components/cellRender'
 
-const StatusGrid = React.memo((props) => {
+const StatusGrid = (props) => {
   const lang = useSelector((state) => state.master.lang)
   const dispatch = useDispatch()
   const { t } = useTranslation()
@@ -67,6 +67,6 @@ const StatusGrid = React.memo((props) => {
         url={baseUrl.jm_status} />
     </>
   )
-}) 
+}
 
 export default StatusGrid
