@@ -177,7 +177,7 @@ const CommentItem = (props) => {
         </div>
     }
 
-    return !_.isEmpty(commentLocal) ? <Grid item xs container gap={2}>
+    return !_.isEmpty(commentLocal) ? <Grid direction={'column'} item xs container gap={2}>
         <Grid className="comment-component" style={{ position: 'relative', paddingLeft: `${commentLocal.level * 60}px` }} item container spacing={2} direction='row'>
             <Grid item>
                 <AvatarControl name={commentLocal.user?.fullName} />

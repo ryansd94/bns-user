@@ -9,7 +9,9 @@ import { LinkControl } from 'components/link'
 import { getPathItem, formatDistanceDate } from "helpers"
 import { AvatarControl } from "components/avatar"
 import { StatusIcon } from 'components/notify/icon'
+import { IconClose } from 'components/icon/icon'
 import { put } from "services"
+import _ from 'lodash'
 
 const TaskCommentNotify = React.forwardRef(function TaskCommentNotify(props, ref) {
     const { data = {}, id, type = ENotifyComponentType.snackbar, onClickNotify } = props
@@ -20,9 +22,9 @@ const TaskCommentNotify = React.forwardRef(function TaskCommentNotify(props, ref
 
     const renderTaskItem = (classContent) => {
         return <Grid container gap={1} flexWrap='nowrap'>
-            <Grid item>
+            {!_.isEmpty(content.TaskContent.TaskType.Icon) ? <Grid item>
                 <LabelIconControl icon={content.TaskContent.TaskType.Icon} color={content.TaskContent.TaskType.Color} />
-            </Grid>
+            </Grid> : ''}
             <Grid item className={`notify-content main-content ${classContent}`}>
                 {content.TaskContent.Title}
             </Grid>
@@ -30,10 +32,14 @@ const TaskCommentNotify = React.forwardRef(function TaskCommentNotify(props, ref
     }
 
     const getTitleNotify = () => {
-        if (notify.type === ENotifyObjectType.taskComment) {
-            return ` ${t('mentioned you in a comment')}`
-        } else {
-            return ` ${t('assign task to you')}`
+        switch (notify.type) {
+            case ENotifyObjectType.taskComment:
+                return ` ${t('mentioned you in a comment')}`
+            case ENotifyObjectType.taskCommentReply:
+                return ` ${t('replied to you in a comment')}`
+            default:
+                return ` ${t('assign task to you')}`
+
         }
     }
 
@@ -100,11 +106,11 @@ const TaskCommentNotify = React.forwardRef(function TaskCommentNotify(props, ref
                 <Grid item className='notify-content'>
                     <LinkControl onClick={onNotifyClick} className='notify-link' href={getTaskUrl()} title={renderContent()} />
                 </Grid>
-                <ButtonIcon showTooltip={false} className='close-notify-icon' type={EButtonIconType.close} onClick={() => closeSnackbar(id)} />
+                <IconClose onClick={() => closeSnackbar(id)} className='close-notify-icon' />
             </Grid>
         } else {
             return <Grid container gap={2} className='notify-list-container'>
-                <Grid item xs>
+                <Grid item xs className='notify-list-item'>
                     <LinkControl onClick={onNotifyClick} className='notify-link' href={getTaskUrl()} title={renderContentPopover()} />
                 </Grid>
             </Grid>

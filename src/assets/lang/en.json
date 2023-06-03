@@ -177,7 +177,8 @@
     "Before": "Before",
     "Unread": "Unread",
     "Mark all read": "Mark all read",
-    "Delete read notifications":"Delete read notifications",
-    "Notification settings":"Notification settings",
-    "You don't have any notifications" :"You don't have any notifications"
+    "Delete read notifications": "Delete read notifications",
+    "Notification settings": "Notification settings",
+    "You don't have any notifications": "You don't have any notifications",
+    "Replied in your comment": "replied in your comment"
 }

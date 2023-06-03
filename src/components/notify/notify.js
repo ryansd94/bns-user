@@ -149,11 +149,11 @@ const Notify = (props) => {
             <Grid item className='flex overflow-hidden'>
                 {
                     loading === true ? <NotifyLoading /> : (!_.isEmpty(notifyItems) ? <div ref={notifyContainerRef} onScroll={handleScroll} className='notify-tab-body no-wrap flex-grow'>
-                        <Grid container item xs gap={2} direction={'column'} className='body-content'>
+                        <Grid container item xs gap={2} direction={'column'}>
                             {
-                                !_.isEmpty(lstNotifyToday) ? <Grid container item xs gap={1} direction={'column'}>
+                                !_.isEmpty(lstNotifyToday) ? <Grid container item xs direction={'column'}>
                                     <Grid item className='notify-group-title'>{t('Today')}</Grid>
-                                    <Grid item container xs gap={3}>
+                                    <Grid item container className='notify-group-content' xs gap={1}>
                                         {
                                             _.map(lstNotifyToday, (x) => {
                                                 return renderNotifyItem(x)
@@ -163,9 +163,9 @@ const Notify = (props) => {
                                 </Grid> : ''
                             }
                             {
-                                !_.isEmpty(lstNotifyBefore) ? <Grid container gap={1} item xs direction={'column'}>
+                                !_.isEmpty(lstNotifyBefore) ? <Grid container item xs direction={'column'}>
                                     <Grid item className='notify-group-title'>{t('Before')}</Grid>
-                                    <Grid item container xs gap={3}>
+                                    <Grid item container className='notify-group-content' xs gap={1}>
                                         {
                                             _.map(lstNotifyBefore, (x) => {
                                                 return renderNotifyItem(x)

@@ -12,6 +12,11 @@ function NotifySnackbarContent() {
   const [message, setMessage] = useState({})
   const connection = useContext(SignalRContext)
   const autoHideDuration = 3000
+  const taskNotifyObjectTypes = [
+    ENotifyObjectType.taskComment,
+    ENotifyObjectType.taskAssigned,
+    ENotifyObjectType.taskCommentReply
+  ]
 
   useEffect(() => {
     if (connection) {
@@ -34,7 +39,7 @@ function NotifySnackbarContent() {
   }, [message.id])
 
   const onNewNotify = (message) => {
-    if (message.type === ENotifyObjectType.taskComment || message.type === ENotifyObjectType.taskAssigned) {
+    if (_.includes(taskNotifyObjectTypes, message.type)) {
       enqueueSnackbar('', { data: message, variant: 'taskCommentNotify', autoHideDuration: autoHideDuration })
       eventEmitter.emit('newNotify', message)
     }
