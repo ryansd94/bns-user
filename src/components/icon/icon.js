@@ -95,10 +95,15 @@ const IconSwitchRight = ({ style, className, onClick }) => {
 const IconClose = ({ style, className, onClick }) => {
   return <i onClick={onClick} style={style} className={`fal fa-times ${className}`}></i>
 }
+const IconBell = ({ style, className, onClick }) => {
+  return <i onClick={onClick} style={style} className={`fas fa-bell ${className}`}></i>
+}
+
 
 export {
   IconSave, IconDelete, IconEdit, IconCancel, IconEmail, IconActive, IconBlock,
   IconUnBlock, IconClean, IconApply, IconBack, IconMore, IconAdd, IconCricle, IconUp,
   IconDown, IconExpand, IconRemove, IconUpload, IconChange, IconCopy, IconComment, IconFullScreen,
-  IconHour, IconDescription, IconTable, IconList, IconRequire, IconSetting, IconSwitchLeft, IconSwitchRight, IconClose
+  IconHour, IconDescription, IconTable, IconList, IconRequire, IconSetting, IconSwitchLeft, IconSwitchRight, IconClose,
+  IconBell
 }

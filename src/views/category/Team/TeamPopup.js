@@ -19,8 +19,8 @@ import {
 import { getByID, save, get } from "services"
 import { ERROR_CODE, baseUrl } from "configs"
 import { loading as loadingButton } from "stores/components/button"
-
 import { message } from "configs"
+
 const TeamPopup = React.memo((props) => {
   console.log("render TeamPopup")
   const { t } = useTranslation()

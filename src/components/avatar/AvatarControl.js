@@ -1,10 +1,10 @@
 import * as React from 'react'
 import Avatar from '@mui/material/Avatar'
-import { ESize, Evariant } from "configs"
+import { ESize, EControlVariant } from "configs"
 
 const AvatarControl = (props) => {
     const { size = ESize.small, name, cursor,
-        onClick, className = "avatar", image = '', variant = Evariant.circular } = props
+        onClick, className = "avatar", image = '', variant = EControlVariant.circular } = props
     let width = 56
     let height = 56
     let fontSize = 24

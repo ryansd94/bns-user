@@ -1,10 +1,8 @@
 import React, { useEffect, useState } from "react"
-import Grid from "@mui/material/Grid"
 import { OverflowTip } from 'components/tooltip'
 import { IconDescription } from 'components/icon/icon'
 import { PopoverControl } from 'components/popover'
 import { EditorControl } from 'components/editor'
-import ClickAwayListener from '@mui/material/ClickAwayListener'
 
 const TaskNoteItem = (props) => {
     const { item, title } = props

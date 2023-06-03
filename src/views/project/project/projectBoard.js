@@ -10,7 +10,7 @@ import Spinner from 'components/shared/Spinner'
 import { setUserSetting } from "stores/views/master"
 import { useDispatch } from "react-redux"
 import { AvatarControl } from 'components/avatar'
-import { Evariant } from "configs"
+import { EControlVariant } from "configs"
 import { DatePickerInput } from 'components/datepicker'
 import { useTranslation } from "react-i18next"
 
@@ -48,7 +48,7 @@ const ProjectBoard = () => {
             return <Grid container direction='column' item key={item.id} gap={2} onClick={() => onProjectClick(item)} className='project-board-item'>
                 <Grid container item xs gap={2} alignItems={'center'}>
                     <Grid item>
-                        <AvatarControl variant={Evariant.rounded} name={item.code} />
+                        <AvatarControl variant={EControlVariant.rounded} name={item.code} />
                     </Grid>
                     <Grid item xs>{item.name}</Grid>
                 </Grid>

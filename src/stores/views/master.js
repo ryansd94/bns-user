@@ -84,11 +84,19 @@ const slice = createSlice({
     },
     newNotify: (state, action) => {
       state.notifyData = { unread: state.notifyData.unread + 1, items: [action.payload, ...state.notifyData.items] }
-    }
+    },
+    updateReadAllNotify: (state, action) => {
+      let data = { ...state.notifyData }
+      _.map(data.items, (x) => {
+        return x.isRead = true
+      })
+      data.unread = 0
+      state.notifyData = { data }
+    },
   },
 })
 const { reducer, actions } = slice
 export const { setData, setLoading, setPage, setReload, setSort,
   setLoadingPopup, setEditData, setPageSize, setFilter, setToolbarVisibility,
-  setReloadNull, setDeleteData, setUserSetting, setActionActive, setLang, setNotifyData, newNotify } = actions
+  setReloadNull, setDeleteData, setUserSetting, setActionActive, setLang, setNotifyData, newNotify, updateReadAllNotify } = actions
 export default reducer

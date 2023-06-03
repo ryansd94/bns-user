@@ -164,7 +164,7 @@ const ButtonFuntion = React.memo(props => {
                 break
             case EButtonType.more:
                 setIcon('far fa-ellipsis-h' + sizeDefault)
-                setText(t('Function'))
+                setText(t('MoreAction'))
                 setFloat(' float-left')
                 break
             case EButtonType.comment:
@@ -240,7 +240,7 @@ const ButtonFuntion = React.memo(props => {
     if (visible) {
         button = (
             <ThemeProvider theme={theme}>
-                {!isTextAndIcon === true ? <Tooltip title={label ? label : text}>
+                {isTextAndIcon === false ? <Tooltip title={label ? label : text}>
                     {button}
                 </Tooltip> : button}
             </ThemeProvider>

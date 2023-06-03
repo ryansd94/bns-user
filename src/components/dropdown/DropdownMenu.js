@@ -7,12 +7,15 @@ import ButtonIcon from 'components/button/ButtonIcon'
 import { EButtonType } from 'configs/enums'
 import { PopoverControl } from 'components/popover'
 import { IconExpand } from 'components/icon/icon'
+import Box from '@mui/material/Box'
+import PropTypes from "prop-types"
 import Menu from '@mui/material/Menu'
 
 const DropdownMenu = (props) => {
     const { genderDropdownItem, type = EButtonType.add, visible = false,
         isShowEndIcon = true, label, isFloatLeft = false, spacingLeft = 1,
-        isButtonIcon = false, className, isCLoseOnClick = true, classNameIcon, isTextAndIcon = true } = props
+        isButtonIcon = false, className, isCloseOnClick = false, classNameIcon,
+        isTextAndIcon = true, anchorOrigin, transformOrigin } = props
     const [open, setOpen] = React.useState(false)
     const anchorRef = React.useRef(null)
 
@@ -79,14 +82,28 @@ const DropdownMenu = (props) => {
     }
 
     const onClick = (e) => {
-        if (isCLoseOnClick) {
+        if (isCloseOnClick) {
             handleClose(e)
         }
     }
     return (
         <div className={`${className}`}>
             {isButtonIcon ? renderButtonIcon() : renderButtonFunction()}
-            <Menu
+            <ClickAwayListener onClickAway={handleClose}>
+                <Box>
+                    <PopoverControl
+                        isCloseOnClick={isCloseOnClick}
+                        id='dropdown-menu'
+                        anchorEl={open ? anchorRef.current : null}
+                        anchorOrigin={anchorOrigin}
+                        transformOrigin={transformOrigin}
+                        onClose={handleClose}
+                        genderBody={genderDropdownItem}
+                    >
+                    </PopoverControl>
+                </Box>
+            </ClickAwayListener>
+            {/* <Menu
                 anchorEl={open ? anchorRef.current : null}
                 open={open}
                 onClose={handleClose}
@@ -121,9 +138,22 @@ const DropdownMenu = (props) => {
                 anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
             >
                 {genderDropdownItem()}
-            </Menu>
-        </div>
+            </Menu> */}
+        </div >
     )
+}
+DropdownMenu.propTypes = {
+    anchorOrigin: PropTypes.object
+}
+DropdownMenu.defaultProps = {
+    anchorOrigin: {
+        vertical: 'top',
+        horizontal: 'left',
+    },
+    transformOrigin: {
+        vertical: 'top',
+        horizontal: 'right',
+    }
 }
 
 export default DropdownMenu

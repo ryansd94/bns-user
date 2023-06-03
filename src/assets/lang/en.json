@@ -10,7 +10,7 @@
     "Apply": "Apply",
     "Reload": "Reload",
     "Add tags": "Add tags",
-    "Function": "Function",
+    "MoreAction": "More action",
     "Comment": "Comment",
     "Reply": "Reply",
     "Cancel": "Cancel",
@@ -172,5 +172,12 @@
     "Column": "Column",
     "Permission": "Permission",
     "Please wait a moment": "Please wait a moment",
-    "Notify": "Notify"
+    "Notify": "Notify",
+    "Today": "Today",
+    "Before": "Before",
+    "Unread": "Unread",
+    "Mark all read": "Mark all read",
+    "Delete read notifications":"Delete read notifications",
+    "Notification settings":"Notification settings",
+    "You don't have any notifications" :"You don't have any notifications"
 }

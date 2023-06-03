@@ -4,7 +4,7 @@ import { Collapse } from 'react-bootstrap'
 import { getUserInfo, deepFindAll, getProjectPath } from "helpers"
 import Grid from "@mui/material/Grid"
 import { AvatarControl } from 'components/avatar'
-import { Evariant, EMenuType, constants } from "configs"
+import { EControlVariant, EMenuType, constants } from "configs"
 import { useSelector } from "react-redux"
 import _ from 'lodash'
 import { useTranslation } from "react-i18next"
@@ -156,7 +156,7 @@ const Sidebar = (props) => {
     return <div className="flex-column">
         <Grid container item xs direction={'column'} className='no-wrap'>
             <Grid container item xs gap={2} alignItems={'center'} className='box-container'>
-                <Grid item><AvatarControl variant={Evariant.rounded} name={user?.setting?.projectSetting?.current} /></Grid>
+                <Grid item><AvatarControl variant={EControlVariant.rounded} name={user?.setting?.projectSetting?.current} /></Grid>
                 <Grid item xs className="project-title">{user?.setting?.projectSetting?.current}</Grid>
             </Grid>
         </Grid>

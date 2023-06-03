@@ -9,11 +9,11 @@ export const formatDistanceDate = (date, ago = false) => {
 }
 
 export const formatDate = (value) => {
-    return _.isNil(value) ? '' : format(value, 'DD-MM-YYYY')
+    return _.isNil(value) ? '' : format(new Date(value), 'dd-MM-yyyy')
 }
 
 export const formatDateTime = (value) => {
-    return _.isNil(value) ? '' : format(value, 'DD-MM-YYYY HH:mm')
+    return _.isNil(value) ? '' : format(new Date(value), 'dd-MM-yyyy HH:mm')
 }
 
 export const capitalize = (str) => {

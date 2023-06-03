@@ -14,8 +14,9 @@ import { PopoverControl } from 'components/popover'
 import { useTranslation } from "react-i18next"
 import { DropdownMenu, DropDownItem } from 'components/dropdown'
 import { IconDelete, IconEdit } from 'components/icon/icon'
+import { useForm } from "react-hook-form"
 import {
-    getUserInfo,
+    getUserName,
     formatDistanceDate
 } from "helpers"
 
@@ -25,7 +26,14 @@ const CommentItem = (props) => {
     const [openPopover, setOpenPopover] = useState(null)
     const [isEditComment, setIsEditComment] = useState(false)
     const { t } = useTranslation()
-    const user = getUserInfo()
+    const controlId = `rte${commentLocal.id}`
+    const user = getUserName()
+    const {
+        control,
+        handleSubmit,
+        setValue
+    } = useForm({
+    })
 
     const onShowMoreComment = async () => {
         await get(`${baseUrl.jm_comment}/children`, {
@@ -43,6 +51,7 @@ const CommentItem = (props) => {
     }
 
     useEffect(() => {
+        setValue(controlId, comment.value)
         setComment(comment)
     }, [comment])
 
@@ -123,17 +132,13 @@ const CommentItem = (props) => {
 
     const onCancelEdit = () => {
         setIsEditComment(false)
+        setValue(controlId, commentLocal.value)
     }
-
-    const onChangeComment = (value) => {
-        commentLocal.value = value
-        setComment({ ...commentLocal })
-    }
-
-    const onConfrimChangeComment = async () => {
-        const res = await save(`${baseUrl.jm_comment}`, commentLocal)
+    
+    const onConfrimChangeComment = async (value) => {
+        setValue(controlId, value[controlId])
+        const res = await save(`${baseUrl.jm_comment}`, { id: commentLocal.id, value: value[controlId] })
         if (res.errorCode == ERROR_CODE.success) {
-            // setValue('comments', comments)
             setIsEditComment(false)
         }
     }
@@ -145,10 +150,10 @@ const CommentItem = (props) => {
                     <LabelControl className='comment-header' label={`${commentLocal.user?.fullName}, ${formatDistanceDate(commentLocal.createdDate)}`} />
                 </Grid>
                 <Grid item id={comment.id}>
-                    <EditorControl onChange={onChangeComment} className={!isEditComment ? 'editor-comment' : ''} readOnly={!isEditComment} value={commentLocal.value} name={`rte${commentLocal.id}`} isShowAccordion={false} />
+                    <EditorControl control={control} className={!isEditComment ? 'editor-comment' : ''} readOnly={!isEditComment} name={controlId} isShowAccordion={false} />
                 </Grid>
                 <Grid item>
-                    <CommentFooter onCancelEdit={onCancelEdit} {...props} id={commentLocal.id} onConfrimChangeComment={onConfrimChangeComment} isEditComment={isEditComment} />
+                    <CommentFooter onCancelEdit={onCancelEdit} {...props} id={commentLocal.id} onConfrimChangeComment={handleSubmit(onConfrimChangeComment)} isEditComment={isEditComment} />
                 </Grid>
             </Grid>
         }

@@ -187,9 +187,10 @@ export const EAlertType = {
   warning: 'warning'
 }
 
-export const Evariant = {
+export const EControlVariant = {
   circular: 'circular',
-  rounded: 'rounded'
+  rounded: 'rounded',
+  text: 'text'
 }
 
 export const EMenuType = {

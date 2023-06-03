@@ -136,12 +136,18 @@ export const EditorToolbar = ({ hide, id }) => {
 
 const EditorControl = (props) => {
     const { label, name, control, size, isShowAccordion = true, onChange, value = null,
-        readOnly, className, isFullScreen = false, isShowPlaceholder = true, required, isBorder = true } = props
+        readOnly = null, className, isFullScreen = false, isShowPlaceholder = true, required, isBorder = true, isShowError = true } = props
     const loadingPopup = useSelector((state) => state.master.loadingPopup)
     const user = getUserInfo()
     const id = name.includes('.') ? _.split(name, '.')[1] : name
     const [hideToolbar, setHideToolbar] = useState(true)
     const [userSuggest, setUserSuggest] = useState([])
+
+    useEffect(() => {
+        if (!_.isNil(readOnly)) {
+            setHideToolbar(readOnly)
+        }
+    }, [readOnly])
 
     async function insertImage() {
         const input = document.createElement('input')
@@ -264,7 +270,7 @@ const EditorControl = (props) => {
 
     const renderEditor = (field, error) => {
         return <div className={className} style={{ marginTop: isShowAccordion ? '1rem' : '0' }}>
-            {!_.isNil(error) ? <FormHelperText children={error?.message} error={!_.isNil(error) ? true : false} /> : ''}
+            {isShowError === true ? (!_.isNil(error) ? <FormHelperText children={error?.message} error={!_.isNil(error) ? true : false} /> : '') : ''}
             <EditorToolbar hide={hideToolbar} id={`rte${id}`} />
             <ReactQuill
                 id={`rte${id}`}
@@ -275,6 +281,9 @@ const EditorControl = (props) => {
                 readOnly={readOnly}
                 value={formatMention(field?.value || value)}
                 onChange={(newValue, a, b, d) => {
+                    if (newValue === '<p><br></p>') {
+                        newValue = ''
+                    }
                     let valueFormat = formatMention(newValue)
                     field && field.onChange(valueFormat)
                     onChange && onChange(valueFormat)

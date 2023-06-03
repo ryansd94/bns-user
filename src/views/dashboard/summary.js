@@ -5,7 +5,7 @@ import { baseUrl } from "configs"
 import { getUserInfo } from "helpers"
 import Grid from "@mui/material/Grid"
 import { AvatarControl } from 'components/avatar'
-import { Evariant } from "configs"
+import { EControlVariant } from "configs"
 import { EditorControl } from 'components/editor'
 import { useForm } from "react-hook-form"
 import { useTranslation } from "react-i18next"
@@ -38,7 +38,7 @@ const Summary = () => {
     return <Grid container item xs className='no-wrap body-content' direction={'column'}>
         <Grid item container gap={2} alignItems={'center'} className='box-container containerNew'>
             <Grid item>
-                <AvatarControl variant={Evariant.rounded} name={project?.name} />
+                <AvatarControl variant={EControlVariant.rounded} name={project?.name} />
             </Grid>
             <Grid item>
                 {project?.name}

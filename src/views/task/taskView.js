@@ -144,7 +144,7 @@ const TaskView = (props) => {
                 isGetAll: true
             }).then((data) => {
                 setUserAssign(data && data.data && _.map(data.data.items, (item) => {
-                    return { id: item.id, fullName: item.fullName }
+                    return { id: item.id, name: item.fullName }
                 }))
             })
         }

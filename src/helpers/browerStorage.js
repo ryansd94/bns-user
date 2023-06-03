@@ -1,33 +1,38 @@
 /* eslint-disable import/prefer-default-export */
-import { LOCAL_STORAGE_KEYS } from '../configs';
+import { LOCAL_STORAGE_KEYS } from '../configs'
 
 export const getAccessToken = () => {
-    return localStorage.getItem(LOCAL_STORAGE_KEYS.accessToken);
-};
+    return localStorage.getItem(LOCAL_STORAGE_KEYS.accessToken)
+}
 
 export const getShopIndex = () => {
-    return localStorage.getItem(LOCAL_STORAGE_KEYS.shopIndex);
-};
+    return localStorage.getItem(LOCAL_STORAGE_KEYS.shopIndex)
+}
 
 export const getRefreshToken = () => {
-    return localStorage.getItem(LOCAL_STORAGE_KEYS.refreshToken);
-};
+    return localStorage.getItem(LOCAL_STORAGE_KEYS.refreshToken)
+}
 
 export const getUserInfo = () => {
-    const user = localStorage.getItem(LOCAL_STORAGE_KEYS.user);
-    return user ? JSON.parse(user) : {};
-};
+    const user = localStorage.getItem(LOCAL_STORAGE_KEYS.user)
+    return user ? JSON.parse(user) : {}
+}
+
+export const getUserName = () => {
+    const user = JSON.parse(localStorage.getItem(LOCAL_STORAGE_KEYS.user) || {})
+    return { "image": user.image, "fullName": user.fullName, userId: user.userId }
+}
 
 export const getLanguage = () => {
-    const language = localStorage.getItem(LOCAL_STORAGE_KEYS.i18nextLng);
-    return language ? language : null;
+    const language = localStorage.getItem(LOCAL_STORAGE_KEYS.i18nextLng)
+    return language ? language : null
 }
 
 export const setTokenLoginSucceeded = ({ token, user }, callback = null) => {
-    localStorage.setItem(LOCAL_STORAGE_KEYS.user, JSON.stringify(user));
-    localStorage.setItem(LOCAL_STORAGE_KEYS.accessToken, token.accessToken);
-    localStorage.setItem(LOCAL_STORAGE_KEYS.refreshToken, token.refreshToken);
-    localStorage.setItem(LOCAL_STORAGE_KEYS.shopIndex, token.shopIndex);
+    localStorage.setItem(LOCAL_STORAGE_KEYS.user, JSON.stringify(user))
+    localStorage.setItem(LOCAL_STORAGE_KEYS.accessToken, token.accessToken)
+    localStorage.setItem(LOCAL_STORAGE_KEYS.refreshToken, token.refreshToken)
+    localStorage.setItem(LOCAL_STORAGE_KEYS.shopIndex, token.shopIndex)
     if (callback) {
         callback()
     }
@@ -47,24 +52,24 @@ export const setUserInfo = ({ user }) => {
 }
 
 export const setRefreshTokenSucceeded = data => {
-    localStorage.setItem(LOCAL_STORAGE_KEYS.accessToken, data.accessToken);
-    localStorage.setItem(LOCAL_STORAGE_KEYS.refreshToken, data.refreshToken);
-};
+    localStorage.setItem(LOCAL_STORAGE_KEYS.accessToken, data.accessToken)
+    localStorage.setItem(LOCAL_STORAGE_KEYS.refreshToken, data.refreshToken)
+}
 
 export const resetUserToken = () => {
-    localStorage.setItem(LOCAL_STORAGE_KEYS.user, '');
-    localStorage.setItem(LOCAL_STORAGE_KEYS.accessToken, '');
-    localStorage.setItem(LOCAL_STORAGE_KEYS.refreshToken, '');
-};
+    localStorage.setItem(LOCAL_STORAGE_KEYS.user, '')
+    localStorage.setItem(LOCAL_STORAGE_KEYS.accessToken, '')
+    localStorage.setItem(LOCAL_STORAGE_KEYS.refreshToken, '')
+}
 
 export const resetRefreshTokenFailure = () => {
-    localStorage.setItem(LOCAL_STORAGE_KEYS.user, '');
-    localStorage.setItem(LOCAL_STORAGE_KEYS.accessToken, '');
-    localStorage.setItem(LOCAL_STORAGE_KEYS.refreshToken, '');
-    localStorage.setItem(LOCAL_STORAGE_KEYS.courses, '');
-    localStorage.setItem(LOCAL_STORAGE_KEYS.i18nextLng, '');
-};
+    localStorage.setItem(LOCAL_STORAGE_KEYS.user, '')
+    localStorage.setItem(LOCAL_STORAGE_KEYS.accessToken, '')
+    localStorage.setItem(LOCAL_STORAGE_KEYS.refreshToken, '')
+    localStorage.setItem(LOCAL_STORAGE_KEYS.courses, '')
+    localStorage.setItem(LOCAL_STORAGE_KEYS.i18nextLng, '')
+}
 
 export const setIsTokenRefreshing = value => {
-    localStorage.setItem(LOCAL_STORAGE_KEYS.isTokenRefreshing, value.toString());
-};
+    localStorage.setItem(LOCAL_STORAGE_KEYS.isTokenRefreshing, value.toString())
+}

@@ -8,17 +8,44 @@ import { EButtonType } from 'configs'
 import { v4 as uuidv4 } from 'uuid'
 import { deepFind } from "helpers/commonFunction"
 import { post } from "services"
-import { baseUrl, ERROR_CODE } from "configs"
+import { baseUrl, ERROR_CODE, message } from "configs"
+import { useForm } from "react-hook-form"
+import { yupResolver } from "@hookform/resolvers/yup"
+import { useTranslation } from "react-i18next"
+import * as Yup from "yup"
 
 const CommentByUser = (props) => {
-    const { label, name, user = {}, control, getValues, setValue,
+    console.log('render CommentByUser')
+    const { label, name, user = {}, getValues, setValue,
         isShow = true, isReplyComment = false, onCancel, parentId = null, taskId, userSuggest } = props
+    const { t } = useTranslation()
+    const controlId = parentId ? parentId : name
+    let validateObject = {}
+    validateObject[controlId] = Yup.string().required(t(message.error.fieldNotEmpty))
     const [commentLocal, setCommentLocal] = useState(null)
-    
-    const onComment = async () => {
-        if (_.isEmpty(commentLocal)) return
+    const validationSchema = Yup.object().shape({ ...validateObject })
+    const {
+        control,
+        handleSubmit,
+        formState: { errors },
+        setError
+    } = useForm({
+        resolver: yupResolver(validationSchema),
+        mode: 'onChange'
+    })
+
+    useEffect(() => {
+        setError(controlId, { message: t(message.error.fieldNotEmpty) })
+
+        return () => {
+            setError(controlId, null)
+        }
+    }, [])
+
+    const onComment = async (value) => {
+        if (_.isEmpty(value[controlId])) return
         let comments = getValues && getValues('comments') || []
-        const newComment = { value: commentLocal, id: uuidv4(), user: user, isAddNew: true, childrens: [], createdDate: new Date() }
+        const newComment = { value: value[controlId], id: uuidv4(), user: user, isAddNew: true, childrens: [], createdDate: new Date() }
         if (_.isNil(parentId)) { //case add new comment
             newComment.level = 0
             comments.unshift(newComment)
@@ -55,13 +82,6 @@ const CommentByUser = (props) => {
         }
     }
 
-    const onChange = (value) => {
-        if (_.isEqual(value, '<p><br></p>')) {
-            value = null
-        }
-        setCommentLocal(value)
-    }
-
     return (isShow ? <Grid container gap={2} item>
         <Grid item container gap={2} direction='row'>
             <Grid item>
@@ -69,19 +89,19 @@ const CommentByUser = (props) => {
             </Grid>
             <Grid item xs container gap={2} direction='column'>
                 <Grid item xs>
-                    <EditorControl isFullScreen={true} userSuggest={userSuggest} value={commentLocal} onChange={onChange} label={label} name={parentId ? parentId : name} isShowAccordion={false} />
+                    <EditorControl isShowError={false} control={control} isFullScreen={true} userSuggest={userSuggest} label={label} name={controlId} isShowAccordion={false} />
                 </Grid>
                 {
                     isReplyComment === true ? <Grid item xs>
                         <ButtonFuntion onClick={onCancel} type={EButtonType.cancel} />
-                        <ButtonFuntion disabled={_.isEmpty(commentLocal) ? true : false} onClick={onComment} type={EButtonType.reply} />
+                        <ButtonFuntion disabled={errors[controlId] ? true : false} onClick={handleSubmit(onComment)} type={EButtonType.reply} />
                     </Grid> : ''
                 }
             </Grid>
         </Grid>
         <Grid item xs>
             {
-                isReplyComment === true ? '' : <ButtonFuntion disabled={_.isEmpty(commentLocal) ? true : false} onClick={onComment} type={EButtonType.comment} />
+                isReplyComment === true ? '' : <ButtonFuntion disabled={errors[controlId] ? true : false} onClick={handleSubmit(onComment)} type={EButtonType.comment} />
             }
         </Grid>
     </Grid> : ''

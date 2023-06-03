@@ -23,7 +23,7 @@ const TaskCommentNotify = React.forwardRef(function TaskCommentNotify(props, ref
             <Grid item>
                 <LabelIconControl icon={content.TaskContent.TaskType.Icon} color={content.TaskContent.TaskType.Color} />
             </Grid>
-            <Grid item className={`notify-content ${classContent}`}>
+            <Grid item className={`notify-content main-content ${classContent}`}>
                 {content.TaskContent.Title}
             </Grid>
         </Grid>
@@ -85,9 +85,10 @@ const TaskCommentNotify = React.forwardRef(function TaskCommentNotify(props, ref
 
     const onNotifyClick = () => {
         put(baseUrl.jm_notifyUser, { id: notify.id, isRead: true })
-        notify.isRead = true
-        setNotify({ ...notify })
-        onClickNotify && onClickNotify(notify)
+        let updateNotify = { ...notify }
+        updateNotify.isRead = true
+        setNotify({ ...updateNotify })
+        onClickNotify && onClickNotify(updateNotify)
     }
 
     const renderComponent = () => {
@@ -102,7 +103,7 @@ const TaskCommentNotify = React.forwardRef(function TaskCommentNotify(props, ref
                 <ButtonIcon showTooltip={false} className='close-notify-icon' type={EButtonIconType.close} onClick={() => closeSnackbar(id)} />
             </Grid>
         } else {
-            return <Grid container gap={2} >
+            return <Grid container gap={2} className='notify-list-container'>
                 <Grid item xs>
                     <LinkControl onClick={onNotifyClick} className='notify-link' href={getTaskUrl()} title={renderContentPopover()} />
                 </Grid>

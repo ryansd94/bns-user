@@ -3,16 +3,16 @@ import Grid from "@mui/material/Grid"
 import { AccordionControl } from 'components/accordion'
 import { CommentByUser, ListComment } from './'
 import { Controller } from "react-hook-form"
-import { getUserInfo } from "helpers"
+import { getUserName } from "helpers"
 
 const Comment = (props) => {
     const { label, name, control } = props
-    const user = getUserInfo()
+    const user = getUserName()
 
     const renderItem = (comments = []) => {
         return <Grid container spacing={2} item direction='column'>
             <Grid item>
-                <CommentByUser {...props} user={user} />
+                <CommentByUser {...props} name='commentByUser' user={user} />
             </Grid>
             <Grid item>
                 <ListComment {...props} comments={comments} user={user} />
