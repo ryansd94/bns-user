@@ -7,7 +7,7 @@ import Button from "@mui/material/Button"
 import { useForm } from "react-hook-form"
 import { useSelector, useDispatch } from "react-redux"
 import * as Yup from "yup"
-import { validateTokenSignup, signup } from "services"
+import { signup } from "services"
 import { ERROR_CODE, EUserValidate } from "configs"
 import { setTokenLoginSucceeded } from "helpers"
 import { yupResolver } from "@hookform/resolvers/yup"
@@ -56,10 +56,10 @@ const JointeamHasAccount = (props) => {
   const onSubmit = async (data) => {
     const dataToken = replaceAll(token, " ", "+")
     data.token = dataToken
-    data.isHasAccount=true
+    data.isHasAccount = true
     const res = await signup(data)
     if (res.errorCode == ERROR_CODE.success) {
-      const userInfo =  res.data
+      const userInfo = res.data
       const token = {
         accessToken: userInfo.token,
         refreshToken: userInfo.token,

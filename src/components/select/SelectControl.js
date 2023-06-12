@@ -18,24 +18,31 @@ import _ from 'lodash'
 const containsText = (text, searchText) =>
     searchText ? text.toLowerCase().indexOf(searchText.toLowerCase()) > -1 : true
 
-
 const SelectControl = React.memo((props) => {
     const { fullWidth, label, size, options = [], renderOptions,
-        renderValue, onChange, defaultValue, disabled, control, name, isSearchText = true } = props
+        renderValue, onChange, defaultValue, disabled, control, name, isSearchText = true, required = false } = props
     const [selectedOption, setSelectedOption] = useState(null)
     const loadingPopup = useSelector((state) => state.master.loadingPopup)
     const [searchText, setSearchText] = useState("")
+
     const displayedOptions = isSearchText == true ? useMemo(
         () => options.filter((option) => containsText(option.name, searchText)),
         [searchText]
     ) : options
+
     const onSelectedChange = (value, field) => {
         setSelectedOption(value)
         onChange && onChange(value)
         field.onChange(value)
     }
+
+    const getSelectOptionName = (value) => {
+        const option = _.find(options, (x) => x.id === value)
+        return option?.name
+    }
+
     useEffect(() => {
-        setSelectedOption(!_.isNil(defaultValue) ? defaultValue : (options && options.length > 0 ? options[0].id : null))
+        setSelectedOption(getSelectOptionName(!_.isNil(defaultValue) ? defaultValue : (options && options.length > 0 ? options[0].id : null)))
     }, [options])
 
     const genderControlElement = (field) => {
@@ -50,7 +57,7 @@ const SelectControl = React.memo((props) => {
                 label={_TemplateVariant === EVariant.outlined ? label : ''}
                 onChange={(e) => onSelectedChange(e.target.value, field)}
                 onClose={() => setSearchText("")}
-                renderValue={() => { return renderValue ? renderValue(!_.isNil(field?.value) ? field.value : selectedOption) : selectedOption.name }}
+                renderValue={() => { return renderValue ? renderValue(!_.isNil(field?.value) ? getSelectOptionName(field.value) : selectedOption) : (!_.isNil(field?.value) ? getSelectOptionName(field.value) : selectedOption) }}
             >
                 {isSearchText ? <ListSubheader>
                     <TextField

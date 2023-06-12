@@ -8,7 +8,7 @@ const Login = lazy(() => import('./views/home/Login'))
 const Status = lazy(() => import('./views/category/status'))
 const User = lazy(() => import('./views/user/User'))
 const JoinTeam = lazy(() => import('./views/signup/JoinTeam/JoinTeam'))
-const Signup = lazy(() => import('./views/signup/Signup/Signup'))
+const Signup = lazy(() => import('./views/signup/Signup/signup2'))
 const Template = lazy(() => import('./views/project/Template/Template'))
 const Task = lazy(() => import('./views/task'))
 const TemplateView = lazy(() => import('./views/project/Template/templateView'))
@@ -27,6 +27,8 @@ const AppRoutes = React.memo(() => {
             <Switch>
                 <Route exact path="/login" component={Login} />
                 <Route exact path="/access-denied" component={NotPermission} />
+                <Route exact path="/signup" render={(props) => (<Signup {...props} />)} component={Signup} />
+                <Route exact path="/signup/jointeam" render={(props) => (<JoinTeam {...props} />)} component={JoinTeam} />
                 <Route exact path="/:organization/dashboard" component={Dashboard} />
                 <Route exact path="/:organization/category/team" component={Team} />
                 <Route exact path="/:organization/category/status" component={Status} />
@@ -39,8 +41,6 @@ const AppRoutes = React.memo(() => {
                 <Route exact path="/:organization/task/edit/:taskEditId" component={TaskView} />
                 <Route exact path="/:organization/template/add" component={TemplateView} />
                 <Route exact path="/:organization/template/:id" component={TemplateView} />
-                <Route exact path="/:organization/signup" render={(props) => (<Signup {...props} />)} component={Signup} />
-                <Route exact path="/:organization/signup/jointeam" render={(props) => (<JoinTeam {...props} />)} component={JoinTeam} />
                 <Route exact path="/:organization/project" component={Project} />
                 <Route exact path="/:organization/viewPermission" component={ViewPermission} />
                 <Route exact path="/:organization/overview/summary" component={Summary} />

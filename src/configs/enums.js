@@ -20,7 +20,8 @@ export const ERROR_CODE = {
   success: "Success",
   error: "Failed",
   isExistsData: "IsExistsData",
-  userNotRegister: "UserNotRegister"
+  userNotRegister: "UserNotRegister",
+  tokenNotValid: "TokenNotValid"
 }
 
 export const MODAL = {
@@ -174,7 +175,8 @@ export const baseUrl = {
   jm_priority: 'jm_priority',
   jm_project: 'jm_project',
   sys_viewPermission: 'sys_viewPermission',
-  jm_notifyUser: 'jm_notifyuser'
+  jm_notifyUser: 'jm_notifyuser',
+  account: 'account'
 }
 
 export const EViewMode = {

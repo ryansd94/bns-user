@@ -75,15 +75,15 @@ export default function Login() {
         if (!user) {
           return
         }
-        const token = await user.getIdToken()
+        const googleToken = await user.getIdToken()
         const res = await loginGoogle({
-          token: token,
+          token: googleToken,
         })
         switch (res.status) {
           case httpStatus.OK: {
             const { data } = res && res
             if (data.errorCode == ERROR_CODE.userNotRegister) {
-              history.push(`/signup?token=${token}`)
+              history.push(`/signup?token=${data.data.token}&googleToken=${googleToken}`)
               break
             } else if (data.errorCode != ERROR_CODE.success) {
               setError({
@@ -99,12 +99,12 @@ export default function Login() {
                 shopIndex: data.shopIndex,
               }
               const user = { ...data, isAdmin: true, acceptScreen: [] }
-              setTokenLoginSucceeded({ token, user }, () => { history.push(`/${user.defaultOrganization}/dashboard`) })
               setError({
                 dirty: false,
                 msg: "",
               })
               dispatch(setUserSetting({ ...user }))
+              setTokenLoginSucceeded({ token, user }, () => { history.push(`/${user.defaultOrganization}/dashboard`) })
             }
             break
           }
@@ -125,6 +125,7 @@ export default function Login() {
     let valid = true
     return valid
   }
+
   useLayoutEffect(() => {
     const tokenWeb = getAccessToken()
     if (tokenWeb) {
@@ -132,6 +133,7 @@ export default function Login() {
       history.push(`/${user.defaultOrganization}/dashboard`)
     }
   }, [])
+  
   // Configure Firebase.
   const config = {
     apiKey: process.env.REACT_APP_FIREBASE_API_KEY,

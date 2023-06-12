@@ -6,7 +6,7 @@ import Box from "@mui/material/Box"
 import { useTranslation } from "react-i18next"
 import { useForm } from "react-hook-form"
 import * as Yup from "yup"
-import { validateTokenSignup, signup } from "services"
+import { validateTokenJoinTeam, signup } from "services"
 import { ERROR_CODE, EUserValidate } from "configs"
 import Alert from "@mui/material/Alert"
 
@@ -47,7 +47,7 @@ export default function JoinTeam() {
     } else setLoading(false)
   }, [])
   const validateToken = async (token) => {
-    const res = await validateTokenSignup({ token: token })
+    const res = await validateTokenJoinTeam({ token: token })
     if (res.errorCode == ERROR_CODE.success) {
       setTokenIsvalid(true)
       if (res.data && res.data.status == EUserValidate.IS_HAS_ACCOUNT)

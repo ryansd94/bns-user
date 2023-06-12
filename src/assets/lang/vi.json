@@ -180,5 +180,21 @@
     "Delete read notifications": "Xóa các thông báo đã đọc",
     "Notification settings": "Cài đặt thông báo",
     "You don't have any notifications": "Bạn không có thông báo nào",
-    "Replied in your comment": "đã trả lời trong bình luận của bạn"
+    "Replied in your comment": "đã trả lời trong bình luận của bạn",
+    "organization domain name": "Tên miền tổ chức",
+    "User Type": "Loại người dùng",
+    "Scale": "Quy mô",
+    "Individual": "Cá nhân",
+    "Company": "Công ty",
+    "Organization": "Tổ chức",
+    "Informations": "Thông tin",
+    "Personal name": "Tên cá nhân",
+    "Company name": "Tên công ty",
+    "Organization Name": "Tên tổ chức",
+    "Please do not leave the fields blank (*)": "Vui lòng không bỏ trống các trường thông tin (*)",
+    "Next": "Kế tiếp",
+    "Finish": "Hoàn thành",
+    "The domain name already exists": "Tên miền đã tồn tại",
+    "Sign up success": "Đăng ký thành công",
+    "The system will automatically log in after seconds": "Hệ thống sẽ tự động đăng nhập sau {0} giây"
 }

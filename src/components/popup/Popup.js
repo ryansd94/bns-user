@@ -88,7 +88,7 @@ const Popup = React.memo((props) => {
   }, [stateOpen])
 
   return (
-    <div>
+    stateOpen === true ? <div>
       <BootstrapDialog
         maxWidth={widthSize}
         fullWidth={true}
@@ -111,7 +111,7 @@ const Popup = React.memo((props) => {
           <ButtonDetail isFloatRight={true} onClick={onSave} type={typeSave} />
         </DialogActions> : ''}
       </BootstrapDialog>
-    </div>
+    </div> : ''
   )
 })
 

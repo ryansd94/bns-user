@@ -11,7 +11,7 @@ import { useSelector, useDispatch } from "react-redux"
 import IconButton from "@mui/material/IconButton"
 import * as Yup from "yup"
 import AccountCircle from "@mui/icons-material/AccountCircle"
-import { validateTokenSignup, signup } from "services"
+import { validateTokenJoinTeam, signup } from "services"
 import { ERROR_CODE, EUserValidate, ESize } from "configs"
 
 import PasswordChecklist from "react-password-checklist"
@@ -60,7 +60,7 @@ const JoinTeamNoAccount = (props) => {
   }, [])
 
   const validateToken = async (token) => {
-    const res = await validateTokenSignup({ token: token })
+    const res = await validateTokenJoinTeam({ token: token })
     if (res.errorCode == ERROR_CODE.success) {
       setTokenIsvalid(true)
       if (res.data && res.data.status == EUserValidate.IS_HAS_ACCOUNT)

@@ -180,5 +180,21 @@
     "Delete read notifications": "Delete read notifications",
     "Notification settings": "Notification settings",
     "You don't have any notifications": "You don't have any notifications",
-    "Replied in your comment": "replied in your comment"
+    "Replied in your comment": "replied in your comment",
+    "organization domain name": "Organization Domain Name",
+    "User Type": "User Type",
+    "Scale": "Scale",
+    "Individual": "Individual",
+    "Company": "Company",
+    "Organization": "Organization",
+    "Informations": "Informations",
+    "Personal name": "Personal name",
+    "Company name": "Company name",
+    "Organization Name": "Organization Name",
+    "Please do not leave the fields blank (*)": "Please do not leave the fields blank (*)",
+    "Next": "Next",
+    "Finish": "Finish",
+    "The domain name already exists": "The domain name already exists",
+    "Sign up success": "Sign Up Success",
+    "The system will automatically log in after seconds": "The system will automatically log in after {0} seconds"
 }
