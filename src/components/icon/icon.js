@@ -98,12 +98,23 @@ const IconClose = ({ style, className, onClick }) => {
 const IconBell = ({ style, className, onClick }) => {
   return <i onClick={onClick} style={style} className={`fas fa-bell ${className}`}></i>
 }
-
+const IconPlus = ({ style, className, onClick }) => {
+  return <i onClick={onClick} style={style} className={`far fa-plus-square ${className}`}></i>
+}
+const IconMinus = ({ style, className, onClick }) => {
+  return <i onClick={onClick} style={style} className={`far fa-minus-square ${className}`}></i>
+}
+const IconLeft = ({ style, className, onClick }) => {
+  return <i onClick={onClick} style={style} className={`far fa-chevron-left ${className}`}></i>
+}
+const IconRight = ({ style, className, onClick }) => {
+  return <i onClick={onClick} style={style} className={`far fa-chevron-right ${className}`}></i>
+}
 
 export {
   IconSave, IconDelete, IconEdit, IconCancel, IconEmail, IconActive, IconBlock,
   IconUnBlock, IconClean, IconApply, IconBack, IconMore, IconAdd, IconCricle, IconUp,
   IconDown, IconExpand, IconRemove, IconUpload, IconChange, IconCopy, IconComment, IconFullScreen,
   IconHour, IconDescription, IconTable, IconList, IconRequire, IconSetting, IconSwitchLeft, IconSwitchRight, IconClose,
-  IconBell
+  IconBell, IconPlus, IconMinus, IconLeft, IconRight
 }

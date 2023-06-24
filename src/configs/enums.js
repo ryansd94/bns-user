@@ -186,7 +186,8 @@ export const EViewMode = {
 
 export const EAlertType = {
   error: 'error',
-  warning: 'warning'
+  warning: 'warning',
+  info: 'info'
 }
 
 export const EControlVariant = {
@@ -204,6 +205,11 @@ export const EMenuType = {
 export const EPermissionObject = {
   user: 0,
   team: 1
+}
+
+export const EProjectTypeOption = {
+  basic: 0,
+  phase: 1
 }
 
 export const _TemplateVariant = EVariant.normal

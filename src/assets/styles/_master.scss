@@ -622,6 +622,7 @@ a:hover {
     margin-left: 2rem;
 }
 .group-container {
+    flex-wrap: nowrap !important;
     border: $border_control;
     border-radius: $group-border-radius;
     box-shadow: rgba(67, 71, 85, 0.27) 0px 0px 0.25em, rgba(90, 125, 188, 0.05) 0px 0.25em 1em;
@@ -731,4 +732,25 @@ a:hover {
 }
 .notify-group-content {
     padding: 0.5rem;
+}
+.icon-require-tab {
+    color: $red;
+}
+.scheduler {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    width: 100% !important;
+    > tbody {
+        > tr {
+            display: flex;
+            > td:last-child {
+                overflow: hidden;
+                .scheduler-view {
+                    width: 100% !important;
+                    overflow: hidden !important;
+                }
+            }
+        }
+    }
 }

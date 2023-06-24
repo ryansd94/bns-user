@@ -76,7 +76,7 @@ const ProjectBoard = () => {
 
     const renderProjectGrid = () => {
         return <div className="body-content-item">
-            <Grid container className="no-wrap" gap={2}>{renderData()}
+            <Grid container gap={2}>{renderData()}
             </Grid>
         </div>
     }

@@ -3,6 +3,7 @@ import ProjectGrid from "./projectGrid"
 import ProjectBoard from "./projectBoard"
 import ProjectToolbar from "./projectToolbar"
 import { Resizable } from 'components/resizable'
+import BasicScheduler from "components/scheduler/basicScheduler"
 
 const Project = () => {
   const [filterModels, setFilterModels] = useState(null)
@@ -17,10 +18,11 @@ const Project = () => {
   }
 
   return (
-    <div className="body-content">
-      <ProjectToolbar onApplyFilter={onApplyFilter} />
-      <Resizable className='' genderLeftComponent={genderLeftComponent} />
-    </div>
+    <BasicScheduler />
+    // <div className="body-content">
+    //   <ProjectToolbar onApplyFilter={onApplyFilter} />
+    //   <Resizable className='' genderLeftComponent={genderLeftComponent} />
+    // </div>
   )
 }
 

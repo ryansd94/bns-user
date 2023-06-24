@@ -1,5 +1,4 @@
 import * as yup from 'yup'
-import { useTranslation } from 'react-i18next';
 
 const REGEX_PASSWORD = /^(?=.*\d)(?=.*[a-zA-Z])[\da-zA-Z_.\-@]{8,}$/
 const REGEX_ONLY_NUMBER = /^\d+$/

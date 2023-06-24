@@ -12,26 +12,45 @@ import {
     setReload,
 } from "stores/views/master"
 import { getByID, save } from "services"
-import { ERROR_CODE, baseUrl } from "configs"
+import { ERROR_CODE, baseUrl, EProjectTypeOption } from "configs"
 import { loading as loadingButton } from "stores/components/button"
-import { message } from "configs"
+import { message, EWidth } from "configs"
 import _ from 'lodash'
 import ProjectCreateContent from './projectCreateContent'
+import { getCustomResolverTab } from "helpers"
+import { DatePickerInput } from 'components/datepicker'
+import { EditorControl } from 'components/editor'
+import TextInput from "components/input/TextInput"
+import { UploadIcon } from 'components/upload'
+import Grid from "@mui/material/Grid"
+import eventEmitter from 'helpers/eventEmitter'
 
-const ProjectPopup = (props) => {
+const ProjectPopup = React.memo((props) => {
+    console.log('render ProjectPopup')
     const { t } = useTranslation()
     const dispatch = useDispatch()
     const editData = useSelector((state) => state.master.editData)
-    const validationSchema = Yup.object().shape({
-        name: Yup.string().required(t(message.error.fieldNotEmpty)),
-        code: Yup.string().required(t(message.error.fieldNotEmpty)),
-    })
+
+    const validationSchemaTab = [{
+        tabIndex: 0,
+        validation: {
+            name: Yup.string().required(t(message.error.fieldNotEmpty)),
+            code: Yup.string().required(t(message.error.fieldNotEmpty))
+        },
+    }]
+
+    const customResolver = async (values, context) => {
+        const result = await getCustomResolverTab(values, context, validationSchemaTab)
+        if (!_.isEmpty(result.errorTab)) {
+            eventEmitter.emit('errorTabs', result.errorTab)
+        }
+        return result
+    }
 
     const defaultValues = {
         name: "",
         description: "",
-        templateId: null,
-        id: null,
+        type: EProjectTypeOption.basic
     }
 
     useEffect(() => {
@@ -64,8 +83,10 @@ const ProjectPopup = (props) => {
         handleSubmit,
         reset,
         setValue,
+        getValues
     } = useForm({
-        resolver: yupResolver(validationSchema),
+        resolver: customResolver,
+        // resolver: yupResolver(validationSchema),
         defaultValues: defaultValues,
     })
 
@@ -81,18 +102,19 @@ const ProjectPopup = (props) => {
         }
     }
 
-    const ModalBody = () => {
-        return <ProjectCreateContent control={control} />
+    function ModalBody() {
+        return <ProjectCreateContent control={control} getValues={getValues} setValue={setValue} />
     }
     return (
         <div>
             <Popup
+                widthSize={EWidth.lg}
                 reset={reset}
                 ModalBody={ModalBody}
                 onSave={handleSubmit(onSubmit)}
             />
         </div>
     )
-}
+})
 
 export default ProjectPopup

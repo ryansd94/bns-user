@@ -196,5 +196,10 @@
     "Finish": "Finish",
     "The domain name already exists": "The domain name already exists",
     "Sign up success": "Sign Up Success",
-    "The system will automatically log in after seconds": "The system will automatically log in after {0} seconds"
+    "The system will automatically log in after seconds": "The system will automatically log in after {0} seconds",
+    "Infomations": "Infomations",
+    "Sprint": "Sprint",
+    "Members": "Members",
+    "The project are not phased": "Project are not phased",
+    "The project is divided into several different phases": "The project is divided into several different phases"
 }

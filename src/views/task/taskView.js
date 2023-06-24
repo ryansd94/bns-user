@@ -411,7 +411,7 @@ const TaskView = (props) => {
                                 taskId={taskId || taskEditId} />
                         </Grid>
                     </Grid>
-                    <Grid item container direction='column' xs={12} className="flex-basis-auto overflow-hidden">
+                    <Grid item container direction='column' xs={12} className="flex-basis-auto of-hidden">
                         <TabControl tabItems={getTabItems()} />
                     </Grid>
                 </Grid>

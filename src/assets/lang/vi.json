@@ -196,5 +196,10 @@
     "Finish": "Hoàn thành",
     "The domain name already exists": "Tên miền đã tồn tại",
     "Sign up success": "Đăng ký thành công",
-    "The system will automatically log in after seconds": "Hệ thống sẽ tự động đăng nhập sau {0} giây"
+    "The system will automatically log in after seconds": "Hệ thống sẽ tự động đăng nhập sau {0} giây",
+    "Infomations": "Thông tin",
+    "Sprint": "Giai đoạn",
+    "Members": "Thành viên",
+    "The project are not phased" : "Dự án không chia theo giai đoạn",
+    "The project is divided into several different phases":"Dự án được chia thành các giai đoạn khác nhau"
 }

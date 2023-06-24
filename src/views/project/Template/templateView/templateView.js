@@ -155,14 +155,14 @@ const TemplateAdd = React.memo((props) => {
 
   return (
     <>
-      <Grid className="overflow-hidden flex-column no-wrap" container gap={2}>
+      <Grid className="of-hidden flex-column no-wrap" container gap={2}>
         <Grid item xs={12} className='flex-basis-auto'>
           <ButtonDetail
             disabled={!_.isNil(id) ? disabled : false}
             onClick={handleSubmit(onSubmit)} type={"Save"} />
         </Grid>
         <div className="containerNew">
-          <Box className="flex-column flex-row overflow-hidden">
+          <Box className="flex-column flex-row of-hidden">
             <TabControl classNameSwipeableView={'ofy-auto'} tabItems={getTabItems()} />
           </Box>
         </div>

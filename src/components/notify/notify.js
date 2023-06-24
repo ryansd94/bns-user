@@ -146,7 +146,7 @@ const Notify = (props) => {
                     </Grid>
                 </Grid>
             </Grid>
-            <Grid item className='flex overflow-hidden'>
+            <Grid item className='flex of-hidden'>
                 {
                     loading === true ? <NotifyLoading /> : (!_.isEmpty(notifyItems) ? <div ref={notifyContainerRef} onScroll={handleScroll} className='notify-tab-body no-wrap flex-grow'>
                         <Grid container item xs gap={2} direction={'column'}>

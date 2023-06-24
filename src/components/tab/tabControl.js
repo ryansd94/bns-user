@@ -1,4 +1,4 @@
-import * as React from 'react'
+import React, { useState, useCallback, useEffect } from 'react'
 import { styled } from '@mui/material/styles'
 import Tabs from '@mui/material/Tabs'
 import Tab from '@mui/material/Tab'
@@ -6,6 +6,8 @@ import SwipeableViews from 'react-swipeable-views'
 import _ from 'lodash'
 import './style.scss'
 import Grid from "@mui/material/Grid"
+import { IconRequire } from 'components/icon/icon'
+import eventEmitter from 'helpers/eventEmitter'
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props
@@ -42,7 +44,6 @@ const AntTab = styled((props) => <Tab disableRipple {...props} />)(({ theme }) =
     minWidth: 0,
   },
   fontWeight: theme.typography.fontWeightRegular,
-  marginRight: theme.spacing(1),
   color: 'rgba(0, 0, 0, 0.85)',
   fontFamily: [
     '-apple-system',
@@ -67,14 +68,28 @@ const AntTab = styled((props) => <Tab disableRipple {...props} />)(({ theme }) =
   '&.Mui-focusVisible': {
     backgroundColor: '#d1eaff',
   },
+  '&.MuiButtonBase-root': {
+    minHeight: '42px'
+  }
 }))
-
-
 
 const TabControl = (props) => {
   const { tabItems = [], classNameSwipeableView } = props
   const indexDefault = _.findIndex(tabItems, (x) => x.isActive)
   const [value, setValue] = React.useState(indexDefault != -1 ? indexDefault : 0)
+  const [errorTabs, setErrorTabs] = useState([])
+
+  const onHasErrors = (errors) => {
+    setErrorTabs(errors)
+  }
+
+  useEffect(() => {
+    eventEmitter.on('errorTabs', onHasErrors)
+
+    return () => {
+      eventEmitter.off('errorTabs')
+    }
+  }, [])
 
   const handleChangeIndex = (index) => {
     setValue(index)
@@ -90,6 +105,9 @@ const TabControl = (props) => {
         <AntTabs value={value} onChange={handleChange} aria-label="ant example">
           {
             _.map(tabItems, (item, index) => {
+              if (_.includes(errorTabs, index)) {
+                return <AntTab icon={<IconRequire className='icon-require-tab' />} iconPosition="end" key={index} label={item.label} />
+              }
               return <AntTab key={index} label={item.label} />
             })
           }

@@ -5,15 +5,12 @@ import TextInput from "components/input/TextInput"
 import Grid from "@mui/material/Grid"
 import Box from "@mui/material/Box"
 import { useTranslation } from "react-i18next"
-import Button from "@mui/material/Button"
 import { useForm } from "react-hook-form"
 import InputAdornment from "@mui/material/InputAdornment"
 import Visibility from "@mui/icons-material/Visibility"
 import VisibilityOff from "@mui/icons-material/VisibilityOff"
 import IconButton from "@mui/material/IconButton"
 import * as Yup from "yup"
-import { message } from "configs"
-import { yupResolver } from "@hookform/resolvers/yup"
 import Alert from "@mui/material/Alert"
 import { validateTokenSignup, registerGoogle, checkOrganization } from "services"
 import { ERROR_CODE } from "configs"
@@ -22,13 +19,11 @@ import {
 } from "helpers"
 import PasswordChecklist from "react-password-checklist"
 import Spinner from "components/shared/Spinner"
-import Stepper from '@mui/material/Stepper'
-import Step from '@mui/material/Step'
-import StepButton from '@mui/material/StepButton'
 import SelectControl from "components/select/SelectControl"
 import { setUserSetting } from "stores/views/master"
 import { useDispatch } from "react-redux"
 import { Finish } from "./components"
+import { StepperControl } from "components/stepper"
 
 export default function Signup() {
   const { search } = useLocation()
@@ -50,8 +45,6 @@ export default function Signup() {
     fullName: "",
   })
   const [activeStep, setActiveStep] = React.useState(0)
-  const [completed, setCompleted] = React.useState({})
-
   const optionUserType = [
     { id: 1, name: t('Individual') },
     { id: 2, name: t('Team') },
@@ -66,37 +59,45 @@ export default function Signup() {
     { id: 4, name: t('1000+ persons') }
   ]
 
-  const totalSteps = () => {
-    return steps.length
-  }
-
-  const completedSteps = () => {
-    return Object.keys(completed).length
-  }
-
-  const isLastStep = () => {
-    return activeStep === totalSteps() - 1
-  }
-
-  const allStepsCompleted = () => {
-    return completedSteps() === totalSteps()
-  }
-
-  const validationSchema = () => {
-    if (activeStep === 0) {
+  const validationSchema = (context) => {
+    if (context.activeStep === 0) {
       return Yup.object().shape({
-        companyName: Yup.string().required(t(message.error.fieldNotEmpty)),
+        companyName: Yup.string().required('Company name is required'),
         organization: Yup.string()
-          .required(t('Domain name cannot be empty'))
-          .min(3, t('Domain name must contain at least 3 characters'))
-          .max(30, t('Domain names can only contain up to 30 characters'))
-          .matches(/^[a-zA-Z0-9_]*$/, 'Domain names contain only lowercase letters, uppercase letters, or numbers')
+          .required('Domain name cannot be empty')
+          .min(3, 'Domain name must contain at least 3 characters')
+          .max(30, 'Domain names can only contain up to 30 characters')
+          .matches(/^[a-zA-Z0-9_]*$/, 'Domain names contain only lowercase letters, uppercase letters, or numbers'),
       })
-    } else if (activeStep === 1) {
+    } else if (context.activeStep === 1) {
       return Yup.object().shape({
-        fullName: Yup.string().required(t(message.error.fieldNotEmpty))
+        fullName: Yup.string().required('Full name is required'),
       })
     }
+  }
+
+  const customResolver = async (values, context) => {
+    const rs = await validationSchema(context).validate(values, { abortEarly: false })
+      .then(() => {
+        return {
+          values,
+          errors: {},
+        }
+      })
+      .catch((validationErrors) => {
+        // Dữ liệu không hợp lệ, cập nhật danh sách lỗi
+        const formattedErrors = validationErrors.inner.reduce((acc, error) => {
+          acc[error.path] = { message: error.message }
+          return acc
+        }, {})
+
+        return {
+          values,
+          errors: formattedErrors,
+        }
+      })
+
+    return rs
   }
 
   const defaultValues = {
@@ -114,25 +115,19 @@ export default function Signup() {
     setError,
     formState: { errors },
   } = useForm({
-    resolver: yupResolver(validationSchema()),
+    resolver: customResolver,
+    context: { activeStep },
     mode: 'onChange',
     defaultValues: defaultValues,
   })
 
-  const onNextStep = () => {
-    const newActiveStep =
-      isLastStep() && !allStepsCompleted() ?
-        steps.findIndex((step, i) => !(i in completed))
-        : activeStep + 1
-    setActiveStep(newActiveStep)
-  }
-
-  const handleNext = async (data) => {
+  const handleNext = async (data, activeStep) => {
     if (activeStep === 0) {
       const res = await checkOrganization({ domain: getValues('organization') })
       if (res.data.errorCode == ERROR_CODE.success) {
         if (res.data.data.isValid === true) {
-          onNextStep()
+          setActiveStep(activeStep + 1)
+          return true
         } else {
           setError('organization', {
             type: 'manual',
@@ -141,25 +136,10 @@ export default function Signup() {
         }
       }
     } else if (activeStep === 1) {
-      onSubmit(data)
-    }
-  }
-
-  const handleBack = () => {
-    setActiveStep((prevActiveStep) => prevActiveStep - 1)
-  }
-
-  const handleStep = (step) => () => {
-    setActiveStep(step)
-  }
-
-  const renderTabContent = (index) => {
-    if (index === 0) {
-      return renderTabInfo()
-    } else if (index === 1) {
-      return renderTabAccount()
-    } else if (index === 2) {
-      return renderTabFinish()
+      if (passwordIsvalid === true) {
+        await onSubmit(data)
+        return true
+      }
     }
   }
 
@@ -191,23 +171,15 @@ export default function Signup() {
     event.preventDefault()
   }
 
-  const checkIsDisabled = () => {
-    if (activeStep === 0 && (!_.isEmpty(errors.companyName) || !_.isEmpty(errors.organization))) {
-      return true
-    } else if (activeStep === 1 && passwordIsvalid === false) {
-      return true
-    }
-    return false
-  }
-
-  const isDisabled = checkIsDisabled()
-
   useEffect(() => {
     if (token) {
       const data = replaceAll(token, " ", "+")
       validateToken(data)
     }
   }, [])
+
+  useEffect(() => {
+  }, [activeStep])
 
   const onSubmit = async (data) => {
     // alert(passwordIsvalid)
@@ -227,7 +199,7 @@ export default function Signup() {
       }
       const user = { ...userInfo, isAdmin: true, acceptScreen: [] }
       dispatch(setUserSetting({ ...user }))
-      setTokenLoginSucceeded({ token, user }, () => {onNextStep()})
+      setTokenLoginSucceeded({ token, user })
     }
   }
 
@@ -258,6 +230,13 @@ export default function Signup() {
         setIsOpenScaleSelect(true)
         break
     }
+  }
+
+  const handleFormSubmit = async (activeStep) => {
+    setActiveStep(activeStep)
+    let returnValue
+    await handleSubmit(async (data) => { returnValue = await handleNext(data, activeStep) })()
+    return returnValue
   }
 
   const renderTabAccount = () => {
@@ -425,6 +404,8 @@ export default function Signup() {
     return <Finish />
   }
 
+  const renderSteps = [renderTabInfo(), renderTabAccount(), renderTabFinish()]
+
   const renderContent = () => {
     return <div>
       <div className="d-flex align-items-center auth px-0">
@@ -438,40 +419,7 @@ export default function Signup() {
                   </Grid>
                   <Grid item>
                     <Box sx={{ width: '100%' }}>
-                      <Grid container gap={2} direction='column'>
-                        <Grid item>
-                          <Stepper activeStep={activeStep}>
-                            {steps.map((label, index) => (
-                              <Step key={label} completed={completed[index]}>
-                                <StepButton color="inherit" onClick={handleStep(index)}>
-                                  {label}
-                                </StepButton>
-                              </Step>
-                            ))}
-                          </Stepper>
-                        </Grid>
-                        <Grid item>
-                          <React.Fragment>
-                            {renderTabContent(activeStep)}
-                            {
-                              activeStep !== 2 ? <Box sx={{ display: 'flex', flexDirection: 'row', pt: 2 }}>
-                                <Button
-                                  color="inherit"
-                                  disabled={activeStep === 0}
-                                  onClick={handleBack}
-                                  sx={{ mr: 1 }}
-                                >
-                                  Back
-                                </Button>
-                                <Box sx={{ flex: '1 1 auto' }} />
-                                <Button disabled={isDisabled} onClick={handleSubmit(handleNext)} sx={{ mr: 1 }}>
-                                  {activeStep == 0 ? t('Next') : t('Finish')}
-                                </Button>
-                              </Box> : ''
-                            }
-                          </React.Fragment>
-                        </Grid>
-                      </Grid>
+                      <StepperControl renderSteps={renderSteps} handleSubmit={handleFormSubmit} errors={errors} steps={steps} />
                     </Box>
                   </Grid>
                 </Grid> : <Alert severity="error">{error}</Alert>}

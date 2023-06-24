@@ -75,7 +75,7 @@ const TaskBoard = React.memo((props) => {
     }
 
     return <Box className="flex-column flex-row ofx-auto ofy-hide">
-        <Grid container className="task-board-container flex-row overflow-hidden gap" item xs={12}>
+        <Grid container className="task-board-container flex-row of-hidden gap" item xs={12}>
             {
                 <DragDropContext onDragEnd={onDragEnd}>{
                     _.map(listStatus, (item) => {

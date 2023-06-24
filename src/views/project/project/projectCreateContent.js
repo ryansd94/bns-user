@@ -1,64 +1,60 @@
-import Grid from "@mui/material/Grid"
-import TextInput from "components/input/TextInput"
+import { useState, useEffect } from "react"
 import { useTranslation } from "react-i18next"
-import { UploadIcon } from 'components/upload'
 import _ from 'lodash'
-import { DatePickerInput } from 'components/datepicker'
-import { EditorControl } from 'components/editor'
+import { TabControl } from 'components/tab'
+import { ProjectInfoTab, ProjectSprintTab, ProjectMemberTab } from "./components"
+import { baseUrl } from "configs"
+import { get } from "services"
 
 const ProjectCreateContent = (props) => {
-    const { control } = props
+    console.log('render ProjectCreateContent')
+    const { control, setValue, getValues } = props
     const { t } = useTranslation()
-    return (
-        <Grid container gap={2}>
-            <Grid item xs={12}>
-                <TextInput
-                    autoFocus={true}
-                    required={true}
-                    control={control}
-                    label={t("Project name")}
-                    name="name"
-                />
-            </Grid>
-            <Grid item xs={12}>
-                <TextInput
-                    required={true}
-                    control={control}
-                    label={t("Project code")}
-                    name="code"
-                />
-            </Grid>
-            <Grid item xs={12}>
-                <UploadIcon
-                    label={t("Icon")}
-                    control={control}
-                    name="icon"
-                />
-            </Grid>
-            <Grid item container direction={'row'} gap={2}>
-                <Grid item xs>
-                    <DatePickerInput
-                        label={t("Start date")}
-                        control={control}
-                        name={`startDate`} />
-                </Grid>
-                <Grid item xs>
-                    <DatePickerInput
-                        label={t("End date")}
-                        control={control}
-                        name={`endDate`} />
-                </Grid>
-            </Grid>
-            <Grid item xs={12}>
-                <EditorControl
-                    control={control}
-                    isFullScreen={true}
-                    label={t("Description")}
-                    name="description"
-                    isShowAccordion={true} />
-            </Grid>
-        </Grid>
-    )
+    const [users, setUsers] = useState([])
+    const [teams, setTeams] = useState([])
+
+    useEffect(() => {
+        let mounted = true
+        const getUsers = async () => {
+            await get(`${baseUrl.sys_viewPermission}/users`, { isGetAll: true }).then((data) => {
+                setUsers(data && data.data && data.data.items)
+            })
+        }
+        const getTeams = async () => {
+            await get(`${baseUrl.sys_viewPermission}/teams`, { isGetAll: true }).then((data) => {
+                setTeams(data && data.data && data.data.items)
+            })
+        }
+        getUsers()
+        getTeams()
+        return () => { mounted = false }
+    }, [])
+
+    const getTabItems = () => {
+        const data = [
+            {
+                label: t('Infomations'),
+                Content: <ProjectInfoTab control={control} />
+            },
+            // {
+            //     label: t('Sprint'),
+            //     Content: <ProjectSprintTab control={control} />
+            // },
+            {
+                label: t('Members'),
+                Content: <ProjectMemberTab 
+                getValues={getValues} 
+                setValue={setValue} 
+                users={users} 
+                teams={teams}
+                control={control} />
+            }
+        ]
+        return data
+    }
+
+    return <TabControl
+        tabItems={getTabItems()} />
 }
 
 export default ProjectCreateContent

@@ -1,10 +1,10 @@
+import React, { useState, useEffect } from "react"
 import Grid from "@mui/material/Grid"
 import { useTranslation } from "react-i18next"
 import project from 'assets/images/project-manager.jpg'
 import ProjectCreateContent from './projectCreateContent'
 import * as Yup from "yup"
 import { useForm } from "react-hook-form"
-import { yupResolver } from "@hookform/resolvers/yup"
 import { message } from "configs"
 import ButtonDetail from "components/button/ButtonDetail"
 import { EButtonDetailType } from "configs"
@@ -16,21 +16,36 @@ import {
     setReload,
 } from "stores/views/master"
 import { save } from "services"
+import _ from 'lodash'
+import { getCustomResolverTab } from "helpers"
 
 const ProjectEmptyView = () => {
     const { t } = useTranslation()
     const dispatch = useDispatch()
-    const validationSchema = Yup.object().shape({
-        name: Yup.string().required(t(message.error.fieldNotEmpty)),
-        code: Yup.string().required(t(message.error.fieldNotEmpty)),
-    })
+    const [errorTabs, setErrorTabs] = useState([])
+    const validationSchemaTab = [{
+        tabIndex: 0,
+        validation: {
+            name: Yup.string().required(t(message.error.fieldNotEmpty)),
+            code: Yup.string().required(t(message.error.fieldNotEmpty))
+        },
+    }]
+
+    const customResolver = async (values, context) => {
+        const result = await getCustomResolverTab(values, context, validationSchemaTab)
+        if (!_.isEmpty(result.errorTab)) {
+            setErrorTabs(result.errorTab)
+        }
+        return result
+    }
+
     const {
         control,
         handleSubmit,
-        reset,
-        setValue,
+        getValues,
+        setValue
     } = useForm({
-        resolver: yupResolver(validationSchema),
+        resolver: customResolver
     })
 
     const onSubmit = async (data) => {
@@ -51,7 +66,7 @@ const ProjectEmptyView = () => {
                 <Grid item xs className="box-container">
                     <h1>{t('To get started, create your first project!')}</h1>
                     <Grid item xs>
-                        <ProjectCreateContent control={control} />
+                        <ProjectCreateContent getValues={getValues} setValue={setValue} errorTabs={errorTabs} control={control} />
                     </Grid>
                 </Grid>
             </Grid>

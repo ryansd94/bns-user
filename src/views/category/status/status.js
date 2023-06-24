@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react"
 import StatusPopup from "./statusPopup"
 import StatusGrid from "./statusGrid"
 import { useTranslation } from "react-i18next"
-import { useDispatch, useSelector } from "react-redux"
+import {  useSelector } from "react-redux"
 import { Resizable } from 'components/resizable'
 import StatusToolbar from "./statusToolbar"
 import { Alert } from 'components/alert'
