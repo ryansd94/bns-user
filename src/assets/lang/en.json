@@ -201,5 +201,9 @@
     "Sprint": "Sprint",
     "Members": "Members",
     "The project are not phased": "Project are not phased",
-    "The project is divided into several different phases": "The project is divided into several different phases"
+    "The project is divided into several different phases": "The project is divided into several different phases",
+    "Add sprint": "Add sprint",
+    "Add new sprint": "Add new sprint",
+    "Sprint name": "Sprint name",
+    "Add child sprint": "Add child sprint"
 }

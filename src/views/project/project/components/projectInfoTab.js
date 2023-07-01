@@ -9,7 +9,7 @@ import { RadioGroupControl } from 'components/radio'
 import { EProjectTypeOption } from "configs"
 
 const ProjectInfoTab = (props) => {
-    const { control } = props
+    const { control, onTypeChange, onValueChange } = props
     const { t } = useTranslation()
     const typeOptions = [
         { id: EProjectTypeOption.basic, label: t('Basic'), guidance: t('The project are not phased') },
@@ -24,6 +24,7 @@ const ProjectInfoTab = (props) => {
                 control={control}
                 label={t("Project name")}
                 name="name"
+                onChange={onValueChange}
             />
         </Grid>
         <Grid item xs={12}>
@@ -32,16 +33,18 @@ const ProjectInfoTab = (props) => {
                 control={control}
                 label={t("Project code")}
                 name="code"
+                onChange={onValueChange}
             />
         </Grid>
         <Grid item>
-            <RadioGroupControl isShowGuidance={true} label={t('Type')} options={typeOptions} control={control} name='type' />
+            <RadioGroupControl onChange={onTypeChange} isShowGuidance={true} label={t('Type')} options={typeOptions} control={control} name='type' />
         </Grid>
         <Grid item xs={12}>
             <UploadIcon
                 label={t("Icon")}
                 control={control}
                 name="icon"
+                onChange={onValueChange}
             />
         </Grid>
         <Grid item container direction={'row'} gap={2}>
@@ -49,12 +52,14 @@ const ProjectInfoTab = (props) => {
                 <DatePickerInput
                     label={t("Start date")}
                     control={control}
+                    onChange={onValueChange}
                     name={`startDate`} />
             </Grid>
             <Grid item xs>
                 <DatePickerInput
                     label={t("End date")}
                     control={control}
+                    onChange={onValueChange}
                     name={`endDate`} />
             </Grid>
         </Grid>
@@ -63,6 +68,7 @@ const ProjectInfoTab = (props) => {
                 control={control}
                 isFullScreen={true}
                 label={t("Description")}
+                onChange={onValueChange}
                 name="description"
                 isShowAccordion={true} />
         </Grid>

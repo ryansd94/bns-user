@@ -27,6 +27,30 @@ export const save = async (baseUrl, param) => {
   }
 }
 
+export const save2 = async (baseUrl, param) => {
+  const user = getUserInfo()
+  validateUser(user)
+  const services = createInstance(user.defaultOrganization)
+  try {
+    const query = `${baseUrl}`
+    if (_.isEmpty(param.id)) {
+      const res = await services.post(query, param)
+      return res
+    } else {
+      let editParam = _.cloneDeep({ changeFields: param.changeFields })
+      const res = await services.put(`${baseUrl}/${param.id}`, editParam)
+      return res
+    }
+  } catch (error) {
+    const { request, response } = error
+    if (response) {
+      validateResponse(response)
+      return response
+    }
+    return error
+  }
+}
+
 export const get = async (baseUrl, param = null, cancelToken = null) => {
   const user = getUserInfo()
   validateUser(user)

@@ -7,20 +7,27 @@ import { AccordionControl } from 'components/accordion'
 import { EPermissionObject } from "configs"
 
 const ProjectMemberTab = (props) => {
-    const { control, setValue, getValues, users, teams } = props
+    const { control, setValue, getValues, users, teams, onValueChange } = props
     const { t } = useTranslation()
     const [userSelectedIds, setUserSelectedIds] = useState([])
     const [teamSelectedIds, setTeamSelectedIds] = useState([])
 
     useEffect(() => {
-        const objects = getValues('objects')
-        if (!_.isEmpty(objects)) {
-            const userApplys = _.map(_.filter(objects, (x) => x.objectType === EPermissionObject.user), (a) => { return a.id })
-            const teamApplys = _.map(_.filter(objects, (x) => x.objectType === EPermissionObject.team), (a) => { return a.id })
-            setUserSelectedIds(userApplys)
-            setTeamSelectedIds(teamApplys)
-        }
+        setUserSelectedIds(getValues('members') || [])
+        setTeamSelectedIds(getValues('teams') || [])
     }, [])
+
+    const renderTeamItem = (data) => {
+        return <Grid xs item container gap={2}>
+            <Grid item container direction='row' gap={2}>
+                <Grid item>
+                    {data.name}
+                </Grid>
+            </Grid>
+            <Grid item className='faint'>no department
+            </Grid>
+        </Grid>
+    }
 
     const renderUserItem = (data) => {
         return <Grid xs item container gap={2} direction='column'>
@@ -45,14 +52,16 @@ const ProjectMemberTab = (props) => {
                 name={'teams'}
                 details={
                     <TransferList
-                        renderItem={(data) => renderUserItem(data)}
+                        renderItem={(data) => renderTeamItem(data)}
                         itemApllyIds={teamSelectedIds}
                         items={teams}
                         control={control}
                         leftTitle={t('Team list')}
                         rightTitle={t('List of applicable teams')}
                         setValueData={setValue}
-                        setValueName={'teams'} />
+                        onChange={onValueChange}
+                        getValueData={getValues}
+                        name={'teams'} />
                 }
             />
         </Grid>
@@ -70,7 +79,9 @@ const ProjectMemberTab = (props) => {
                         leftTitle={t('User list')}
                         rightTitle={t('List of applicable users')}
                         setValueData={setValue}
-                        setValueName={'members'} />
+                        onChange={onValueChange}
+                        getValueData={getValues}
+                        name={'members'} />
                 }
             />
         </Grid>

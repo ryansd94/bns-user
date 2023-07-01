@@ -200,6 +200,10 @@
     "Infomations": "Thông tin",
     "Sprint": "Giai đoạn",
     "Members": "Thành viên",
-    "The project are not phased" : "Dự án không chia theo giai đoạn",
-    "The project is divided into several different phases":"Dự án được chia thành các giai đoạn khác nhau"
+    "The project are not phased": "Dự án không chia theo giai đoạn",
+    "The project is divided into several different phases": "Dự án được chia thành các giai đoạn khác nhau",
+    "Add sprint": "Thêm giai đoạn",
+    "Sprint name": "Tên giai đoạn",
+    "Add child sprint": "Thêm giai đoạn con",
+    "Add new sprint": "Thêm mới giai đoạn"
 }

@@ -18,11 +18,11 @@ const Project = () => {
   }
 
   return (
-    <BasicScheduler />
-    // <div className="body-content">
-    //   <ProjectToolbar onApplyFilter={onApplyFilter} />
-    //   <Resizable className='' genderLeftComponent={genderLeftComponent} />
-    // </div>
+    // <BasicScheduler />
+    <div className="body-content">
+      <ProjectToolbar onApplyFilter={onApplyFilter} />
+      <Resizable className='' genderLeftComponent={genderLeftComponent} />
+    </div>
   )
 }
 

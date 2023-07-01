@@ -158,7 +158,9 @@ export const EControlType = {
   childTask: "ChildTask",
   parentTask: "ParentTask",
   upload: "Upload",
-  comment: "Comment"
+  comment: "Comment",
+  transferList: "TransferList",
+  listObject: "ListObject"
 }
 
 export const baseUrl = {
@@ -210,6 +212,12 @@ export const EPermissionObject = {
 export const EProjectTypeOption = {
   basic: 0,
   phase: 1
+}
+
+export const ERowStatus = {
+  addNew: 0,
+  update: 1,
+  noChange: 2
 }
 
 export const _TemplateVariant = EVariant.normal

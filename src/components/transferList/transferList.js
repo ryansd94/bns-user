@@ -4,15 +4,17 @@ import Grid from "@mui/material/Grid"
 import { CheckBoxControl } from 'components/checkbox'
 import { Group } from 'components/layout'
 import ButtonIcon from "components/button/ButtonIcon"
-import { EButtonIconType } from "configs"
+import { EButtonIconType, EControlType } from "configs"
 import { useForm } from "react-hook-form"
 
 const TransferList = (props) => {
     console.log('TransferList')
-    const { items = [], setValueName,
-        renderItem, setValueData, itemApllyIds, leftTitle, rightTitle } = props
+    const { items = [], name,
+        renderItem, setValueData, 
+        // itemApllyIds, 
+        leftTitle, rightTitle, onChange, getValueData } = props
     const [lstItemAll, setLstItemAll] = useState(items)
-    const [lstItemApply, setLstItemApply] = useState([])
+    const [lstItemApply, setLstItemApply] = useState(getValueData(name))
     const [disabledSwitchRight, setDisabledSwitchRight] = useState(true)
     const [disabledSwitchLeft, setDisabledSwitchLeft] = useState(true)
     const { t } = useTranslation()
@@ -23,20 +25,30 @@ const TransferList = (props) => {
         control
     } = useForm({
     })
+    
+    useEffect(() => {
+        const itemApllyIds = getValueData(name) || []
+        const lstItemSelected = _.filter(lstItemAll, (x) => _.includes(itemApllyIds, x.id))
+        const lstItemNotSelected = _.filter(lstItemAll, (x) => !_.includes(itemApllyIds, x.id))
+        setLstItemApply([...lstItemSelected])
+        setLstItemAll([...lstItemNotSelected])
+    }, [])
 
     useEffect(() => {
-        setValueData && setValueData(setValueName, _.map(lstItemApply, (x) => { return x.id }))
+        const lstIdApply = _.map(lstItemApply, (x) => { return x.id })
+        // onChange && onChange(lstIdApply, name, EControlType.transferList)
+        setValueData && setValueData(name, lstIdApply)
     }, [lstItemApply])
 
-    useEffect(() => {
-        if (!_.isEmpty(itemApllyIds)) {
-            const lstItemSelected = _.filter(lstItemAll, (x) => _.includes(itemApllyIds, x.id))
-            const lstItemNotSelected = _.filter(lstItemAll, (x) => !_.includes(itemApllyIds, x.id))
-            lstItemApply.push(...lstItemSelected)
-            setLstItemApply([...lstItemApply])
-            setLstItemAll([...lstItemNotSelected])
-        }
-    }, [itemApllyIds])
+    // useEffect(() => {
+    //     if (!_.isEmpty(itemApllyIds)) {
+    //         const lstItemSelected = _.filter(lstItemAll, (x) => _.includes(itemApllyIds, x.id))
+    //         const lstItemNotSelected = _.filter(lstItemAll, (x) => !_.includes(itemApllyIds, x.id))
+    //         lstItemApply.push(...lstItemSelected)
+    //         setLstItemApply([...lstItemApply])
+    //         setLstItemAll([...lstItemNotSelected])
+    //     }
+    // }, [itemApllyIds])
 
     const onCheckAllItem = (value) => {
         let itemSelected = []
@@ -106,6 +118,9 @@ const TransferList = (props) => {
             _.map(lstItemSelected, (item) => {
                 setValue(item.id, false)
             })
+            const lstIdApply = _.map(lstItemApply, (x) => { return x.id })
+            onChange && onChange(lstIdApply, name, EControlType.transferList)
+            setValueData && setValueData(name, lstIdApply)
         }
         setDisabledSwitchRight(true)
         setValue('all', false)
@@ -123,6 +138,9 @@ const TransferList = (props) => {
             _.map(lstItemSelected, (item) => {
                 setValue(`${item.id}-apply`, false)
             })
+            const lstIdApply = _.map(lstItemNotSelected, (x) => { return x.id })
+            onChange && onChange(lstIdApply, name, EControlType.transferList)
+            setValueData && setValueData(name, lstIdApply)
         }
         setDisabledSwitchLeft(true)
         setValue('all-apply', false)

@@ -16,7 +16,8 @@ export default function RadioGroupControl({
     label,
     name,
     options = [],
-    isShowGuidance = false
+    isShowGuidance = false,
+    onChange
 }) {
 
     const loadingPopup = useSelector((state) => state.master.loadingPopup)
@@ -28,13 +29,13 @@ export default function RadioGroupControl({
 
     return (
         <Controller
-            render={({ field: { onChange, value }, fieldState: { error } }) =>
+            render={({ field, fieldState: { error } }) =>
                 loadingPopup ? (
                     <Skeleton width={"100%"} height={"56px"} variant="text">
                         <RadioGroup
                             name={name}
                             onChange={(e) => {
-                                onChange && onChange(e.target.value)
+                                field.onChange(e.target.value)
                             }}
                         >
                             {options && options.map((item) => {
@@ -48,10 +49,11 @@ export default function RadioGroupControl({
                         <Grid item xs>
                             <RadioGroup
                                 row
-                                value={value}
+                                value={field.value}
                                 name={name}
                                 onChange={(e) => {
-                                    onChange && onChange(e.target.value)
+                                    onChange && onChange(e.target.value, name)
+                                    field.onChange(e.target.value)
                                 }}
                             >
                                 <Grid container gap={2} direction='column'>
@@ -60,7 +62,7 @@ export default function RadioGroupControl({
                                             return <FormControlLabel key={item.id} value={item.id} control={<Radio />} label={item.label} />
                                         })}
                                     </Grid>
-                                    {isShowGuidance === true ? <Grid item xs>{renderInfo(value)}</Grid> : ''}
+                                    {isShowGuidance === true ? <Grid item xs>{renderInfo(field.value)}</Grid> : ''}
                                 </Grid>
                             </RadioGroup>
                         </Grid>

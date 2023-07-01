@@ -43,7 +43,8 @@ const ProjectEmptyView = () => {
         control,
         handleSubmit,
         getValues,
-        setValue
+        setValue,
+        reset
     } = useForm({
         resolver: customResolver
     })
@@ -66,7 +67,7 @@ const ProjectEmptyView = () => {
                 <Grid item xs className="box-container">
                     <h1>{t('To get started, create your first project!')}</h1>
                     <Grid item xs>
-                        <ProjectCreateContent getValues={getValues} setValue={setValue} errorTabs={errorTabs} control={control} />
+                        <ProjectCreateContent reset={reset} getValues={getValues} setValue={setValue} errorTabs={errorTabs} control={control} />
                     </Grid>
                 </Grid>
             </Grid>

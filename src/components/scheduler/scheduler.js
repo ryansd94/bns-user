@@ -400,9 +400,6 @@ class Scheduler extends Component {
 
     onViewChange = (viewType, showAgenda, isEventPerspective) => {
         const { onViewChange, schedulerData } = this.props;
-        // let viewType = parseInt(e.target.value.charAt(0));
-        // let showAgenda = e.target.value.charAt(1) === '1';
-        // let isEventPerspective = e.target.value.charAt(2) === '1';
         onViewChange(schedulerData, { viewType: viewType, showAgenda: showAgenda, isEventPerspective: isEventPerspective });
     }
 

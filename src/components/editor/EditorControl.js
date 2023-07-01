@@ -285,8 +285,8 @@ const EditorControl = (props) => {
                         newValue = ''
                     }
                     let valueFormat = formatMention(newValue)
+                    onChange && onChange(valueFormat, name)
                     field && field.onChange(valueFormat)
-                    onChange && onChange(valueFormat)
                 }}
                 placeholder={isShowPlaceholder ? "Write something awesome..." : ''}
                 modules={modules}

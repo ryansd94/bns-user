@@ -3,58 +3,61 @@ import { useTranslation } from "react-i18next"
 import _ from 'lodash'
 import { TabControl } from 'components/tab'
 import { ProjectInfoTab, ProjectSprintTab, ProjectMemberTab } from "./components"
-import { baseUrl } from "configs"
-import { get } from "services"
+import { baseUrl, EProjectTypeOption } from "configs"
 
 const ProjectCreateContent = (props) => {
     console.log('render ProjectCreateContent')
-    const { control, setValue, getValues } = props
+    const { control, setValue, getValues, reset, type, onValueChange, members, users, teams } = props
     const { t } = useTranslation()
-    const [users, setUsers] = useState([])
-    const [teams, setTeams] = useState([])
+    const [disabledTabSprint, setDisabledTabSprint] = useState(type === EProjectTypeOption.phase ? false : true)
 
     useEffect(() => {
-        let mounted = true
-        const getUsers = async () => {
-            await get(`${baseUrl.sys_viewPermission}/users`, { isGetAll: true }).then((data) => {
-                setUsers(data && data.data && data.data.items)
-            })
+        setTabItems(getTabItems())
+    }, [disabledTabSprint])
+
+    const onTypeChange = (value, name) => {
+        if (value == EProjectTypeOption.basic) {
+            setDisabledTabSprint(true)
+        } else {
+            setDisabledTabSprint(false)
         }
-        const getTeams = async () => {
-            await get(`${baseUrl.sys_viewPermission}/teams`, { isGetAll: true }).then((data) => {
-                setTeams(data && data.data && data.data.items)
-            })
-        }
-        getUsers()
-        getTeams()
-        return () => { mounted = false }
-    }, [])
+        onValueChange(value, name)
+    }
 
     const getTabItems = () => {
         const data = [
             {
                 label: t('Infomations'),
-                Content: <ProjectInfoTab control={control} />
+                Content: <ProjectInfoTab onValueChange={onValueChange} onTypeChange={onTypeChange} control={control} />
             },
-            // {
-            //     label: t('Sprint'),
-            //     Content: <ProjectSprintTab control={control} />
-            // },
             {
                 label: t('Members'),
-                Content: <ProjectMemberTab 
-                getValues={getValues} 
-                setValue={setValue} 
-                users={users} 
-                teams={teams}
-                control={control} />
+                Content: <ProjectMemberTab
+                    members={members}
+                    getValues={getValues}
+                    setValue={setValue}
+                    users={users}
+                    teams={teams}
+                    onValueChange={onValueChange}
+                    control={control} />
+            },
+            {
+                label: t('Sprint'),
+                Content: <ProjectSprintTab onValueChange={onValueChange} name={'sprints'} reset={reset} control={control} getValues={getValues} setValue={setValue} />,
+                disabled: disabledTabSprint
             }
         ]
         return data
     }
+    const [tabItems, setTabItems] = useState(getTabItems())
+
+
+    useEffect(() => {
+        setTabItems(getTabItems())
+    }, [users, teams])
 
     return <TabControl
-        tabItems={getTabItems()} />
+        tabItems={tabItems} />
 }
 
 export default ProjectCreateContent

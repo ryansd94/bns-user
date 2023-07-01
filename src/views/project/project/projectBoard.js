@@ -7,12 +7,13 @@ import { getUserInfo, setUserInfo } from "helpers"
 import { useHistory } from "react-router-dom"
 import ProjectEmptyView from './projectEmptyView'
 import Spinner from 'components/shared/Spinner'
-import { setUserSetting } from "stores/views/master"
+import { setUserSetting, setEditData } from "stores/views/master"
 import { useDispatch } from "react-redux"
 import { AvatarControl } from 'components/avatar'
 import { EControlVariant } from "configs"
 import { DatePickerInput } from 'components/datepicker'
 import { useTranslation } from "react-i18next"
+import { open, change_title } from "components/popup/popupSlice"
 
 const ProjectBoard = () => {
     const [projects, setProjects] = useState([])
@@ -40,7 +41,10 @@ const ProjectBoard = () => {
         user.setting.projectSetting.currentId = item.id
         setUserInfo({ user: user })
         dispatch(setUserSetting({ setting: { projectSetting: { current: item.code, currentId: item.id } } }))
-        history.push(`/${user.defaultOrganization}/${item.code}/overview/summary`)
+        // history.push(`/${user.defaultOrganization}/${item.code}/overview/summary`)
+        if (_.isNil(item.id)) return
+        dispatch(open())
+        dispatch(setEditData(item.id))
     }
 
     const renderData = () => {

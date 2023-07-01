@@ -607,6 +607,9 @@ a:hover {
     min-width: 300px;
     max-width: 350px;
     box-shadow: $content-box-shadow;
+    &:hover {
+        background-color: $item-background-color;
+    }
 }
 
 .no-border {
@@ -753,4 +756,34 @@ a:hover {
             }
         }
     }
+}
+.sprint-item-container {
+    padding: 1rem;
+    position: relative;
+    &:hover {
+        background-color: $item-background-color;
+        .sprint-item-action {
+            display: block;
+        }
+    }
+    .sprint-item-action {
+        position: absolute;
+        display: none;
+        right: 0;
+        margin-right: 1rem;
+    }
+}
+.sprint-item-header {
+    padding: 1rem;
+    border-bottom: $border_control;
+    font-weight: 700;
+}
+.sprint-list-content {
+    border: $border_control;
+    .sprint-item-container:not(:last-child) {
+        border-bottom: $border_control;
+    }
+}
+.sprint-item-div:not(:last-child) {
+    border-bottom: $border_control;
 }

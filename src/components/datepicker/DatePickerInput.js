@@ -8,7 +8,7 @@ import { EFormatDate } from "configs/enums"
 import { Controller } from "react-hook-form"
 import { useSelector } from "react-redux"
 import Skeleton from "@mui/material/Skeleton"
-import { _TemplateVariant, EVariant, _ControlSizeDefault } from "configs"
+import { _TemplateVariant, EVariant, _ControlSizeDefault,EControlType } from "configs"
 import { LabelControl } from 'components/label'
 import _ from 'lodash'
 import { FormHelperText } from '@mui/material'
@@ -35,6 +35,7 @@ const DatePickerInput = ({ size, onChange, disabled, control, name, label,
                             size={size ? size : _ControlSizeDefault}
                             disabled={disabled ? disabled : false}
                             inputFormat={EFormatDate.ddmmyyyy}
+                            onChange={onChange}
                             renderInput={(params) =>
                                 <TextField
                                     size={size ? size : _ControlSizeDefault} {...params} />}
@@ -87,8 +88,8 @@ const DatePickerInput = ({ size, onChange, disabled, control, name, label,
                     value: value || !_.isNil(field?.value) ? field?.value : null,
                     onChange: (newValue) => {
                         setValue(newValue)
+                        onChange && onChange(newValue, name, EControlType.datePicker)
                         field.onChange(newValue)
-                        onChange && onChange(newValue)
                     },
                     error: error
                 })

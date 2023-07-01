@@ -4,32 +4,48 @@ import { useTranslation } from "react-i18next"
 import { useSelector, useDispatch } from "react-redux"
 import * as Yup from "yup"
 import { useForm } from "react-hook-form"
-import { yupResolver } from "@hookform/resolvers/yup"
 import { open, change_title } from "components/popup/popupSlice"
 import { openMessage } from "stores/components/snackbar"
 import {
     setLoadingPopup,
     setReload,
 } from "stores/views/master"
-import { getByID, save } from "services"
-import { ERROR_CODE, baseUrl, EProjectTypeOption } from "configs"
+import { getByID, save2 } from "services"
+import { ERROR_CODE, baseUrl, EProjectTypeOption, EControlType } from "configs"
 import { loading as loadingButton } from "stores/components/button"
 import { message, EWidth } from "configs"
 import _ from 'lodash'
 import ProjectCreateContent from './projectCreateContent'
 import { getCustomResolverTab } from "helpers"
-import { DatePickerInput } from 'components/datepicker'
-import { EditorControl } from 'components/editor'
-import TextInput from "components/input/TextInput"
-import { UploadIcon } from 'components/upload'
-import Grid from "@mui/material/Grid"
 import eventEmitter from 'helpers/eventEmitter'
+import { get } from "services"
 
 const ProjectPopup = React.memo((props) => {
     console.log('render ProjectPopup')
     const { t } = useTranslation()
     const dispatch = useDispatch()
     const editData = useSelector((state) => state.master.editData)
+    const [members, setMembers] = useState({})
+    const [users, setUsers] = useState([])
+    const [teams, setTeams] = useState([])
+    const [type, setType] = useState(EProjectTypeOption.basic)
+
+    useEffect(() => {
+        let mounted = true
+        const getUsers = async () => {
+            await get(`${baseUrl.sys_viewPermission}/users`, { isGetAll: true }).then((data) => {
+                setUsers(data && data.data && data.data.items)
+            })
+        }
+        const getTeams = async () => {
+            await get(`${baseUrl.sys_viewPermission}/teams`, { isGetAll: true }).then((data) => {
+                setTeams(data && data.data && data.data.items)
+            })
+        }
+        getUsers()
+        getTeams()
+        return () => { mounted = false }
+    }, [])
 
     const validationSchemaTab = [{
         tabIndex: 0,
@@ -50,7 +66,8 @@ const ProjectPopup = React.memo((props) => {
     const defaultValues = {
         name: "",
         description: "",
-        type: EProjectTypeOption.basic
+        type: EProjectTypeOption.basic,
+        sprints: []
     }
 
     useEffect(() => {
@@ -63,18 +80,14 @@ const ProjectPopup = React.memo((props) => {
         if (!editData) return
         dispatch(change_title(t("Edit project")))
         dispatch(setLoadingPopup(true))
-        dispatch(open())
         await getByID(baseUrl.jm_project, editData).then((res) => {
-            //dispatch(setEditData(res.data))
-            setValue("id", res.data.id)
-            setValue("name", res.data.name)
-            setValue("code", res.data.code)
-            setValue("description", res.data.description)
-            setValue("icon", res.data.icon)
-            setValue("templateId", res.data.templateId)
-            setValue('color', res.data.color)
-            setColor(res.data.color)
+            for (let key in res.data) {
+                setValue(key, res.data[key])
+            }
+            setMembers({ teamsApplyIds: res.data.teams, usersApplyIds: res.data.members })
+            setType(res.data.type)
             dispatch(setLoadingPopup(false))
+            dispatch(open())
         })
     }
 
@@ -83,18 +96,19 @@ const ProjectPopup = React.memo((props) => {
         handleSubmit,
         reset,
         setValue,
-        getValues
+        getValues,
+        register
     } = useForm({
         resolver: customResolver,
-        // resolver: yupResolver(validationSchema),
         defaultValues: defaultValues,
     })
 
     const onSubmit = async (data) => {
+        console.log(data)
         dispatch(loadingButton(true))
         var postData = data
         if (!_.isEmpty(editData)) postData.id = editData
-        const res = await save(baseUrl.jm_project, postData)
+        const res = await save2(baseUrl.jm_project, postData)
         dispatch(loadingButton(false))
         dispatch(openMessage({ ...res }))
         if (res.errorCode == ERROR_CODE.success) {
@@ -102,12 +116,76 @@ const ProjectPopup = React.memo((props) => {
         }
     }
 
-    function ModalBody() {
-        return <ProjectCreateContent control={control} getValues={getValues} setValue={setValue} />
+    const onValueChange = (value, name, type = EControlType.textField) => {
+        if (_.isNil(editData)) return
+        let changeFields = getValues('changeFields') || []
+        let field = _.find(changeFields, (x) => x.key === name)
+        let originValue = null
+        let isDiffernt = false
+
+        if (_.isNil(field)) {
+            originValue = _.sortBy(getValues(name))
+        } else {
+            originValue = _.sortBy(field.originValue)
+        }
+
+        if (_.isNumber(originValue) || _.isNumber(value)) {
+            if (originValue != value) {
+                isDiffernt = true
+            }
+        } else if (type === EControlType.transferList) {
+            if (_.isNil(value)) {
+                value = []
+            }
+            if (_.isNil(originValue)) {
+                originValue = []
+            }
+            if (!_.isEqual(originValue, _.sortBy(value))) {
+                isDiffernt = true
+            }
+        } else if (!_.isEqual(originValue, value)) {
+            isDiffernt = true
+        }
+
+        if (isDiffernt === true) {
+            let newValue = value
+            if (type === EControlType.transferList) {
+                let deleteValues = _.difference(originValue, value)
+                let addValues = _.difference(value, originValue)
+                newValue = { deleteValues, addValues }
+            }
+            if (_.isNil(field)) {
+                changeFields.push({ key: name, value: newValue, originValue, type })
+            } else {
+                field.value = newValue
+            }
+        } else {
+            if (!_.isNil(field)) {
+                changeFields = _.filter(changeFields, (x) => x.key !== name)
+            }
+        }
+        setValue('changeFields', changeFields)
+        console.log(changeFields)
+        eventEmitter.emit('onChangeDisabled', !_.isEmpty(changeFields) ? false : true)
     }
+
+    function ModalBody() {
+        return <ProjectCreateContent
+            members={members}
+            onValueChange={onValueChange}
+            register={register}
+            type={_.isNil(editData) ? EProjectTypeOption.basic : type}
+            control={control}
+            getValues={getValues}
+            users={users}
+            teams={teams}
+            setValue={setValue} />
+    }
+
     return (
         <div>
             <Popup
+                disabledSave={!_.isEmpty(editData) ? true : false}
                 widthSize={EWidth.lg}
                 reset={reset}
                 ModalBody={ModalBody}

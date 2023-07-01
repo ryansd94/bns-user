@@ -6,7 +6,7 @@ import SwipeableViews from 'react-swipeable-views'
 import _ from 'lodash'
 import './style.scss'
 import Grid from "@mui/material/Grid"
-import { IconRequire } from 'components/icon/icon'
+import { IconRequire, IconBlock } from 'components/icon/icon'
 import eventEmitter from 'helpers/eventEmitter'
 
 function TabPanel(props) {
@@ -105,6 +105,9 @@ const TabControl = (props) => {
         <AntTabs value={value} onChange={handleChange} aria-label="ant example">
           {
             _.map(tabItems, (item, index) => {
+              if (item.disabled === true) {
+                return <AntTab disabled={true} icon={<IconBlock />} iconPosition="start" key={index} label={item.label} />
+              }
               if (_.includes(errorTabs, index)) {
                 return <AntTab icon={<IconRequire className='icon-require-tab' />} iconPosition="end" key={index} label={item.label} />
               }

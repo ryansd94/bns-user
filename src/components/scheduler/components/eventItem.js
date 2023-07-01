@@ -4,6 +4,7 @@ import { PopoverControl } from 'components/popover'
 import EventItemPopover from './eventItemPopover'
 import { CellUnits, DATETIME_FORMAT } from './constants'
 import { DnDTypes } from './dnDTypes'
+import Grid from "@mui/material/Grid"
 const supportTouch = 'ontouchstart' in window;
 
 class EventItem extends Component {
@@ -511,9 +512,16 @@ class EventItem extends Component {
             endResizeDiv = <div className="event-resizer event-end-resizer" ref={(ref) => this.endResizer = ref}></div>;
 
         let eventItemTemplate = (
-            <div className={roundCls + ' event-item'} key={eventItem.id}
+            <div onMouseEnter={this.handlePopoverOpen} onMouseLeave={this.handlePopoverClose} className={roundCls + ' event-item'} key={eventItem.id}
                 style={{ height: config.eventItemHeight, backgroundColor: bgColor }}>
                 <span style={{ marginLeft: '10px', lineHeight: `${config.eventItemHeight}px` }}>{eventTitle}</span>
+                {
+                    schedulerData._isResizing() || config.eventItemPopoverEnabled == false || eventItem.showPopover == false ? '' : <PopoverControl anchorEl={this.state.openPopover}
+                        onClose={this.handlePopoverClose}
+                        genderBody={() => { return content }}
+                    >
+                    </PopoverControl>
+                }
             </div>
         );
         if (eventItemTemplateResolver != undefined)
@@ -526,26 +534,13 @@ class EventItem extends Component {
         </a>;
 
         return (
-            isDragging ? null : (schedulerData._isResizing() || config.eventItemPopoverEnabled == false || eventItem.showPopover == false ?
-                <div>
-                    {
-                        connectDragPreview(
-                            connectDragSource(a)
-                        )
-                    }
-                </div> :
-                <div onMouseEnter={this.handlePopoverOpen} onMouseLeave={this.handlePopoverClose}>
-                    {
-                        connectDragPreview(
-                            connectDragSource(a)
-                        )
-                    }
-                    <PopoverControl anchorEl={this.state.openPopover}
-                        onClose={this.handlePopoverClose}
-                        genderBody={() => { return content }}
-                    >
-                    </PopoverControl>
-                </div>
+            isDragging ? null : (<div>
+                {
+                    connectDragPreview(
+                        connectDragSource(a)
+                    )
+                }
+            </div>
             )
         );
     }

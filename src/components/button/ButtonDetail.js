@@ -20,9 +20,10 @@ const ButtonDetail = (props) => {
     },
   })
   const { t } = useTranslation()
-  const { type, onClick, autoFocus, disabled, className, isFloatRight = false } = props
+  const { type, onClick, autoFocus, disabled, className, isFloatRight = false, label } = props
   const [icon, setIcon] = useState("")
-  const [text, setText] = useState("")
+  const [text, setText] = useState(label)
+  const [disabledButton, setDisabledButton] = useState(disabled)
   const [color, setColor] = useState(null)
   const [defaultLoading, setDefaultLoading] = useState(false)
   const loading = useSelector((state) => state.button.loading)
@@ -53,6 +54,11 @@ const ButtonDetail = (props) => {
         break
     }
   }, [lang])
+
+  useEffect(() => {
+    setDisabledButton(disabled)
+  }, [disabled])
+
   let button
   if (type != "Undo") {
     const themeButton = (
@@ -61,7 +67,7 @@ const ButtonDetail = (props) => {
         color={color != null ? color : "primary"}
         autoFocus={autoFocus}
         variant="contained"
-        disabled={(defaultLoading ? loading : false) || disabled}
+        disabled={(defaultLoading ? loading : false) || disabledButton}
         className={`${className} ${isFloatRight == true ? 'f-right' : ''}`}
       >
         {text}
@@ -98,7 +104,7 @@ const ButtonDetail = (props) => {
         color={color != null ? color : "primary"}
         autoFocus={autoFocus}
         className={`${className} button-detail`}
-        disabled={disabled}
+        disabled={disabledButton}
         // startIcon={icon}
         variant="outlined"
       >

@@ -57,7 +57,7 @@ const SelectControl = React.memo((props) => {
                 label={_TemplateVariant === EVariant.outlined ? label : ''}
                 onChange={(e) => onSelectedChange(e.target.value, field)}
                 onClose={() => setSearchText("")}
-                renderValue={() => { return renderValue ? renderValue(!_.isNil(field?.value) ? getSelectOptionName(field.value) : selectedOption) : (!_.isNil(field?.value) ? getSelectOptionName(field.value) : selectedOption) }}
+                renderValue={() => { return renderValue ? renderValue(!_.isNil(field?.value) ? field.value : selectedOption) : (!_.isNil(field?.value) ? getSelectOptionName(field.value) : selectedOption) }}
             >
                 {isSearchText ? <ListSubheader>
                     <TextField

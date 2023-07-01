@@ -94,8 +94,8 @@ export default function TextInput({
                     valueChange = null
                   }
                 }
+                onChange && onChange(valueChange, name)
                 field.onChange(valueChange)
-                onChange && onChange(valueChange)
               }}
               sx={{
                 "& .MuiInputBase-input": {

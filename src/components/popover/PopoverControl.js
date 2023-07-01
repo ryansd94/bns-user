@@ -54,7 +54,7 @@ PopoverControl.propTypes = {
 }
 PopoverControl.defaultProps = {
   anchorOrigin: {
-    vertical: 'top',
+    vertical: 'bottom',
     horizontal: 'left',
   },
   transformOrigin: {

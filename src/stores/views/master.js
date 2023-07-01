@@ -10,7 +10,7 @@ const initialState = {
   data: [],
   isReload: null,
   loadingPopup: false,
-  editData: "",
+  editData: null,
   filterModel: [],
   toolbarVisible: { ...VisibleDefault },
   deleteData: {},

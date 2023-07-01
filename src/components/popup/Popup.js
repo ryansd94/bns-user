@@ -14,6 +14,7 @@ import { useSelector, useDispatch } from "react-redux"
 import { close } from "components/popup/popupSlice"
 import { setEditData } from "stores/views/master"
 import { EButtonDetailType } from "configs"
+import eventEmitter from 'helpers/eventEmitter'
 import _ from 'lodash'
 
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
@@ -68,18 +69,37 @@ const Popup = React.memo((props) => {
   const dispatch = useDispatch()
   const { ModalBody, open = null, title = null,
     onSave, widthSize = "sm", reset, typeSave = EButtonDetailType.save,
-    isShowFooter = true, handleClose = null } = props
+    isShowFooter = true, handleClose = null, labelSave = '', disabledSave = false } = props
+  const stateOpen = !_.isNil(open) ? open : useSelector((state) => state.popup.open)
+  const [openPopup, setOpen] = useState(open)
+  const [disabled, setDisabled] = useState(disabledSave)
+  const stateTitle = !_.isNil(title) ? title : useSelector((state) => state.popup.title)
+  const editData = useSelector((state) => state.master.editData)
 
   const onClose = () => {
     if (_.isNil(handleClose)) {
-      dispatch(close())
-      dispatch(setEditData(null))
+      if (openPopup === null) {
+        dispatch(close())
+      } else {
+        setOpen(false)
+      }
+      if (!_.isNil(editData)) {
+        dispatch(setEditData(null))
+      }
     } else {
       handleClose()
     }
   }
-  const stateOpen = !_.isNil(open) ? open : useSelector((state) => state.popup.open)
-  const stateTitle = !_.isNil(title) ? title : useSelector((state) => state.popup.title)
+
+  useEffect(() => {
+    setDisabled(disabledSave)
+  }, [disabledSave])
+
+  useEffect(() => {
+    if (!_.isNil(open)) {
+      setOpen(open)
+    }
+  }, [open])
 
   useEffect(() => {
     if (!stateOpen) {
@@ -87,14 +107,33 @@ const Popup = React.memo((props) => {
     }
   }, [stateOpen])
 
+  const handleSave = () => {
+    onSave && onSave()
+    // if (!_.isNil(editData)) {
+    //   onClose()
+    // }
+  }
+
+  useEffect(() => {
+    eventEmitter.on('onChangeDisabled', onChangeDisabled)
+
+    return () => {
+      eventEmitter.off('onChangeDisabled')
+    }
+  }, [])
+
+  const onChangeDisabled = (disabled) => {
+    setDisabled(disabled)
+  }
+
   return (
-    stateOpen === true ? <div>
+    (!_.isNil(openPopup) ? (openPopup === true) : (stateOpen === true)) === true ? <div>
       <BootstrapDialog
         maxWidth={widthSize}
         fullWidth={true}
         aria-labelledby="draggable-dialog-title"
         PaperComponent={PaperComponent}
-        open={stateOpen}
+        open={!_.isNil(openPopup) ? openPopup : stateOpen}
         onClose={onClose}
       >
         <BootstrapDialogTitle
@@ -108,7 +147,7 @@ const Popup = React.memo((props) => {
         </DialogContent>
         {isShowFooter ? <DialogActions>
           <ButtonDetail onClick={onClose} type={EButtonDetailType.undo} />
-          <ButtonDetail isFloatRight={true} onClick={onSave} type={typeSave} />
+          <ButtonDetail disabled={disabled} label={labelSave} isFloatRight={true} onClick={handleSave} type={typeSave} />
         </DialogActions> : ''}
       </BootstrapDialog>
     </div> : ''

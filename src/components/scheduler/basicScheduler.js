@@ -1,10 +1,5 @@
 import React, { useState, useMemo, Component } from 'react'
-import { PropTypes } from 'prop-types';
-// import moment from 'moment';
-// import 'moment/locale/zh-cn';
-// import 'antd/lib/style/index.less';
 import { ViewTypes } from './components/constants';
-import withDragDropContext from './withDnDContext';
 import Scheduler from './scheduler';
 import SchedulerData from './components/schedulerData';
 import DemoData from './components/demoData';
@@ -12,12 +7,9 @@ import { DragDropContext } from 'react-dnd';
 import HTML5Backend from "react-dnd-html5-backend";
 import _ from 'lodash'
 
-
 class BasicScheduler extends Component {
     constructor(props) {
         super(props);
-
-        //let schedulerData = new SchedulerData(new moment("2017-12-18").format(DATE_FORMAT), ViewTypes.Week);
         let schedulerData = new SchedulerData('2017-12-18', ViewTypes.Week);
         schedulerData.localeMoment.locale('en');
         schedulerData.setResources(DemoData.resources);
