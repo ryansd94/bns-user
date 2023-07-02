@@ -11,7 +11,6 @@ const TransferList = (props) => {
     console.log('TransferList')
     const { items = [], name,
         renderItem, setValueData, 
-        // itemApllyIds, 
         leftTitle, rightTitle, onChange, getValueData } = props
     const [lstItemAll, setLstItemAll] = useState(items)
     const [lstItemApply, setLstItemApply] = useState(getValueData(name))
@@ -33,22 +32,6 @@ const TransferList = (props) => {
         setLstItemApply([...lstItemSelected])
         setLstItemAll([...lstItemNotSelected])
     }, [])
-
-    useEffect(() => {
-        const lstIdApply = _.map(lstItemApply, (x) => { return x.id })
-        // onChange && onChange(lstIdApply, name, EControlType.transferList)
-        setValueData && setValueData(name, lstIdApply)
-    }, [lstItemApply])
-
-    // useEffect(() => {
-    //     if (!_.isEmpty(itemApllyIds)) {
-    //         const lstItemSelected = _.filter(lstItemAll, (x) => _.includes(itemApllyIds, x.id))
-    //         const lstItemNotSelected = _.filter(lstItemAll, (x) => !_.includes(itemApllyIds, x.id))
-    //         lstItemApply.push(...lstItemSelected)
-    //         setLstItemApply([...lstItemApply])
-    //         setLstItemAll([...lstItemNotSelected])
-    //     }
-    // }, [itemApllyIds])
 
     const onCheckAllItem = (value) => {
         let itemSelected = []

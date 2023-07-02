@@ -34,7 +34,7 @@ export const deepFind = (arr, search, keyChildItem = 'childrens') => {
             return obj
         }
         if (obj[keyChildItem]) {
-            var deepResult = deepFind(obj[keyChildItem], search)
+            var deepResult = deepFind(obj[keyChildItem], search, keyChildItem)
             if (deepResult) {
                 return deepResult
             }
@@ -50,7 +50,7 @@ export const deepFindAll = (arr, search, keyChildItem = 'childrens') => {
             data.push(obj)
         }
         if (obj[keyChildItem]) {
-            var deepResult = deepFind(obj[keyChildItem], search)
+            var deepResult = deepFind(obj[keyChildItem], search, keyChildItem)
             if (deepResult) {
                 data.push(deepResult)
             }

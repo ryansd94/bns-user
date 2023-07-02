@@ -9,22 +9,25 @@ import ProjectSprintTabPopup from "./projectSprintTabPopup"
 import { formatDate, deepFind } from "helpers/commonFunction"
 import ButtonIcon from "components/button/ButtonIcon"
 import { Controller } from "react-hook-form"
-import { v4 as uuidv4 } from 'uuid'
 
 const ProjectSprintTab = (props) => {
     console.log('render ProjectSprintTab')
     const { control, getValues, setValue, name, onValueChange } = props
     const { t } = useTranslation()
     const [dataPopup, setDataPopup] = useState({ open: false })
-    const [activeId, setActiveId] = useState('')
 
     const onEditClick = (item) => {
         setDataPopup({ open: true, ...item })
     }
 
     const onAddChildClick = (item) => {
-        setActiveId(item.id)
-        setDataPopup({ open: true })
+        setDataPopup({ open: true, parentId: item.id })
+    }
+
+    const onDeleteClick = (item) => {
+        let deleteItem = _.cloneDeep(item)
+        deleteItem.rowStatus = ERowStatus.delete
+        onSubmit(deleteItem, true)
     }
 
     const renderHeader = () => {
@@ -52,6 +55,9 @@ const ProjectSprintTab = (props) => {
                     <Grid xs item>
                         <ButtonIcon onClick={() => onEditClick(item)} type={EButtonIconType.edit} />
                     </Grid>
+                    <Grid xs item>
+                        <ButtonIcon onClick={() => onDeleteClick(item)} type={EButtonIconType.delete} />
+                    </Grid>
                 </Grid>
             </div>
         </Grid>
@@ -62,41 +68,63 @@ const ProjectSprintTab = (props) => {
             childLevel = childLevel + 1
         }
         return _.map(items, (item) => {
-            return <Grid className="sprint-item-div" container direction={'column'} key={item.id}>{renderSprintItem(item, isChildItem, childLevel)}{!_.isNil(item.childs) && !_.isEmpty(item.childs) ? renderItems(item.childs, true, childLevel) : ''}</Grid>
+            return item.rowStatus !== ERowStatus.delete ? <Grid className="sprint-item-div" container direction={'column'} key={item.id}>{renderSprintItem(item, isChildItem, childLevel)}{!_.isNil(item.childs) && !_.isEmpty(item.childs) ? renderItems(item.childs, true, childLevel) : ''}</Grid> : ''
             // return <>{renderSprintItem(item, isChildItem, childLevel)}{!_.isNil(item.childs) && !_.isEmpty(item.childs) ? renderItems(item.childs, true, childLevel) : ''}</>
         })
     }
 
-    const onSubmit = (data) => {
+    const onSubmit = (data, isDelete = false) => {
         let items = _.cloneDeep(getValues(name))
-        if (data.rowStatus === ERowStatus.addNew) {
-            if (!_.isEmpty(activeId)) {
-                var sprint = deepFind(items, function (obj) {
-                    return obj.id === activeId
-                }, 'childs')
-                if (!_.isNil(sprint)) {
-                    let childs = sprint.childs
-                    if (_.isNil(childs)) {
-                        sprint.childs = [{ ...data, id: uuidv4() }]
-                    } else {
-                        childs.push({ ...data, id: uuidv4() })
+        if (isDelete === false) {
+            if (data.rowStatus === ERowStatus.addNew) {
+                if (!_.isEmpty(data.parentId)) {
+                    var sprint = deepFind(items, function (obj) {
+                        return obj.id === data.parentId
+                    }, 'childs')
+                    if (!_.isNil(sprint)) {
+                        let childs = sprint.childs
+                        if (_.isNil(childs)) {
+                            sprint.childs = [{ ...data }]
+                        } else {
+                            childs.push({ ...data })
+                        }
                     }
+                } else {
+                    items.push(data)
                 }
             } else {
-                items.push(data)
+                let sprint = deepFind(items, function (obj) {
+                    return obj.id === data.id
+                }, 'childs')
+                if (!_.isNil(sprint)) {
+                    sprint.name = data.name
+                    sprint.startDate = data.startDate
+                    sprint.endDate = data.endDate
+                    sprint.rowStatus = data.rowStatus
+                }
             }
         } else {
-            var sprint = deepFind(items, function (obj) {
+            let sprint = deepFind(items, function (obj) {
                 return obj.id === data.id
             }, 'childs')
             if (!_.isNil(sprint)) {
-                sprint.name = data.name
-                sprint.startDate = data.startDate
-                sprint.endDate = data.endDate
-                sprint.rowStatus = data.rowStatus
+                if (sprint.rowStatus === ERowStatus.addNew) {
+                    if (!_.isNil(sprint.parentId)) {
+                        let parent = deepFind(items, function (obj) {
+                            return obj.id === sprint.parentId
+                        }, 'childs')
+                        if (!_.isNil(parent)) {
+                            parent.childs = _.filter(parent.childs, (x) => x.id !== sprint.id)
+                        }
+                    } else {
+                        _.remove(items, sprint)
+                    }
+                } else {
+                    sprint.rowStatus = ERowStatus.delete
+                }
             }
         }
-        onValueChange && onValueChange([...items], name, EControlType.listObject)
+        onValueChange && onValueChange([...items], name, EControlType.listObject, data, isDelete)
         setValue(name, [...items])
         // setOpenPopup(false)
     }

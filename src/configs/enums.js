@@ -217,7 +217,8 @@ export const EProjectTypeOption = {
 export const ERowStatus = {
   addNew: 0,
   update: 1,
-  noChange: 2
+  noChange: 2,
+  delete: 3
 }
 
 export const _TemplateVariant = EVariant.normal

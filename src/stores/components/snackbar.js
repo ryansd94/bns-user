@@ -18,7 +18,7 @@ const slice = createSlice({
       } else {
         state.open = true;
         state.severity = "error";
-        state.title = action.payload.title;
+        state.title = action.payload.title || action.payload.data;
       }
     },
     close: (state, action) => {

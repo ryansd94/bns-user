@@ -10,9 +10,11 @@ import { message, ERowStatus } from "configs"
 import { yupResolver } from "@hookform/resolvers/yup"
 import * as Yup from "yup"
 import { v4 as uuidv4 } from 'uuid'
+import { CheckBoxControl } from "components/checkbox"
 
 const ProjectSprintTabPopup = (props) => {
     const { onSubmit, data = {}, handleClose } = props
+    const [open, setOpen] = useState(data?.open)
     const { t } = useTranslation()
 
     const validationSchema = Yup.object().shape({
@@ -29,17 +31,22 @@ const ProjectSprintTabPopup = (props) => {
         defaultValues: {
             name: '',
             startDate: null,
-            endDate: null
+            endDate: null,
+            active: true
         }
     })
 
     useEffect(() => {
-        setValue('name', data.name)
-        setValue('startDate', data.startDate)
-        setValue('endDate', data.endDate)
+        setOpen(data.open)
+        if (data.open === true) {
+            setValue('name', data.name)
+            setValue('startDate', data.startDate)
+            setValue('endDate', data.endDate)
+        }
     }, [data])
 
     const onApplyClick = (item) => {
+        item.parentId = data?.parentId
         if (_.isNil(data?.id)) {
             item.id = uuidv4()
             item.rowStatus = ERowStatus.addNew
@@ -52,6 +59,7 @@ const ProjectSprintTabPopup = (props) => {
             reset()
         } else {
             handleClose()
+            setOpen(false)
         }
     }
 
@@ -80,17 +88,24 @@ const ProjectSprintTabPopup = (props) => {
                         name={`endDate`} />
                 </Grid>
             </Grid>
+            <Grid item xs>
+                <CheckBoxControl
+                    label={t("Active")}
+                    control={control}
+                    name={`active`} />
+            </Grid>
         </Grid>
     }
 
     return <>
         <Popup
+            removeOnChangeDisabled={false}
             title={!_.isNil(data.id) ? t('Edit sprint') : t('Add new sprint')}
             typeSave=''
             labelSave={!_.isNil(data.id) ? t('Apply') : t('Add')}
             handleClose={handleClose}
             isEditData={false}
-            open={data?.open}
+            open={open}
             reset={reset}
             ModalBody={renderPopupAddContent}
             widthSize={"sm"}

@@ -69,7 +69,7 @@ const Popup = React.memo((props) => {
   const dispatch = useDispatch()
   const { ModalBody, open = null, title = null,
     onSave, widthSize = "sm", reset, typeSave = EButtonDetailType.save,
-    isShowFooter = true, handleClose = null, labelSave = '', disabledSave = false } = props
+    isShowFooter = true, handleClose = null, labelSave = '', disabledSave = false, removeOnChangeDisabled = true } = props
   const stateOpen = !_.isNil(open) ? open : useSelector((state) => state.popup.open)
   const [openPopup, setOpen] = useState(open)
   const [disabled, setDisabled] = useState(disabledSave)
@@ -96,14 +96,17 @@ const Popup = React.memo((props) => {
   }, [disabledSave])
 
   useEffect(() => {
+    setDisabled(disabledSave)
     if (!_.isNil(open)) {
       setOpen(open)
     }
   }, [open])
 
   useEffect(() => {
-    if (!stateOpen) {
+    if (stateOpen === false) {
+      onClose()
       reset && reset()
+      setDisabled(disabledSave)
     }
   }, [stateOpen])
 
@@ -118,7 +121,9 @@ const Popup = React.memo((props) => {
     eventEmitter.on('onChangeDisabled', onChangeDisabled)
 
     return () => {
-      eventEmitter.off('onChangeDisabled')
+      if (removeOnChangeDisabled === true) {
+        eventEmitter.off('onChangeDisabled')
+      }
     }
   }, [])
 

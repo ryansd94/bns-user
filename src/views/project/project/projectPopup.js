@@ -4,20 +4,21 @@ import { useTranslation } from "react-i18next"
 import { useSelector, useDispatch } from "react-redux"
 import * as Yup from "yup"
 import { useForm } from "react-hook-form"
-import { open, change_title } from "components/popup/popupSlice"
+import { open, change_title, close } from "components/popup/popupSlice"
 import { openMessage } from "stores/components/snackbar"
 import {
     setLoadingPopup,
     setReload,
 } from "stores/views/master"
 import { getByID, save2 } from "services"
-import { ERROR_CODE, baseUrl, EProjectTypeOption, EControlType } from "configs"
+import { ERROR_CODE, baseUrl, EProjectTypeOption, EControlType, ERowStatus } from "configs"
 import { loading as loadingButton } from "stores/components/button"
 import { message, EWidth } from "configs"
 import _ from 'lodash'
 import ProjectCreateContent from './projectCreateContent'
 import { getCustomResolverTab } from "helpers"
 import eventEmitter from 'helpers/eventEmitter'
+import { deepFindAll, deepFind } from "helpers/commonFunction"
 import { get } from "services"
 
 const ProjectPopup = React.memo((props) => {
@@ -105,18 +106,20 @@ const ProjectPopup = React.memo((props) => {
 
     const onSubmit = async (data) => {
         console.log(data)
-        dispatch(loadingButton(true))
-        var postData = data
-        if (!_.isEmpty(editData)) postData.id = editData
-        const res = await save2(baseUrl.jm_project, postData)
-        dispatch(loadingButton(false))
-        dispatch(openMessage({ ...res }))
-        if (res.errorCode == ERROR_CODE.success) {
-            dispatch(setReload())
-        }
+        // dispatch(loadingButton(true))
+        // var postData = data
+        // if (!_.isEmpty(editData)) postData.id = editData
+        // const res = await save2(baseUrl.jm_project, postData)
+        // dispatch(loadingButton(false))
+        // dispatch(openMessage({ ...res }))
+        // if (res.errorCode == ERROR_CODE.success) {
+        //     dispatch(setReload())
+        //     dispatch(close())
+        //     // reset()
+        // }
     }
 
-    const onValueChange = (value, name, type = EControlType.textField) => {
+    const onValueChange = (value, name, type = EControlType.textField, valueChange = null, isDelete = false) => {
         if (_.isNil(editData)) return
         let changeFields = getValues('changeFields') || []
         let field = _.find(changeFields, (x) => x.key === name)
@@ -124,9 +127,13 @@ const ProjectPopup = React.memo((props) => {
         let isDiffernt = false
 
         if (_.isNil(field)) {
-            originValue = _.sortBy(getValues(name))
+            originValue = getValues(name)
         } else {
-            originValue = _.sortBy(field.originValue)
+            originValue = field.originValue
+        }
+
+        if (type === EControlType.transferList) {
+            originValue = _.sortBy(originValue)
         }
 
         if (_.isNumber(originValue) || _.isNumber(value)) {
@@ -148,16 +155,81 @@ const ProjectPopup = React.memo((props) => {
         }
 
         if (isDiffernt === true) {
-            let newValue = value
+            let newValue = []
             if (type === EControlType.transferList) {
+                newValue = _.cloneDeep(value)
                 let deleteValues = _.difference(originValue, value)
                 let addValues = _.difference(value, originValue)
                 newValue = { deleteValues, addValues }
-            }
-            if (_.isNil(field)) {
-                changeFields.push({ key: name, value: newValue, originValue, type })
+            } else if (type === EControlType.listObject) {
+                newValue = []
+                if (!_.isNil(field)) {
+                    newValue = field.value
+                }
+
+                if (!_.isNil(valueChange) && isDelete === false) {
+                    if (valueChange.rowStatus === ERowStatus.addNew) {
+                        if (_.isNil(valueChange.parentId)) {
+                            newValue.push(valueChange)
+                        } else {
+                            let parent = deepFind(newValue, function (obj) {
+                                return obj.id === valueChange.parentId
+                            }, 'childs')
+                            if (!_.isNil(parent)) {
+                                if (!_.isNil(parent.childs)) {
+                                    parent.childs.push(valueChange)
+                                } else {
+                                    parent.childs = [{ ...valueChange }]
+                                }
+                            } else {
+                                newValue.push(valueChange)
+                            }
+                        }
+                    } else {
+                        let updatedValue = deepFind(newValue, function (obj) {
+                            return obj.id === valueChange.id
+                        }, 'childs')
+                        if (!_.isEmpty(updatedValue)) {
+                            _.assign(updatedValue, valueChange);
+                        } else {
+                            newValue.push(updatedValue)
+                        }
+                    }
+                } else {
+                    const deleteValue = deepFind(newValue, function (x) {
+                        return x.id === valueChange.id
+                    }, 'childs')
+                    if (_.isNil(deleteValue)) {
+                        newValue.push(updatedValue)
+                    } else {
+                        let parentDeleted = deepFind(newValue, function (x) {
+                            return x.id === deleteValue.parentId
+                        }, 'childs')
+                        if (!_.isNil(parentDeleted)) {
+                            parentDeleted.childs = _.filter(parentDeleted.childs, (x) => x.id !== deleteValue.id)
+                        } else {
+                            newValue = _.filter(newValue, (x) => x.id !== deleteValue.id)
+                        }
+                    }
+                }
             } else {
-                field.value = newValue
+                newValue = value
+            }
+
+            if (_.isNil(field)) {
+                if (type === EControlType.listObject) {
+                    if (!_.isEmpty(newValue)) {
+                        changeFields.push({ key: name, value: newValue, originValue, type })
+                    }
+                } else {
+                    changeFields.push({ key: name, value: newValue, originValue, type })
+                }
+            } else {
+                if (!_.isEmpty(newValue)) {
+                    field.value = newValue
+                } else {
+                    changeFields = _.filter(changeFields, (x) => x.key !== name)
+                }
             }
         } else {
             if (!_.isNil(field)) {
@@ -169,7 +241,7 @@ const ProjectPopup = React.memo((props) => {
         eventEmitter.emit('onChangeDisabled', !_.isEmpty(changeFields) ? false : true)
     }
 
-    function ModalBody() {
+    const renderModalBody = () => {
         return <ProjectCreateContent
             members={members}
             onValueChange={onValueChange}
@@ -188,7 +260,7 @@ const ProjectPopup = React.memo((props) => {
                 disabledSave={!_.isEmpty(editData) ? true : false}
                 widthSize={EWidth.lg}
                 reset={reset}
-                ModalBody={ModalBody}
+                ModalBody={renderModalBody}
                 onSave={handleSubmit(onSubmit)}
             />
         </div>

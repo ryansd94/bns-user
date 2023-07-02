@@ -9,13 +9,6 @@ import { EPermissionObject } from "configs"
 const ProjectMemberTab = (props) => {
     const { control, setValue, getValues, users, teams, onValueChange } = props
     const { t } = useTranslation()
-    const [userSelectedIds, setUserSelectedIds] = useState([])
-    const [teamSelectedIds, setTeamSelectedIds] = useState([])
-
-    useEffect(() => {
-        setUserSelectedIds(getValues('members') || [])
-        setTeamSelectedIds(getValues('teams') || [])
-    }, [])
 
     const renderTeamItem = (data) => {
         return <Grid xs item container gap={2}>
@@ -53,7 +46,6 @@ const ProjectMemberTab = (props) => {
                 details={
                     <TransferList
                         renderItem={(data) => renderTeamItem(data)}
-                        itemApllyIds={teamSelectedIds}
                         items={teams}
                         control={control}
                         leftTitle={t('Team list')}
@@ -73,7 +65,6 @@ const ProjectMemberTab = (props) => {
                 details={
                     <TransferList
                         renderItem={(data) => renderUserItem(data)}
-                        itemApllyIds={userSelectedIds}
                         items={users}
                         control={control}
                         leftTitle={t('User list')}
