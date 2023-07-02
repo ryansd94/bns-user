@@ -7,6 +7,8 @@ import {
 } from "stores/views/template"
 import { useTranslation } from "react-i18next"
 import { EFilterType } from "configs"
+import { getPathItem } from "helpers"
+
 const TemplateToolbar = (props) => {
     console.log("render template toolbar")
     const { onApplyFilter } = props
@@ -27,9 +29,9 @@ const TemplateToolbar = (props) => {
         columnVisibility[event.target.name] = event.target.checked
         dispatch(setColumnVisibility({ ...columnVisibility }))
     }
-    
+
     const handleClickOpen = () => {
-        window.open(`/template/add`)
+        window.open(getPathItem(`/template/add`, false))
     }
 
     return <div>

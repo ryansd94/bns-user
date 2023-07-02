@@ -4,11 +4,11 @@ import { useTranslation } from "react-i18next"
 import _ from 'lodash'
 import { EButtonType, EButtonIconType, EControlType, ERowStatus } from "configs"
 import ButtonFuntion from "components/button/ButtonFuntion"
-import Popup from "components/popup/Popup"
 import ProjectSprintTabPopup from "./projectSprintTabPopup"
 import { formatDate, deepFind } from "helpers/commonFunction"
 import ButtonIcon from "components/button/ButtonIcon"
 import { Controller } from "react-hook-form"
+import { CheckBoxCellRender } from 'components/cellRender'
 
 const ProjectSprintTab = (props) => {
     console.log('render ProjectSprintTab')
@@ -35,6 +35,7 @@ const ProjectSprintTab = (props) => {
             <Grid item xs={6}>{t("Sprint name")}</Grid>
             <Grid item xs>{t("Start date")}</Grid>
             <Grid item xs>{t("End date")}</Grid>
+            <Grid item xs>{t("Active")}</Grid>
         </Grid>
     }
 
@@ -47,6 +48,7 @@ const ProjectSprintTab = (props) => {
             <Grid item xs={6} style={style}>{item.name}</Grid>
             <Grid item xs>{formatDate(item.startDate)}</Grid>
             <Grid item xs>{formatDate(item.endDate)}</Grid>
+            <Grid item xs><CheckBoxCellRender disabled={true} checked={item.active} /></Grid>
             <div className="sprint-item-action">
                 <Grid item gap={2} container >
                     <Grid xs item>
@@ -97,10 +99,7 @@ const ProjectSprintTab = (props) => {
                     return obj.id === data.id
                 }, 'childs')
                 if (!_.isNil(sprint)) {
-                    sprint.name = data.name
-                    sprint.startDate = data.startDate
-                    sprint.endDate = data.endDate
-                    sprint.rowStatus = data.rowStatus
+                    _.assign(sprint, data)
                 }
             }
         } else {
@@ -124,7 +123,7 @@ const ProjectSprintTab = (props) => {
                 }
             }
         }
-        onValueChange && onValueChange([...items], name, EControlType.listObject, data, isDelete)
+        onValueChange && onValueChange(data, name, EControlType.listObject, isDelete)
         setValue(name, [...items])
         // setOpenPopup(false)
     }

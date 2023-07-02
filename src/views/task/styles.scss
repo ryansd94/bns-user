@@ -11,11 +11,6 @@
     &:hover {
         overflow-x: overlay;
     }
-    .react-swipeable-view-container {
-        flex-flow: column nowrap;
-        flex-direction: column !important;
-        overflow: auto;
-    }
 }
 .task-column-content {
     > .MuiGrid-root {

@@ -1,115 +1,125 @@
 import _ from 'lodash'
+import { EControlType, ERowStatus } from "configs"
+import { deepFind } from "helpers/commonFunction"
 
 const DiffTracker = {
-  getDiff: function getDiff (newObject, oldObject, filterProperties = [], ignoreFields = []) {
-    const cloneNewObject = _.cloneDeep(newObject)
+  getChangeFieldsOnChange: function getChangeFieldsOnChange(value, name, type = EControlType.textField, isDelete = false, getValues) {
+    let changeFields = getValues('changeFields') || []
+    let field = _.find(changeFields, (x) => x.key === name)
+    let originValue = null
+    let isDiffernt = false
 
-    const trackChanges = (newObject, oldObject, objectName) => {
-      const isRootLevel = !objectName
-      const cloneNewObject = _.cloneDeep(newObject)
+    if (_.isNil(field)) {
+      originValue = getValues(name)
+    } else {
+      originValue = field.originValue
+    }
 
-      return _.transform(cloneNewObject, (result, value, key) => {
-        const currentField = !_.isEmpty(objectName) ? objectName + '.' + key : key
+    if (type === EControlType.transferList) {
+      originValue = _.sortBy(originValue)
+    }
 
+    if (_.isNumber(originValue) || _.isNumber(value)) {
+      if (originValue != value) {
+        isDiffernt = true
+      }
+    } else if (type === EControlType.transferList) {
+      if (_.isNil(value)) {
+        value = []
+      }
+      if (_.isNil(originValue)) {
+        originValue = []
+      }
+      if (!_.isEqual(originValue, _.sortBy(value))) {
+        isDiffernt = true
+      }
+    } else if (!_.isEqual(originValue, value)) {
+      isDiffernt = true
+    }
 
-        let isDifferent = false
-
-        if (_.isEmpty(filterProperties)) { // compare by order
-          isDifferent = !_.isEqual(value, oldObject[key])
-        } else { // compare by key
-          isDifferent = _.isArray(oldObject)
-            ? !_.isEqual(_.omit(value, getPropertiesByObjectName(objectName, ignoreFields)), _.omit(getOldObjectItem(oldObject, objectName, value, key), getPropertiesByObjectName(objectName, ignoreFields)))
-            : !getPropertiesByObjectName(objectName, ignoreFields).includes(key) && !_.isEqual(value, oldObject[key])
+    if (isDiffernt === true) {
+      let newValue = []
+      if (type === EControlType.transferList) {
+        newValue = _.cloneDeep(value)
+        let deleteValues = _.difference(originValue, value)
+        let addValues = _.difference(value, originValue)
+        newValue = { deleteValues, addValues }
+      } else if (type === EControlType.listObject) {
+        newValue = []
+        if (!_.isNil(field)) {
+          newValue = field.value
         }
-        
-        if (isDifferent) {
-          if (_.isObject(value) && _.isObject(oldObject[key])) {
-            if (_.isArray(result)) {
-              if (_.isEmpty(filterProperties)) { // ver 1
-                result.push(trackChanges(value, oldObject[key], _.isArray(oldObject) ? objectName : key))
-              } else { // ver 2
-                let oldObjectItem = getOldObjectItem(oldObject, objectName, value, key)
 
-                // added
-                if (_.isEmpty(oldObjectItem)) {
-                  result.push(value)
-                } else { // modified
-                  let item = trackChanges(value, oldObjectItem, _.isArray(oldObject) ? objectName : key)
-                  if (!_.isEmpty(item)) {
-                    result.push(item)
-                  }
-                }
-              }
+        if (!_.isNil(value) && isDelete === false) {
+          if (value.rowStatus === ERowStatus.addNew) {
+            if (_.isNil(value.parentId)) {
+              newValue.push(value)
             } else {
-              result[key] = trackChanges(value, oldObject[key], _.isArray(oldObject) ? objectName : key)
-            }
-          }
-          else {
-            if (_.isArray(result)) {
-              if (_.isEmpty(filterProperties)) { // ver 1
-                result.push(value)
-              } else { // ver 2
-                let oldObjectItem = getOldObjectItem(oldObject, objectName, value, key)
-
-                // added
-                if (_.isEmpty(oldObjectItem)) {
-                  result.push(value)
+              let parent = deepFind(newValue, function (obj) {
+                return obj.id === value.parentId
+              }, 'childs')
+              if (!_.isNil(parent)) {
+                if (!_.isNil(parent.childs)) {
+                  parent.childs.push(value)
                 } else {
-                  let item = trackChanges(value, oldObjectItem, _.isArray(oldObject) ? objectName : key)
-                  if (!_.isEmpty(item)) {
-                    result.push(item)
-                  }
+                  parent.childs = [{ ...value }]
                 }
+              } else {
+                newValue.push(value)
               }
+            }
+          } else {
+            let updatedValue = deepFind(newValue, function (obj) {
+              return obj.id === value.id
+            }, 'childs')
+            if (!_.isNil(updatedValue)) {
+              _.assign(updatedValue, value);
             } else {
-              result[key] = value
+              newValue.push(value)
+            }
+          }
+        } else {
+          const deleteValue = deepFind(newValue, function (x) {
+            return x.id === value.id
+          }, 'childs')
+          if (_.isNil(deleteValue)) {
+            newValue.push(value)
+          } else {
+            let parentDeleted = deepFind(newValue, function (x) {
+              return x.id === deleteValue.parentId
+            }, 'childs')
+            if (!_.isNil(parentDeleted)) {
+              parentDeleted.childs = _.filter(parentDeleted.childs, (x) => x.id !== deleteValue.id)
+            } else {
+              newValue = _.filter(newValue, (x) => x.id !== deleteValue.id)
             }
           }
         }
-      })
-    }
-
-    const getPropertyByObjectName = (objectName, properties) => {
-      if (_.isEmpty(objectName)) {
-        return _.find(properties, function (property) {
-          return property.indexOf('.') < 0
-        })
       } else {
-        let property = _.find(properties, function (property) {
-          return property.indexOf(objectName) >= 0
-        })
-        return _.replace(property, objectName + '.', '')
+        newValue = value
+      }
+
+      if (_.isNil(field)) {
+        if (type === EControlType.listObject) {
+          if (!_.isEmpty(newValue)) {
+            changeFields.push({ key: name, value: newValue, originValue, type })
+          }
+        } else {
+          changeFields.push({ key: name, value: newValue, originValue, type })
+        }
+      } else {
+        if (!_.isEmpty(newValue)) {
+          field.value = newValue
+        } else {
+          changeFields = _.filter(changeFields, (x) => x.key !== name)
+        }
+      }
+    } else {
+      if (!_.isNil(field)) {
+        changeFields = _.filter(changeFields, (x) => x.key !== name)
       }
     }
-
-    const getPropertiesByObjectName = (objectName, properties) => {
-      if (_.isEmpty(objectName)) {
-        return _.filter(properties, function (property) {
-          return property.indexOf('.') < 0
-        })
-      } else {
-        let prps = _.filter(properties, function (property) {
-          return property.indexOf(objectName) >= 0
-        })
-        let finalProperties = []
-        _.forEach(prps, (prp) => {
-          finalProperties.push(_.replace(prp, objectName + '.', ''))
-        })
-        return finalProperties
-      }
-    }
-
-    const getOldObjectItem = (oldObject, objectName, value, key) => {
-      return _.isArray(oldObject)
-        ? _.find(oldObject, function (o) {
-          let filterProperty = getPropertyByObjectName(objectName, filterProperties)
-          return _.isEmpty(filterProperty) ? _.isEqual(value, o) : _.isEqual(value[filterProperty], o[filterProperty])
-        })
-        : oldObject[key]
-    }
-
-    let diff = trackChanges(cloneNewObject, oldObject)
-    return diff
+    return changeFields
   },
 }
 export default DiffTracker

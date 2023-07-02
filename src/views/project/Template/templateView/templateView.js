@@ -154,20 +154,22 @@ const TemplateAdd = React.memo((props) => {
   }
 
   return (
-    <>
-      <Grid className="of-hidden flex-column no-wrap" container gap={2}>
-        <Grid item xs={12} className='flex-basis-auto'>
-          <ButtonDetail
-            disabled={!_.isNil(id) ? disabled : false}
-            onClick={handleSubmit(onSubmit)} type={"Save"} />
+    <div className="body-content">
+      <div className="body-content-item of-hidden flex-container ">
+        <Grid className="of-hidden flex-column no-wrap" container gap={2}>
+          <Grid item xs={12} className='flex-basis-auto'>
+            <ButtonDetail
+              disabled={!_.isNil(id) ? disabled : false}
+              onClick={handleSubmit(onSubmit)} type={"Save"} />
+          </Grid>
+          <div className="containerNew">
+            <Grid item container direction='column' xs={12} className="flex-basis-auto of-hidden">
+              <TabControl tabItems={getTabItems()} />
+            </Grid>
+          </div>
         </Grid>
-        <div className="containerNew">
-          <Box className="flex-column flex-row of-hidden">
-            <TabControl classNameSwipeableView={'ofy-auto'} tabItems={getTabItems()} />
-          </Box>
-        </div>
-      </Grid>
-    </>
+      </div>
+    </div>
   )
 })
 

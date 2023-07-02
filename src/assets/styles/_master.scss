@@ -787,3 +787,14 @@ a:hover {
 .sprint-item-div:not(:last-child) {
     border-bottom: $border_control;
 }
+.MuiCheckbox-root {
+    padding: 0 !important;
+}
+.MuiFormControlLabel-root{
+    margin-left: 0 !important;
+    gap: 0.5rem;
+}
+
+// .react-swipeable-view-container {
+//     transform: translate(0%, 0px) !important;
+// }

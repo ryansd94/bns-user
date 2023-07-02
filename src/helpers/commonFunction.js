@@ -86,9 +86,11 @@ export const getProjectPath = (path) => {
     return path
 }
 
-export const getPathItem = (url) => {
+export const getPathItem = (url, isProjectPath = true) => {
     let path = url
-    path = getProjectPath(path)
+    if (isProjectPath === true) {
+        path = getProjectPath(path)
+    }
     const user = getUserInfo()
     if (user) {
         const defaultOrganization = user.defaultOrganization

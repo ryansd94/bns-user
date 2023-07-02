@@ -18,8 +18,8 @@ import _ from 'lodash'
 import ProjectCreateContent from './projectCreateContent'
 import { getCustomResolverTab } from "helpers"
 import eventEmitter from 'helpers/eventEmitter'
-import { deepFindAll, deepFind } from "helpers/commonFunction"
 import { get } from "services"
+import DiffTracker from "helpers/diffTracker"
 
 const ProjectPopup = React.memo((props) => {
     console.log('render ProjectPopup')
@@ -106,136 +106,22 @@ const ProjectPopup = React.memo((props) => {
 
     const onSubmit = async (data) => {
         console.log(data)
-        // dispatch(loadingButton(true))
-        // var postData = data
-        // if (!_.isEmpty(editData)) postData.id = editData
-        // const res = await save2(baseUrl.jm_project, postData)
-        // dispatch(loadingButton(false))
-        // dispatch(openMessage({ ...res }))
-        // if (res.errorCode == ERROR_CODE.success) {
-        //     dispatch(setReload())
-        //     dispatch(close())
-        //     // reset()
-        // }
+        dispatch(loadingButton(true))
+        var postData = data
+        if (!_.isEmpty(editData)) postData.id = editData
+        const res = await save2(baseUrl.jm_project, postData)
+        dispatch(loadingButton(false))
+        dispatch(openMessage({ ...res }))
+        if (res.errorCode == ERROR_CODE.success) {
+            dispatch(setReload())
+            dispatch(close())
+            // reset()
+        }
     }
 
-    const onValueChange = (value, name, type = EControlType.textField, valueChange = null, isDelete = false) => {
+    const onValueChange = (value, name, type = EControlType.textField, isDelete = false) => {
         if (_.isNil(editData)) return
-        let changeFields = getValues('changeFields') || []
-        let field = _.find(changeFields, (x) => x.key === name)
-        let originValue = null
-        let isDiffernt = false
-
-        if (_.isNil(field)) {
-            originValue = getValues(name)
-        } else {
-            originValue = field.originValue
-        }
-
-        if (type === EControlType.transferList) {
-            originValue = _.sortBy(originValue)
-        }
-
-        if (_.isNumber(originValue) || _.isNumber(value)) {
-            if (originValue != value) {
-                isDiffernt = true
-            }
-        } else if (type === EControlType.transferList) {
-            if (_.isNil(value)) {
-                value = []
-            }
-            if (_.isNil(originValue)) {
-                originValue = []
-            }
-            if (!_.isEqual(originValue, _.sortBy(value))) {
-                isDiffernt = true
-            }
-        } else if (!_.isEqual(originValue, value)) {
-            isDiffernt = true
-        }
-
-        if (isDiffernt === true) {
-            let newValue = []
-            if (type === EControlType.transferList) {
-                newValue = _.cloneDeep(value)
-                let deleteValues = _.difference(originValue, value)
-                let addValues = _.difference(value, originValue)
-                newValue = { deleteValues, addValues }
-            } else if (type === EControlType.listObject) {
-                newValue = []
-                if (!_.isNil(field)) {
-                    newValue = field.value
-                }
-
-                if (!_.isNil(valueChange) && isDelete === false) {
-                    if (valueChange.rowStatus === ERowStatus.addNew) {
-                        if (_.isNil(valueChange.parentId)) {
-                            newValue.push(valueChange)
-                        } else {
-                            let parent = deepFind(newValue, function (obj) {
-                                return obj.id === valueChange.parentId
-                            }, 'childs')
-                            if (!_.isNil(parent)) {
-                                if (!_.isNil(parent.childs)) {
-                                    parent.childs.push(valueChange)
-                                } else {
-                                    parent.childs = [{ ...valueChange }]
-                                }
-                            } else {
-                                newValue.push(valueChange)
-                            }
-                        }
-                    } else {
-                        let updatedValue = deepFind(newValue, function (obj) {
-                            return obj.id === valueChange.id
-                        }, 'childs')
-                        if (!_.isEmpty(updatedValue)) {
-                            _.assign(updatedValue, valueChange);
-                        } else {
-                            newValue.push(updatedValue)
-                        }
-                    }
-                } else {
-                    const deleteValue = deepFind(newValue, function (x) {
-                        return x.id === valueChange.id
-                    }, 'childs')
-                    if (_.isNil(deleteValue)) {
-                        newValue.push(updatedValue)
-                    } else {
-                        let parentDeleted = deepFind(newValue, function (x) {
-                            return x.id === deleteValue.parentId
-                        }, 'childs')
-                        if (!_.isNil(parentDeleted)) {
-                            parentDeleted.childs = _.filter(parentDeleted.childs, (x) => x.id !== deleteValue.id)
-                        } else {
-                            newValue = _.filter(newValue, (x) => x.id !== deleteValue.id)
-                        }
-                    }
-                }
-            } else {
-                newValue = value
-            }
-
-            if (_.isNil(field)) {
-                if (type === EControlType.listObject) {
-                    if (!_.isEmpty(newValue)) {
-                        changeFields.push({ key: name, value: newValue, originValue, type })
-                    }
-                } else {
-                    changeFields.push({ key: name, value: newValue, originValue, type })
-                }
-            } else {
-                if (!_.isEmpty(newValue)) {
-                    field.value = newValue
-                } else {
-                    changeFields = _.filter(changeFields, (x) => x.key !== name)
-                }
-            }
-        } else {
-            if (!_.isNil(field)) {
-                changeFields = _.filter(changeFields, (x) => x.key !== name)
-            }
-        }
+        let changeFields = DiffTracker.getChangeFieldsOnChange(value, name, type, isDelete, getValues)
         setValue('changeFields', changeFields)
         console.log(changeFields)
         eventEmitter.emit('onChangeDisabled', !_.isEmpty(changeFields) ? false : true)

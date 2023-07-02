@@ -3,9 +3,10 @@ import Grid from "@mui/material/Grid"
 import { useTranslation } from "react-i18next"
 import ButtonIcon from "components/button/ButtonIcon"
 import { useFieldArray } from "react-hook-form"
-import { EButtonIconType } from "configs"
+import { EButtonIconType, EButtonType } from "configs"
 import { v4 as uuidv4 } from 'uuid'
 import StatusSelect from 'components/select/statusSelect'
+import ButtonFuntion from "components/button/ButtonFuntion"
 
 const StatusTemplate = React.memo((props) => {
     console.log("render StatusTemplate");
@@ -76,8 +77,8 @@ const StatusTemplate = React.memo((props) => {
         if (statusItem.isDelete)
             return ''
         return (
-            <Grid key={uuidv4()} item xs={12} container spacing={2} >
-                <Grid item xs={5}>
+            <Grid key={uuidv4()} item gap={2} container alignItems={'center'}>
+                <Grid item xs={3}>
                     <StatusSelect
                         onChange={(value) => onStatusChange(index, value)}
                         options={[...statusData]}
@@ -86,7 +87,7 @@ const StatusTemplate = React.memo((props) => {
                         control={control}
                     />
                 </Grid>
-                <Grid item  >
+                <Grid item>
                     <ButtonIcon
                         onClick={() => onStatusDelete(index, statusItem.id)}
                         type={EButtonIconType.delete}
@@ -99,16 +100,14 @@ const StatusTemplate = React.memo((props) => {
 
     return (
         <Grid container gap={2} direction="column" item>
-            <Grid item container xs={12}>
+            <Grid item container>
                 <Grid className="flex-container" container item xs={5}>
-                    <span className="text-note">
-                        {t("Trạng thái")}
-                    </span>
-                    <ButtonIcon showTooltip={false} onClick={addNew} type={EButtonIconType.add} />
+                    <ButtonFuntion onClick={addNew} isFloatLeft={true} type={EButtonType.add} label={t('Add status')} />
                 </Grid>
             </Grid>
-            {statusTemplate && statusTemplate.map((statusItem, index) => { return genderListStatus(statusItem, index) })}
-
+            <Grid container gap={2} direction="column" item>
+                {statusTemplate && statusTemplate.map((statusItem, index) => { return genderListStatus(statusItem, index) })}
+            </Grid>
         </Grid>
     )
 })

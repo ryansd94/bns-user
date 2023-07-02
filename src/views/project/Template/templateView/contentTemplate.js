@@ -465,12 +465,16 @@ const ContentTemplate = (props) => {
     <Controller
       name={name}
       render={({ field, fieldState: { error } }) =>
-        <Grid container spacing={2}>
-          <Grid className="flex-container" item xs={12}>
-            <span>1111111</span>
-            <TextInput control={control} name="title" disabled />
+        <Grid container gap={2}>
+          <Grid container alignItems={'center'} gap={2} item xs={12}>
+            <Grid item>
+              <span>1111111</span>
+            </Grid>
+            <Grid item xs>
+              <TextInput control={control} name="title" disabled />
+            </Grid>
           </Grid>
-          <Grid className="flex-container" container spacing={2} item xs={12}>
+          <Grid className="flex-container" container gap={2} item xs={12}>
             <Grid item>
               <AssignSelect
                 control={control}
@@ -486,10 +490,10 @@ const ContentTemplate = (props) => {
               />
             </Grid>
           </Grid>
-          <Grid item xs>
+          <Grid item xs container>
             <DragDropContextContainer>
               <DragDropContext onDragEnd={onDragEndTitle}>
-                <Grid className="task-column-content" container spacing={2} item xs={12} direction="row">
+                <Grid className="task-column-content no-wrap" container gap={2} item xs={12} direction="row">
                   <Grid key={2} item xs={12} sm={getElementControls("column3").length > 0 ? 6 : 9}>
                     <DraggableElement
                       field={field}

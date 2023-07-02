@@ -42,6 +42,7 @@ const ProjectSprintTabPopup = (props) => {
             setValue('name', data.name)
             setValue('startDate', data.startDate)
             setValue('endDate', data.endDate)
+            setValue('active', data.active)
         }
     }, [data])
 
