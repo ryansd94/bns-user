@@ -205,5 +205,9 @@
     "Add sprint": "Thêm giai đoạn",
     "Sprint name": "Tên giai đoạn",
     "Add child sprint": "Thêm giai đoạn con",
-    "Add new sprint": "Thêm mới giai đoạn"
+    "Add new sprint": "Thêm mới giai đoạn",
+    "Plan": "Kế hoạch",
+    "Parent task": "Công việc cha",
+    "Child task":"Công việc con",
+    "Attachments":"Tệp đính kèm"
 }

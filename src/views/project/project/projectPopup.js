@@ -59,7 +59,7 @@ const ProjectPopup = React.memo((props) => {
     const customResolver = async (values, context) => {
         const result = await getCustomResolverTab(values, context, validationSchemaTab)
         if (!_.isEmpty(result.errorTab)) {
-            eventEmitter.emit('errorTabs', result.errorTab)
+            eventEmitter.emit('errorTabs', { errors: result.errorTab, id: 'projectTab' })
         }
         return result
     }

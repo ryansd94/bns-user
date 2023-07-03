@@ -12,7 +12,7 @@ import { LabelControl } from 'components/label'
 import _ from 'lodash'
 
 const MultiSelect = React.memo(
-  ({ control, required, data = [], label, name, placeholder, disabled, size, fullWidth, renderOption, renderTags }) => {
+  ({ control, required, data = [], label, name, placeholder, disabled, size, fullWidth, renderOption, renderTags, onChange }) => {
     const loadingPopup = useSelector((state) => state.master.loadingPopup)
     const [value, setValue] = React.useState([])
     const [text, setText] = React.useState("")
@@ -62,7 +62,7 @@ const MultiSelect = React.memo(
     return (
       <Controller
         name={name}
-        render={({ field: { onChange, value }, fieldState: { error } }) =>
+        render={({ field, fieldState: { error } }) =>
           loadingPopup ? (
             <Skeleton
               width={"100%"}
@@ -78,11 +78,12 @@ const MultiSelect = React.memo(
                 isOptionEqualToValue={(option, value) =>
                   option != null && value != null ? option.id === value.id : ""
                 }
-                value={value != null ? value : []}
+                value={field.value != null ? field.value : []}
                 filterSelectedOptions
                 getOptionLabel={(option) => (option ? option.name : "")}
                 onChange={(event, newValue) => {
-                  onChange(newValue)
+                  onChange && onChange(newValue, name)
+                  field.onChange(newValue)
                 }}
                 renderInput={(params) => {
                   params.inputProps.onKeyDown = handleKeyDown
@@ -115,16 +116,19 @@ const MultiSelect = React.memo(
                 isOptionEqualToValue={(option, value) =>
                   option != null && value != null ? option.id === value.id : ""
                 }
-                value={value != null ? getDataByDefaultValue(value) : []}
+                value={field.value != null ? getDataByDefaultValue(field.value) : []}
                 filterSelectedOptions
                 getOptionLabel={(option) => (option ? option.name : "")}
                 onChange={(event, newValue) => {
                   if (newValue.length > 0) {
-                    onChange(_.map(newValue, (item) => {
+                    const changedValues = _.map(newValue, (item) => {
                       return item.id
-                    }))
+                    })
+                    onChange && onChange(changedValues, name)
+                    field.onChange(changedValues)
                   } else {
-                    onChange([])
+                    onChange && onChange([], name)
+                    field.onChange([])
                   }
                 }}
                 renderOption={(props, option) => {

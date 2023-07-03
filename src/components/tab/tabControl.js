@@ -21,11 +21,9 @@ function TabPanel(props) {
       aria-labelledby={`full-width-tab-${index}`}
       {...other}
     >
-      {value === index && (
-        <div>
+      <div>
           {children}
         </div>
-      )}
     </div>
   )
 }
@@ -74,12 +72,12 @@ const AntTab = styled((props) => <Tab disableRipple {...props} />)(({ theme }) =
 }))
 
 const TabControl = (props) => {
-  const { tabItems = [], classNameSwipeableView } = props
+  const { tabItems = [], classNameSwipeableView, id } = props
   const indexDefault = _.findIndex(tabItems, (x) => x.isActive)
   const [value, setValue] = React.useState(indexDefault != -1 ? indexDefault : 0)
   const [errorTabs, setErrorTabs] = useState([])
 
-  const onHasErrors = (errors) => {
+  const onHasErrors = ({ errors }) => {
     setErrorTabs(errors)
   }
 
@@ -101,21 +99,19 @@ const TabControl = (props) => {
 
   return (
     <Grid container item flexWrap="nowrap" className="overflow-hidden" direction="column">
-      <div>
-        <AntTabs value={value} onChange={handleChange} aria-label="ant example">
-          {
-            _.map(tabItems, (item, index) => {
-              if (item.disabled === true) {
-                return <AntTab disabled={true} icon={<IconBlock />} iconPosition="start" key={index} label={item.label} />
-              }
-              if (_.includes(errorTabs, index)) {
-                return <AntTab icon={<IconRequire className='icon-require-tab' />} iconPosition="end" key={index} label={item.label} />
-              }
-              return <AntTab key={index} label={item.label} />
-            })
-          }
-        </AntTabs>
-      </div>
+      <AntTabs value={value} onChange={handleChange} aria-label="ant example">
+        {
+          _.map(tabItems, (item, index) => {
+            if (item.disabled === true) {
+              return <AntTab disabled={true} icon={<IconBlock />} iconPosition="start" key={index} label={item.label} />
+            }
+            if (_.includes(errorTabs, index)) {
+              return <AntTab icon={<IconRequire className='icon-require-tab' />} iconPosition="end" key={index} label={item.label} />
+            }
+            return <AntTab key={index} label={item.label} />
+          })
+        }
+      </AntTabs>
       <SwipeableViews
         className={`flex-column ofx-hiden ${classNameSwipeableView}`}
         animateTransitions={false}

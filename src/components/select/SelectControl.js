@@ -42,7 +42,7 @@ const SelectControl = React.memo((props) => {
     }
 
     useEffect(() => {
-        setSelectedOption(getSelectOptionName(!_.isNil(defaultValue) ? defaultValue : (options && options.length > 0 ? options[0].id : null)))
+        setSelectedOption(!_.isNil(defaultValue) ? defaultValue : (options && options.length > 0 ? options[0].id : null))
     }, [options])
 
     const genderControlElement = (field) => {

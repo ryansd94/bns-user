@@ -9,6 +9,7 @@ import IconButton from "@mui/material/IconButton"
 import { SpinningCircles } from "react-loading-icons"
 import { useSelector } from "react-redux"
 import Grid from "@mui/material/Grid"
+import eventEmitter from 'helpers/eventEmitter'
 
 const ButtonDetail = (props) => {
   const theme = createTheme({
@@ -20,9 +21,10 @@ const ButtonDetail = (props) => {
     },
   })
   const { t } = useTranslation()
-  const { type, onClick, autoFocus, disabled, className, isFloatRight = false, label } = props
+  const { type, onClick, autoFocus, disabled, className, isFloatRight = false, label, id } = props
   const [icon, setIcon] = useState("")
   const [text, setText] = useState(label)
+  const [xxx, setXxx] = useState(id)
   const [disabledButton, setDisabledButton] = useState(disabled)
   const [color, setColor] = useState(null)
   const [defaultLoading, setDefaultLoading] = useState(false)
@@ -58,6 +60,21 @@ const ButtonDetail = (props) => {
   useEffect(() => {
     setDisabledButton(disabled)
   }, [disabled])
+
+
+  const onChangeButtonDisabled = ({ buttonId, disabled }) => {
+    if (id === buttonId) {
+      setDisabledButton(disabled)
+    }
+  }
+
+  useEffect(() => {
+    eventEmitter.on('onChangeButtonDisabled', onChangeButtonDisabled)
+
+    return () => {
+      eventEmitter.off('onChangeButtonDisabled')
+    }
+  }, [])
 
   let button
   if (type != "Undo") {

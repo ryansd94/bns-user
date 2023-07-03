@@ -37,7 +37,7 @@
     "Delete file": "Delete file",
     "Drag and drop files here or tap to select files": "Drag and drop files here or tap to select files",
     "Description": "Description",
-    "Detail": "Detail",
+    "Detail": "Details",
     "Decentralization": "Decentralization",
     "Users": "Users",
     "Team": "Team",
@@ -205,5 +205,9 @@
     "Add sprint": "Add sprint",
     "Add new sprint": "Add new sprint",
     "Sprint name": "Sprint name",
-    "Add child sprint": "Add child sprint"
+    "Add child sprint": "Add child sprint",
+    "Plan": "Plan",
+    "Parent task": "Parent task",
+    "Child task": "Child task",
+    "Attachments":"Attachments"
 }

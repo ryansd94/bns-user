@@ -159,7 +159,7 @@ const TemplateAdd = React.memo((props) => {
         <Grid className="of-hidden flex-column no-wrap" container gap={2}>
           <Grid item xs={12} className='flex-basis-auto'>
             <ButtonDetail
-              disabled={!_.isNil(id) ? disabled : false}
+              // disabled={!_.isNil(id) ? disabled : false}
               onClick={handleSubmit(onSubmit)} type={"Save"} />
           </Grid>
           <div className="containerNew">

@@ -18,11 +18,11 @@ import {
 import { save } from "services"
 import _ from 'lodash'
 import { getCustomResolverTab } from "helpers"
+import eventEmitter from 'helpers/eventEmitter'
 
 const ProjectEmptyView = () => {
     const { t } = useTranslation()
     const dispatch = useDispatch()
-    const [errorTabs, setErrorTabs] = useState([])
     const validationSchemaTab = [{
         tabIndex: 0,
         validation: {
@@ -34,7 +34,7 @@ const ProjectEmptyView = () => {
     const customResolver = async (values, context) => {
         const result = await getCustomResolverTab(values, context, validationSchemaTab)
         if (!_.isEmpty(result.errorTab)) {
-            setErrorTabs(result.errorTab)
+            eventEmitter.emit('errorTabs', { errors: result.errorTab, id: 'projectTab' })
         }
         return result
     }
@@ -67,7 +67,7 @@ const ProjectEmptyView = () => {
                 <Grid item xs className="box-container">
                     <h1>{t('To get started, create your first project!')}</h1>
                     <Grid item xs>
-                        <ProjectCreateContent reset={reset} getValues={getValues} setValue={setValue} errorTabs={errorTabs} control={control} />
+                        <ProjectCreateContent reset={reset} getValues={getValues} setValue={setValue} control={control} />
                     </Grid>
                 </Grid>
             </Grid>

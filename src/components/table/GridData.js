@@ -175,7 +175,6 @@ const GridData = (props) => {
                     rowHeight={rowHeight && rowHeight}
                     ref={gridRef}
                     animateRows={true}
-                    sort
                     style={{ display: "flex" }}
                     defaultColDef={defaultColDef}
                     enableRangeSelection={true}

@@ -3,12 +3,10 @@ import styled from "styled-components"
 import { DragDropContext } from "react-beautiful-dnd"
 import DraggableElement from "components/drapAndDrop/DraggableElement"
 import TextInput from "components/input/TextInput"
-import { EControlType, ESize, EButtonIconType } from 'configs'
+import { EControlType, EButtonIconType } from 'configs'
 import Grid from "@mui/material/Grid"
-import { useForm } from "react-hook-form"
 import { useTranslation } from "react-i18next"
 import TooltipControl from './tooltipControl'
-import useMediaQuery from '@mui/material/useMediaQuery'
 import { useTheme } from '@mui/material/styles'
 import { v4 as uuidv4 } from 'uuid'
 import AssignSelect from 'components/select/assignSelect'
@@ -71,7 +69,7 @@ const addToList = (list, index, id, element) => {
   }
 }
 
-const generateListTitle = () => {
+const generateListTitle = (t) => {
   return {
     "column1": [
       {
@@ -79,7 +77,7 @@ const generateListTitle = () => {
         prefix: "column1",
         type: EControlType.editor,
         name: 'description',
-        label: 'Mô tả',
+        label: t('Description'),
         required: true,
         default: true
       },
@@ -88,7 +86,7 @@ const generateListTitle = () => {
         prefix: "column1",
         type: EControlType.editor,
         name: 'note',
-        label: 'Ghi chú',
+        label: t('Note'),
         default: true
       },
       {
@@ -96,7 +94,7 @@ const generateListTitle = () => {
         prefix: "column1",
         type: EControlType.comment,
         name: 'comment',
-        label: 'Bình luận',
+        label: t('Comment'),
         default: true
       },
     ],
@@ -105,14 +103,14 @@ const generateListTitle = () => {
         id: `item-3`,
         prefix: "item-3@column2",
         type: EControlType.group,
-        label: 'Chi tiết',
+        label: t('Detail'),
         name: 'detail',
         default: true,
         items: [
           {
             id: `item-4@item-3`,
             type: EControlType.userItem,
-            label: 'Người tạo',
+            label: t('User created'),
             name: 'createdUser',
             default: true,
             defaultReadonly: true,
@@ -121,7 +119,7 @@ const generateListTitle = () => {
           {
             id: `item-11@item-3`,
             type: EControlType.dateTimePicker,
-            label: 'Ngày tạo',
+            label: t('Date created'),
             name: 'createdDate',
             default: true,
             defaultReadonly: true,
@@ -130,7 +128,7 @@ const generateListTitle = () => {
           {
             id: `item-5@item-3`,
             type: EControlType.select,
-            label: 'Độ ưu tiên',
+            label: t('Priority'),
             name: 'priority',
             default: true
           },
@@ -140,27 +138,27 @@ const generateListTitle = () => {
         id: `item-8`,
         prefix: "item-8@column2",
         type: EControlType.group,
-        label: 'Kế hoạch',
+        label: t('Plan'),
         default: true,
         items: [
           {
             id: `item-9@item-8`,
             type: EControlType.datePicker,
-            label: 'Ngày bắt đầu',
+            label: t('Start date'),
             name: 'startDate',
             default: true
           },
           {
             id: `item-10@item-8`,
             type: EControlType.datePicker,
-            label: 'Ngày hết hạn',
+            label: t('Expiration date'),
             name: 'dueDate',
             default: true
           },
           {
             id: `item-12@item-8`,
             type: EControlType.number,
-            label: 'Thời gian ước tính',
+            label: t('Estimated time'),
             name: 'estimatedhour',
             default: true
           }
@@ -170,7 +168,7 @@ const generateListTitle = () => {
         id: `item-14`,
         prefix: "item-14@column2",
         type: EControlType.parentTask,
-        label: 'Công việc cha',
+        label: t('Parent task'),
         name: 'taskParent',
         default: true,
       },
@@ -178,7 +176,7 @@ const generateListTitle = () => {
         id: `item-13`,
         prefix: "item-13@column2",
         type: EControlType.childTask,
-        label: 'Công việc con',
+        label: t('Child task'),
         name: 'taskChilds',
         default: true,
       },
@@ -186,7 +184,7 @@ const generateListTitle = () => {
         id: `item-15`,
         prefix: "item-15@column2",
         type: EControlType.upload,
-        label: 'Tập tin đính kèm',
+        label: t('Attachments'),
         name: 'files',
         default: true,
       }
@@ -199,8 +197,8 @@ const ContentTemplate = (props) => {
   const { setValue, dataTemplate = null, statusData = [], templateColumnData = [],
     control, formState, onTemplateChange, name } = props
   const theme = useTheme()
-  const [elementsTitle, setElementsTitle] = useState(generateListTitle())
   const { t } = useTranslation()
+  const [elementsTitle, setElementsTitle] = useState(generateListTitle(t))
 
   useEffect(() => {
     if (dataTemplate && dataTemplate.content) {
@@ -479,14 +477,15 @@ const ContentTemplate = (props) => {
               <AssignSelect
                 control={control}
                 name={'assign'}
-                data={[{ id: 1, fullName: 'Người nhận 1' }, { id: 2, fullName: 'Người nhận 2' }, { id: 3, fullName: 'Người nhận 3' }]}
+                data={[{ id: 1, name: 'Người nhận 1' }, { id: 2, name: 'Người nhận 2' }, { id: 3, name: 'Người nhận 3' }]}
               />
             </Grid>
             <Grid item>
               <StatusSelect
-                options={[...statusData]}
+                options={statusData}
                 name={'status'}
                 control={control}
+                defaultValue={!_.isEmpty(statusData) ? statusData[0].id : null}
               />
             </Grid>
           </Grid>

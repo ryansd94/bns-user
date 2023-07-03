@@ -30,14 +30,15 @@ import _ from 'lodash'
 import './styles.scss'
 import { TagControl } from "components/tag"
 import * as Yup from "yup"
-import { yupResolver } from "@hookform/resolvers/yup"
 import { message } from "configs"
 import { TaskChild, TaskParent } from 'components/task'
 import { MultipleFileUploadField } from 'components/upload/uploadFile'
 import { TaskMoreButton } from '../task/taskMoreButton'
 import { Comment } from 'components/comment'
 import { deepFindAll } from "helpers/commonFunction"
-import { getUserInfo } from "helpers"
+import { getUserInfo, getCustomResolverTab } from "helpers"
+import eventEmitter from 'helpers/eventEmitter'
+import DiffTracker from "helpers/diffTracker"
 
 const TaskView = (props) => {
     console.log("render TaskView")
@@ -50,16 +51,26 @@ const TaskView = (props) => {
     const [templateContent, setTemplateContent] = useState('')
     const { t } = useTranslation()
     const { id, taskEditId } = useParams()
-    const [validateData, setValidateData] = useState({
-        defaultData: Yup.object().shape({
-            'title': Yup.string().required(t(message.error.fieldNotEmpty)),
-        }),
-        dynamicData: Yup.object().shape({
-        })
-    })
+    const [validateData, setValidateData] = useState([{
+        tabIndex: 0,
+        validation: {
+            defaultData: Yup.object().shape({
+                'title': Yup.string().required(t(message.error.fieldNotEmpty)),
+            }),
+            dynamicData: Yup.object().shape({
+            })
+        }
+    }])
     const user = getUserInfo()
 
-    const validationSchema = Yup.object().shape(validateData)
+    const customResolver = async (values, context) => {
+        const result = await getCustomResolverTab(values, context, validateData)
+        if (!_.isEmpty(result.errorTab)) {
+            eventEmitter.emit('errorTabs', { errors: result.errorTab, id: 'taskTab' })
+        }
+        return result
+    }
+
     const [taskTypeId2, settaskTypeId2] = useState(taskTypeId)
     const {
         control,
@@ -67,7 +78,7 @@ const TaskView = (props) => {
         setValue,
         getValues
     } = useForm({
-        resolver: yupResolver(validationSchema),
+        resolver: customResolver,
         defaultValues: {
             dynamicData: {},
             defaultData: { title: '', parentId: parentIdFromQuery || parentId, taskTypeId: id || taskTypeId, estimatedhour: '0', tags: [] },
@@ -110,10 +121,13 @@ const TaskView = (props) => {
             })
         }
 
-        setValidateData({
-            defaultData: Yup.object().shape(defaultValidate),
-            dynamicData: Yup.object().shape(dynamicValidate)
-        })
+        setValidateData([{
+            tabIndex: 0,
+            validation: {
+                defaultData: Yup.object().shape(defaultValidate),
+                dynamicData: Yup.object().shape(dynamicValidate)
+            }
+        }])
     }
 
     useEffect(() => {
@@ -366,12 +380,20 @@ const TaskView = (props) => {
         </Grid>
     }
 
+    const onValueChange = (value, name, type = EControlType.textField, isDelete = false) => {
+        if (_.isNil(taskEditId) && _.isNil(taskId)) return
+        let changeFields = DiffTracker.getChangeFieldsOnChange(value, name, type, isDelete, getValues)
+        setValue('changeFields', changeFields)
+        console.log(changeFields)
+        eventEmitter.emit('onChangeButtonDisabled', { buttonId: 'buttonTaskSave', disabled: !_.isEmpty(changeFields) ? false : true })
+    }
+
     const renderTaskContent = () => {
         return <div className="containerNew">
             <Box className="task-view-container">
                 <Grid container item spacing={2} flexWrap="nowrap" direction="column">
                     <Grid item xs={12} className="flex-basis-auto">
-                        <TextInput autoFocus={true} focused={true} control={control} placeholder={t('Title')} name="defaultData.title" />
+                        <TextInput onChange={onValueChange} autoFocus={true} focused={true} control={control} placeholder={t('Title')} name="defaultData.title" />
                     </Grid>
                     <Grid className="flex-container flex-basis-auto" flexWrap={'nowrap'} container gap={2} item xs={12}>
                         <Grid item xs>
@@ -381,6 +403,7 @@ const TaskView = (props) => {
                                         control={control}
                                         name={'defaultData.usersAssignId'}
                                         data={userAssign}
+                                        onChange={onValueChange}
                                     />
                                 </Grid>
                                 <Grid item>
@@ -401,7 +424,12 @@ const TaskView = (props) => {
                             </Grid>
                         </Grid>
                         <Grid item>
-                            <ButtonDetail className="f-right" onClick={handleSubmit(onSubmit)} type={EButtonDetailType.save} />
+                            <ButtonDetail
+                                id='buttonTaskSave'
+                                className="f-right"
+                                onClick={handleSubmit(onSubmit)}
+                                disabled={_.isNil(taskEditId) && _.isNil(taskId) ? false : true}
+                                type={EButtonDetailType.save} />
                         </Grid>
                         <Grid item>
                             <TaskMoreButton
@@ -412,7 +440,9 @@ const TaskView = (props) => {
                         </Grid>
                     </Grid>
                     <Grid item container direction='column' xs={12} className="flex-basis-auto of-hidden">
-                        <TabControl tabItems={getTabItems()} />
+                        <TabControl
+                            id={'taskTab'}
+                            tabItems={getTabItems()} />
                     </Grid>
                 </Grid>
             </Box>

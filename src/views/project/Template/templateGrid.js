@@ -6,6 +6,7 @@ import { baseUrl } from "configs"
 import { formatDate } from "helpers/commonFunction"
 import { LinkControl } from 'components/link'
 import { CellButton } from 'components/cellRender'
+import { getPathItem } from "helpers"
 
 const TemplateGrid = React.memo((props) => {
     console.log("render TemplateGrid")
@@ -26,7 +27,7 @@ const TemplateGrid = React.memo((props) => {
             flex: 1,
             cellRenderer: (params) => {
                 return <LinkControl
-                    href={`/template/${params.data.id}`}
+                    href={getPathItem(`/template/${params.data.id}`, false)}
                     title={params.data.name} >
                 </LinkControl >
             },

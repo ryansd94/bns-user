@@ -57,6 +57,7 @@ const ProjectCreateContent = (props) => {
     }, [users, teams])
 
     return <TabControl
+        id={'projectTab'}
         tabItems={tabItems} />
 }
 
