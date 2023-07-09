@@ -42,6 +42,20 @@ const StatusGrid = (props) => {
         return <CheckBoxCellRender disabled={true} checked={params.value} />
       }
     },
+    {
+      field: "isAutomaticAdd",
+      headerName: t("Automatically added"),
+      cellRenderer: (params) => {
+        return <CheckBoxCellRender disabled={true} checked={params.value} />
+      }
+    },
+    {
+      field: "isApplyAll",
+      headerName: t("Applied to all types of tasks"),
+      cellRenderer: (params) => {
+        return <CheckBoxCellRender disabled={true} checked={params.value} />
+      }
+    },
     { field: "description", headerName: t("Description"), flex: 2 },
     {
       field: "edit",
@@ -51,7 +65,7 @@ const StatusGrid = (props) => {
       resizable: false,
       cellRenderer: (params) => {
         return <strong>
-          <CellButton id={params.data.id} url={baseUrl.jm_status}/>
+          <CellButton id={params.data.id} url={baseUrl.jm_status} />
         </strong>
       },
       sortable: false,

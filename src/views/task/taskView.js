@@ -90,9 +90,7 @@ const TaskView = (props) => {
         if (!data.template) {
             return []
         }
-        const templateStatus = data.template && _.orderBy(data.template.templateStatus, 'order', 'asc').map((item) => {
-            return item.status
-        })
+        const templateStatus = data.template && _.orderBy(data.template.status, 'order', 'asc')
         return templateStatus
     }
 
@@ -380,12 +378,11 @@ const TaskView = (props) => {
         </Grid>
     }
 
-    const onValueChange = (value, name, type = EControlType.textField, isDelete = false) => {
-        if (_.isNil(taskEditId) && _.isNil(taskId)) return
-        let changeFields = DiffTracker.getChangeFieldsOnChange(value, name, type, isDelete, getValues)
-        setValue('changeFields', changeFields)
-        console.log(changeFields)
-        eventEmitter.emit('onChangeButtonDisabled', { buttonId: 'buttonTaskSave', disabled: !_.isEmpty(changeFields) ? false : true })
+    const onValueChange = (value, name, type = EControlType.textField) => {
+        DiffTracker.onValueChange({
+          editData: taskEditId || taskId, value, name, type, getValues,
+          setValue, eventEmitter, buttonId: 'buttonTaskSave'
+        })
     }
 
     const renderTaskContent = () => {

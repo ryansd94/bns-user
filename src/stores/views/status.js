@@ -9,6 +9,10 @@ const initialState = {
         color: true,
         id: false,
         description: true,
+        isStatusStart: true,
+        isStatusEnd: true,
+        isAutomaticAdd: true,
+        isApplyAll: true,
         __check__: true,
     },
     filters: []

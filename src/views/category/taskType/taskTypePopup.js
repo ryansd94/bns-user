@@ -14,12 +14,14 @@ import {
     setLoadingPopup,
     setReload,
 } from "stores/views/master"
-import { getByID, save, get } from "services"
-import { ERROR_CODE, baseUrl } from "configs"
+import { getByID, save2, get } from "services"
+import { ERROR_CODE, baseUrl, EControlType } from "configs"
 import { loading as loadingButton } from "stores/components/button"
 import { UploadIcon } from 'components/upload'
 import { message } from "configs"
 import { ColorPickerControl } from "components/colorPicker"
+import DiffTracker from "helpers/diffTracker"
+import eventEmitter from 'helpers/eventEmitter'
 import _ from 'lodash'
 
 const TaskTypePopup = React.memo((props) => {
@@ -31,6 +33,7 @@ const TaskTypePopup = React.memo((props) => {
     const validationSchema = Yup.object().shape({
         name: Yup.string().required(t(message.error.fieldNotEmpty)),
     })
+    const popupId = 'popup-task-type'
 
     const defaultValues = {
         name: "",
@@ -80,6 +83,7 @@ const TaskTypePopup = React.memo((props) => {
         handleSubmit,
         reset,
         setValue,
+        getValues
     } = useForm({
         resolver: yupResolver(validationSchema),
         defaultValues: defaultValues,
@@ -89,7 +93,7 @@ const TaskTypePopup = React.memo((props) => {
         dispatch(loadingButton(true))
         var postData = data
         if (!_.isEmpty(editData)) postData.id = editData
-        const res = await save(baseUrl.jm_taskType, postData)
+        const res = await save2(baseUrl.jm_taskType, postData)
         dispatch(loadingButton(false))
         dispatch(openMessage({ ...res }))
         if (res.errorCode == ERROR_CODE.success) {
@@ -97,8 +101,13 @@ const TaskTypePopup = React.memo((props) => {
         }
     }
 
-    const onColorChange = (e) => {
-        setColor(e.hex)
+    const onColorChange = (value, name) => {
+        setColor(value)
+        onValueChange(value, name)
+    }
+
+    const onValueChange = (value, name, type = EControlType.textField, isDelete = false) => {
+        DiffTracker.onValueChange({ editData, value, name, type, isDelete, getValues, setValue, eventEmitter, buttonId: popupId })
     }
 
     function ModalBody() {
@@ -111,6 +120,7 @@ const TaskTypePopup = React.memo((props) => {
                         control={control}
                         label={t("Task type name")}
                         name="name"
+                        onChange={onValueChange}
                     />
                 </Grid>
                 <Grid item xs={12}>
@@ -119,6 +129,7 @@ const TaskTypePopup = React.memo((props) => {
                         control={control}
                         name="icon"
                         color={color}
+                        onChange={onValueChange}
                     />
                 </Grid>
                 <Grid item xs={12}>
@@ -135,6 +146,7 @@ const TaskTypePopup = React.memo((props) => {
                         control={control}
                         name="templateId"
                         label={t("Task template")}
+                        onSelectChange={onValueChange}
                     />
                 </Grid>
                 <Grid item xs={12}>
@@ -142,6 +154,7 @@ const TaskTypePopup = React.memo((props) => {
                         control={control}
                         label={t("Description")}
                         name="description"
+                        onChange={onValueChange}
                     />
                 </Grid>
             </Grid>
@@ -150,6 +163,8 @@ const TaskTypePopup = React.memo((props) => {
     return (
         <div>
             <Popup
+                id={popupId}
+                disabledSave={!_.isEmpty(editData) ? true : false}
                 reset={reset}
                 ModalBody={ModalBody}
                 onSave={handleSubmit(onSubmit)}

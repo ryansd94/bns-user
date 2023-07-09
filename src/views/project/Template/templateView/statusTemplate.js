@@ -7,7 +7,6 @@ import { EButtonIconType, EButtonType, EControlType } from "configs"
 import { v4 as uuidv4 } from 'uuid'
 import StatusSelect from 'components/select/statusSelect'
 import ButtonFuntion from "components/button/ButtonFuntion"
-import { getValue } from "@mui/system"
 import _ from "lodash"
 
 const StatusTemplate = React.memo((props) => {
@@ -15,9 +14,13 @@ const StatusTemplate = React.memo((props) => {
     const { t } = useTranslation()
     const { setValue, id, onValueChange, control, statusData, getValues, name } = props
     const status = _.cloneDeep(getValues(name))
-    const originData = !_.isNil(status) ? _.cloneDeep(status) : (statusData && statusData.length > 0 && [{ id: statusData[0].id, isCurrentSelected: true }])
+    const getListStatusTemplate = () => {
+        return _.map(_.filter(statusData, (x) => x.isAutomaticAdd === true), (y) => { return { id: y.id } })
+    }
+    const originData = !_.isNil(status) ? _.cloneDeep(status) : (statusData && statusData.length > 0 && getListStatusTemplate())
     const [listStatusTemplate, setListStatusTemplate] = useState(originData)
     const listStatusDataIds = _.map(statusData, (x) => { return x.id })
+
 
     const getListStatusTemplateRemaining = () => {
         const currentListStatusIds = _.map(_.filter(listStatusTemplate, (item) => item.isCurrentSelected !== true), (x) => { return x.id })
@@ -62,7 +65,7 @@ const StatusTemplate = React.memo((props) => {
         if (!_.isNil(xxx)) {
             delete xxx.isCurrentSelected
         }
-        
+
         const currentListStatusIds = _.map(currentListStatus, (x) => { return x.id })
         const remainingListStatus = _.difference(listStatusDataIds, currentListStatusIds)
         if (!_.isEmpty(remainingListStatus)) {

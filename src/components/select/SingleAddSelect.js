@@ -98,8 +98,8 @@ const SingleAddSelect = React.memo(
                   } else {
                     newValue = newValue && newValue.id
                   }
+                  onSelectChange && onSelectChange(newValue, name)
                   field.onChange(newValue)
-                  onSelectChange && onSelectChange(newValue)
                 }}
                 onInputChange={onInputChange}
                 renderOption={(props, option) => {

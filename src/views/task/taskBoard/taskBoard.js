@@ -78,7 +78,7 @@ const TaskBoard = React.memo((props) => {
         <Grid container className="task-board-container flex-row of-hidden gap" item xs={12}>
             {
                 <DragDropContext onDragEnd={onDragEnd}>{
-                    _.map(listStatus, (item) => {
+                    _.map(_.orderBy(listStatus, ['isStatusStart', 'isStatusEnd'], ['desc', 'asc']), (item) => {
                         return <TaskDragElement
                             key={item.id}
                             onRowClicked={onRowClicked}

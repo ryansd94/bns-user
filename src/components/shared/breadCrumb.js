@@ -22,8 +22,8 @@ const BreadCrumb = (props) => {
     }, [currentPath])
 
     return <nav aria-label="breadcrumb" className="flex align-items-center">
-        <ol class="breadcrumb">
-            <li class="breadcrumb-item active" aria-current="page">{title}</li>
+        <ol className="breadcrumb">
+            <li className="breadcrumb-item active" aria-current="page">{title}</li>
         </ol>
     </nav>
 }

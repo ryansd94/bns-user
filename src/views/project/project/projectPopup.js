@@ -16,7 +16,7 @@ import { loading as loadingButton } from "stores/components/button"
 import { message, EWidth } from "configs"
 import _ from 'lodash'
 import ProjectCreateContent from './projectCreateContent'
-import { getCustomResolverTab } from "helpers"
+import { getCustomResolverTab, setValuesData } from "helpers"
 import eventEmitter from 'helpers/eventEmitter'
 import { get } from "services"
 import DiffTracker from "helpers/diffTracker"
@@ -30,6 +30,7 @@ const ProjectPopup = React.memo((props) => {
     const [users, setUsers] = useState([])
     const [teams, setTeams] = useState([])
     const [type, setType] = useState(EProjectTypeOption.basic)
+    const id = 'popup-project'
 
     useEffect(() => {
         let mounted = true
@@ -82,9 +83,7 @@ const ProjectPopup = React.memo((props) => {
         dispatch(change_title(t("Edit project")))
         dispatch(setLoadingPopup(true))
         await getByID(baseUrl.jm_project, editData).then((res) => {
-            for (let key in res.data) {
-                setValue(key, res.data[key])
-            }
+            setValuesData(setValue, res.data)
             setMembers({ teamsApplyIds: res.data.teams, usersApplyIds: res.data.members })
             setType(res.data.type)
             dispatch(setLoadingPopup(false))
@@ -119,10 +118,7 @@ const ProjectPopup = React.memo((props) => {
     }
 
     const onValueChange = (value, name, type = EControlType.textField, isDelete = false) => {
-        if (_.isNil(editData)) return
-        let changeFields = DiffTracker.getChangeFieldsOnChange(value, name, type, isDelete, getValues)
-        setValue('changeFields', changeFields)
-        eventEmitter.emit('onChangeDisabled', !_.isEmpty(changeFields) ? false : true)
+        DiffTracker.onValueChange({ buttonId: id, editData, value, name, type, isDelete, getValues, setValue, eventEmitter })
     }
 
     const renderModalBody = () => {
@@ -141,6 +137,7 @@ const ProjectPopup = React.memo((props) => {
     return (
         <div>
             <Popup
+                id={id}
                 disabledSave={!_.isEmpty(editData) ? true : false}
                 widthSize={EWidth.lg}
                 reset={reset}

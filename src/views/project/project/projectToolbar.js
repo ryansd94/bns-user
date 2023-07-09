@@ -8,7 +8,7 @@ import {
 import { useTranslation } from "react-i18next"
 import ProjectPopup from "./projectPopup"
 import { open, change_title } from "components/popup/popupSlice"
-import { EFilterType, baseUrl } from "configs"
+import { EControlType, baseUrl } from "configs"
 
 const ProjectToolbar = (props) => {
     const { onApplyFilter } = props
@@ -17,22 +17,22 @@ const ProjectToolbar = (props) => {
     const toolbarVisible = { ...useSelector((state) => state.master.toolbarVisible) }
     const columnVisibility = { ...useSelector((state) => state.project.columnVisibility) }
     const columnModel = [{
-        field: "name", isShow: true, label: t("Project name"), type: EFilterType.text
+        field: "name", isShow: true, label: t("Project name"), type: EControlType.textField
     },
     {
-        field: "code", isShow: true, label: t("Project code"), type: EFilterType.text
+        field: "code", isShow: true, label: t("Project code"), type: EControlType.textField
     },
     {
-        field: "startDate", isShow: true, label: t("Start date"), type: EFilterType.datetime
+        field: "startDate", isShow: true, label: t("Start date"), type: EControlType.datetime
     },
     {
-        field: "endDate", isShow: true, label: t("End date"), type: EFilterType.datetime
+        field: "endDate", isShow: true, label: t("End date"), type: EControlType.datetime
     },
     {
-        field: "description", isShow: true, label: t("Description"), type: EFilterType.text
+        field: "description", isShow: true, label: t("Description"), type: EControlType.textField
     },
     {
-        field: "createdDate", isShow: true, label: t("Ngày tạo"), type: EFilterType.datetime
+        field: "createdDate", isShow: true, label: t("Ngày tạo"), type: EControlType.datetime
     }]
 
     const handleColumnConfigChange = (event) => {

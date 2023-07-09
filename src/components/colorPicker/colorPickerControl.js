@@ -40,8 +40,8 @@ export default function ColorPickerControl({
                                 name={name}
                                 value={field.value || defaultValue || ''}
                                 onChange={(e) => {
+                                    onChange && onChange(`#${e.hex}`, name)
                                     field.onChange(`#${e.hex}`)
-                                    onChange && onChange(e)
                                 }}
                                 hideTextfield={hideTextfield}
                                 defaultValue="transparent"

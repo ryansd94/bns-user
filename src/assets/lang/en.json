@@ -209,5 +209,12 @@
     "Plan": "Plan",
     "Parent task": "Parent task",
     "Child task": "Child task",
-    "Attachments":"Attachments"
+    "Attachments": "Attachments",
+    "The status indicates task completed": "The status indicates task completed",
+    "The status indicates task started": "The status indicates task started",
+    "Automatically added to the status list when creating a new the task template": "The status will be automatically added to the status list when creating a new task template",
+    "The status will be applied to all types of tasks": "The status will be applied to all types of tasks",
+    "when the checkbox is selected, this status will automatically be added to the status list of all task types": "when the checkbox is selected, this status will automatically be added to the status list of all task types",
+    "Automatically added": "Automatically added",
+    "Applied to all types of tasks":"Applied to all types of tasks"
 }

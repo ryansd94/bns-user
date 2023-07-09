@@ -75,13 +75,6 @@ export const EColumnType = {
   text: "Text"
 }
 
-export const EFilterType = {
-  select: "Select",
-  multiSelect: "MultiSelect",
-  text: "Text",
-  datetime: "Datetime"
-}
-
 export const EColor =
 {
   cancel: '#86878796'
@@ -161,7 +154,10 @@ export const EControlType = {
   comment: "Comment",
   transferList: "TransferList",
   listObject: "ListObject",
-  listId: "ListId"
+  listId: "ListId",
+  multiSelect: "MultiSelect",
+  checkBox: "CheckBox",
+  other: "Other"
 }
 
 export const baseUrl = {
@@ -220,6 +216,18 @@ export const ERowStatus = {
   update: 1,
   noChange: 2,
   delete: 3
+}
+
+export const EPosition = {
+  top: 0,
+  left: 1,
+  right: 2,
+  bottom: 3
+}
+
+export const EGuidanceContentType = {
+  icon: 'Icon',
+  detail: 'Detail'
 }
 
 export const _TemplateVariant = EVariant.normal

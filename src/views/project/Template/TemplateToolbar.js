@@ -6,7 +6,7 @@ import {
     setColumnVisibility,
 } from "stores/views/template"
 import { useTranslation } from "react-i18next"
-import { EFilterType } from "configs"
+import { EControlType } from "configs"
 import { getPathItem } from "helpers"
 
 const TemplateToolbar = (props) => {
@@ -17,13 +17,13 @@ const TemplateToolbar = (props) => {
     const toolbarVisible = { ...useSelector((state) => state.master.toolbarVisible) }
     const columnVisibility = { ...useSelector((state) => state.template.columnVisibility) }
     const columnModel = [{
-        field: "name", isShow: true, label: t("Template name"), type: EFilterType.text
+        field: "name", isShow: true, label: t("Template name"), type: EControlType.textField
     },
     {
-        field: "description", isShow: true, label: t("Description"), type: EFilterType.text
+        field: "description", isShow: true, label: t("Description"), type: EControlType.textField
     },
     {
-        field: "createdDate", isShow: true, label: t("Date created"), type: EFilterType.datetime
+        field: "createdDate", isShow: true, label: t("Date created"), type: EControlType.datetime
     }]
     const handleColumnConfigChange = (event) => {
         columnVisibility[event.target.name] = event.target.checked

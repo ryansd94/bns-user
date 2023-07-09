@@ -15,11 +15,14 @@ import {
     setReload,
     setEditData,
 } from "stores/views/master"
-import { getByID, save } from "services"
-import { ERROR_CODE, baseUrl } from "configs"
+import { getByID, save2 } from "services"
+import { ERROR_CODE, baseUrl, EControlType } from "configs"
 import { loading as loadingButton } from "stores/components/button"
 import { message } from "configs"
 import { CheckBoxControl } from 'components/checkbox'
+import { setValuesData } from "helpers"
+import DiffTracker from "helpers/diffTracker"
+import eventEmitter from 'helpers/eventEmitter'
 import _ from "lodash"
 
 const StatusPopup = (props) => {
@@ -33,6 +36,7 @@ const StatusPopup = (props) => {
     })
     const [statusStartDisable, setStatusStartDisable] = useState(false)
     const [statusEndDisable, setStatusEndDisable] = useState(false)
+    const popupId = 'popup-status'
 
     const defaultValues = {
         name: "",
@@ -51,12 +55,7 @@ const StatusPopup = (props) => {
         dispatch(setLoadingPopup(true))
         dispatch(open())
         await getByID(baseUrl.jm_status, editData).then((res) => {
-            setValue("id", res.data.id || "")
-            setValue("name", res.data.name || "")
-            setValue("description", res.data.description || "")
-            setValue("color", res.data.color)
-            setValue("isStatusStart", res.data.isStatusStart)
-            setValue("isStatusEnd", res.data.isStatusEnd)
+            setValuesData(setValue, res.data)
             dispatch(setLoadingPopup(false))
         })
     }
@@ -66,6 +65,7 @@ const StatusPopup = (props) => {
         handleSubmit,
         reset,
         setValue,
+        getValues
     } = useForm({
         resolver: yupResolver(validationSchema),
         defaultValues: defaultValues,
@@ -73,12 +73,13 @@ const StatusPopup = (props) => {
 
     const onSubmit = async (data) => {
         dispatch(loadingButton(true))
-        var postData = data
-        if (!editData) postData.id = editData
-        if (data.parentId) postData.parentId = data.parentId
-        if (data.members)
-            postData.members = data.members.map((item, index) => item.id)
-        const res = await save(baseUrl.jm_status, postData)
+        let saveData = _.cloneDeep({ ...data })
+        if (!_.isNil(editData)) {
+            saveData = {}
+            saveData.id = editData
+            saveData.changeFields = data.changeFields
+        }
+        const res = await save2(baseUrl.jm_status, saveData)
         dispatch(loadingButton(false))
         dispatch(openMessage({ ...res }))
         if (res.errorCode == ERROR_CODE.success) {
@@ -91,65 +92,97 @@ const StatusPopup = (props) => {
         }
     }
 
-    const onStatusStartChange = (value) => {
+    const onStatusStartChange = (value, name) => {
         setStatusEndDisable(value)
+        onValueChange(value, name)
     }
 
-    const onStatusEndChange = (value) => {
+    const onStatusEndChange = (value, name) => {
         setStatusStartDisable(value)
+        onValueChange(value, name)
+    }
+
+    const onValueChange = (value, name, type = EControlType.textField, isDelete = false) => {
+        DiffTracker.onValueChange({ editData, value, name, type, isDelete, getValues, setValue, eventEmitter, buttonId: popupId })
     }
 
     function ModalBody() {
         return (
-            <Grid container gap={2}>
-                <Grid item xs={12}>
+            <Grid container gap={2} item xs direction='column'>
+                <Grid item xs>
                     <TextInput
                         autoFocus={true}
                         required={true}
                         control={control}
                         label={t("Status name")}
                         name="name"
+                        onChange={onValueChange}
                     />
                 </Grid>
-                <Grid item xs={12}>
+                <Grid item xs>
                     <ColorPickerControl
                         control={control}
                         label={t("Color")}
                         name="color"
+                        onChange={onValueChange}
                     />
                 </Grid>
-                <Grid item xs={12}>
+                <Grid item xs container gap={2} direction='row'>
+                    <Grid item xs>
+                        <CheckBoxControl
+                            guidance={{ content: t('The status indicates task started') }}
+                            disabled={statusStartDisable}
+                            onChange={onStatusStartChange}
+                            control={control}
+                            label={t("Start status")}
+                            name="isStatusStart"
+                        />
+                    </Grid>
+                    <Grid item xs>
+                        <CheckBoxControl
+                            guidance={{ content: t('The status indicates task completed') }}
+                            disabled={statusEndDisable}
+                            onChange={onStatusEndChange}
+                            control={control}
+                            label={t("End status")}
+                            name="isStatusEnd"
+                        />
+                    </Grid>
+                </Grid>
+                <Grid item xs>
+                    <CheckBoxControl
+                        guidance={{ content: t('Automatically added to the status list when creating a new the task template') }}
+                        control={control}
+                        label={t("Automatically added")}
+                        name="isAutomaticAdd"
+                        onChange={onValueChange}
+                    />
+                </Grid>
+                <Grid item xs>
+                    <CheckBoxControl
+                        guidance={{ content: t('when the checkbox is selected, this status will automatically be added to the status list of all task types') }}
+                        control={control}
+                        label={t("Applied to all types of tasks")}
+                        name="isApplyAll"
+                        onChange={onValueChange}
+                    />
+                </Grid>
+                <Grid item xs>
                     <TextInput
                         control={control}
                         label={t("Description")}
                         name="description"
-                    />
-                </Grid>
-                <Grid item xs={12}>
-                    <CheckBoxControl
-                        disabled={statusStartDisable}
-                        onChange={onStatusStartChange}
-                        control={control}
-                        label={t("Start status")}
-                        name="isStatusStart"
-                    />
-                </Grid>
-                <Grid item xs={12}>
-                    <CheckBoxControl
-                        disabled={statusEndDisable}
-                        onChange={onStatusEndChange}
-                        control={control}
-                        label={t("End status")}
-                        name="isStatusEnd"
+                        onChange={onValueChange}
                     />
                 </Grid>
             </Grid>
         )
     }
-
     return (
         <div>
             <Popup
+                id={popupId}
+                disabledSave={!_.isEmpty(editData) ? true : false}
                 reset={reset}
                 ModalBody={ModalBody}
                 widthSize={"sm"}

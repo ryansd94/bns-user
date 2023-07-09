@@ -6,7 +6,7 @@ import {
     setColumnVisibility,
 } from "stores/views/priority"
 import { useTranslation } from "react-i18next"
-import { EFilterType } from "configs"
+import { EControlType } from "configs"
 import { open, change_title } from "components/popup/popupSlice"
 
 const PriorityToolbar = (props) => {
@@ -17,16 +17,16 @@ const PriorityToolbar = (props) => {
     const columnVisibility = { ...useSelector((state) => state.priority.columnVisibility) }
 
     const columnModel = [{
-        field: "name", isShow: true, label: t("Status name"), type: EFilterType.text
+        field: "name", isShow: true, label: t("Status name"), type: EControlType.textField
     },
     {
-        field: "color", isShow: true, label: t("Color"), type: EFilterType.text
+        field: "color", isShow: true, label: t("Color"), type: EControlType.textField
     },
     {
-        field: "description", isShow: true, label: t("Description"), type: EFilterType.text
+        field: "description", isShow: true, label: t("Description"), type: EControlType.textField
     },
     {
-        field: "createdDate", isShow: true, label: t("Date created"), type: EFilterType.datetime
+        field: "createdDate", isShow: true, label: t("Date created"), type: EControlType.datetime
     }]
 
     const handleColumnConfigChange = (event) => {

@@ -157,7 +157,7 @@ const ContentTemplate = (props) => {
     )
 
     if (!_.isNil(id)) {
-      onValueChange(listCopy, name, null, JSON.parse(dataTemplate.content))
+      onValueChange(listCopy, name)
     }
     setElementContent(listCopy)
   }
@@ -185,7 +185,7 @@ const ContentTemplate = (props) => {
       }
     }
     if (!_.isNil(id)) {
-      onValueChange(listCopy, name, null, JSON.parse(dataTemplate.content))
+      onValueChange(listCopy, name)
     }
     setElementContent(listCopy)
   }
@@ -214,7 +214,7 @@ const ContentTemplate = (props) => {
       }
     }
     if (!_.isNil(id)) {
-      onValueChange(listCopy, name, null, JSON.parse(dataTemplate.content))
+      onValueChange(listCopy, name)
     }
     field.onChange(listCopy)
     setElementContent(listCopy)
@@ -241,7 +241,7 @@ const ContentTemplate = (props) => {
       sourceList.splice(index + 1, 0, removedElement)
     }
     if (!_.isNil(id)) {
-      onValueChange(listCopy, name, null, JSON.parse(dataTemplate.content))
+      onValueChange(listCopy, name)
     }
     field.onChange(listCopy)
     setElementContent(listCopy)
@@ -268,7 +268,7 @@ const ContentTemplate = (props) => {
       settingItem.required = data.required
     }
     if (!_.isNil(id)) {
-      onValueChange(listCopy, name, null, JSON.parse(dataTemplate.content))
+      onValueChange(listCopy, name)
     }
     field.onChange(listCopy)
     setElementContent(listCopy)
@@ -328,7 +328,7 @@ const ContentTemplate = (props) => {
       }
     )
     if (!_.isNil(id)) {
-      onValueChange(listCopy, name, null, JSON.parse(dataTemplate.content))
+      onValueChange(listCopy, name)
     }
     field.onChange(listCopy)
     setElementContent(listCopy)

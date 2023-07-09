@@ -128,12 +128,11 @@ const TemplateAdd = React.memo((props) => {
     }
   }
 
-  const onValueChange = (value, name, type = EControlType.textField, originData = null) => {
-    if (_.isNil(id)) return
-    let changeFields = DiffTracker.getChangeFieldsOnChange(value, name, type, false, getValues, originData)
-    console.log(changeFields)
-    setValue('changeFields', changeFields)
-    eventEmitter.emit('onChangeButtonDisabled', { buttonId: 'btn-template-save', disabled: !_.isEmpty(changeFields) ? false : true })
+  const onValueChange = (value, name, type = EControlType.textField, isEntity = true) => {
+    DiffTracker.onValueChange({
+      editData: id, value, name, type, getValues,
+      setValue, eventEmitter, buttonId: 'btn-template-save', isEntity
+    })
   }
 
   const renderTabInfo = () => {
@@ -154,7 +153,7 @@ const TemplateAdd = React.memo((props) => {
 
   const renderView = () => {
     return <ContentTemplate
-      onValueChange={onValueChange}
+      onValueChange={(value, name) => onValueChange(value, name, EControlType.other, false)}
       name={'content'}
       id={id}
       formState={formState}

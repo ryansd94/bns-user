@@ -4,7 +4,7 @@ import MultiSelect from 'components/select/MultiSelect'
 import Grid from "@mui/material/Grid"
 import { useTranslation } from "react-i18next"
 import { DatePickerInput } from "components/datepicker"
-import { EFilterType } from "configs"
+import { EControlType } from "configs"
 import { TextInput } from "components/input"
 import ButtonIcon from "components/button/ButtonIcon"
 import { EButtonIconType } from 'configs'
@@ -89,11 +89,11 @@ const FilterItem = React.memo((props) => {
     }
 
     const getConditionValue = (type) => {
-        if (type == EFilterType.text) {
+        if (type == EControlType.textField) {
             return textOptions
-        } else if (type == EFilterType.select) {
+        } else if (type == EControlType.select) {
             return selectOptions
-        } else if (type == EFilterType.datetime) {
+        } else if (type == EControlType.datetime) {
             return dateOptions
         }
     }
@@ -120,7 +120,7 @@ const FilterItem = React.memo((props) => {
                 disabled = false
             }
             setConditionOption(getConditionValue(valueItem.type))
-            if (valueItem.type == EFilterType.text) {
+            if (valueItem.type == EControlType.textField) {
                 setWidth(300)
                 setValueComponent(
                     <TextInput
@@ -132,7 +132,7 @@ const FilterItem = React.memo((props) => {
                     />
                 )
             }
-            else if (valueItem.type == EFilterType.select) {
+            else if (valueItem.type == EControlType.select) {
                 setWidth(300)
                 setValueComponent(
                     <MultiSelect size={size} multiple={true}
@@ -144,7 +144,7 @@ const FilterItem = React.memo((props) => {
                     </MultiSelect>
                 )
             }
-            else if (valueItem.type == EFilterType.datetime) {
+            else if (valueItem.type == EControlType.datetime) {
                 setWidth(200)
                 setValueComponent(
                     <DatePickerInput
@@ -192,7 +192,7 @@ const FilterItem = React.memo((props) => {
             setDisplay('Block')
         }
         if (type != null) {
-            if (type == EFilterType.text) {
+            if (type == EControlType.textField) {
                 setValueComponent(
                     <TextInput
                         label={t("Value")}
@@ -203,7 +203,7 @@ const FilterItem = React.memo((props) => {
                         control={control} />
                 )
             }
-            else if (type == EFilterType.select) {
+            else if (type == EControlType.select) {
                 setValueComponent(
                     <MultiSelect
                         disabled={disabled}
@@ -214,7 +214,7 @@ const FilterItem = React.memo((props) => {
                         data={status}></MultiSelect>
                 )
             }
-            else if (type == EFilterType.datetime) {
+            else if (type == EControlType.datetime) {
                 setValueComponent(<DatePickerInput
                     disabled={disabled}
                     label={t("Value")}

@@ -7,7 +7,7 @@ import {
 import { useTranslation } from "react-i18next"
 import ViewPermissionPopup from "./viewPermissionPopup"
 import { open, change_title } from "components/popup/popupSlice"
-import { EFilterType, baseUrl } from "configs"
+import { EControlType, baseUrl } from "configs"
 
 const ViewPermissionToolbar = (props) => {
     const { onApplyFilter, users, teams } = props
@@ -16,13 +16,13 @@ const ViewPermissionToolbar = (props) => {
     const toolbarVisible = { ...useSelector((state) => state.master.toolbarVisible) }
     const columnVisibility = { ...useSelector((state) => state.viewPermission.columnVisibility) }
     const columnModel = [{
-        field: "name", isShow: true, label: t("Permission name"), type: EFilterType.text
+        field: "name", isShow: true, label: t("Permission name"), type: EControlType.textField
     },
     {
-        field: "description", isShow: true, label: t("Description"), type: EFilterType.text
+        field: "description", isShow: true, label: t("Description"), type: EControlType.textField
     },
     {
-        field: "createdDate", isShow: true, label: t("Date created"), type: EFilterType.datetime
+        field: "createdDate", isShow: true, label: t("Date created"), type: EControlType.datetime
     }]
 
     const handleColumnConfigChange = (event) => {

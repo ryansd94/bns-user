@@ -8,7 +8,7 @@ import {
 import { useTranslation } from "react-i18next"
 import TeamPopup from "./TeamPopup"
 import { open, change_title } from "components/popup/popupSlice"
-import { EFilterType, baseUrl } from "configs"
+import { EControlType, baseUrl } from "configs"
 
 const TeamToolbar = (props) => {
     // console.log("render TeamToolbar")
@@ -18,19 +18,19 @@ const TeamToolbar = (props) => {
     const toolbarVisible = { ...useSelector((state) => state.master.toolbarVisible) }
     const columnVisibility = { ...useSelector((state) => state.team.columnVisibility) }
     const columnModel = [{
-        field: "name", isShow: true, label: t("Team name"), type: EFilterType.text
+        field: "name", isShow: true, label: t("Team name"), type: EControlType.textField
     },
     {
-        field: "description", isShow: true, label: t("Description"), type: EFilterType.text
+        field: "description", isShow: true, label: t("Description"), type: EControlType.textField
     },
     {
-        field: "parentName", isShow: true, label: t("Team parent"), type: EFilterType.text
+        field: "parentName", isShow: true, label: t("Team parent"), type: EControlType.textField
     },
     // {
-    //     field: "status", value: true, label: t("Trạng thái"), type: EFilterType.select
+    //     field: "status", value: true, label: t("Trạng thái"), type: EControlType.select
     // },
     {
-        field: "createdDate", isShow: true, label: t("Date created"), type: EFilterType.datetime
+        field: "createdDate", isShow: true, label: t("Date created"), type: EControlType.datetime
     }]
 
     const handleColumnConfigChange = (event) => {

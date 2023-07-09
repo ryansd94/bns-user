@@ -6,12 +6,10 @@ import {
     setColumnVisibility,
 } from "stores/views/user"
 import { useTranslation } from "react-i18next"
-import Menu from '@mui/material/Menu'
-import MenuItem from '@mui/material/MenuItem'
-import { IconDelete } from "components/icon/icon"
 import UserPopup from "./UserPopup"
 import { open, change_title } from "components/popup/popupSlice"
-import { EFilterType } from "configs"
+import { EControlType } from "configs"
+
 const UserToolbar = (props) => {
     console.log("render user toolbar")
     const { onAddClick, onApplyFilter } = props
@@ -21,19 +19,19 @@ const UserToolbar = (props) => {
     const columnVisibility = { ...useSelector((state) => state.user.columnVisibility) }
 
     const columnModel = [{
-        field: "email", isShow: true, label: t("Email"), type: EFilterType.text
+        field: "email", isShow: true, label: t("Email"), type: EControlType.textField
     },
     {
-        field: "fullName", isShow: true, label: t("Full name"), type: EFilterType.text
+        field: "fullName", isShow: true, label: t("Full name"), type: EControlType.textField
     },
     {
-        field: "teamName", isShow: true, label: t("Team"), type: EFilterType.text
+        field: "teamName", isShow: true, label: t("Team"), type: EControlType.textField
     },
     {
-        field: "status", isShow: true, label: t("Status"), type: EFilterType.select
+        field: "status", isShow: true, label: t("Status"), type: EControlType.select
     },
     {
-        field: "createdDate", isShow: true, label: t("Date created"), type: EFilterType.datetime
+        field: "createdDate", isShow: true, label: t("Date created"), type: EControlType.datetime
     }]
 
     const handleColumnConfigChange = (event) => {

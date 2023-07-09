@@ -69,7 +69,8 @@ const Popup = React.memo((props) => {
   const dispatch = useDispatch()
   const { ModalBody, open = null, title = null,
     onSave, widthSize = "sm", reset, typeSave = EButtonDetailType.save,
-    isShowFooter = true, handleClose = null, labelSave = '', disabledSave = false, removeOnChangeDisabled = true } = props
+    isShowFooter = true, handleClose = null, labelSave = '', disabledSave = false, 
+    removeOnChangeDisabled = true, id } = props
   const stateOpen = !_.isNil(open) ? open : useSelector((state) => state.popup.open)
   const [openPopup, setOpen] = useState(open)
   const [disabled, setDisabled] = useState(disabledSave)
@@ -152,7 +153,7 @@ const Popup = React.memo((props) => {
         </DialogContent>
         {isShowFooter ? <DialogActions>
           <ButtonDetail onClick={onClose} type={EButtonDetailType.undo} />
-          <ButtonDetail disabled={disabled} label={labelSave} isFloatRight={true} onClick={handleSave} type={typeSave} />
+          <ButtonDetail id={id} disabled={disabled} label={labelSave} isFloatRight={true} onClick={handleSave} type={typeSave} />
         </DialogActions> : ''}
       </BootstrapDialog>
     </div> : ''

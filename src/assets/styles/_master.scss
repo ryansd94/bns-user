@@ -796,9 +796,15 @@ a:hover {
 }
 .MuiFormControlLabel-root {
     margin-left: 0 !important;
+    margin-right: 0 !important;
     gap: 0.5rem;
 }
-
+.icon-guidance {
+    color: map-get($theme-colors, primary);
+}
+.alert-guidance{
+    background-color: transparent !important;
+}
 // .react-swipeable-view-container {
 //     transform: translate(0%, 0px) !important;
 // }

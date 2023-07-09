@@ -98,3 +98,9 @@ export const getPathItem = (url, isProjectPath = true) => {
     }
     return path
 }
+
+export const setValuesData = (setValue, data) => {
+    for (let key in data) {
+        setValue(key, data[key])
+    }
+}

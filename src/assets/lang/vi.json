@@ -208,6 +208,13 @@
     "Add new sprint": "Thêm mới giai đoạn",
     "Plan": "Kế hoạch",
     "Parent task": "Công việc cha",
-    "Child task":"Công việc con",
-    "Attachments":"Tệp đính kèm"
+    "Child task": "Công việc con",
+    "Attachments": "Tệp đính kèm",
+    "The status indicates task completed": "trạng thái cho biết kết thúc công việc",
+    "The status indicates task started": "trạng thái cho biết bắt đầu công việc",
+    "Automatically added to the status list when creating a new the task template": "Trạng thái sẽ được tự động thêm vào danh sách trạng thái khi tạo mẫu công việc mới",
+    "The status will be applied to all types of tasks": "Trạng thái sẽ được áp dụng cho tất cả các loại công việc",
+    "when the checkbox is selected, this status will automatically be added to the status list of all task types": "khi checkbox này được chọn, trạng thái này sẽ tự động được thêm vào danh sách trạng thái của tất cả các loại công việc",
+    "Automatically added": "Tự động được thêm vào",
+    "Applied to all types of tasks":"Áp dụng cho tất cả các loại công việc"
 }

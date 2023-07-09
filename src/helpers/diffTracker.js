@@ -4,7 +4,7 @@ import { deepFind } from "helpers/commonFunction"
 
 const DiffTracker = {
   getChangeFieldsOnChange: function getChangeFieldsOnChange(value, name, type = EControlType.textField, isDelete = false,
-    getValues, originData = null) {
+    getValues, originData = null, isEntity = true) {
     let changeFields = getValues('changeFields') || []
     let field = _.find(changeFields, (x) => x.key === name)
     let originValue = null
@@ -111,10 +111,10 @@ const DiffTracker = {
       if (_.isNil(field)) {
         if (type === EControlType.listObject) {
           if (!_.isEmpty(newValue)) {
-            changeFields.push({ key: name, value: newValue, originValue, type })
+            changeFields.push({ key: name, value: newValue, originValue, type, isEntity })
           }
         } else {
-          changeFields.push({ key: name, value: newValue, originValue, type })
+          changeFields.push({ key: name, value: newValue, originValue, type, isEntity })
         }
       } else {
         if (!_.isEmpty(newValue)) {
@@ -130,5 +130,12 @@ const DiffTracker = {
     }
     return changeFields
   },
+  onValueChange: function ({ editData, value, name, type = EControlType.textField, isDelete = false,
+    getValues, setValue, eventEmitter, buttonId, isEntity, originData = null }) {
+    if (_.isNil(editData)) return
+    let changeFields = this.getChangeFieldsOnChange(value, name, type, isDelete, getValues, originData, isEntity)
+    setValue('changeFields', changeFields)
+    eventEmitter.emit('onChangeButtonDisabled', { buttonId, disabled: !_.isEmpty(changeFields) ? false : true })
+  }
 }
 export default DiffTracker

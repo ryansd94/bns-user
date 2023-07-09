@@ -6,7 +6,7 @@ import {
     setColumnVisibility,
 } from "stores/views/task"
 import { useTranslation } from "react-i18next"
-import { EFilterType, baseUrl } from "configs"
+import { EControlType, baseUrl } from "configs"
 import TaskTypeMenu from './taskTypeMenu'
 import { EButtonType } from 'configs/enums'
 import ButtonFuntion from 'components/button/ButtonFuntion'
@@ -20,31 +20,31 @@ const TaskToolbar = (props) => {
     const columnVisibility = { ...useSelector((state) => state.task.columnVisibility) }
 
     const [columnModels, setColumnModel] = useState([{
-        field: "title", isShow: true, label: t("Title"), type: EFilterType.text
+        field: "title", isShow: true, label: t("Title"), type: EControlType.textField
     },
     {
-        field: "status.Name", isShow: true, label: t("Status"), type: EFilterType.text
+        field: "status.Name", isShow: true, label: t("Status"), type: EControlType.textField
     },
     {
-        field: "estimatedhour", isShow: true, label: t("Estimated time"), type: EFilterType.text
+        field: "estimatedhour", isShow: true, label: t("Estimated time"), type: EControlType.textField
     },
     {
-        field: "tags", isShow: true, label: t("Tags"), type: EFilterType.text
+        field: "tags", isShow: true, label: t("Tags"), type: EControlType.textField
     },
     {
-        field: "taskType.name", isShow: true, label: t("Task type"), type: EFilterType.text
+        field: "taskType.name", isShow: true, label: t("Task type"), type: EControlType.textField
     },
     {
-        field: "startDate", isShow: true, label: t("Start date"), type: EFilterType.datetime
+        field: "startDate", isShow: true, label: t("Start date"), type: EControlType.datetime
     },
     {
-        field: "dueDate", isShow: true, label: t("Expiration date"), type: EFilterType.datetime
+        field: "dueDate", isShow: true, label: t("Expiration date"), type: EControlType.datetime
     },
     {
-        field: "createdDate", isShow: true, label: t("Date created"), type: EFilterType.datetime
+        field: "createdDate", isShow: true, label: t("Date created"), type: EControlType.datetime
     },
     {
-        field: "createdUser.fullName", isShow: true, label: t("User created"), type: EFilterType.text
+        field: "createdUser.fullName", isShow: true, label: t("User created"), type: EControlType.textField
     }
     ])
 
@@ -55,7 +55,7 @@ const TaskToolbar = (props) => {
                 label: item.name,
                 isShow: true,
                 width: 110,
-                type: EFilterType.text,
+                type: EControlType.textField,
                 isCustom: true
             })
         })

@@ -8,7 +8,7 @@ import {
 import { useTranslation } from "react-i18next"
 import TaskTypePopup from "./taskTypePopup"
 import { open, change_title } from "components/popup/popupSlice"
-import { EFilterType, baseUrl } from "configs"
+import { EControlType, baseUrl } from "configs"
 
 const TaskTypeToolbar = (props) => {
     const { onApplyFilter } = props
@@ -17,19 +17,19 @@ const TaskTypeToolbar = (props) => {
     const toolbarVisible = { ...useSelector((state) => state.master.toolbarVisible) }
     const columnVisibility = { ...useSelector((state) => state.taskType.columnVisibility) }
     const columnModel = [{
-        field: "name", isShow: true, label: t("Task type name"), type: EFilterType.text
+        field: "name", isShow: true, label: t("Task type name"), type: EControlType.textField
     },
     {
-        field: "templateName", isShow: true, label: t("Task template"), type: EFilterType.text
+        field: "templateName", isShow: true, label: t("Task template"), type: EControlType.textField
     },
     {
-        field: "description", isShow: true, label: t("Description"), type: EFilterType.text
+        field: "description", isShow: true, label: t("Description"), type: EControlType.textField
     },
     {
-        field: "icon", isShow: true, label: t("Icon"), type: EFilterType.text, isHideFilter: true
+        field: "icon", isShow: true, label: t("Icon"), type: EControlType.textField, isHideFilter: true
     },
     {
-        field: "createdDate", isShow: true, label: t("Date created"), type: EFilterType.datetime
+        field: "createdDate", isShow: true, label: t("Date created"), type: EControlType.datetime
     }]
     
     const handleColumnConfigChange = (event) => {

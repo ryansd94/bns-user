@@ -7,9 +7,9 @@ const UserItem = (props) => {
 
     return <Box className="select-item">
         <div>
-            <AvatarControl size={ESize.miniSmall} image={props.image} name={props.name}></AvatarControl>
+            <AvatarControl size={ESize.miniSmall} image={props.image} name={props.name || props.fullName}></AvatarControl>
         </div>
-        <span key={props.id}>{props.name}</span>
+        <span key={props.id}>{props.name|| props.fullName}</span>
     </Box>
 }
 

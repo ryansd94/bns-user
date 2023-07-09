@@ -24,7 +24,7 @@ const TaskDragItem = ({ id, index, control, genderPopoverControl }) => {
   }
 
   return (
-    <Draggable draggableId={id} index={index}>
+    <Draggable droppableId={id} draggableId={id} index={index}>
       {(provided, snapshot) => {
         return (
           <DragItem
