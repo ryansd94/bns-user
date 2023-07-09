@@ -21,9 +21,14 @@ function TabPanel(props) {
       aria-labelledby={`full-width-tab-${index}`}
       {...other}
     >
-      <div>
+      {value === index && (
+        <div>
           {children}
         </div>
+      )}
+      {/* <div>
+        {children}
+      </div> */}
     </div>
   )
 }

@@ -14,6 +14,7 @@ import StatusSelect from 'components/select/statusSelect'
 import _ from "lodash"
 import { deepFind } from "helpers/commonFunction"
 import { Controller } from "react-hook-form"
+import { getListContent } from "./defaultContent"
 
 const DragDropContextContainer = styled.div`
 display:flex;
@@ -69,161 +70,30 @@ const addToList = (list, index, id, element) => {
   }
 }
 
-const generateListTitle = (t) => {
-  return {
-    "column1": [
-      {
-        id: `item-1`,
-        prefix: "column1",
-        type: EControlType.editor,
-        name: 'description',
-        label: t('Description'),
-        required: true,
-        default: true
-      },
-      {
-        id: `item-2`,
-        prefix: "column1",
-        type: EControlType.editor,
-        name: 'note',
-        label: t('Note'),
-        default: true
-      },
-      {
-        id: `item-16`,
-        prefix: "column1",
-        type: EControlType.comment,
-        name: 'comment',
-        label: t('Comment'),
-        default: true
-      },
-    ],
-    "column2": [
-      {
-        id: `item-3`,
-        prefix: "item-3@column2",
-        type: EControlType.group,
-        label: t('Detail'),
-        name: 'detail',
-        default: true,
-        items: [
-          {
-            id: `item-4@item-3`,
-            type: EControlType.userItem,
-            label: t('User created'),
-            name: 'createdUser',
-            default: true,
-            defaultReadonly: true,
-            isHidenWhenCreate: true
-          },
-          {
-            id: `item-11@item-3`,
-            type: EControlType.dateTimePicker,
-            label: t('Date created'),
-            name: 'createdDate',
-            default: true,
-            defaultReadonly: true,
-            isHidenWhenCreate: true
-          },
-          {
-            id: `item-5@item-3`,
-            type: EControlType.select,
-            label: t('Priority'),
-            name: 'priority',
-            default: true
-          },
-        ]
-      },
-      {
-        id: `item-8`,
-        prefix: "item-8@column2",
-        type: EControlType.group,
-        label: t('Plan'),
-        default: true,
-        items: [
-          {
-            id: `item-9@item-8`,
-            type: EControlType.datePicker,
-            label: t('Start date'),
-            name: 'startDate',
-            default: true
-          },
-          {
-            id: `item-10@item-8`,
-            type: EControlType.datePicker,
-            label: t('Expiration date'),
-            name: 'dueDate',
-            default: true
-          },
-          {
-            id: `item-12@item-8`,
-            type: EControlType.number,
-            label: t('Estimated time'),
-            name: 'estimatedhour',
-            default: true
-          }
-        ]
-      },
-      {
-        id: `item-14`,
-        prefix: "item-14@column2",
-        type: EControlType.parentTask,
-        label: t('Parent task'),
-        name: 'taskParent',
-        default: true,
-      },
-      {
-        id: `item-13`,
-        prefix: "item-13@column2",
-        type: EControlType.childTask,
-        label: t('Child task'),
-        name: 'taskChilds',
-        default: true,
-      },
-      {
-        id: `item-15`,
-        prefix: "item-15@column2",
-        type: EControlType.upload,
-        label: t('Attachments'),
-        name: 'files',
-        default: true,
-      }
-    ],
-  }
-}
-
 const ContentTemplate = (props) => {
   console.log("render ContentTemplate")
   const { setValue, dataTemplate = null, statusData = [], templateColumnData = [],
-    control, formState, onTemplateChange, name } = props
+    control, name, onValueChange, id } = props
   const theme = useTheme()
   const { t } = useTranslation()
-  const [elementsTitle, setElementsTitle] = useState(generateListTitle(t))
+  const [elementContent, setElementContent] = useState(getListContent(t))
 
   useEffect(() => {
     if (dataTemplate && dataTemplate.content) {
       const content = JSON.parse(dataTemplate.content)
-      setElementsTitle(content)
+      setElementContent(content)
     }
   }, [dataTemplate])
 
   useEffect(() => {
-    if (!_.isNil(formState) && !_.isEmpty(formState.dirtyFields)) {
-      onTemplateChange(true)
-    } else {
-      onTemplateChange(false)
-    }
-  }, [formState])
-
-  useEffect(() => {
-    setValue('content', elementsTitle)
-  }, [elementsTitle])
+    setValue(name, elementContent)
+  }, [elementContent])
 
   const onDragEndTitle = (result) => {
     if (!result.destination) {
       return
     }
-    const listCopy = { ...elementsTitle }
+    const listCopy = { ...elementContent }
 
     let sourceDroppableId = result.source.droppableId
     let isSourceGroup = false
@@ -286,16 +156,19 @@ const ContentTemplate = (props) => {
       destinationElement
     )
 
-    setElementsTitle(listCopy)
+    if (!_.isNil(id)) {
+      onValueChange(listCopy, name, null, JSON.parse(dataTemplate.content))
+    }
+    setElementContent(listCopy)
   }
 
   const getElementControls = (listKey) => {
-    const value = elementsTitle[listKey]
+    const value = elementContent[listKey]
     return _.isNil(value) ? [] : value
   }
 
   const onDeleteControl = (item, prefix) => {
-    const listCopy = { ...elementsTitle }
+    const listCopy = { ...elementContent }
     let sourceList = listCopy[prefix]
     //non group
     if (item.id.indexOf('@') != -1) {
@@ -311,11 +184,14 @@ const ContentTemplate = (props) => {
         sourceList.splice(index, 1)
       }
     }
-    setElementsTitle(listCopy)
+    if (!_.isNil(id)) {
+      onValueChange(listCopy, name, null, JSON.parse(dataTemplate.content))
+    }
+    setElementContent(listCopy)
   }
 
   const onMoveUpControl = (item, prefix, field) => {
-    const listCopy = { ...elementsTitle }
+    const listCopy = { ...elementContent }
     let sourceList = listCopy[prefix]
     //non group
     if (item.id.indexOf('@') != -1) {
@@ -337,12 +213,15 @@ const ContentTemplate = (props) => {
         sourceList.splice(index - 1, 0, removedElement)
       }
     }
+    if (!_.isNil(id)) {
+      onValueChange(listCopy, name, null, JSON.parse(dataTemplate.content))
+    }
     field.onChange(listCopy)
-    setElementsTitle(listCopy)
+    setElementContent(listCopy)
   }
 
   const onMoveDownControl = (item, prefix, field) => {
-    const listCopy = { ...elementsTitle }
+    const listCopy = { ...elementContent }
     let sourceList = listCopy[prefix]
     //non group
     if (item.id.indexOf('@') != -1) {
@@ -361,8 +240,11 @@ const ContentTemplate = (props) => {
       )
       sourceList.splice(index + 1, 0, removedElement)
     }
+    if (!_.isNil(id)) {
+      onValueChange(listCopy, name, null, JSON.parse(dataTemplate.content))
+    }
     field.onChange(listCopy)
-    setElementsTitle(listCopy)
+    setElementContent(listCopy)
   }
 
   const onAction = (type, item, prefix, field) => {
@@ -376,7 +258,7 @@ const ContentTemplate = (props) => {
   }
 
   const onSettingSubmit = (data, index, prefix, item, field) => {
-    let listCopy = { ...elementsTitle }
+    let listCopy = { ...elementContent }
     let sourceList = listCopy[prefix]
     let settingItem = deepFind(sourceList, function (obj) {
       return obj.id === item.id
@@ -385,12 +267,15 @@ const ContentTemplate = (props) => {
       settingItem.label = data.label
       settingItem.required = data.required
     }
+    if (!_.isNil(id)) {
+      onValueChange(listCopy, name, null, JSON.parse(dataTemplate.content))
+    }
     field.onChange(listCopy)
-    setElementsTitle(listCopy)
+    setElementContent(listCopy)
   }
 
   const onAddControlSubmit = (data, index, prefix, item, field) => {
-    const listCopy = { ...elementsTitle }
+    const listCopy = { ...elementContent }
     const destinationList = listCopy[prefix]
     let prefixGroup = prefix
     let id = item.id
@@ -442,8 +327,11 @@ const ContentTemplate = (props) => {
         prefix: isNonGroup ? prefixGroup : null
       }
     )
+    if (!_.isNil(id)) {
+      onValueChange(listCopy, name, null, JSON.parse(dataTemplate.content))
+    }
     field.onChange(listCopy)
-    setElementsTitle(listCopy)
+    setElementContent(listCopy)
   }
 
   const genderPopoverControl = (item, prefix, index, isLastControl, field) => {

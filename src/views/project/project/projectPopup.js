@@ -11,7 +11,7 @@ import {
     setReload,
 } from "stores/views/master"
 import { getByID, save2 } from "services"
-import { ERROR_CODE, baseUrl, EProjectTypeOption, EControlType, ERowStatus } from "configs"
+import { ERROR_CODE, baseUrl, EProjectTypeOption, EControlType } from "configs"
 import { loading as loadingButton } from "stores/components/button"
 import { message, EWidth } from "configs"
 import _ from 'lodash'
@@ -105,7 +105,6 @@ const ProjectPopup = React.memo((props) => {
     })
 
     const onSubmit = async (data) => {
-        console.log(data)
         dispatch(loadingButton(true))
         var postData = data
         if (!_.isEmpty(editData)) postData.id = editData
@@ -123,7 +122,6 @@ const ProjectPopup = React.memo((props) => {
         if (_.isNil(editData)) return
         let changeFields = DiffTracker.getChangeFieldsOnChange(value, name, type, isDelete, getValues)
         setValue('changeFields', changeFields)
-        console.log(changeFields)
         eventEmitter.emit('onChangeDisabled', !_.isEmpty(changeFields) ? false : true)
     }
 

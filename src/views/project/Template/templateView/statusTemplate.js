@@ -3,85 +3,105 @@ import Grid from "@mui/material/Grid"
 import { useTranslation } from "react-i18next"
 import ButtonIcon from "components/button/ButtonIcon"
 import { useFieldArray } from "react-hook-form"
-import { EButtonIconType, EButtonType } from "configs"
+import { EButtonIconType, EButtonType, EControlType } from "configs"
 import { v4 as uuidv4 } from 'uuid'
 import StatusSelect from 'components/select/statusSelect'
 import ButtonFuntion from "components/button/ButtonFuntion"
+import { getValue } from "@mui/system"
+import _ from "lodash"
 
 const StatusTemplate = React.memo((props) => {
     console.log("render StatusTemplate");
     const { t } = useTranslation()
-    const { listStatus = [], setValue, id, getValues, control, statusData } = props
-    const [statusTemplate, setStatusTemplate] = useState([])
+    const { setValue, id, onValueChange, control, statusData, getValues, name } = props
+    const status = _.cloneDeep(getValues(name))
+    const originData = !_.isNil(status) ? _.cloneDeep(status) : (statusData && statusData.length > 0 && [{ id: statusData[0].id, isCurrentSelected: true }])
+    const [listStatusTemplate, setListStatusTemplate] = useState(originData)
+    const listStatusDataIds = _.map(statusData, (x) => { return x.id })
 
-    const { fields, append, remove } = useFieldArray({
+    const getListStatusTemplateRemaining = () => {
+        const currentListStatusIds = _.map(_.filter(listStatusTemplate, (item) => item.isCurrentSelected !== true), (x) => { return x.id })
+        const remainingListStatus = _.difference(listStatusDataIds, currentListStatusIds) || []
+        return remainingListStatus
+    }
+    const [listStatusTemplateRemaining, setListStatusTemplateRemaining] = useState(getListStatusTemplateRemaining())
+    const { } = useFieldArray({
         control,
-        name: "status",
+        name: name,
     })
 
     useEffect(() => {
-        setValue('status', statusTemplate)
-    }, [statusTemplate])
+        if (!_.isNil(listStatusTemplate)) {
+            if (!_.isNil(id)) {
+                onValueChange(listStatusTemplate, name, EControlType.listId, status)
+            }
+            setValue(name, [...listStatusTemplate])
+        }
+    }, [listStatusTemplate])
 
-    useEffect(() => {
-        if (!id) {
-            setStatusTemplate(statusData && statusData.length > 0 && [statusData[0]] || [])
+    const onStatusDelete = (deletedItem) => {
+        const updateStatus = listStatusTemplate.filter(item => item.id !== deletedItem.id)
+        setListStatusTemplate(updateStatus)
+        if (!_.includes(listStatusTemplateRemaining, deletedItem.id)) {
+            listStatusTemplateRemaining.push(deletedItem.id)
+            setListStatusTemplateRemaining(listStatusTemplateRemaining)
         }
-    }, [statusData])
+    }
 
-    useEffect(() => {
-        if (id) {
-            setStatusTemplate([...listStatus])
-            setValue('status', [...listStatus])
+    const onStatusRemainingDelete = () => {
+        if (!_.isNil(statusRemainingId)) {
+            const currentListStatus = listStatusTemplate.filter(item => item !== statusRemainingId)
+            setListStatusTemplate([...currentListStatus])
         }
-    }, [listStatus])
-
-    const onStatusDelete = (index, id) => {
-        //remove(index)
-        // setStatusTemplate(statusTemplate.filter(item => item.id !== id))
-        var item = statusTemplate.find((ele) => {
-            return ele.id === id
-        })
-        if (item.isNew) {
-            remove(index)
-            setStatusTemplate(statusTemplate.filter(item => item.id !== id))
-        }
-        else {
-            setValue(`status[${index}].isDelete`, true)
-            item.isDelete = true
-            setStatusTemplate([...statusTemplate])
-        }
+        setListStatusTemplateRemaining([])
     }
 
     const addNew = () => {
-        const newStatus = statusData && statusData.length > 0 && { ...statusData[0] } || {}
-        append(newStatus)
-        statusTemplate.splice(statusTemplate.length > 0 ? statusTemplate.length + 1 : 0, 0, newStatus)
+        let currentListStatus = _.cloneDeep(listStatusTemplate || [])
+        let xxx = _.find(currentListStatus, (x) => x.isCurrentSelected === true)
+        if (!_.isNil(xxx)) {
+            delete xxx.isCurrentSelected
+        }
+        
+        const currentListStatusIds = _.map(currentListStatus, (x) => { return x.id })
+        const remainingListStatus = _.difference(listStatusDataIds, currentListStatusIds)
+        if (!_.isEmpty(remainingListStatus)) {
+            setListStatusTemplateRemaining([...remainingListStatus])
+            currentListStatus.push({ id: remainingListStatus[0], isCurrentSelected: true })
+            setListStatusTemplate([...currentListStatus])
+        }
     }
 
-    const onStatusChange = (index, value) => {
+    const onStatusChange = (index, value, id) => {
         const item = statusData.find((item) => {
             return item.id === value
         })
-        setValue(`status[${index}]`, item)
-        const updateStatus = statusTemplate.map((obj, i) => {
-            if (i === index) {
-                return { ...obj, ...item };
-            }
-            return obj;
-        })
-        setStatusTemplate([...updateStatus])
+        setValue(`status[${index}.id]`, value)
+        const updateStatus = _.find(listStatusTemplate, (x) => x.id === id)
+        if (!_.isNil(updateStatus)) {
+            updateStatus.id = value
+        }
+        setListStatusTemplate([...listStatusTemplate])
     }
 
-    const genderListStatus = (statusItem, index) => {
+    const renderStatusItem = (statusItem, index) => {
         if (statusItem.isDelete)
             return ''
+        let options = []
+        const disabled = statusItem.isCurrentSelected !== true ? true : false
+        if (statusItem.isCurrentSelected !== true) {
+            options = statusData
+        } else {
+            options = _.filter(statusData, (x) => _.includes(listStatusTemplateRemaining, x.id))
+        }
+
         return (
             <Grid key={uuidv4()} item gap={2} container alignItems={'center'}>
                 <Grid item xs={3}>
                     <StatusSelect
-                        onChange={(value) => onStatusChange(index, value)}
-                        options={[...statusData]}
+                        disabled={disabled}
+                        onChange={(value) => onStatusChange(index, value, statusItem.id)}
+                        options={options}
                         defaultValue={statusItem.id}
                         name={`status[${index}].id`}
                         control={control}
@@ -89,7 +109,7 @@ const StatusTemplate = React.memo((props) => {
                 </Grid>
                 <Grid item>
                     <ButtonIcon
-                        onClick={() => onStatusDelete(index, statusItem.id)}
+                        onClick={() => onStatusDelete(statusItem)}
                         type={EButtonIconType.delete}
                     />
                 </Grid>
@@ -106,7 +126,13 @@ const StatusTemplate = React.memo((props) => {
                 </Grid>
             </Grid>
             <Grid container gap={2} direction="column" item>
-                {statusTemplate && statusTemplate.map((statusItem, index) => { return genderListStatus(statusItem, index) })}
+                {
+                    !_.isNil(listStatusTemplate) && listStatusTemplate.map((item, index) => {
+                        const statusItem = _.find(statusData, (x) => x.id === item.id)
+                        if (_.isNil(statusItem)) return ''
+                        return renderStatusItem({ ...statusItem, isCurrentSelected: item.isCurrentSelected }, index)
+                    })
+                }
             </Grid>
         </Grid>
     )

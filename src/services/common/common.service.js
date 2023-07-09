@@ -37,8 +37,8 @@ export const save2 = async (baseUrl, param) => {
       const res = await services.post(query, param)
       return res
     } else {
-      let editParam = _.cloneDeep({ changeFields: param.changeFields })
-      const res = await services.put(`${baseUrl}/${param.id}`, editParam)
+      // let editParam = _.cloneDeep({ changeFields: param.changeFields })
+      const res = await services.put(`${baseUrl}/${param.id}`, param)
       return res
     }
   } catch (error) {

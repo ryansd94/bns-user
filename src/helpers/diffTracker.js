@@ -3,14 +3,16 @@ import { EControlType, ERowStatus } from "configs"
 import { deepFind } from "helpers/commonFunction"
 
 const DiffTracker = {
-  getChangeFieldsOnChange: function getChangeFieldsOnChange(value, name, type = EControlType.textField, isDelete = false, getValues) {
+  getChangeFieldsOnChange: function getChangeFieldsOnChange(value, name, type = EControlType.textField, isDelete = false,
+    getValues, originData = null) {
     let changeFields = getValues('changeFields') || []
     let field = _.find(changeFields, (x) => x.key === name)
     let originValue = null
     let isDiffernt = false
 
     if (_.isNil(field)) {
-      originValue = getValues(name)
+      const x = getValues(name)
+      originValue = !_.isNil(originData) ? _.cloneDeep(originData) : getValues(name)
     } else {
       originValue = field.originValue
     }
@@ -40,10 +42,17 @@ const DiffTracker = {
     if (isDiffernt === true) {
       let newValue = []
       if (type === EControlType.transferList) {
-        newValue = _.cloneDeep(value)
+        newValue = {}
         let deleteValues = _.difference(originValue, value)
         let addValues = _.difference(value, originValue)
         newValue = { deleteValues, addValues }
+      } else if (type === EControlType.listId) {
+        newValue = {}
+        const originValueIds = _.cloneDeep(_.map(originValue, (x) => { return x.id }))
+        const valueIds = _.cloneDeep(_.map(value, (x) => { return x.id }))
+        let deleteValues = _.difference(originValueIds, valueIds)
+        let addValues = _.difference(valueIds, originValueIds)
+        newValue = { deleteValues: _.map(deleteValues, (x) => { return { id: x } }), addValues: _.map(addValues, (x) => { return { id: x } }) }
       } else if (type === EControlType.listObject) {
         newValue = []
         if (!_.isNil(field)) {

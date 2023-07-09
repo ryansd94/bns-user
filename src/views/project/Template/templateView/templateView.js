@@ -1,24 +1,25 @@
-import React, { useEffect, useState, useMemo, useCallback, useLayoutEffect } from "react"
+import React, { useEffect, useState } from "react"
 import Grid from "@mui/material/Grid"
 import ButtonDetail from "components/button/ButtonDetail"
 import { TabControl } from 'components/tab'
 import { useTranslation } from "react-i18next"
-import { useSelector, useDispatch } from "react-redux"
+import { useDispatch } from "react-redux"
 import * as Yup from "yup"
 import { useForm } from "react-hook-form"
-import { yupResolver } from "@hookform/resolvers/yup"
 import StatusTemplate from './statusTemplate'
 import InfoTemplate from './info'
-import Box from "@mui/material/Box"
 import ContentTemplate from './contentTemplate'
-import { save, getByID, get } from "services"
+import { save2, getByID, get } from "services"
 import { loading as loadingButton } from "stores/components/button"
 import { openMessage } from "stores/components/snackbar"
-import { baseUrl, message } from 'configs'
+import { baseUrl, message, EControlType, ERROR_CODE } from 'configs'
 import { useParams } from 'react-router'
 import {
   setLoadingPopup,
 } from "stores/views/master"
+import eventEmitter from 'helpers/eventEmitter'
+import DiffTracker from "helpers/diffTracker"
+import { getCustomResolverTab } from "helpers"
 import _ from 'lodash'
 
 const TemplateAdd = React.memo((props) => {
@@ -29,9 +30,23 @@ const TemplateAdd = React.memo((props) => {
   const [dataTemplate, setDataTemplate] = useState(null)
   const [statusData, setStatusData] = useState([])
   const [templateColumnData, setTemplateColumnData] = useState([])
-  const validationSchema = Yup.object().shape({
-    name: Yup.string().required(t(message.error.fieldNotEmpty)),
-  })
+  const tabId = 'templateInfoTab'
+
+  const validationSchemaTab = [{
+    tabIndex: 0,
+    validation: {
+      name: Yup.string().required(t(message.error.fieldNotEmpty))
+    },
+  }]
+
+  const customResolver = async (values, context) => {
+    const result = await getCustomResolverTab(values, context, validationSchemaTab)
+    if (!_.isEmpty(result.errorTab)) {
+      eventEmitter.emit('errorTabs', { errors: result.errorTab, id: tabId })
+    }
+    return result
+  }
+
   const [disabled, setDisabled] = useState(true)
 
   const {
@@ -42,13 +57,12 @@ const TemplateAdd = React.memo((props) => {
     getValues,
     formState,
   } = useForm({
-    resolver: yupResolver(validationSchema),
+    resolver: customResolver,
     defaultValues: {
       name: '',
       description: '',
       id: id,
       assign: [1]
-      // status: [{ id: uuidv4(), name: 'Mới', color: '#1976d2', isNew: true }]e 
     }
   })
 
@@ -59,16 +73,6 @@ const TemplateAdd = React.memo((props) => {
     fetchStatus()
     fetchTemplateColumn()
   }, [])
-
-  useEffect(() => {
-    if (id) {
-      if (!_.isNil(formState) && !_.isEmpty(formState.dirtyFields)) {
-        setDisabled(false)
-      } else {
-        setDisabled(true)
-      }
-    }
-  }, [formState])
 
   const fetchStatus = async () => {
     await get(baseUrl.jm_status, {
@@ -100,39 +104,65 @@ const TemplateAdd = React.memo((props) => {
       setValue("id", data.data.id)
       setValue("content", JSON.parse(data.data.content))
       setValue("description", data.data.description)
-      // setValue('status', data.data.status)
+      setValue('status', [...data.data.status])
       // setListStatus(data.data.status)
     })
   }
 
   const onSubmit = async (data) => {
-    // alert(JSON.stringify(data))
+    // alert(JSON.stringify(data.status))
     // return
+    let saveData = _.cloneDeep({ ...data })
     dispatch(loadingButton(true))
-    data.content = data.content
-    const res = await save(baseUrl.jm_template, data)
+    if (!_.isNil(id)) {
+      saveData = {}
+      saveData.id = id
+      saveData.changeFields = data.changeFields
+      saveData.content = data.content
+    }
+    const res = await save2(baseUrl.jm_template, saveData)
     dispatch(loadingButton(false))
     dispatch(openMessage({ ...res }))
-  }
-
-  const renderTabInfo = () => {
-    return <InfoTemplate dataTemplate={dataTemplate} control={control} />
-  }
-
-  const onTemplateChange = (isChange) => {
-    if (isChange === true) {
-      setDisabled(false)
-    } else {
-      setDisabled(true)
+    if (!_.isNil(id) && res.errorCode !== ERROR_CODE.error) {
+      eventEmitter.emit('onChangeButtonDisabled', { buttonId: 'btn-template-save', disabled: true })
     }
   }
 
+  const onValueChange = (value, name, type = EControlType.textField, originData = null) => {
+    if (_.isNil(id)) return
+    let changeFields = DiffTracker.getChangeFieldsOnChange(value, name, type, false, getValues, originData)
+    console.log(changeFields)
+    setValue('changeFields', changeFields)
+    eventEmitter.emit('onChangeButtonDisabled', { buttonId: 'btn-template-save', disabled: !_.isEmpty(changeFields) ? false : true })
+  }
+
+  const renderTabInfo = () => {
+    return <InfoTemplate onValueChange={onValueChange} id={id} dataTemplate={dataTemplate} control={control} />
+  }
+
   const renderTabStatus = () => {
-    return <StatusTemplate statusData={statusData} id={id} control={control} getValues={getValues} handleSubmit={handleSubmit} setValue={setValue} listStatus={(dataTemplate && dataTemplate.status) || []} />
+    return <StatusTemplate
+      onValueChange={onValueChange}
+      name={'status'}
+      statusData={statusData}
+      id={id}
+      control={control}
+      getValues={getValues}
+      handleSubmit={handleSubmit}
+      setValue={setValue} />
   }
 
   const renderView = () => {
-    return <ContentTemplate name={'content'} onTemplateChange={onTemplateChange} formState={formState} templateColumnData={templateColumnData} statusData={statusData} dataTemplate={dataTemplate} control={control} setValue={setValue} />
+    return <ContentTemplate
+      onValueChange={onValueChange}
+      name={'content'}
+      id={id}
+      formState={formState}
+      templateColumnData={templateColumnData}
+      statusData={statusData}
+      dataTemplate={dataTemplate}
+      control={control}
+      setValue={setValue} />
   }
 
   const getTabItems = () => {
@@ -159,7 +189,8 @@ const TemplateAdd = React.memo((props) => {
         <Grid className="of-hidden flex-column no-wrap" container gap={2}>
           <Grid item xs={12} className='flex-basis-auto'>
             <ButtonDetail
-              // disabled={!_.isNil(id) ? disabled : false}
+              id='btn-template-save'
+              disabled={!_.isNil(id) ? true : false}
               onClick={handleSubmit(onSubmit)} type={"Save"} />
           </Grid>
           <div className="containerNew">

@@ -10,6 +10,7 @@ import { SpinningCircles } from "react-loading-icons"
 import { useSelector } from "react-redux"
 import Grid from "@mui/material/Grid"
 import eventEmitter from 'helpers/eventEmitter'
+import _ from 'lodash'
 
 const ButtonDetail = (props) => {
   const theme = createTheme({
@@ -23,8 +24,7 @@ const ButtonDetail = (props) => {
   const { t } = useTranslation()
   const { type, onClick, autoFocus, disabled, className, isFloatRight = false, label, id } = props
   const [icon, setIcon] = useState("")
-  const [text, setText] = useState(label)
-  const [xxx, setXxx] = useState(id)
+  const [text, setText] = useState(!_.isEmpty(label) ? label : t("Save"))
   const [disabledButton, setDisabledButton] = useState(disabled)
   const [color, setColor] = useState(null)
   const [defaultLoading, setDefaultLoading] = useState(false)

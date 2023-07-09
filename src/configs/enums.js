@@ -160,7 +160,8 @@ export const EControlType = {
   upload: "Upload",
   comment: "Comment",
   transferList: "TransferList",
-  listObject: "ListObject"
+  listObject: "ListObject",
+  listId: "ListId"
 }
 
 export const baseUrl = {
