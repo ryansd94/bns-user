@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useCallback } from "react"
 import style from "./ResizableNew.scss"
-import ResizePanel from "react-resize-panel"
 import classNames from "classnames/bind"
 let cx = classNames.bind(style)
 
@@ -30,7 +29,7 @@ const Resizable = React.memo((props) => {
             <div className={cx("content", "panelNew")}>
                 {genderLeftComponent()}
             </div>
-            <ResizePanel
+            {/* <ResizePanel
                 direction="w"
                 style={{ width: "400px", display: display }}
                 handleClass="customHandle"
@@ -39,7 +38,7 @@ const Resizable = React.memo((props) => {
                 <div className="right-bar panel">
                     {genderRightComponent && genderRightComponent()}
                 </div>
-            </ResizePanel>
+            </ResizePanel> */}
         </div>
     )
 })
