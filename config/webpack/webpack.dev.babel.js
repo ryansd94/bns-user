@@ -18,6 +18,10 @@ module.exports = {
     path: paths.outputPath,
     chunkFilename: '[name].js',
     publicPath: '/',
+    loader: 'resolve-url-loader',
+    options: {
+      removeCR: true
+    }
   },
   performance: {
     hints: 'warning',
