@@ -17,11 +17,27 @@ module.exports = {
     filename: '[name].js',
     path: paths.outputPath,
     chunkFilename: '[name].js',
-    publicPath: '/',
-    loader: 'resolve-url-loader',
-    options: {
-      removeCR: true
-    }
+    publicPath: '/'
+  },
+  module: {
+    rules: [
+      // Các quy tắc khác
+      {
+        test: /\.css$/,
+        use: [
+          'style-loader',
+          'css-loader',
+          {
+            loader: 'resolve-url-loader',
+            options: {
+              removeCR: true
+            }
+          },
+          // Các loader khác
+        ]
+      },
+      // Các quy tắc khác
+    ]
   },
   performance: {
     hints: 'warning',

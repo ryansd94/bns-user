@@ -21,6 +21,26 @@ module.exports = {
       removeCR: true
     }
   },
+  module: {
+    rules: [
+      // Các quy tắc khác
+      {
+        test: /\.css$/,
+        use: [
+          'style-loader',
+          'css-loader',
+          {
+            loader: 'resolve-url-loader',
+            options: {
+              removeCR: true
+            }
+          },
+          // Các loader khác
+        ]
+      },
+      // Các quy tắc khác
+    ]
+  },
   plugins: [
     new CleanWebpackPlugin(
       {
