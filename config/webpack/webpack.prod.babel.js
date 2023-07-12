@@ -16,6 +16,10 @@ module.exports = {
     path: paths.outputPath,
     chunkFilename: '[name].[chunkhash].js',
     publicPath: '/',
+    loader: 'resolve-url-loader',
+    options: {
+      removeCR: true
+    }
   },
   plugins: [
     new CleanWebpackPlugin(
