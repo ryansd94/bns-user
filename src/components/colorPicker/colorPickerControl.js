@@ -40,7 +40,7 @@ export default function ColorPickerControl({
                                 name={name}
                                 value={field.value || defaultValue || ''}
                                 onChange={(e) => {
-                                    onChange && onChange(`#${e.hex}`, name)
+                                    onChange && onChange({ value: `#${e.hex}`, name })
                                     field.onChange(`#${e.hex}`)
                                 }}
                                 hideTextfield={hideTextfield}
@@ -51,12 +51,11 @@ export default function ColorPickerControl({
                 }
                 name={name}
                 control={control && control}
-            /> :
-            <div className={readOnly ? "disabled" : undefined}>
+            /> : <div className={readOnly ? "disabled" : ''}>
                 <ColorPicker
                     name={name}
                     value={defaultValue || ''}
-                    onChange={onChange}
+                    onChange={(e) => onChange({ value: `#${e.hex}` })}
                     hideTextfield={hideTextfield}
                     defaultValue="transparent"
                 />

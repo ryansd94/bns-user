@@ -40,7 +40,7 @@ const CheckBoxControl = ({ size, onChange, disabled, control, name, label, isVie
                                     <CheckBox name={name}
                                         disabled={disabled}
                                         onChange={(newValue) => {
-                                            onChange && onChange(newValue.target.checked, name)
+                                            onChange && onChange({ value: newValue.target.checked, name })
                                             field.onChange(newValue.target.checked)
                                         }}
                                         label={label}

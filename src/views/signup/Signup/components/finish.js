@@ -21,7 +21,7 @@ const Finish = () => {
 
     useEffect(() => {
         if (countdown === 0) {
-            history.push(`/${user.defaultOrganization}/dashboard`)
+            history.push(`/${user.defaultOrganization?.code}/dashboard`)
         }
     }, [countdown])
 

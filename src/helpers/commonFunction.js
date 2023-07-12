@@ -93,7 +93,7 @@ export const getPathItem = (url, isProjectPath = true) => {
     }
     const user = getUserInfo()
     if (user) {
-        const defaultOrganization = user.defaultOrganization
+        const defaultOrganization = user.defaultOrganization?.code
         path = !_.isNil(defaultOrganization) ? `/${user.defaultOrganization}${path}` : `${path}`
     }
     return path

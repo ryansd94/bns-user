@@ -101,12 +101,12 @@ const TaskTypePopup = React.memo((props) => {
         }
     }
 
-    const onColorChange = (value, name) => {
+    const onColorChange = ({ value, name }) => {
         setColor(value)
-        onValueChange(value, name)
+        onValueChange({ value, name })
     }
 
-    const onValueChange = (value, name, type = EControlType.textField, isDelete = false) => {
+    const onValueChange = ({ value, name, type = EControlType.textField, isDelete = false }) => {
         DiffTracker.onValueChange({ editData, value, name, type, isDelete, getValues, setValue, eventEmitter, buttonId: popupId })
     }
 

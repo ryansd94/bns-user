@@ -7,7 +7,7 @@ import _ from 'lodash'
 export const createInstance = (organization = null) => {
     // const { origin } = window && window.location
     const instance = axios.create({
-        baseURL: !_.isNil(organization) ? `${process.env.REACT_APP_API_URL}/${organization}/api` : `${process.env.REACT_APP_API_URL}/api`,
+        baseURL: !_.isNil(organization) ? `${process.env.REACT_APP_API_URL}/${organization.code}/api` : `${process.env.REACT_APP_API_URL}/api`,
         headers: {
             'content-type': 'application/json',
         },

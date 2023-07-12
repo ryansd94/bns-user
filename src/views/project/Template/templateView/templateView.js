@@ -62,7 +62,8 @@ const TemplateAdd = React.memo((props) => {
       name: '',
       description: '',
       id: id,
-      assign: [1]
+      assign: [1],
+      statusId: 0
     }
   })
 
@@ -128,7 +129,7 @@ const TemplateAdd = React.memo((props) => {
     }
   }
 
-  const onValueChange = (value, name, type = EControlType.textField, isEntity = true) => {
+  const onValueChange = ({ value, name, type = EControlType.textField, isEntity = true }) => {
     DiffTracker.onValueChange({
       editData: id, value, name, type, getValues,
       setValue, eventEmitter, buttonId: 'btn-template-save', isEntity

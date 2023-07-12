@@ -15,13 +15,17 @@ const ProjectCreateContent = (props) => {
         setTabItems(getTabItems())
     }, [disabledTabSprint])
 
-    const onTypeChange = (value, name) => {
+    const onTypeChange = ({ value, name }) => {
         if (value == EProjectTypeOption.basic) {
             setDisabledTabSprint(true)
         } else {
             setDisabledTabSprint(false)
         }
-        onValueChange(value, name)
+        onValueChange({ value, name })
+    }
+
+    const onDataTabChange = (props) => {
+        onValueChange({ ...props, isEntity: false })
     }
 
     const getTabItems = () => {
@@ -38,12 +42,12 @@ const ProjectCreateContent = (props) => {
                     setValue={setValue}
                     users={users}
                     teams={teams}
-                    onValueChange={onValueChange}
+                    onValueChange={onDataTabChange}
                     control={control} />
             },
             {
                 label: t('Sprint'),
-                Content: <ProjectSprintTab onValueChange={onValueChange} name={'sprints'} reset={reset} control={control} getValues={getValues} setValue={setValue} />,
+                Content: <ProjectSprintTab onValueChange={onDataTabChange} name={'sprints'} reset={reset} control={control} getValues={getValues} setValue={setValue} />,
                 disabled: disabledTabSprint
             }
         ]

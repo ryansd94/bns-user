@@ -10,6 +10,8 @@ import _ from 'lodash'
 import { useTranslation } from "react-i18next"
 import { setActionActive } from "stores/views/master"
 import { useDispatch } from "react-redux"
+import SelectControl from 'components/select/SelectControl'
+import { useForm } from "react-hook-form"
 
 const Sidebar = (props) => {
     const { location } = props
@@ -23,6 +25,10 @@ const Sidebar = (props) => {
     const viewPermissions = user.viewPermissions
     const { t } = useTranslation()
     const dispatch = useDispatch()
+
+    const {
+        control
+    } = useForm()
 
     useEffect(() => {
         onRouteChanged()
@@ -52,8 +58,8 @@ const Sidebar = (props) => {
             path = getProjectPath(path)
         }
         if (user) {
-            const defaultOrganization = user.defaultOrganization
-            return !_.isNil(defaultOrganization) ? `/${user.defaultOrganization}${path}` : `${path}`
+            const defaultOrganization = user.defaultOrganization?.code
+            return !_.isNil(defaultOrganization) ? `/${defaultOrganization}${path}` : `${path}`
         }
         return path
     }
@@ -153,13 +159,24 @@ const Sidebar = (props) => {
         </nav>
     }
 
+    const renderProjectOfUser = () => {
+        return <SelectControl
+            // onChange={onUserTypeChange}
+            options={user.projects}
+            control={control}
+            defaultValue={user?.setting?.projectSetting?.currentId}
+            name='projects'
+        />
+        // return <Grid container item xs direction={'column'} className='no-wrap'>
+        //     <Grid container item xs gap={2} alignItems={'center'} className='box-container'>
+        //         <Grid item><AvatarControl variant={EControlVariant.rounded} name={user?.setting?.projectSetting?.current} /></Grid>
+        //         <Grid item xs className="project-title">{user?.setting?.projectSetting?.current}</Grid>
+        //     </Grid>
+        // </Grid>
+    }
+
     return <div className="flex-column">
-        <Grid container item xs direction={'column'} className='no-wrap'>
-            <Grid container item xs gap={2} alignItems={'center'} className='box-container'>
-                <Grid item><AvatarControl variant={EControlVariant.rounded} name={user?.setting?.projectSetting?.current} /></Grid>
-                <Grid item xs className="project-title">{user?.setting?.projectSetting?.current}</Grid>
-            </Grid>
-        </Grid>
+        {renderProjectOfUser()}
         {renderMenu()}
     </div>
 }

@@ -254,6 +254,11 @@ legend {
         }
     }
 }
+.MuiOutlinedInput-root {
+    height: 40px !important;
+    padding-top: 0 !important;
+    padding-bottom: 0 !important;
+}
 .select-item {
     display: flex;
     gap: 10px;
@@ -380,6 +385,7 @@ span[data-testid="alphaslider"] {
     max-width: max-content !important;
 }
 .tag-item-container {
+    height: $default-control-height;
     max-width: 180px !important;
     flex-wrap: nowrap !important;
     gap: 8px;
@@ -533,6 +539,12 @@ a:hover {
         overflow-y: hidden;
         &:hover {
             overflow-y: overlay;
+        }
+        > div {
+            height: 100%;
+            > div {
+                height: 100%;
+            }
         }
     }
     > .task-board-content {
@@ -802,8 +814,11 @@ a:hover {
 .icon-guidance {
     color: map-get($theme-colors, primary);
 }
-.alert-guidance{
+.alert-guidance {
     background-color: transparent !important;
+}
+.MuiChip-root {
+    border: none !important;
 }
 // .react-swipeable-view-container {
 //     transform: translate(0%, 0px) !important;

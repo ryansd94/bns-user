@@ -123,7 +123,7 @@ const ProjectSprintTab = (props) => {
                 }
             }
         }
-        onValueChange && onValueChange(data, name, EControlType.listObject, isDelete)
+        onValueChange && onValueChange(data, name, EControlType.listObject, isDelete, false)
         setValue(name, [...items])
         // setOpenPopup(false)
     }

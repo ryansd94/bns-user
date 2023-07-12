@@ -82,7 +82,7 @@ const MultiSelect = React.memo(
                 filterSelectedOptions
                 getOptionLabel={(option) => (option ? option.name : "")}
                 onChange={(event, newValue) => {
-                  onChange && onChange(newValue, name)
+                  onChange && onChange({ value: newValue, name })
                   field.onChange(newValue)
                 }}
                 renderInput={(params) => {
@@ -124,10 +124,10 @@ const MultiSelect = React.memo(
                     const changedValues = _.map(newValue, (item) => {
                       return item.id
                     })
-                    onChange && onChange(changedValues, name)
+                    onChange && onChange({ value: changedValues, name })
                     field.onChange(changedValues)
                   } else {
-                    onChange && onChange([], name)
+                    onChange && onChange({ value: [], name })
                     field.onChange([])
                   }
                 }}

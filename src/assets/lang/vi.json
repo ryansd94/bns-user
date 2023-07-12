@@ -216,5 +216,8 @@
     "The status will be applied to all types of tasks": "Trạng thái sẽ được áp dụng cho tất cả các loại công việc",
     "when the checkbox is selected, this status will automatically be added to the status list of all task types": "khi checkbox này được chọn, trạng thái này sẽ tự động được thêm vào danh sách trạng thái của tất cả các loại công việc",
     "Automatically added": "Tự động được thêm vào",
-    "Applied to all types of tasks":"Áp dụng cho tất cả các loại công việc"
+    "Applied to all types of tasks":"Áp dụng cho tất cả các loại công việc",
+    "Assigned user 1":"Người được giao 1",
+    "Assigned user 2":"Người được giao 2",
+    "Assigned user 3":"Người được giao 3"
 }

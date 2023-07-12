@@ -72,11 +72,12 @@ const addToList = (list, index, id, element) => {
 
 const ContentTemplate = (props) => {
   console.log("render ContentTemplate")
-  const { setValue, dataTemplate = null, statusData = [], templateColumnData = [],
+  const { setValue, dataTemplate = null, templateColumnData = [],
     control, name, onValueChange, id } = props
   const theme = useTheme()
   const { t } = useTranslation()
   const [elementContent, setElementContent] = useState(getListContent(t))
+  const statusData = [{ id: 0, name: t('Start') }, { id: 1, name: t('End') }]
 
   useEffect(() => {
     if (dataTemplate && dataTemplate.content) {
@@ -157,7 +158,7 @@ const ContentTemplate = (props) => {
     )
 
     if (!_.isNil(id)) {
-      onValueChange(listCopy, name)
+      onValueChange({ value: listCopy, name })
     }
     setElementContent(listCopy)
   }
@@ -185,7 +186,7 @@ const ContentTemplate = (props) => {
       }
     }
     if (!_.isNil(id)) {
-      onValueChange(listCopy, name)
+      onValueChange({ value: listCopy, name })
     }
     setElementContent(listCopy)
   }
@@ -214,7 +215,7 @@ const ContentTemplate = (props) => {
       }
     }
     if (!_.isNil(id)) {
-      onValueChange(listCopy, name)
+      onValueChange({ value: listCopy, name })
     }
     field.onChange(listCopy)
     setElementContent(listCopy)
@@ -241,7 +242,7 @@ const ContentTemplate = (props) => {
       sourceList.splice(index + 1, 0, removedElement)
     }
     if (!_.isNil(id)) {
-      onValueChange(listCopy, name)
+      onValueChange({ value: listCopy, name })
     }
     field.onChange(listCopy)
     setElementContent(listCopy)
@@ -268,7 +269,7 @@ const ContentTemplate = (props) => {
       settingItem.required = data.required
     }
     if (!_.isNil(id)) {
-      onValueChange(listCopy, name)
+      onValueChange({ value: listCopy, name })
     }
     field.onChange(listCopy)
     setElementContent(listCopy)
@@ -328,7 +329,7 @@ const ContentTemplate = (props) => {
       }
     )
     if (!_.isNil(id)) {
-      onValueChange(listCopy, name)
+      onValueChange({ value: listCopy, name })
     }
     field.onChange(listCopy)
     setElementContent(listCopy)
@@ -365,13 +366,13 @@ const ContentTemplate = (props) => {
               <AssignSelect
                 control={control}
                 name={'assign'}
-                data={[{ id: 1, name: 'Người nhận 1' }, { id: 2, name: 'Người nhận 2' }, { id: 3, name: 'Người nhận 3' }]}
+                data={[{ id: 1, name: t('Assigner 1') }, { id: 2, name: 'Assigner 2' }, { id: 3, name: 'Assigner 3' }]}
               />
             </Grid>
             <Grid item>
               <StatusSelect
                 options={statusData}
-                name={'status'}
+                name={'statusId'}
                 control={control}
                 defaultValue={!_.isEmpty(statusData) ? statusData[0].id : null}
               />

@@ -10,7 +10,7 @@ import { useForm } from "react-hook-form"
 const TransferList = (props) => {
     console.log('TransferList')
     const { items = [], name,
-        renderItem, setValueData, 
+        renderItem, setValueData,
         leftTitle, rightTitle, onChange, getValueData } = props
     const [lstItemAll, setLstItemAll] = useState(items)
     const [lstItemApply, setLstItemApply] = useState(getValueData(name))
@@ -24,7 +24,7 @@ const TransferList = (props) => {
         control
     } = useForm({
     })
-    
+
     useEffect(() => {
         const itemApllyIds = getValueData(name) || []
         const lstItemSelected = _.filter(lstItemAll, (x) => _.includes(itemApllyIds, x.id))
@@ -33,7 +33,7 @@ const TransferList = (props) => {
         setLstItemAll([...lstItemNotSelected])
     }, [])
 
-    const onCheckAllItem = (value) => {
+    const onCheckAllItem = ({ value }) => {
         let itemSelected = []
         _.map(lstItemAll, (item) => {
             setValue(item.id, value)
@@ -45,7 +45,7 @@ const TransferList = (props) => {
         setDisabledSwitchRight(_.isEmpty(itemSelected))
     }
 
-    const onCheckAllItemApply = (value) => {
+    const onCheckAllItemApply = ({ value }) => {
         let itemSelected = []
         _.map(lstItemApply, (item) => {
             setValue(`${item.id}-apply`, value)
@@ -102,7 +102,7 @@ const TransferList = (props) => {
                 setValue(item.id, false)
             })
             const lstIdApply = _.map(lstItemApply, (x) => { return x.id })
-            onChange && onChange(lstIdApply, name, EControlType.transferList)
+            onChange && onChange({ value: lstIdApply, name, type: EControlType.transferList })
             setValueData && setValueData(name, lstIdApply)
         }
         setDisabledSwitchRight(true)
@@ -122,7 +122,7 @@ const TransferList = (props) => {
                 setValue(`${item.id}-apply`, false)
             })
             const lstIdApply = _.map(lstItemNotSelected, (x) => { return x.id })
-            onChange && onChange(lstIdApply, name, EControlType.transferList)
+            onChange && onChange({ value: lstIdApply, name, type: EControlType.transferList })
             setValueData && setValueData(name, lstIdApply)
         }
         setDisabledSwitchLeft(true)
@@ -138,9 +138,9 @@ const TransferList = (props) => {
             </Grid>
             {
                 _.map(lstItemAll, (item) => {
-                    return <Grid key={item.id} container direction='row'>
+                    return <Grid key={item.id} gap={1} container direction='row'>
                         <Grid item>
-                            <CheckBoxControl onChange={(value) => onChangeSelectedItemNotApply(value, item.id)} control={control} name={item.id} />
+                            <CheckBoxControl onChange={({ value }) => onChangeSelectedItemNotApply(value, item.id)} control={control} name={item.id} />
                         </Grid>
                         {renderItem && renderItem(item)}
                     </Grid>
@@ -158,9 +158,9 @@ const TransferList = (props) => {
             </Grid>
             {
                 _.map(lstItemApply, (item) => {
-                    return <Grid key={item.id} container direction='row'>
+                    return <Grid key={item.id} gap={1} container direction='row'>
                         <Grid item>
-                            <CheckBoxControl onChange={(value) => onChangeSelectedItemApply(value, item.id)} control={control} name={`${item.id}-apply`} />
+                            <CheckBoxControl onChange={({ value }) => onChangeSelectedItemApply(value, item.id)} control={control} name={`${item.id}-apply`} />
                         </Grid>
                         {renderItem && renderItem(item)}
                     </Grid>

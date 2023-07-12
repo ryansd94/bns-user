@@ -23,7 +23,7 @@ const UploadIcon = (props) => {
 
         reader.onloadend = function (e) {
             setSelectedFile(reader.result)
-            onChange && onChange(reader.result, name)
+            onChange && onChange({ value: reader.result, name })
             field.onChange(reader.result)
         }.bind(this)
     }

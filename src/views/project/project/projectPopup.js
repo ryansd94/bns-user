@@ -105,9 +105,13 @@ const ProjectPopup = React.memo((props) => {
 
     const onSubmit = async (data) => {
         dispatch(loadingButton(true))
-        var postData = data
-        if (!_.isEmpty(editData)) postData.id = editData
-        const res = await save2(baseUrl.jm_project, postData)
+        let saveData = { ...data }
+        if (!_.isNil(editData)) {
+          saveData = {}
+          saveData.id = editData
+          saveData.changeFields = data.changeFields
+        }
+        const res = await save2(baseUrl.jm_project, saveData)
         dispatch(loadingButton(false))
         dispatch(openMessage({ ...res }))
         if (res.errorCode == ERROR_CODE.success) {
@@ -117,8 +121,8 @@ const ProjectPopup = React.memo((props) => {
         }
     }
 
-    const onValueChange = (value, name, type = EControlType.textField, isDelete = false) => {
-        DiffTracker.onValueChange({ buttonId: id, editData, value, name, type, isDelete, getValues, setValue, eventEmitter })
+    const onValueChange = ({ value, name, type = EControlType.textField, isDelete = false, isEntity = true }) => {
+        DiffTracker.onValueChange({ buttonId: id, editData, value, name, type, isDelete, getValues, setValue, eventEmitter, isEntity })
     }
 
     const renderModalBody = () => {

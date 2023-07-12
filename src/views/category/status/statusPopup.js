@@ -94,15 +94,15 @@ const StatusPopup = (props) => {
 
     const onStatusStartChange = (value, name) => {
         setStatusEndDisable(value)
-        onValueChange(value, name)
+        onValueChange({value, name})
     }
 
     const onStatusEndChange = (value, name) => {
         setStatusStartDisable(value)
-        onValueChange(value, name)
+        onValueChange({value, name})
     }
 
-    const onValueChange = (value, name, type = EControlType.textField, isDelete = false) => {
+    const onValueChange = ({value, name, type = EControlType.textField, isDelete = false}) => {
         DiffTracker.onValueChange({ editData, value, name, type, isDelete, getValues, setValue, eventEmitter, buttonId: popupId })
     }
 

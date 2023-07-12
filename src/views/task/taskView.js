@@ -378,7 +378,7 @@ const TaskView = (props) => {
         </Grid>
     }
 
-    const onValueChange = (value, name, type = EControlType.textField) => {
+    const onValueChange = ({value, name, type = EControlType.textField}) => {
         DiffTracker.onValueChange({
           editData: taskEditId || taskId, value, name, type, getValues,
           setValue, eventEmitter, buttonId: 'buttonTaskSave'

@@ -52,7 +52,7 @@ export default function RadioGroupControl({
                                 value={field.value}
                                 name={name}
                                 onChange={(e) => {
-                                    onChange && onChange(e.target.value, name)
+                                    onChange && onChange({ value: e.target.value, name })
                                     field.onChange(e.target.value)
                                 }}
                             >

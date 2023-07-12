@@ -94,7 +94,7 @@ export default function TextInput({
                     valueChange = null
                   }
                 }
-                onChange && onChange(valueChange, name)
+                onChange && onChange({ value: valueChange, name })
                 field.onChange(valueChange)
               }}
               sx={{

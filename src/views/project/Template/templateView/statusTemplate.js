@@ -36,7 +36,7 @@ const StatusTemplate = React.memo((props) => {
     useEffect(() => {
         if (!_.isNil(listStatusTemplate)) {
             if (!_.isNil(id)) {
-                onValueChange(listStatusTemplate, name, EControlType.listId, status)
+                onValueChange({ value: listStatusTemplate, name, type: EControlType.listId })
             }
             setValue(name, [...listStatusTemplate])
         }
@@ -49,14 +49,6 @@ const StatusTemplate = React.memo((props) => {
             listStatusTemplateRemaining.push(deletedItem.id)
             setListStatusTemplateRemaining(listStatusTemplateRemaining)
         }
-    }
-
-    const onStatusRemainingDelete = () => {
-        if (!_.isNil(statusRemainingId)) {
-            const currentListStatus = listStatusTemplate.filter(item => item !== statusRemainingId)
-            setListStatusTemplate([...currentListStatus])
-        }
-        setListStatusTemplateRemaining([])
     }
 
     const addNew = () => {

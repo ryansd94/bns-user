@@ -98,7 +98,7 @@ const TaskDragElement = ({ item, columnHeader, controls = [], droppableClassName
       {
         loading ? <Loading isShowTitle={false} /> : <DroppableStyles>
           {columnHeader ? (<ColumnHeader>{columnHeader}</ColumnHeader>) : ''}
-          <Droppable droppableId={`${item.id}`}>
+          <Droppable  droppableId={`${item.id}`}>
             {(provided) => (
               <div className={droppableClassName} {...provided.droppableProps} ref={provided.innerRef}>
                 {

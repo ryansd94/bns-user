@@ -36,11 +36,11 @@ const ProjectBoard = () => {
     }, [])
 
     const onProjectClick = (item) => {
-        save(`${baseUrl.jm_user}/me`, { id: user.userId, configs: [{ key: 'ProjectSetting.Current', value: item.code }, { key: 'ProjectSetting.CurrentId', value: item.id }] })
-        user.setting.projectSetting.current = item.code
-        user.setting.projectSetting.currentId = item.id
-        setUserInfo({ user: user })
-        dispatch(setUserSetting({ setting: { projectSetting: { current: item.code, currentId: item.id } } }))
+        // save(`${baseUrl.jm_user}/me`, { id: user.userId, configs: [{ key: 'ProjectSetting.Current', value: item.code }, { key: 'ProjectSetting.CurrentId', value: item.id }] })
+        // user.setting.projectSetting.current = item.code
+        // user.setting.projectSetting.currentId = item.id
+        // setUserInfo({ user: user })
+        // dispatch(setUserSetting({ setting: { projectSetting: { current: item.code, currentId: item.id } } }))
         // history.push(`/${user.defaultOrganization}/${item.code}/overview/summary`)
         if (_.isNil(item.id)) return
         dispatch(open())

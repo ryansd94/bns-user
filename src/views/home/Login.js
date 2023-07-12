@@ -104,7 +104,7 @@ export default function Login() {
                 msg: "",
               })
               dispatch(setUserSetting({ ...user }))
-              setTokenLoginSucceeded({ token, user }, () => { history.push(`/${user.defaultOrganization}/dashboard`) })
+              setTokenLoginSucceeded({ token, user }, () => { history.push(`/${user.defaultOrganization?.code}/dashboard`) })
             }
             break
           }
@@ -130,7 +130,7 @@ export default function Login() {
     const tokenWeb = getAccessToken()
     if (tokenWeb) {
       const user = getUserInfo()
-      history.push(`/${user.defaultOrganization}/dashboard`)
+      history.push(`/${user.defaultOrganization?.code}/dashboard`)
     }
   }, [])
   
@@ -190,7 +190,7 @@ export default function Login() {
               dirty: false,
               msg: "",
             })
-            history.push(`${user.defaultOrganization}/dashboard`)
+            history.push(`${user.defaultOrganization?.code}/dashboard`)
           }
           break
         }
