@@ -26,15 +26,15 @@ module.exports = {
         test: /\.css$/,
         use: [
           'style-loader',
-          'css-loader',
-          {
-            loader: 'resolve-url-loader',
-            options: {
-              removeCR: true
-            }
-          },
+          'css-loader'
           // Các loader khác
         ]
+      },
+      {
+        loader: 'resolve-url-loader',
+        options: {
+          removeCR: true
+        }
       },
       // Các quy tắc khác
     ]
