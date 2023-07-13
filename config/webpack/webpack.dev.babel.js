@@ -3,6 +3,7 @@ import Jarvis from 'webpack-jarvis';
 import dotenv from 'dotenv';
 import $ from 'jquery';
 import paths from './paths';
+const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 
 const env = dotenv.config().parsed;
 const envKeys = Object.keys(env || {}).reduce((prev, next) => {
@@ -21,26 +22,19 @@ module.exports = {
   },
   module: {
     rules: [
-      // Các quy tắc khác
-      {
-        test: /\.css$/,
-        use: [
-          'style-loader',
-          'css-loader'
-        ]
-      },
       {
         test: /\.s?css$/,
         use: [
           {
-            loader: 'resolve-url-loader',
+            loader: MiniCssExtractPlugin.loader,
             options: {
               removeCR: true
             }
-          }
+          },
+          'style-loader',
+          'css-loader'
         ]
       }
-      // Các quy tắc khác
     ]
   },
   performance: {

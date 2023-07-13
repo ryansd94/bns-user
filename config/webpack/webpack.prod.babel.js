@@ -2,6 +2,7 @@ import { CleanWebpackPlugin } from 'clean-webpack-plugin';
 import paths from './paths';
 import dotenv from 'dotenv';
 import webpack from 'webpack';
+const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 
 const env = dotenv.config().parsed;
 const envKeys = Object.keys(env || {}).reduce((prev, next) => {
@@ -24,21 +25,16 @@ module.exports = {
   module: {
     rules: [
       {
-        test: /\.css$/,
-        use: [
-          'style-loader',
-          'css-loader'
-        ]
-      },
-      {
         test: /\.s?css$/,
         use: [
           {
-            loader: 'resolve-url-loader',
+            loader: MiniCssExtractPlugin.loader,
             options: {
               removeCR: true
             }
-          }
+          },
+          'style-loader',
+          'css-loader'
         ]
       }
     ]
