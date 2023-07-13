@@ -35,7 +35,28 @@ module.exports = {
           },
           {
             loader: 'resolve-url-loader',
-            options: { removeCR: true }
+            options: {
+              removeCR: true,
+              sourceMap: true
+            }
+          }
+        ]
+      },
+      {
+        test: /\.css$/,
+        use: [
+          {
+            loader: 'sass-loader',
+            options: {
+              sourceMap: true, // <-- !!IMPORTANT!!
+            }
+          },
+          {
+            loader: 'resolve-url-loader',
+            options: {
+              removeCR: true,
+              sourceMap: true
+            }
           }
         ]
       }
