@@ -26,13 +26,15 @@ module.exports = {
         test: /\.s?css$/,
         use: [
           {
-            loader: MiniCssExtractPlugin.loader,
+            loader: 'sass-loader',
             options: {
-              removeCR: true
+              sourceMap: true, // <-- !!IMPORTANT!!
             }
           },
-          'style-loader',
-          'css-loader'
+          {
+            loader: 'resolve-url-loader',
+            options: { removeCR: true }
+          }
         ]
       }
     ]
