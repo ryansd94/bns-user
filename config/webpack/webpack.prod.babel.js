@@ -23,22 +23,19 @@ module.exports = {
   },
   module: {
     rules: [
-      // Các quy tắc khác
       {
-        test: /\.css$/,
+        test: /\.s?css$/,
         use: [
           'style-loader',
-          'css-loader'
-          // Các loader khác
+          'css-loader',
+          {
+            loader: 'resolve-url-loader',
+            options: {
+              removeCR: true
+            }
+          }
         ]
-      },
-      {
-        loader: 'resolve-url-loader',
-        options: {
-          removeCR: true
-        }
       }
-      // Các quy tắc khác
     ]
   },
   plugins: [

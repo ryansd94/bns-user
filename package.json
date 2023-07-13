@@ -81,6 +81,7 @@
     "react-scripts": "^4.0.3",
     "react-swipeable-views": "^0.14.0",
     "redux": "^4.1.2",
+    "resolve-url-loader": "^5.0.0",
     "rrule": "^2.6.0",
     "serve": "^13.0.2",
     "styled-components": "^5.3.3",
