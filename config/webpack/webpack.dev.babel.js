@@ -23,7 +23,7 @@ module.exports = {
   module: {
     rules: [
       {
-        test: /\.s?css$/,
+        test: /\.scss$/,
         use: [
           {
             loader: 'sass-loader',
