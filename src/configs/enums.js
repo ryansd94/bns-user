@@ -107,7 +107,9 @@ export const EButtonIconType = {
   unLock: "UnLock",
   switchLeft: "SwitchLeft",
   switchRight: "SwitchRight",
-  close: "Close"
+  close: "Close",
+  refresh: "Refresh",
+  copy: "Copy"
 }
 
 export const EButtonDetailType = {
@@ -175,7 +177,8 @@ export const baseUrl = {
   jm_project: 'jm_project',
   sys_viewPermission: 'sys_viewPermission',
   jm_notifyUser: 'jm_notifyuser',
-  account: 'account'
+  account: 'account',
+  jm_tag: 'jm_tag'
 }
 
 export const EViewMode = {
@@ -228,6 +231,11 @@ export const EPosition = {
 export const EGuidanceContentType = {
   icon: 'Icon',
   detail: 'Detail'
+}
+
+export const ESortType = {
+  asc: 'asc',
+  desc: 'desc'
 }
 
 export const _TemplateVariant = EVariant.normal

@@ -192,6 +192,7 @@ const Filter = (props) => {
                             <SingleAddSelect
                                 data={filterData}
                                 control={control}
+                                isAddWhenNoOption={false}
                                 name='filterId'
                             />
                         </Grid>

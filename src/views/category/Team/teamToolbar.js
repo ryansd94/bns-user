@@ -24,7 +24,7 @@ const TeamToolbar = (props) => {
         field: "description", isShow: true, label: t("Description"), type: EControlType.textField
     },
     {
-        field: "parentName", isShow: true, label: t("Team parent"), type: EControlType.textField
+        field: "parent.Name", isShow: true, label: t("Team parent"), type: EControlType.textField
     },
     // {
     //     field: "status", value: true, label: t("Trạng thái"), type: EControlType.select

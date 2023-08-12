@@ -13,7 +13,7 @@ import IconButton from "@mui/material/IconButton"
 import * as Yup from "yup"
 import Alert from "@mui/material/Alert"
 import { validateTokenSignup, registerGoogle, checkOrganization } from "services"
-import { ERROR_CODE } from "configs"
+import { ERROR_CODE, message } from "configs"
 import {
   setTokenLoginSucceeded,
 } from "helpers"
@@ -24,13 +24,14 @@ import { setUserSetting } from "stores/views/master"
 import { useDispatch } from "react-redux"
 import { Finish } from "./components"
 import { StepperControl } from "components/stepper"
+import eventEmitter from 'helpers/eventEmitter'
 
 export default function Signup() {
   const { search } = useLocation()
   const { t } = useTranslation()
   const dispatch = useDispatch()
   const { token, googleToken } = queryString.parse(search)
-  const steps = [t('Informations'), t('Account'), t('Finish')]
+  const steps = [{ label: t('Informations'), name: 'tabInformation' }, { label: t('Account'), name: 'tabAccount' }, { label: t('Finish'), name: 'tabFinish' }]
   const [error, setErrorToken] = useState("")
   const [password, setPassword] = useState("")
   const [loading, setLoading] = useState(false)
@@ -39,6 +40,7 @@ export default function Signup() {
   const [companyName, setCompanyName] = useState(t("Personal name"))
   const [passwordIsvalid, setPasswordIsvalid] = useState(false)
   const [tokenIsvalid, setTokenIsvalid] = useState(true)
+  const id = 'signup'
   const [values, setValues] = React.useState({
     password: "",
     confirmPassword: "",
@@ -62,9 +64,9 @@ export default function Signup() {
   const validationSchema = (context) => {
     if (context.activeStep === 0) {
       return Yup.object().shape({
-        companyName: Yup.string().required('Company name is required'),
+        companyName: Yup.string().required(t(message.error.fieldNotEmpty)),
         organization: Yup.string()
-          .required('Domain name cannot be empty')
+          .required(t(message.error.fieldNotEmpty))
           .min(3, 'Domain name must contain at least 3 characters')
           .max(30, 'Domain names can only contain up to 30 characters')
           .matches(/^[a-zA-Z0-9_]*$/, 'Domain names contain only lowercase letters, uppercase letters, or numbers'),
@@ -123,7 +125,9 @@ export default function Signup() {
 
   const handleNext = async (data, activeStep) => {
     if (activeStep === 0) {
+      eventEmitter.emit('onChangeButtonLoading', { buttonId: id, loading: true })
       const res = await checkOrganization({ domain: getValues('organization') })
+      eventEmitter.emit('onChangeButtonLoading', { buttonId: id, loading: false })
       if (res.data.errorCode == ERROR_CODE.success) {
         if (res.data.data.isValid === true) {
           setActiveStep(activeStep + 1)
@@ -186,6 +190,7 @@ export default function Signup() {
     // return
     if (!passwordIsvalid) return
 
+    eventEmitter.emit('onChangeButtonLoading', { buttonId: id, loading: true })
     data.token = token
     data.googleToken = replaceAll(googleToken, " ", "+")
     const res = await registerGoogle(data)
@@ -200,15 +205,16 @@ export default function Signup() {
       const user = { ...userInfo, isAdmin: true, acceptScreen: [] }
       dispatch(setUserSetting({ ...user }))
       setTokenLoginSucceeded({ token, user })
+      eventEmitter.emit('onChangeButtonLoading', { buttonId: id, loading: false })
     }
   }
 
-  const onChangePasswordAgain = (text) => {
-    setPasswordAgain(text)
+  const onChangePasswordAgain = ({ value }) => {
+    setPasswordAgain(value)
   }
 
-  const onChangePassword = (text) => {
-    setPassword(text)
+  const onChangePassword = ({ value }) => {
+    setPassword(value)
   }
 
   const onUserTypeChange = (value) => {
@@ -419,7 +425,7 @@ export default function Signup() {
                   </Grid>
                   <Grid item>
                     <Box sx={{ width: '100%' }}>
-                      <StepperControl renderSteps={renderSteps} handleSubmit={handleFormSubmit} errors={errors} steps={steps} />
+                      <StepperControl id={id} renderSteps={renderSteps} handleSubmit={handleFormSubmit} errors={errors} steps={steps} />
                     </Box>
                   </Grid>
                 </Grid> : <Alert severity="error">{error}</Alert>}

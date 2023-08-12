@@ -7,7 +7,7 @@ import * as Yup from "yup"
 import { useForm } from "react-hook-form"
 import { message } from "configs"
 import ButtonDetail from "components/button/ButtonDetail"
-import { EButtonDetailType } from "configs"
+import { EButtonDetailType, EProjectTypeOption } from "configs"
 import { loading as loadingButton } from "stores/components/button"
 import { useDispatch } from "react-redux"
 import { ERROR_CODE, baseUrl } from "configs"
@@ -39,6 +39,13 @@ const ProjectEmptyView = () => {
         return result
     }
 
+    const defaultValues = {
+        name: "",
+        description: "",
+        type: EProjectTypeOption.basic,
+        sprints: []
+    }
+
     const {
         control,
         handleSubmit,
@@ -46,7 +53,8 @@ const ProjectEmptyView = () => {
         setValue,
         reset
     } = useForm({
-        resolver: customResolver
+        resolver: customResolver,
+        defaultValues: defaultValues
     })
 
     const onSubmit = async (data) => {
@@ -67,7 +75,12 @@ const ProjectEmptyView = () => {
                 <Grid item xs className="box-container">
                     <h1>{t('To get started, create your first project!')}</h1>
                     <Grid item xs>
-                        <ProjectCreateContent reset={reset} getValues={getValues} setValue={setValue} control={control} />
+                        <ProjectCreateContent
+                            reset={reset}
+                            getValues={getValues}
+                            type={EProjectTypeOption.basic}
+                            setValue={setValue}
+                            control={control} />
                     </Grid>
                 </Grid>
             </Grid>

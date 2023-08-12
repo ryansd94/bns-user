@@ -101,7 +101,7 @@ const UserGrid = React.memo((props) => {
         }
 
         return <strong>
-          <CellButton isDeleteShow={!_isMainAccount} listButton={listButton} id={params.data.id} isEditShow={false} url={baseUrl.jm_template} />
+          <CellButton isDeleteShow={!_isMainAccount} listButton={listButton} id={params.data.userId} isEditShow={false} url={baseUrl.jm_user} />
         </strong>
       },
       sortable: false,

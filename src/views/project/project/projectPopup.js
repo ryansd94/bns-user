@@ -96,11 +96,10 @@ const ProjectPopup = React.memo((props) => {
         handleSubmit,
         reset,
         setValue,
-        getValues,
-        register
+        getValues
     } = useForm({
         resolver: customResolver,
-        defaultValues: defaultValues,
+        defaultValues: defaultValues
     })
 
     const onSubmit = async (data) => {
@@ -129,7 +128,6 @@ const ProjectPopup = React.memo((props) => {
         return <ProjectCreateContent
             members={members}
             onValueChange={onValueChange}
-            register={register}
             type={_.isNil(editData) ? EProjectTypeOption.basic : type}
             control={control}
             getValues={getValues}

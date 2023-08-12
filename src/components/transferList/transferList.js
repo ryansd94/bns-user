@@ -8,7 +8,6 @@ import { EButtonIconType, EControlType } from "configs"
 import { useForm } from "react-hook-form"
 
 const TransferList = (props) => {
-    console.log('TransferList')
     const { items = [], name,
         renderItem, setValueData,
         leftTitle, rightTitle, onChange, getValueData } = props

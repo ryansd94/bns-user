@@ -230,22 +230,24 @@ const FilterItem = React.memo((props) => {
             <Grid width={200}>
                 <SingleAddSelect
                     size={size}
-                    onSelectChange={onColumnChange}
+                    onSelectChange={({ value }) => onColumnChange(value)}
                     label={t("Column")}
                     data={setColumnModelData()}
                     control={control}
                     name={`test[${index}].column`}
+                    isAddWhenNoOption={false}
                 >
                 </SingleAddSelect>
             </Grid>
             <Grid width={200}  >
                 <SingleAddSelect
                     size={size}
-                    onSelectChange={onConditionChange}
+                    onSelectChange={({ value }) => onConditionChange(value)}
                     disabled={item && item.condition != null ? false : disableCondition}
                     control={control}
                     label={t("Compare")}
                     name={`test[${index}].condition`}
+                    isAddWhenNoOption={false}
                     data={conditionOption}>
                 </SingleAddSelect>
             </Grid>

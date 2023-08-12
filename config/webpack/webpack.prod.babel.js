@@ -2,7 +2,6 @@ import { CleanWebpackPlugin } from 'clean-webpack-plugin';
 import paths from './paths';
 import dotenv from 'dotenv';
 import webpack from 'webpack';
-const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 
 const env = dotenv.config().parsed;
 const envKeys = Object.keys(env || {}).reduce((prev, next) => {
@@ -21,46 +20,6 @@ module.exports = {
     options: {
       removeCR: true
     }
-  },
-  module: {
-    rules: [
-      {
-        test: /\.scss$/,
-        use: [
-          {
-            loader: 'sass-loader',
-            options: {
-              sourceMap: true, // <-- !!IMPORTANT!!
-            }
-          },
-          {
-            loader: 'resolve-url-loader',
-            options: {
-              removeCR: true,
-              sourceMap: true
-            }
-          }
-        ]
-      },
-      {
-        test: /\.css$/,
-        use: [
-          {
-            loader: 'sass-loader',
-            options: {
-              sourceMap: true, // <-- !!IMPORTANT!!
-            }
-          },
-          {
-            loader: 'resolve-url-loader',
-            options: {
-              removeCR: true,
-              sourceMap: true
-            }
-          }
-        ]
-      }
-    ]
   },
   plugins: [
     new CleanWebpackPlugin(

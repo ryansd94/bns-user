@@ -13,6 +13,7 @@ import { LabelControl } from 'components/label'
 import { useSelector } from "react-redux"
 import Skeleton from "@mui/material/Skeleton"
 import { Controller } from "react-hook-form"
+import { useTranslation } from "react-i18next"
 import _ from 'lodash'
 
 const containsText = (text, searchText) =>
@@ -20,8 +21,10 @@ const containsText = (text, searchText) =>
 
 const SelectControl = React.memo((props) => {
     const { fullWidth, label, size, options = [], renderOptions,
-        renderValue, onChange, defaultValue, disabled, control, name, isSearchText = true, required = false } = props
+        renderValue, onChange, defaultValue, disabled, control, name,
+        isSearchText = true, required = false, isSelectedDefault = true } = props
     const [selectedOption, setSelectedOption] = useState(null)
+    const { t } = useTranslation()
     const loadingPopup = useSelector((state) => state.master.loadingPopup)
     const [searchText, setSearchText] = useState("")
 
@@ -42,7 +45,7 @@ const SelectControl = React.memo((props) => {
     }
 
     useEffect(() => {
-        setSelectedOption(!_.isNil(defaultValue) ? defaultValue : (options && options.length > 0 ? options[0].id : null))
+        setSelectedOption(!_.isNil(defaultValue) ? defaultValue : (options && options.length > 0 && isSelectedDefault === true ? options[0].id : null))
     }, [options])
 
     const genderControlElement = (field) => {
@@ -80,14 +83,16 @@ const SelectControl = React.memo((props) => {
                         }}
                     />
                 </ListSubheader> : <ListSubheader></ListSubheader>}
-                {displayedOptions.map((option, i) => (
-                    <MenuItem key={option.id} value={option.id}>
-                        {
-                            renderOptions ? renderOptions(option) :
-                                option.name
-                        }
-                    </MenuItem>
-                ))}
+                {
+                    !_.isEmpty(displayedOptions) ? displayedOptions.map((option, i) => (
+                        <MenuItem key={option.id} value={option.id}>
+                            {
+                                renderOptions ? renderOptions(option) :
+                                    option.name
+                            }
+                        </MenuItem>
+                    )) : <MenuItem disabled className="italic">{t('No data displayed')}</MenuItem>
+                }
             </Select>
         </FormControl>
     }

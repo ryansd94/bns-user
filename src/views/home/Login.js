@@ -2,6 +2,7 @@
 import { Link, useHistory } from "react-router-dom"
 import { Form } from "react-bootstrap"
 import Box from "@mui/material/Box"
+import Grid from "@mui/material/Grid"
 import IconButton from "@mui/material/IconButton"
 import OutlinedInput from "@mui/material/OutlinedInput"
 import InputLabel from "@mui/material/InputLabel"
@@ -20,17 +21,25 @@ import {
 import { login, loginGoogle } from "services"
 import httpStatus from "http-status"
 import Button from "@mui/material/Button"
-import { ERROR_CODE } from "configs"
+import { ERROR_CODE, message } from "configs"
 import firebase from "firebase/compat/app"
 import StyledFirebaseAuth from "react-firebaseui/StyledFirebaseAuth"
 import "firebase/compat/auth"
 import _ from 'lodash'
 import { setUserSetting } from "stores/views/master"
 import { useDispatch } from "react-redux"
+import { useTranslation } from "react-i18next"
+import { TextInput } from "components"
+import * as Yup from "yup"
+import { useForm } from "react-hook-form"
+import { yupResolver } from "@hookform/resolvers/yup"
+import { Alert } from "components/alert"
+import { CheckBoxControl } from 'components/checkbox'
 
 export default function Login() {
   const history = useHistory()
   const dispatch = useDispatch()
+  const { t } = useTranslation()
   const [values, setValues] = React.useState({
     amount: "",
     password: "",
@@ -46,16 +55,30 @@ export default function Login() {
     msg: "",
   })
 
+  const validationSchema = Yup.object().shape({
+    username: Yup.string().required(t(message.error.fieldNotEmpty)),
+    password: Yup.string().required(t(message.error.fieldNotEmpty))
+  })
+
+  const {
+    control,
+    handleSubmit,
+    reset,
+    setValue,
+    getValues
+  } = useForm({
+    resolver: yupResolver(validationSchema)
+  })
+
   useEffect(() => {
     const { username, password } = getKeepMeUser()
-    if (!_.isNil(username)) {
+    if (!_.isNil(username) && !_.isEmpty(username)) {
+      setValue('username', username)
+      setValue('password', password)
+      setValue('keepMe', true)
       setValues({ ...values, ['username']: username, password: password, keepMe: true })
     }
   }, [])
-
-  const handleChange = (prop) => (event) => {
-    setValues({ ...values, [prop]: event.target.value })
-  }
 
   const handleClickShowPassword = () => {
     setValues({
@@ -88,7 +111,7 @@ export default function Login() {
             } else if (data.errorCode != ERROR_CODE.success) {
               setError({
                 dirty: true,
-                msg: "tài hkoản hoặc mật khẩu sai",
+                msg: t('Invalid username or password'),
               })
               break
             } else {
@@ -121,19 +144,16 @@ export default function Login() {
     return () => unregisterAuthObserver()
   }
 
-  function validate() {
-    let valid = true
-    return valid
-  }
-
   useLayoutEffect(() => {
     const tokenWeb = getAccessToken()
     if (tokenWeb) {
       const user = getUserInfo()
-      history.push(`/${user.defaultOrganization?.code}/dashboard`)
+      if (_.isNil(user)) {
+        history.push(`/${user.defaultOrganization?.code}/dashboard`)
+      }
     }
   }, [])
-  
+
   // Configure Firebase.
   const config = {
     apiKey: process.env.REACT_APP_FIREBASE_API_KEY,
@@ -152,56 +172,53 @@ export default function Login() {
     },
   }
 
-  async function handleSubmit() {
-    const valid = validate()
-    if (valid) {
-      setIsSubmitting(true)
-      const res = await login({
-        userName: values.username,
-        passWord: values.password,
-        remember: true,
-      })
-      setIsSubmitting(false)
-      switch (res.status) {
-        case httpStatus.OK: {
-          const { data, errors } = res && res
-          if (data.errorCode != ERROR_CODE.success) {
-            setError({
-              dirty: true,
-              msg: "tài hkoản hoặc mật khẩu sai",
-            })
-            break
-          } else {
-            const { data } = res && res.data
-            const token = {
-              accessToken: data.token,
-              refreshToken: data.token,
-              shopIndex: data.shopIndex,
-            }
-            const user = { ...data, isAdmin: true, acceptScreen: [] }
-            if (values.keepMe) {
-              setKeepMeUser({ user: values.username, password: values.password })
-            } else {
-              setKeepMeUser({ user: null, password: null })
-            }
-            setTokenLoginSucceeded({ token, user })
-            dispatch(setUserSetting({ ...user }))
-            setError({
-              dirty: false,
-              msg: "",
-            })
-            history.push(`${user.defaultOrganization?.code}/dashboard`)
-          }
-          break
-        }
-        default: {
+  async function onSignIn(data) {
+    setIsSubmitting(true)
+    const res = await login({
+      userName: data.username,
+      passWord: data.password,
+      remember: true,
+    })
+    setIsSubmitting(false)
+    switch (res.status) {
+      case httpStatus.OK: {
+        const { data, errors } = res && res
+        if (data.errorCode != ERROR_CODE.success) {
           setError({
             dirty: true,
-            msg: "Đã có lỗi xảy ra. Vui lòng thử lại sau",
+            msg: t('Invalid username or password'),
           })
-          resetUserToken()
           break
+        } else {
+          const { data } = res && res.data
+          const token = {
+            accessToken: data.token,
+            refreshToken: data.token,
+            shopIndex: data.shopIndex,
+          }
+          const user = { ...data, isAdmin: true, acceptScreen: [] }
+          if (getValues('keepMe') === true) {
+            setKeepMeUser({ user: getValues('username'), password: getValues('password') })
+          } else {
+            setKeepMeUser({ user: '', password: '' })
+          }
+          setTokenLoginSucceeded({ token, user })
+          dispatch(setUserSetting({ ...user }))
+          setError({
+            dirty: false,
+            msg: "",
+          })
+          history.push(`${user.defaultOrganization?.code}/dashboard`)
         }
+        break
+      }
+      default: {
+        setError({
+          dirty: true,
+          msg: "Đã có lỗi xảy ra. Vui lòng thử lại sau",
+        })
+        resetUserToken()
+        break
       }
     }
   }
@@ -220,73 +237,74 @@ export default function Login() {
               </div>
               <h4>Hello! let's get started</h4>
               <h6 className="font-weight-light">Sign in to continue.</h6>
-              <Box
-                component="form"
-                sx={{
-                  "& > :not(style)": { m: 1 },
-                }}
-                noValidate
-                autoComplete="off"
-              >
-                <FormControl fullWidth>
-                  <InputLabel htmlFor="component-outlined">UserName</InputLabel>
-                  <OutlinedInput
-                    autoComplete="new-password"
-                    id="component-outlined"
-                    value={values.username}
-                    onChange={handleChange("username")}
-                    label="UserName"
+              <Grid container gap={2} direction='column'>
+                <Grid item xs={12}>
+                  {!_.isNil(error?.msg) ? <Alert message={error?.msg} /> : ''}
+                </Grid>
+                <Grid item xs={12}>
+                  <TextInput
+                    autoFocus={true}
+                    required={true}
+                    control={control}
+                    label={t("Username")}
+                    name="username"
                   />
-                </FormControl>
-                <FormControl fullWidth sx={{ m: 1 }} variant="outlined">
-                  <InputLabel htmlFor="outlined-adornment-password">
-                    Password
-                  </InputLabel>
-                  <OutlinedInput
-                    autoComplete="new-password"
-                    id="outlined-adornment-password"
+                </Grid>
+                <Grid item xs={12}>
+                  <TextInput
+                    required={true}
+                    control={control}
+                    label={t("Password")}
+                    name="password"
                     type={values.showPassword ? "text" : "password"}
-                    value={values.password}
-                    onChange={handleChange("password")}
-                    endAdornment={
-                      <InputAdornment position="end">
-                        <IconButton
-                          aria-label="toggle password visibility"
-                          onClick={handleClickShowPassword}
-                          onMouseDown={handleMouseDownPassword}
-                          edge="end"
-                        >
-                          {values.showPassword ? (
-                            <VisibilityOff />
-                          ) : (
-                            <Visibility />
-                          )}
-                        </IconButton>
-                      </InputAdornment>
-                    }
-                    label="Password"
+                    inputProps={{
+                      endAdornment: (
+                        <InputAdornment position="end">
+                          <IconButton
+                            aria-label="toggle password visibility"
+                            onClick={handleClickShowPassword}
+                            onMouseDown={handleMouseDownPassword}
+                            edge="end"
+                          >
+                            {values.showPassword ? (
+                              <VisibilityOff />
+                            ) : (
+                              <Visibility />
+                            )}
+                          </IconButton>
+                        </InputAdornment>
+                      )
+                    }}
                   />
-                </FormControl>
-                <Button variant="contained" onClick={handleSubmit}>
-                  Sign in
-                </Button>
-              </Box>
+                </Grid>
+                <Grid item xs>
+                  <Button variant="contained" onClick={handleSubmit(onSignIn)}>
+                    {t('Sign in')}
+                  </Button>
+                </Grid>
+              </Grid>
+
               <Form className="pt-3">
                 <div className="my-2 d-flex justify-content-between align-items-center">
-                  <div className="form-check">
+                  <CheckBoxControl
+                    control={control}
+                    label={t('Keep me signed in')}
+                    name="keepMe"
+                  />
+                  {/* <div className="form-check">
                     <label className="form-check-label text-muted">
                       <input checked={values['keepMe']} onChange={handleChange("keepMe")} type="checkbox" className="form-check-input" />
                       <i className="input-helper"></i>
-                      Keep me signed in
+                      {t('Keep me signed in')}
                     </label>
-                  </div>
-                  <a
+                  </div> */}
+                  {/* <a
                     href="!#"
                     onClick={(event) => event.preventDefault()}
                     className="auth-link text-black"
                   >
                     Forgot password?
-                  </a>
+                  </a> */}
                 </div>
                 <div className="mb-2">
                   <StyledFirebaseAuth

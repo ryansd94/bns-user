@@ -47,8 +47,8 @@ const IconUp = ({ style, className }) => {
 const IconDown = ({ style, className }) => {
   return <i style={style} className="far fa-arrow-down fa-sm"></i>
 }
-const IconExpand = ({ style, className }) => {
-  return <i style={style} className="far fa-angle-down fa-sm"></i>
+const IconExpand = ({ style, className, onClick }) => {
+  return <i onClick={onClick} style={style} className={`far fa-angle-down fa-sm ${className}`}></i>
 }
 const IconRemove = ({ style, className }) => {
   return <i style={style} className={`fa-regular fa-xmark fa-sm ${className}`}></i>
@@ -59,8 +59,9 @@ const IconUpload = ({ style, className }) => {
 const IconChange = ({ style, className }) => {
   return <i style={style} className="far fa-exchange fa-sm"></i>
 }
-const IconCopy = ({ style, className }) => {
-  return <i style={style} className="far fa-copy fa-sm"></i>
+const IconCopy = ({ style, className, isHoverColor = false }) => {
+  const content = <i style={style} className="far fa-copy fa-sm"></i>
+  return isHoverColor ? <a className='icon'>{content}</a> : content
 }
 const IconComment = ({ style, className }) => {
   return <i style={style} className="far fa-comment-alt fa-sm"></i>
@@ -93,7 +94,7 @@ const IconSwitchRight = ({ style, className, onClick }) => {
   return <i onClick={onClick} style={style} className={`far fa-arrow-alt-right ${className}`}></i>
 }
 const IconClose = ({ style, className, onClick }) => {
-  return <i onClick={onClick} style={style} className={`fal fa-times ${className}`}></i>
+  return <i onClick={onClick} style={style} className={`far fa-times ${className}`}></i>
 }
 const IconBell = ({ style, className, onClick }) => {
   return <i onClick={onClick} style={style} className={`fas fa-bell ${className}`}></i>
@@ -113,10 +114,20 @@ const IconRight = ({ style, className, onClick }) => {
 const IconInfo = ({ style, className, onClick }) => {
   return <i onClick={onClick} style={style} className={`far fa-info-circle ${className}`}></i>
 }
+const IconRefresh = ({ style, className, onClick }) => {
+  return <i onClick={onClick} style={style} className={`far fa-sync ${className}`}></i>
+}
+const IconCollapse = ({ style, className, onClick }) => {
+  return <i onClick={onClick} style={style} className={`far fa-angle-right ${className}`}></i>
+}
+const IconX = ({ style, className, onClick }) => {
+  return <a className='icon'><i onClick={onClick} style={style} className={`far fa-times-circle ${className}`}></i></a>
+}
+
 export {
   IconSave, IconDelete, IconEdit, IconCancel, IconEmail, IconActive, IconBlock,
   IconUnBlock, IconClean, IconApply, IconBack, IconMore, IconAdd, IconCricle, IconUp,
   IconDown, IconExpand, IconRemove, IconUpload, IconChange, IconCopy, IconComment, IconFullScreen,
   IconHour, IconDescription, IconTable, IconList, IconRequire, IconSetting, IconSwitchLeft, IconSwitchRight, IconClose,
-  IconBell, IconPlus, IconMinus, IconLeft, IconRight, IconInfo
+  IconBell, IconPlus, IconMinus, IconLeft, IconRight, IconInfo, IconRefresh, IconCollapse, IconX
 }

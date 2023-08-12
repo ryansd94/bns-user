@@ -26,7 +26,8 @@ export default function TextInput({
   focused,
   onChange,
   style,
-  className = 'containerControl'
+  className = 'containerControl',
+  isFormArray = false
 }) {
   const loadingPopup = useSelector((state) => state.master.loadingPopup)
   return (
@@ -80,7 +81,7 @@ export default function TextInput({
               rows={multiline ? 2 : 1}
               maxRows={multiline ? 4 : 1}
               size={size ? size : _ControlSizeDefault}
-              helperText={error?.message}
+              helperText={isFormArray === true ? '' : error?.message}
               label={_TemplateVariant === EVariant.outlined ? label : ''}
               disabled={disabled ? disabled : false}
               autoComplete="new-password"

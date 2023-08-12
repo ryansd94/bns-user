@@ -1,11 +1,10 @@
 import React from "react"
 import _ from "lodash"
 import Grid from "@mui/material/Grid"
-import { LinkControl } from 'components/link'
 import StatusItem from 'views/category/status/statusItem'
 import { OverflowTip } from 'components/tooltip'
 import UploadIconImage from 'components/upload/uploadIcon/uploadIconImage'
-import { IconDelete } from "components/icon/icon"
+import { IconX } from "components/icon/icon"
 import { useTranslation } from "react-i18next"
 import { cellFormatDateTime } from "helpers/commonFunction"
 import { LabelControl } from 'components/label'
@@ -24,21 +23,18 @@ const TaskItem = (props) => {
     }
 
     const renderTooltipRemoveIcon = (item) => {
-        return <IconDelete onClick={() => onRemoveTaskItem(item)} className='delete-icon' />
+        return <IconX onClick={() => onRemoveTaskItem(item)} />
     }
 
     const renderItem = () => {
-        const titleTask = <OverflowTip value={item.title} genderTooltipContent={() => renderTooltipTitleContent(item.title)} />
-        const titleTaskType = <OverflowTip disableHoverListener={false} value={item.taskType.name} genderTooltipContent={() => renderTooltipTaskTypeContent(item.taskType)} />
         const titleRemoveIcon = <OverflowTip disableHoverListener={false} className='delete-icon-root' value={t('Delete link')} genderTooltipContent={() => renderTooltipRemoveIcon(item)} />
 
-        const href = `/task/edit/${item.id}`
-        return <Grid className='child-task-item' container gap={1} item key={item.id} direction='column'>
-            <Grid style={{ width: '100%' }} container key={item.id} direction='column'>
+        return <Grid justifyContent={'center'} className='child-task-item' container gap={1} item key={item.id} direction='column'>
+            <Grid style={{ width: '100%' }} container key={item.id} gap={1} direction='column'>
                 <TaskTitle item={item} />
                 <Grid item container gap={1} direction='row'>
                     <Grid item>
-                        <LabelControl label={`${t('Update')} ${cellFormatDateTime({ value: item.updatedDate || item.createdDate })}, `} />
+                        <LabelControl label={`${t('Updated')} ${cellFormatDateTime({ value: item.updatedDate || item.createdDate })}, `} />
                     </Grid>
                     <Grid item>
                         <StatusItem status={item.status} />
@@ -48,6 +44,7 @@ const TaskItem = (props) => {
             {titleRemoveIcon}
         </Grid>
     }
+    
     return (
         renderItem()
     )

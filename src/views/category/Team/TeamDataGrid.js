@@ -3,7 +3,7 @@ import { useTranslation } from "react-i18next"
 import { useSelector } from "react-redux"
 import { baseUrl } from "configs"
 import GridData from "components/table/GridData"
-import { CellButton } from 'components/cellRender'
+import { CellButton, CellGroupItem } from 'components/cellRender'
 
 const TeamDataGrid = React.memo((props) => {
   console.log("render TeamDataGrid")
@@ -14,12 +14,21 @@ const TeamDataGrid = React.memo((props) => {
   const columns = [
     {
       checkboxSelection: true,
-      resizable: false, width: 40, headerCheckboxSelection: true, pinned: 'left'
+      resizable: false, width: 40, headerCheckboxSelection: true,
+      pinned: 'left',
+      lockPosition: 'left'
     },
     {
       field: "name", headerName: t("Team name"),
       flex: 1,
       pinned: 'left',
+      lockPosition: 'left',
+      sort: 'asc',
+      cellRenderer: (params) => {
+        return <strong>
+          <CellGroupItem item={params.data} name={'name'} />
+        </strong>
+      }
     },
     {
       field: "description",
@@ -39,10 +48,11 @@ const TeamDataGrid = React.memo((props) => {
       width: 150,
       cellRenderer: (params) => {
         return <strong>
-          <CellButton id={params.data.id} isEditShow={false} url={baseUrl.jm_template} />
+          <CellButton id={params.data.id} isEditShow={false} url={baseUrl.jm_team} />
         </strong>
       },
       sortable: false,
+      lockPosition: 'right'
     },
   ]
 

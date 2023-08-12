@@ -18,7 +18,7 @@ const TaskBoard = React.memo((props) => {
     const isReload = useSelector((state) => state.master.isReload)
     const user = getUserInfo()
 
-    useEffect(() => {
+    useEffect(async () => {
         let mounted = true
         const getStatus = async () => {
             await get(baseUrl.jm_status, { isGetAll: true }).then((data) => {
@@ -29,7 +29,7 @@ const TaskBoard = React.memo((props) => {
         return () => { mounted = false }
     }, [])
 
-    useEffect(() => {
+    useEffect(async () => {
         let mounted = true
         const getTask = async () => {
             await get(baseUrl.jm_task, { isGetAll: true, defaultFilters: JSON.stringify(getDefaultFilter()) }).then((data) => {

@@ -11,12 +11,13 @@ import { open, change_title } from "components/popup/popupSlice"
 import { EControlType } from "configs"
 
 const UserToolbar = (props) => {
-    console.log("render user toolbar")
-    const { onAddClick, onApplyFilter } = props
+    console.log('UserToolbar')
+    const { onApplyFilter } = props
     const { t } = useTranslation()
     const dispatch = useDispatch()
     const toolbarVisible = { ...useSelector((state) => state.master.toolbarVisible) }
     const columnVisibility = { ...useSelector((state) => state.user.columnVisibility) }
+    const openPopup = useSelector((state) => state.popup.open)
 
     const columnModel = [{
         field: "email", isShow: true, label: t("Email"), type: EControlType.textField

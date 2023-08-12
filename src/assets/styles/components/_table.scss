@@ -1,0 +1,13 @@
+.cell-header {
+    .cell-icon {
+        position: absolute !important;
+        visibility: hidden;
+    }
+    &:hover {
+        .cell-icon {
+            visibility: visible;
+            right: 10px;
+            top: 10px;
+        }
+    }
+}

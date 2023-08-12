@@ -21,11 +21,11 @@ const ProjectCreateContent = (props) => {
         } else {
             setDisabledTabSprint(false)
         }
-        onValueChange({ value, name })
+        onValueChange && onValueChange({ value, name })
     }
 
     const onDataTabChange = (props) => {
-        onValueChange({ ...props, isEntity: false })
+        onValueChange && onValueChange({ ...props, isEntity: false })
     }
 
     const getTabItems = () => {

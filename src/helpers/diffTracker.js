@@ -3,16 +3,20 @@ import { EControlType, ERowStatus } from "configs"
 import { deepFind } from "helpers/commonFunction"
 
 const DiffTracker = {
-  getChangeFieldsOnChange: function getChangeFieldsOnChange(value, name, type = EControlType.textField, isDelete = false,
-    getValues, originData = null, isEntity = true) {
-    let changeFields = getValues('changeFields') || []
+  getChangeFieldsOnChange: function getChangeFieldsOnChange({ value, name, type = EControlType.textField, isDelete = false,
+    getValues, originData = null, isEntity = true, onCustomGetChangeFields, nameGetValue }) {
+    let changeFields = []
+    if (!_.isNil(onCustomGetChangeFields)) {
+      changeFields = onCustomGetChangeFields()
+    } else {
+      changeFields = getValues('changeFields') || []
+    }
     let field = _.find(changeFields, (x) => x.key === name)
     let originValue = null
     let isDiffernt = false
 
     if (_.isNil(field)) {
-      const x = getValues(name)
-      originValue = !_.isNil(originData) ? _.cloneDeep(originData) : getValues(name)
+      originValue = !_.isNil(originData) ? _.cloneDeep(originData) : getValues(nameGetValue || name)
     } else {
       originValue = field.originValue
     }
@@ -41,7 +45,7 @@ const DiffTracker = {
 
     if (isDiffernt === true) {
       let newValue = []
-      if (type === EControlType.transferList) {
+      if (type === EControlType.transferList || type === EControlType.multiSelect) {
         newValue = {}
         let deleteValues = _.difference(originValue, value)
         let addValues = _.difference(value, originValue)
@@ -52,7 +56,10 @@ const DiffTracker = {
         const valueIds = _.cloneDeep(_.map(value, (x) => { return x.id }))
         let deleteValues = _.difference(originValueIds, valueIds)
         let addValues = _.difference(valueIds, originValueIds)
-        newValue = { deleteValues: _.map(deleteValues, (x) => { return { id: x } }), addValues: _.map(addValues, (x) => { return { id: x } }) }
+        newValue = {
+          deleteValues: _.map(deleteValues, (x) => { return { id: x } }),
+          addValues: _.map(addValues, (x) => { return { id: x } })
+        }
       } else if (type === EControlType.listObject) {
         newValue = []
         if (!_.isNil(field)) {
@@ -131,10 +138,14 @@ const DiffTracker = {
     return changeFields
   },
   onValueChange: function ({ editData, value, name, type = EControlType.textField, isDelete = false,
-    getValues, setValue, eventEmitter, buttonId, isEntity, originData = null }) {
+    getValues, setValue, eventEmitter, buttonId, isEntity, originData = null, onCustomSetValue, onCustomGetChangeFields, nameGetValue }) {
     if (_.isNil(editData)) return
-    let changeFields = this.getChangeFieldsOnChange(value, name, type, isDelete, getValues, originData, isEntity)
-    setValue('changeFields', changeFields)
+    let changeFields = this.getChangeFieldsOnChange({ value, name, type, isDelete, getValues, originData, isEntity, onCustomGetChangeFields, nameGetValue })
+    if (onCustomSetValue) {
+      onCustomSetValue(changeFields)
+    } else {
+      setValue('changeFields', changeFields)
+    }
     eventEmitter.emit('onChangeButtonDisabled', { buttonId, disabled: !_.isEmpty(changeFields) ? false : true })
   }
 }

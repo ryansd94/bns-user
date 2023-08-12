@@ -2,6 +2,7 @@ import { useTranslation } from "react-i18next"
 import { IconActive, IconEmail, IconBlock } from "components/icon/icon"
 import { EUserStatus } from "configs"
 import Grid from "@mui/material/Grid"
+import { OverflowTip } from 'components/tooltip'
 
 const UserStatus = (props) => {
     const { t } = useTranslation()
@@ -24,13 +25,18 @@ const UserStatus = (props) => {
         icon2 = <IconBlock className={userStatusClassName} />
         label = t("Temporarily locked")
     }
+
+    const genderTooltipContent = () => {
+        return <span style={{ textOverflow: 'ellipsis' }}>{label}</span>
+    }
+
     return (
-        <Grid container item gap={2} direction="row" >
+        <Grid container item gap={2} direction="row" flexWrap={'nowrap'}>
             <Grid item>
                 {icon2}
             </Grid>
-            <Grid item xs>
-                {label}
+            <Grid item xs className="of-hidden">
+                <OverflowTip value={label} genderTooltipContent={genderTooltipContent} />
             </Grid>
         </Grid>)
 }

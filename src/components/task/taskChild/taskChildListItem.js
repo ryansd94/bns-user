@@ -5,15 +5,16 @@ import { Controller } from "react-hook-form"
 import TaskItem from './../taskItem'
 
 const TaskChildListItem = (props) => {
-    const { control, name, setValue, getValues } = props
+    const { control, name, setValue, getValues, onChange } = props
 
     const onRemoveTaskChild = (item) => {
         const originTaskChild = getValues(name)
         let listRemoveTaskChild = getValues('defaultData.taskChildDelete') || []
         const lstTaskChild = _.filter(originTaskChild, (x) => x.id !== item.id)
+        onChange && onChange({ value: lstTaskChild })
         setValue(name, lstTaskChild)
         listRemoveTaskChild.push(item.id)
-        setValue('defaultData.taskChildDelete', listRemoveTaskChild)
+        // setValue('defaultData.taskChildDelete', listRemoveTaskChild)
     }
 
     const renderChildItem = (item) => {

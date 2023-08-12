@@ -15,7 +15,7 @@ import { DropDownItem } from 'components/dropdown'
 import { EButtonType } from 'configs/enums'
 import TaskChildPopup from './taskChildPopup'
 import { ActionButton } from 'components/cellRender'
-import { CellButton } from 'components/cellRender'
+import { CellButton, CellGroupItem } from 'components/cellRender'
 import { getUserInfo, getPathItem } from "helpers"
 
 const TaskGrid = React.memo((props) => {
@@ -33,19 +33,29 @@ const TaskGrid = React.memo((props) => {
             resizable: false,
             width: 30,
             pinned: 'left',
-            headerCheckboxSelection: true
+            headerCheckboxSelection: true,
+            lockPosition: 'left',
+        },
+        {
+            field: "number", headerName: t("ID"),
+            lockPosition: 'left',
+            pinned: 'left',
+            width: 100
         },
         {
             field: "title",
             headerName: t("Title"),
             width: 400,
             pinned: 'left',
+            lockPosition: 'left',
             cellRenderer: (params) => {
-                const titleTask = <LabelIconControl id={params.data.id} name={params.data.title} color={params.data.taskType.color} icon={params.data.taskType.icon} />
-                const href = getPathItem(`/task/edit/${params.data.id}`)
-                return <div className="select-item">
-                    <LinkControl href={href} title={titleTask}></LinkControl>
-                </div>
+                return <CellGroupItem item={params.data} name={'name'} renderContent={() => {
+                    const titleTask = <LabelIconControl id={params.data.id} name={params.data.title} color={params.data.taskType.color} icon={params.data.taskType.icon} />
+                    const href = getPathItem(`/task/edit/${params.data.id}`)
+                    return <div className="select-item">
+                        <LinkControl href={href} title={titleTask}></LinkControl>
+                    </div>
+                }} />
             }
         },
         {

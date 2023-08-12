@@ -26,7 +26,9 @@ import {
   IconSetting,
   IconSwitchRight,
   IconSwitchLeft,
-  IconClose
+  IconClose,
+  IconRefresh,
+  IconCopy
 } from "components/icon/icon"
 import { isHasPermissionForButton } from "helpers"
 import { EColor } from 'configs/enums'
@@ -43,7 +45,7 @@ const ButtonIcon = (props) => {
   const classes = useStyles()
   const { t } = useTranslation()
   const { type, onClick, title, disabled, color, size, showTooltip = true,
-    style, refs, className = 'button-icon', isCheckPermissionDefault = false } = props
+    style, refs, className = 'button-icon', isCheckPermissionDefault = false, isHoverColor } = props
   const [titleDefault, setTitle] = useState("")
   const [isCheckPermission, setIsCheckPermission] = useState(isCheckPermissionDefault)
   const [isShow, setIsShow] = useState(true)
@@ -115,6 +117,9 @@ const ButtonIcon = (props) => {
       case EButtonIconType.close:
         setTitle(t("Close"))
         break
+      case EButtonIconType.refresh:
+        setTitle(t("Reload"))
+        break
       default:
         break
     }
@@ -130,52 +135,64 @@ const ButtonIcon = (props) => {
   let icon
   let width = 21
   let height = 21
+  let fontSize = '21px'
 
+  if (size === ESize.small) {
+    fontSize = '14px'
+  }
   const adjustedButtonProps = {
     disabled: disabled,
     component: disabled ? "div" : undefined,
     onClick: disabled ? undefined : onClick,
   }
+
+  // const styleIcon = { width: width, height: height }
+  const styleIcon = { fontSize: fontSize }
+
   if (type == "Edit")
-    icon = <IconEdit style={{ width: width, height: height }} />
+    icon = <IconEdit style={styleIcon} />
   else if (type == "Delete")
-    icon = <IconDelete style={{ width: width, height: height }} />
+    icon = <IconDelete style={styleIcon} />
   else if (type == "Email")
-    icon = <IconEmail style={{ width: width, height: height }} />
+    icon = <IconEmail style={styleIcon} />
   else if (type == "Lock")
-    icon = <IconBlock style={{ width: width, height: height }} />
+    icon = <IconBlock style={styleIcon} />
   else if (type == "UnLock")
-    icon = <IconUnBlock style={{ width: width, height: height }} />
+    icon = <IconUnBlock style={styleIcon} />
   else if (type == EButtonIconType.apply)
-    icon = <IconApply style={{ width: width, height: height }} />
+    icon = <IconApply style={styleIcon} />
   else if (type == EButtonIconType.cancel)
-    icon = <IconCancel style={{ width: width, height: height }} />
+    icon = <IconCancel style={styleIcon} />
   else if (type == EButtonIconType.back)
-    icon = <IconBack style={{ width: width, height: height }} />
+    icon = <IconBack style={styleIcon} />
   else if (type == EButtonIconType.more)
-    icon = <IconMore style={{ width: width, height: height }} />
+    icon = <IconMore style={styleIcon} />
   else if (type == EButtonIconType.add)
-    icon = <IconAdd style={{ width: width, height: height }} />
+    icon = <IconAdd style={styleIcon} />
   else if (type == EButtonIconType.up)
-    icon = <IconUp style={{ width: width, height: height }} />
+    icon = <IconUp style={styleIcon} />
   else if (type == EButtonIconType.down)
-    icon = <IconDown style={{ width: width, height: height }} />
+    icon = <IconDown style={styleIcon} />
   else if (type == EButtonIconType.upload)
-    icon = <IconUpload style={{ width: width, height: height }} />
+    icon = <IconUpload style={styleIcon} />
   else if (type == EButtonIconType.comment)
-    icon = <IconComment style={{ width: width, height: height }} />
+    icon = <IconComment style={styleIcon} />
   else if (type == EButtonIconType.fullScreen)
-    icon = <IconFullScreen style={{ width: width, height: height }} />
+    icon = <IconFullScreen style={styleIcon} />
   else if (type == EButtonIconType.require)
-    icon = <IconRequire style={{ width: width, height: height }} />
+    icon = <IconRequire style={styleIcon} />
   else if (type == EButtonIconType.setting)
-    icon = <IconSetting style={{ width: width, height: height }} />
+    icon = <IconSetting style={styleIcon} />
   else if (type == EButtonIconType.switchLeft)
-    icon = <IconSwitchLeft style={{ width: width, height: height }} />
+    icon = <IconSwitchLeft style={styleIcon} />
   else if (type == EButtonIconType.switchRight)
-    icon = <IconSwitchRight style={{ width: width, height: height }} />
+    icon = <IconSwitchRight style={styleIcon} />
   else if (type == EButtonIconType.close)
-    icon = <IconClose style={{ width: width, height: height }} />
+    icon = <IconClose style={styleIcon} />
+  else if (type == EButtonIconType.refresh)
+    icon = <IconRefresh style={styleIcon} />
+  else if (type == EButtonIconType.copy)
+    icon = <IconCopy style={styleIcon} isHoverColor={isHoverColor} />
 
   button = (
     <IconButton

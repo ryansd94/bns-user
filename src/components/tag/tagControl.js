@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import Grid from "@mui/material/Grid"
 import ButtonFuntion from 'components/button/ButtonFuntion'
-import { EButtonType } from 'configs/enums'
+import { EButtonType, ERowStatus, EControlType } from 'configs/enums'
 import SingleAddSelect from 'components/select/SingleAddSelect'
 import { useTranslation } from "react-i18next"
 import ClickAwayListener from '@mui/material/ClickAwayListener'
@@ -12,10 +12,9 @@ import { Controller } from "react-hook-form"
 
 const TagControl = React.memo(props => {
 
-    const { control, setValue, name, getValues } = props
+    const { control, setValue, name, getValues, data, onChange } = props
     const { t } = useTranslation()
     const [isShowTagInput, setIsShowTagInput] = useState(false)
-    const [tagData, setTagData] = useState([])
     const onAddTagClick = () => {
         setIsShowTagInput(true)
     }
@@ -26,12 +25,18 @@ const TagControl = React.memo(props => {
 
     const onDeleteTagClick = (item) => {
         if (!_.isNil(item)) {
+            const id = item.id
             let lstTag = getValues(name)
-            let tag = _.find(lstTag, (x) => x.id === item.id)
-            if (!_.isNil(tag)) {
-                tag.isDelete = true
-                setValue(name, [...lstTag])
+            if (item.isAddNew !== true) {
+                let tags = _.find(lstTag, (x) => x.id === id)
+                if (!_.isNil(tags)) {
+                    tags.isDelete = true
+                }
+            } else {
+                lstTag = _.filter(lstTag, (x) => x.id !== id)
             }
+            onChange && onChange({ value: item, name, type: EControlType.listObject, isDelete: true })
+            setValue(name, [...lstTag])
         }
     }
 
@@ -41,17 +46,27 @@ const TagControl = React.memo(props => {
         let tags = _.filter(values, (x) => x.isDelete !== true)
         if (_.isEmpty(tags))
             return ''
-        const aaa = _.map(tags, (x) => {
-            return <TagItem onDeleteTagClick={onDeleteTagClick} key={x.id} tagItem={x} />
+        return _.map(tags, (item) => {
+            if (item.isAddNew !== true) {
+                item = _.find(data, (x) => x.id === item.id)
+            }
+            return !_.isNil(item) ? <TagItem onDeleteTagClick={onDeleteTagClick} key={item.id} tagItem={item} /> : ''
         })
-        return aaa
     }
 
-    const onSelectChange = (value) => {
+    const onSelectChange = ({ value }) => {
         if (!_.isNil(value)) {
-            let lstTag = getValues(name)
-            lstTag.push(value)
+            let lstTag = _.cloneDeep(getValues(name))
+            let newValue = _.cloneDeep(value)
+            if (value.isAddNew === true) {
+                lstTag.push(newValue)
+            } else {
+                newValue = { id: value }
+                lstTag.push(newValue)
+            }
+            onChange && onChange({ value: { ...newValue, rowStatus: ERowStatus.addNew }, name, type: EControlType.listObject })
             setValue(name, [...lstTag])
+            setValue('tagId', null)
         }
     }
 
@@ -59,16 +74,16 @@ const TagControl = React.memo(props => {
         render={({ field, fieldState: { error } }) =>
             <ClickAwayListener onClickAway={onClickAway}>
                 <Box>
-                    <Grid container className='tag-control-contaier' xs item  direction="row" >
+                    <Grid container className='tag-control-contaier' xs item direction="row" >
                         {renderTagItem(field?.value)}
                         {isShowTagInput ? <Grid item>
                             <SingleAddSelect
-                                data={tagData}
+                                data={data}
                                 width={150}
                                 onSelectChange={onSelectChange}
                                 freeSolo
                                 control={control}
-                                name="templateId"
+                                name="tagId"
                                 placeholder={t("Add tags")}
                             />
                         </Grid> : ''}

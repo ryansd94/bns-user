@@ -5,6 +5,7 @@ import { LinkControl } from 'components/link'
 import { OverflowTip } from 'components/tooltip'
 import UploadIconImage from 'components/upload/uploadIcon/uploadIconImage'
 import { useTranslation } from "react-i18next"
+import { getPathItem } from "helpers"
 
 const TaskTitle = (props) => {
     const { item, isRenderTaskLink = true } = props
@@ -22,7 +23,7 @@ const TaskTitle = (props) => {
         const titleTask = <OverflowTip value={item.title} genderTooltipContent={() => renderTooltipTitleContent(item.title)} />
         const titleTaskType = <OverflowTip disableHoverListener={false} value={item.taskType.name} genderTooltipContent={() => renderTooltipTaskTypeContent(item.taskType)} />
 
-        const href = `/task/edit/${item.id}`
+        const href = getPathItem(`/task/edit/${item.id}`)
         return <Grid item container gap={1} className='label-icon-control-container' direction='row'>
             <Grid item>
                 {titleTaskType}

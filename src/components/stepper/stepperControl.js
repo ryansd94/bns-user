@@ -6,10 +6,11 @@ import Grid from "@mui/material/Grid"
 import Box from "@mui/material/Box"
 import Button from "@mui/material/Button"
 import { useTranslation } from "react-i18next"
+import ButtonDetail from "components/button/ButtonDetail"
 import _ from 'lodash'
 
 const StepperControl = (props) => {
-    const { steps, renderSteps, handleSubmit, errors } = props
+    const { steps, renderSteps, handleSubmit, errors, id } = props
     const { t } = useTranslation()
     const [activeStep, setActiveStep] = React.useState(0)
     const [completed, setCompleted] = React.useState({})
@@ -59,10 +60,10 @@ const StepperControl = (props) => {
     return <Grid container gap={2} direction='column'>
         <Grid item>
             <Stepper activeStep={activeStep}>
-                {steps.map((label, index) => (
-                    <Step key={label} completed={completed[index]}>
+                {steps.map((item, index) => (
+                    <Step key={item.label} completed={completed[index]}>
                         <StepButton color="inherit" onClick={handleStep(index)}>
-                            {label}
+                            {item.label}
                         </StepButton>
                     </Step>
                 ))}
@@ -82,9 +83,11 @@ const StepperControl = (props) => {
                             Back
                         </Button>
                         <Box sx={{ flex: '1 1 auto' }} />
-                        <Button disabled={!_.isEmpty(errors) ? true : false} onClick={async () => onNextStep(await handleSubmit(activeStep))} sx={{ mr: 1 }}>
+
+                        <ButtonDetail isFloatRight={true} id={id} label={activeStep == 0 ? t('Next') : t('Finish')} disabled={!_.isEmpty(errors) ? true : false} onClick={async () => onNextStep(await handleSubmit(activeStep))} sx={{ mr: 1 }} />
+                        {/* <Button disabled={!_.isEmpty(errors) ? true : false} onClick={async () => onNextStep(await handleSubmit(activeStep))} sx={{ mr: 1 }}>
                             {activeStep == 0 ? t('Next') : t('Finish')}
-                        </Button>
+                        </Button> */}
                     </Box> : ''
                 }
             </React.Fragment>

@@ -9,7 +9,7 @@ import { useTranslation } from "react-i18next"
 import { Controller } from "react-hook-form"
 
 const TaskParentAddButton = (props) => {
-    const { control, defaultData = [], name, setValue } = props
+    const { control, defaultData = [], name, setValue, onChange } = props
     const { t } = useTranslation()
     const [data, setData] = useState(defaultData)
 
@@ -31,6 +31,7 @@ const TaskParentAddButton = (props) => {
 
     const onSelectChange = (value) => {
         const taskParent = _.find(data, (x) => x.id === value)
+        onChange && onChange({ value: value?.value, name })
         setValue(name, taskParent)
     }
 

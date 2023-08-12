@@ -1,27 +1,28 @@
 ﻿import React, { useEffect, useState } from 'react'
-import { Link, withRouter } from 'react-router-dom'
+import { Link, withRouter, useHistory } from 'react-router-dom'
 import { Collapse } from 'react-bootstrap'
-import { getUserInfo, deepFindAll, getProjectPath } from "helpers"
-import Grid from "@mui/material/Grid"
-import { AvatarControl } from 'components/avatar'
-import { EControlVariant, EMenuType, constants } from "configs"
+import { getUserInfo, deepFindAll, getProjectPath, setUserInfo } from "helpers"
+import { EMenuType, constants, baseUrl } from "configs"
 import { useSelector } from "react-redux"
 import _ from 'lodash'
 import { useTranslation } from "react-i18next"
-import { setActionActive } from "stores/views/master"
+import { setActionActive, setUserSetting } from "stores/views/master"
 import { useDispatch } from "react-redux"
 import SelectControl from 'components/select/SelectControl'
 import { useForm } from "react-hook-form"
+import { save } from "services"
 
 const Sidebar = (props) => {
     const { location } = props
     const [state, setState] = useState({})
+    const history = useHistory()
     const userFromState = { ...useSelector((state) => state.master.userSetting) }
     const menu = useSelector((state) => state.menu.menu)
     const getUser = () => {
         return !_.isEmpty(userFromState) ? userFromState : getUserInfo()
     }
-    const user = getUser()
+    let user = getUser()
+    let userInfo = getUserInfo()
     const viewPermissions = user.viewPermissions
     const { t } = useTranslation()
     const dispatch = useDispatch()
@@ -159,9 +160,21 @@ const Sidebar = (props) => {
         </nav>
     }
 
-    const renderProjectOfUser = () => {
+    const onProjectChange = (value) => {
+        const item = _.find(userInfo?.projects, (x) => x.id === value.value)
+        if (!_.isNil(item)) {
+            save(`${baseUrl.jm_user}/me`, { id: userInfo.userId, configs: [{ key: 'ProjectSetting.Current', value: item.code }, { key: 'ProjectSetting.CurrentId', value: item.id }] })
+            userInfo.setting.projectSetting.current = item.code
+            userInfo.setting.projectSetting.currentId = item.id
+            dispatch(setUserSetting({ setting: { projectSetting: { current: item.code, currentId: item.id } } }))
+            setUserInfo({ user: userInfo })
+            history.push(`/${userInfo.defaultOrganization.code}/${item.code}/overview/summary`)
+        }
+    }
+
+    const renderProjectByUser = () => {
         return <SelectControl
-            // onChange={onUserTypeChange}
+            onChange={onProjectChange}
             options={user.projects}
             control={control}
             defaultValue={user?.setting?.projectSetting?.currentId}
@@ -176,7 +189,7 @@ const Sidebar = (props) => {
     }
 
     return <div className="flex-column">
-        {renderProjectOfUser()}
+        {renderProjectByUser()}
         {renderMenu()}
     </div>
 }

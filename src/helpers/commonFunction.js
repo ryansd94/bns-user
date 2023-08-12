@@ -81,7 +81,7 @@ export const getProjectPath = (path) => {
     const user = getUserInfo()
     if (user) {
         const code = user?.setting?.projectSetting?.current
-        return `/${code}${path}`
+        return !_.isNil(code) ? `/${code}${path}` : path
     }
     return path
 }
@@ -94,7 +94,7 @@ export const getPathItem = (url, isProjectPath = true) => {
     const user = getUserInfo()
     if (user) {
         const defaultOrganization = user.defaultOrganization?.code
-        path = !_.isNil(defaultOrganization) ? `/${user.defaultOrganization}${path}` : `${path}`
+        path = !_.isNil(defaultOrganization) ? `/${defaultOrganization}${path}` : `${path}`
     }
     return path
 }
@@ -103,4 +103,28 @@ export const setValuesData = (setValue, data) => {
     for (let key in data) {
         setValue(key, data[key])
     }
+}
+
+export const getAllItemsWithId = (data, targetId) => {
+    const result = []
+
+    const traverse = (item, parentId) => {
+        if (item.parentId === parentId) {
+            result.push(item)
+        }
+
+        if (item.childs && item.childs.length > 0) {
+            item.childs.forEach(traverse)
+
+            _.each(item.childs, (child) => {
+                traverse(child, item.id)
+            })
+        }
+    }
+
+    _.each(data, (item) => {
+        traverse(item, targetId)
+    })
+
+    return result
 }

@@ -28,7 +28,7 @@ const ButtonDetail = (props) => {
   const [disabledButton, setDisabledButton] = useState(disabled)
   const [color, setColor] = useState(null)
   const [defaultLoading, setDefaultLoading] = useState(false)
-  const loading = useSelector((state) => state.button.loading)
+  const [loading, setLoading] = useState(useSelector((state) => state.button.loading))
   const lang = useSelector((state) => state.master.lang)
 
   useEffect(() => {
@@ -53,6 +53,7 @@ const ButtonDetail = (props) => {
         setDefaultLoading(true)
         break
       default:
+        setDefaultLoading(true)
         break
     }
   }, [lang])
@@ -68,11 +69,19 @@ const ButtonDetail = (props) => {
     }
   }
 
+  const onChangeButtonLoading = ({ buttonId, loading }) => {
+    if (id === buttonId) {
+      setLoading(loading)
+    }
+  }
+
   useEffect(() => {
     eventEmitter.on('onChangeButtonDisabled', onChangeButtonDisabled)
+    eventEmitter.on('onChangeButtonLoading', onChangeButtonLoading)
 
     return () => {
       eventEmitter.off('onChangeButtonDisabled')
+      eventEmitter.off('onChangeButtonLoading')
     }
   }, [])
 
@@ -132,7 +141,6 @@ const ButtonDetail = (props) => {
   return button
 }
 ButtonDetail.propTypes = {
-  type: PropTypes.string.isRequired,
   onClick: PropTypes.func.isRequired,
   autoFocus: PropTypes.bool,
   disabled: PropTypes.bool,

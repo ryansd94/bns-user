@@ -136,18 +136,61 @@ export const EditorToolbar = ({ hide, id }) => {
 
 const EditorControl = (props) => {
     const { label, name, control, size, isShowAccordion = true, onChange, value = null,
-        readOnly = null, className, isFullScreen = false, isShowPlaceholder = true, required, isBorder = true, isShowError = true } = props
+        readOnly = null, className, isFullScreen = false, isShowPlaceholder = true, required,
+        isBorder = true, isShowError = true, copyToClipboardRef } = props
     const loadingPopup = useSelector((state) => state.master.loadingPopup)
     const user = getUserInfo()
     const id = name.includes('.') ? _.split(name, '.')[1] : name
     const [hideToolbar, setHideToolbar] = useState(true)
     const [userSuggest, setUserSuggest] = useState([])
+    const quillRef = useRef(null)
 
     useEffect(() => {
         if (!_.isNil(readOnly)) {
             setHideToolbar(readOnly)
         }
     }, [readOnly])
+
+
+    useEffect(() => {
+        const handlePaste = (event) => {
+            const clipboardData = event.clipboardData || window.clipboardData
+            let pasteData = clipboardData.getData('text')
+            const pasteDataHtml = clipboardData.getData('text/html')
+            const dataText = copyToClipboardRef?.current?.props['data-text']
+            const type = copyToClipboardRef?.current?.props['data-name']
+
+            let quill = quillRef.current.getEditor()
+            let selection = quill?.selection?.savedRange?.index || 0
+            let newIndex = selection
+            if (type === 'task' && pasteData === dataText) {
+                const div = document.createElement('div')
+                const dataValue = copyToClipboardRef?.current?.props['data-value']
+                div.innerHTML = pasteData;
+                const lengthContent = div.textContent
+                const newOffset = lengthContent?.length
+                newIndex = selection + newOffset
+                pasteData = `<a href="${dataValue?.url}" target="_blank" rel="noopener noreferrer">${dataValue?.textUrl}</a>: ${dataValue?.text}`
+
+                quill.clipboard.dangerouslyPasteHTML(selection, pasteData)
+            }
+            else {
+                quill.clipboard.dangerouslyPasteHTML(selection, pasteDataHtml)
+
+            }
+
+            setTimeout(() => quill.setSelection(newIndex, 0), 1)
+            quill.focus()
+            event.preventDefault()
+        }
+
+        const quill = quillRef.current.getEditor()
+        quill.root.addEventListener('paste', handlePaste)
+
+        return () => {
+            quill.root.removeEventListener('paste', handlePaste)
+        }
+    }, [])
 
     async function insertImage() {
         const input = document.createElement('input')
@@ -242,6 +285,28 @@ const EditorControl = (props) => {
         return value
     }
 
+    const formatHyperLink = (value) => {
+        const x = parseHyperlinkFormula(value)
+        console.log(x)
+        return x
+    }
+
+
+    const parseHyperlinkFormula = (value) => {
+        if (_.isNil(value)) return {}
+        const regex = /=HYPERLINK\("([^"]+)", "([^"]+)"\)/
+        const match = value.match(regex)
+
+        if (match) {
+            const url = match[1]
+            const text = match[2]
+            value = _.replace(value, match[0], `<a href="${url}">${text}</a>`)
+            return value
+        } else {
+            return value
+        }
+    }
+
     const getElementByAttribute = (attr, value, root) => {
         root = root || document.body
         if (root.hasAttribute(attr) && root.getAttribute(attr) == value) {
@@ -273,6 +338,7 @@ const EditorControl = (props) => {
             {isShowError === true ? (!_.isNil(error) ? <FormHelperText children={error?.message} error={!_.isNil(error) ? true : false} /> : '') : ''}
             <EditorToolbar hide={hideToolbar} id={`rte${id}`} />
             <ReactQuill
+                ref={quillRef}
                 id={`rte${id}`}
                 className={!isBorder ? 'no-border' : ''}
                 theme='snow'
@@ -280,7 +346,7 @@ const EditorControl = (props) => {
                 onFocus={onFocus}
                 readOnly={readOnly}
                 value={formatMention(field?.value || value)}
-                onChange={(newValue, a, b, d) => {
+                onChange={(newValue, delta, source) => {
                     if (newValue === '<p><br></p>') {
                         newValue = ''
                     }

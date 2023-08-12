@@ -46,6 +46,7 @@ const TeamPopup = React.memo((props) => {
       draw: 0,
       start: 0,
       length: 10000,
+      isParentChild: false
     }).then((data) => {
       setDataTeam(data && data.data && data.data.items)
     })
@@ -170,7 +171,7 @@ const TeamPopup = React.memo((props) => {
             label={t("Team parent")}
           />
         </Grid>
-        <Grid item xs={12}>
+        {/* <Grid item xs={12}>
           <span className="text-note">
             {t(
               "Enter the Email of the user you want to add to the group, press Enter to add more users"
@@ -186,7 +187,7 @@ const TeamPopup = React.memo((props) => {
             placeholder={t("Enter user email")}
           />
 
-        </Grid>
+        </Grid> */}
       </Grid>
     )
   }

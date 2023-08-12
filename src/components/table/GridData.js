@@ -15,6 +15,8 @@ import {
 import { Pagination } from 'components/pagination'
 import { Loading } from 'components/loading'
 import { get } from "services"
+import eventEmitter from 'helpers/eventEmitter'
+import { deepFind, getAllItemsWithId } from 'helpers'
 import _ from 'lodash'
 import './styles.scss'
 import axios from 'axios'
@@ -23,14 +25,22 @@ import axios from 'axios'
 ModuleRegistry.registerModules([ClientSideRowModelModule])
 
 const GridData = (props) => {
+    console.log('render GridData')
     const gridRef = useRef()
     const dispatch = useDispatch()
     const { columns = [], rowHeight,
-        columnVisibility, filterModels, url, onRowClicked, frameworkComponents, autoGroupColumnDef, defaultFilters = [] } = props
-    const [columnsDef, setColumnsDef] = useState([...columns]);
+        columnVisibility, filterModels, url, onRowClicked, frameworkComponents,
+        autoGroupColumnDef, defaultFilters = [] } = props
+    const [columnsDef, setColumnsDef] = useState([...columns])
     const gridStyle = useMemo(() => ({ width: '100%', display: "flex", flexDirection: "column", flexGrow: 1 }), [])
     const [currentPage, setCurrentPage] = useState(null)
-    const [sortModel, setSortModel] = useState(null)
+    const getSortDefault = () => {
+        const sorts = _.map(_.filter(columns, (x) => !_.isNil(x.sort)), (y) => {
+            return { field: y.field, sort: y.sort }
+        })
+        return sorts
+    }
+    const [sortModel, setSortModel] = useState(getSortDefault())
     const toolbarVisible = { ...useSelector((state) => state.master.toolbarVisible) }
     const isReload = useSelector((state) => state.master.isReload)
     const [data, setData] = useState(null)
@@ -61,7 +71,7 @@ const GridData = (props) => {
         loadingOverlayComponent: Loading,
         loadingOverlayComponentParams: {
             loadingMessage: 'One moment please...',
-        },
+        }
     }
 
     useEffect(() => {
@@ -99,11 +109,26 @@ const GridData = (props) => {
     }, [columnVisibility])
 
     useEffect(() => {
+        _.each(columns, (item) => item.comparator = customComparator)
         setColumnsDef([...columns])
     }, [columns])
 
+    // useEffect(() => {
+    //     const sorts = _.map(_.filter(columns, (x) => !_.isNil(x.sort)), (y) => {
+    //         return { field: y.field, sort: y.sort }
+    //     })
+    //     if (!_.isNil(sorts) && !_.isEmpty(sorts)) {
+    //         setSortModel(sorts)
+    //     }
+    // }, [])
+
+
     const onPageChange = (param) => {
         setCurrentPage(param - 1)
+    }
+
+    function customComparator(data1, data2) {
+        return 0 //means no comparing and no sorting
     }
 
     const onSelectionChanged = (newSelection) => {
@@ -126,12 +151,18 @@ const GridData = (props) => {
         const filterParams = params.get("filters")
         cancelToken.current = new axios.CancelToken.source()
 
+        let sortField = ''
+        let sortType = ''
+        if (!_.isNil(sortModel) && !_.isEmpty(sortModel)) {
+            sortField = sortModel[0].field
+            sortType = sortModel[0].sort
+        }
+
         return await get(url, {
             start: currentPage ? currentPage * (_.isNil(pageSize) ? 10 : pageSize) : 0,
             length: _.isNil(pageSize) ? 10 : pageSize,
-            fieldSort:
-                sortModel != null && sortModel.length > 0 ? sortModel[0].field : "",
-            sort: sortModel != null && sortModel.length > 0 ? sortModel[0].sort : "",
+            fieldSort: sortField,
+            sort: sortType,
             filters: filterParams,
             defaultFilters: !_.isEmpty(defaultFilters) ? JSON.stringify(defaultFilters) : null
 
@@ -144,22 +175,93 @@ const GridData = (props) => {
     }
 
     const onGridReady = useCallback(async (params) => {
-        const value = await fetchData()
-        setData(value)
+        const data = await fetchData()
+        setData(data)
     }, [])
 
     const onPageLengthChange = (value) => {
         dispatch(setPageSize(_.parseInt(_.isEmpty(value) ? 1000 : value)))
     }
 
+    const getLevelItem = (currentData, item, level) => {
+        if (_.isNil(item.parentId)) {
+            return level + 1
+        } else {
+            const parent = deepFind(currentData, function (obj) {
+                return _.isEqual(obj.id, item.parentId)
+            }, 'childs')
+            if (!_.isNil(parent)) {
+                if (!_.isNil(parent.parentId)) {
+                    level = getLevelItem(currentData, parent, level + 1)
+                } else {
+                    return level + 1
+                }
+            } else {
+                return level + 1
+            }
+        }
+        return level
+    }
+
+    const getAllChildsExpand = ({ childs, level, returnData = [] }) => {
+        _.each(childs, (child) => {
+            child.level = level
+            returnData.push(child)
+            if (child.isExpand === true) {
+                getAllChildsExpand({ childs: child.childs, level: level + 1, returnData })
+            }
+        })
+    }
+
+    const onExpandCollapseGroupRow = ({ id, isExpand = true }) => {
+        if (!_.isNil(gridOptions) && !_.isNil(gridOptions.api)) {
+            let currentData = []
+            gridOptions.api.forEachNode(node => currentData.push(node.data))
+            let index = _.findIndex(currentData, (x) => x.id === id)
+            if (index !== -1) {
+                if (isExpand === true) {
+                    let childs = currentData[index].childs
+                    if (!_.isNil(childs) && !_.isEmpty(childs)) {
+                        let level = getLevelItem(currentData, currentData[index], currentData[index].level || 0)
+                        let allChilds = []
+                        getAllChildsExpand({ childs, level, returnData: allChilds })
+                        currentData.splice(index + 1, 0, ...allChilds)
+                        if (!_.isNil(gridOptions)) {
+                            gridOptions.api.setRowData(currentData)
+                        }
+                    }
+                } else {
+                    const lstChildsItem = getAllItemsWithId(currentData[index].childs, id)
+                    const ids = _.map(lstChildsItem, (item) => { return item.id })
+                    currentData = _.filter(currentData, (x) => !_.includes(ids, x.id))
+                    if (!_.isNil(gridOptions)) {
+                        gridOptions.api.setRowData(currentData)
+                    }
+                }
+                currentData[index].isExpand = isExpand
+            }
+        }
+    }
+
     useEffect(async () => {
         dispatch(setReloadNull())
+        eventEmitter.on('onExpandCollapseGroupRow', onExpandCollapseGroupRow)
+        return () => {
+            eventEmitter.off('onExpandCollapseGroupRow')
+            if (cancelToken?.current) {
+                cancelToken.current.cancel()
+            }
+        }
     }, [])
 
     useEffect(async () => {
         if (sortModel != null || filterModels != null || isReload != null || currentPage != null || !_.isNil(pageSize)) {
-            const res = await fetchData()
-            setData(res)
+            const data = await fetchData()
+            setData(data)
+            if (!_.isNil(gridRef)) {
+                //reload grid
+                gridRef.current.api.applyTransaction({ update: data && data.data && data.data.items })
+            }
             return () => {
                 if (cancelToken.current) {
                     cancelToken.current.cancel('Component unmounted or dependencies changed')
@@ -183,14 +285,14 @@ const GridData = (props) => {
                     gridOptions={gridOptions}
                     columnDefs={columnsDef}
                     rowSelection='multiple'
-                    onGridReady={onGridReady}
+                    // onGridReady={onGridReady}
                     onRowClicked={onRowClicked}
                     onFirstDataRendered={onFirstDataRendered}
                     autoGroupColumnDef={autoGroupColumnDef}
                     enableCellTextSelection={true}
                     // overlayLoadingTemplate={'<span class="ag-overlay-loading-center">Please wait while your rows are loading</span>'}
                     // overlayNoRowsTemplate={
-                    //     '<span style="padding: 10px; border: 2px solid #444; background: lightgoldenrodyellow">This is a custom \'no rows\' overlay</span>'
+                    //     '<span style="padding: 10px border: 2px solid #444 background: lightgoldenrodyellow">This is a custom \'no rows\' overlay</span>'
                     // }
                     onSortChanged={onSortChanged}
                     suppressRowClickSelection={true}

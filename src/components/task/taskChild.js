@@ -6,11 +6,11 @@ import TaskChildAddButton from './taskChild/taskChildAddButton'
 const TaskChild = (props) => {
     const { taskId, taskTypeId } = props
 
-    return <Grid container xs={12} item spacing={2} direction="column">
-        <Grid item style={{ width: '100%' }}>
+    return <Grid container item gap={2} direction="column">
+        <Grid item>
             <TaskChildAddButton taskId={taskId} taskTypeId={taskTypeId} />
         </Grid>
-        <Grid container xs={12} item spacing={2} direction="column">
+        <Grid container xs={12} item direction="column">
             <TaskChildListItem {...props} />
         </Grid>
     </Grid>

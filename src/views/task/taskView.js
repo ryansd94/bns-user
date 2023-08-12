@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react"
+import React, { useEffect, useState, useRef } from "react"
 import { EditorControl } from 'components/editor'
 import { EControlType, ESize, EButtonDetailType } from 'configs'
 import Grid from "@mui/material/Grid"
@@ -9,7 +9,7 @@ import { AccordionControl } from 'components/accordion'
 import { DatePickerInput } from 'components/datepicker'
 import { getByID, get, save } from "services"
 import { useParams } from 'react-router'
-import { baseUrl, ERROR_CODE } from "configs"
+import { baseUrl, ERROR_CODE, EButtonIconType } from "configs"
 import { EFormatDate } from "configs/enums"
 import { useForm } from "react-hook-form"
 import Box from "@mui/material/Box"
@@ -18,7 +18,6 @@ import StatusSelect from 'components/select/statusSelect'
 import ButtonDetail from "components/button/ButtonDetail"
 import { TabControl } from 'components/tab'
 import { useDispatch } from "react-redux"
-import { loading as loadingButton } from "stores/components/button"
 import { openMessage } from "stores/components/snackbar"
 import { UserControl } from 'components/user'
 import { useLocation } from "react-router-dom"
@@ -39,6 +38,9 @@ import { deepFindAll } from "helpers/commonFunction"
 import { getUserInfo, getCustomResolverTab } from "helpers"
 import eventEmitter from 'helpers/eventEmitter'
 import DiffTracker from "helpers/diffTracker"
+import InputAdornment from "@mui/material/InputAdornment"
+import ButtonIcon from "components/button/ButtonIcon"
+import { CopyToClipboard } from 'react-copy-to-clipboard'
 
 const TaskView = (props) => {
     console.log("render TaskView")
@@ -48,9 +50,12 @@ const TaskView = (props) => {
     const dispatch = useDispatch()
     const [data, setData] = useState({})
     const [userAssign, setUserAssign] = useState([])
+    const [tags, setTags] = useState([])
     const [templateContent, setTemplateContent] = useState('')
     const { t } = useTranslation()
+    const buttonSaveId = ''
     const { id, taskEditId } = useParams()
+    const copyToClipboardRef = useRef(null)
     const [validateData, setValidateData] = useState([{
         tabIndex: 0,
         validation: {
@@ -71,7 +76,6 @@ const TaskView = (props) => {
         return result
     }
 
-    const [taskTypeId2, settaskTypeId2] = useState(taskTypeId)
     const {
         control,
         handleSubmit,
@@ -145,13 +149,13 @@ const TaskView = (props) => {
     useEffect(() => {
         if (!_.isNil(id)) {
             fetchDataTemplate(id)
-        } else if (!_.isNil(taskTypeId2)) {
-            fetchDataTemplate(taskTypeId2)
+        } else if (!_.isNil(taskTypeId)) {
+            fetchDataTemplate(taskTypeId)
         }
-    }, [isCreate, id, taskTypeId2])
+    }, [isCreate, id, taskTypeId])
 
     useEffect(() => {
-        const fetchDataUserAssign = async () => {
+        const fetchUsersAssign = async () => {
             await get(`${baseUrl.jm_task}/user-assign`, {
                 isGetAll: true
             }).then((data) => {
@@ -160,13 +164,19 @@ const TaskView = (props) => {
                 }))
             })
         }
-        fetchDataUserAssign()
+        const fetchTags = async () => {
+            await get(`${baseUrl.jm_tag}`, {
+                isGetAll: true
+            }).then((data) => {
+                setTags(data && data.data && _.map(data.data.items, (item) => {
+                    return { id: item.id, name: item.name }
+                }))
+            })
+        }
+        fetchTags()
+        fetchUsersAssign()
         if (!_.isNil(taskId) || !_.isNil(taskEditId) || !_.isNil(copyTaskId)) {
             loadData()
-        }
-
-        return () => {
-            settaskTypeId2(null)
         }
     }, [taskId, taskEditId, copyTaskId])
 
@@ -186,7 +196,7 @@ const TaskView = (props) => {
             setData({
                 template: data && data.data && data.data.taskType?.template,
                 task: data?.data?.task,
-                taskChilds: data.data.taskChilds,
+                taskChilds: data.data.childs,
                 comments: data?.data?.comments
             })
         })
@@ -195,7 +205,7 @@ const TaskView = (props) => {
     useEffect(() => {
         if (!_.isNil(data.task)) {
             const taskData = data.task
-            const taskChilds = taskData.taskChilds
+            const taskChilds = taskData.childs
             setValue('comments', data.comments)
             setValue('defaultData', taskData)
             setValue('defaultData.usersAssignId', taskData.usersAssignId)
@@ -210,25 +220,27 @@ const TaskView = (props) => {
         const name = _.isNil(item.name) ? (_.isNil(item.customColumnId) ? `dynamicData.${item.id}` : `dynamicData.${item.customColumnId}`) : `defaultData.${item.name}`
         const readOnly = item.defaultReadonly || false
         const isHidenWhenCreate = item.isHidenWhenCreate || false
+        const isEntity = _.isNil(item.name) ? false : true
+        const nameValueChange = _.isNil(item.name) ? (_.isNil(item.customColumnId) ? item.id : item.customColumnId) : item.name
         if (!_.isNil(id)) {
             if (isHidenWhenCreate) return ''
         }
-        let component = <TextInput required={item.required} disabled={readOnly} name={name} control={control} size={ESize.small} label={item.label} />
+        let component = <TextInput onChange={({ value, name }) => onValueChange({ value, name: nameValueChange, nameGetValue: name, isEntity, isDynamic: !isEntity })} required={item.required} disabled={readOnly} name={name} control={control} size={ESize.small} label={item.label} />
         switch (item.type) {
             case EControlType.typography:
                 component = <span>{item.id}</span>
                 break
             case EControlType.editor:
-                component = (<EditorControl required={item.required} isFullScreen={true} label={item.label} name={name} control={control} className="editor-container" />)
+                component = (<EditorControl copyToClipboardRef={copyToClipboardRef} onChange={({ value, name }) => onValueChange({ value, name: nameValueChange, nameGetValue: name, isEntity, isDynamic: !isEntity })} required={item.required} isFullScreen={true} label={item.label} name={name} control={control} className="editor-container" />)
                 break
             case EControlType.select:
                 component = (<SingleAddSelect required={item.required} fullWidth={true} label={item.label} name={name} control={control} />)
                 break
             case EControlType.dateTimePicker:
-                component = (<DatePickerInput required={item.required} disabled={readOnly} formatDate={EFormatDate.ddmmyyyy_hhmm} label={item.label} name={name} control={control} />)
+                component = (<DatePickerInput onChange={({ value, name }) => onValueChange({ value, name: nameValueChange, nameGetValue: name, isEntity, isDynamic: !isEntity })} required={item.required} disabled={readOnly} formatDate={EFormatDate.ddmmyyyy_hhmm} label={item.label} name={name} control={control} />)
                 break
             case EControlType.datePicker:
-                component = (<DatePickerInput required={item.required} disabled={readOnly} label={item.label} name={name} control={control} />)
+                component = (<DatePickerInput onChange={({ value, name }) => onValueChange({ value, name: nameValueChange, nameGetValue: name, isEntity, isDynamic: !isEntity })} required={item.required} disabled={readOnly} label={item.label} name={name} control={control} />)
                 break
             case EControlType.number:
                 component = (<NumberInput required={item.required} disabled={readOnly} label={item.label} name={name} control={control} />)
@@ -264,7 +276,15 @@ const TaskView = (props) => {
                     name={name}
                     className='task-group-container'
                     details={
-                        <TaskChild taskId={taskId || taskEditId} taskTypeId={id || taskTypeId || data?.task.taskTypeId} control={control} setValue={setValue} getValues={getValues} name={name} />
+                        <TaskChild
+                            taskId={taskId || taskEditId}
+                            taskTypeId={id || taskTypeId || data?.task.taskTypeId}
+                            control={control}
+                            setValue={setValue}
+                            getValues={getValues}
+                            name={name}
+                            onChange={({ value }) => onValueChange({ value, isEntity: false, type: EControlType.transferList, name: 'childIds', originData: getOriginTaskChildIds() })}
+                        />
                     }
                 />
                 break
@@ -275,7 +295,15 @@ const TaskView = (props) => {
                     name={name}
                     className='task-group-container'
                     details={
-                        <TaskParent taskId={taskId || taskEditId} taskTypeId={id || taskTypeId || data?.task.taskTypeId} control={control} setValue={setValue} getValues={getValues} name={name} />
+                        <TaskParent
+                            taskId={taskId || taskEditId}
+                            taskTypeId={id || taskTypeId || data?.task.taskTypeId}
+                            control={control}
+                            setValue={setValue}
+                            getValues={getValues}
+                            name={name}
+                            onChange={({ value }) => onValueChange({ value, name: 'parentId', nameGetValue: 'defaultData.parentId' })}
+                        />
                     }
                 />
                 break
@@ -309,20 +337,24 @@ const TaskView = (props) => {
     }
 
     const onSubmit = async (data) => {
-        // console.log(JSON.stringify(data))
-        // return;
-        dispatch(loadingButton(true))
+        // console.log({ ...data })
+        // return
+        // dispatch(loadingButton(true))
+        eventEmitter.emit('onChangeButtonLoading', { loading: true, buttonId: buttonSaveId })
         let postData = data
         if (!_.isNil(taskEditId) || !_.isNil(taskId)) { //case edit task
+            postData = {}
             postData.id = taskEditId || taskId
+            postData.changeFields = data.changeFields
         } else { //case add task
             postData.defaultData.projectId = user?.setting?.projectSetting?.currentId
-        }
-        if (!_.isNil(data.defaultData?.taskParent)) {
-            postData.defaultData.parentId = data.defaultData.taskParent.id
+            if (!_.isNil(data.defaultData?.taskParent)) {
+                postData.defaultData.parentId = data.defaultData.taskParent.id
+            }
         }
         const res = await save(baseUrl.jm_task, postData)
-        dispatch(loadingButton(false))
+        eventEmitter.emit('onChangeButtonLoading', { loading: false, buttonId: buttonSaveId })
+        // dispatch(loadingButton(false))
         dispatch(openMessage({ ...res }))
         if (res.errorCode == ERROR_CODE.success) {
             dispatch(setReload())
@@ -378,11 +410,65 @@ const TaskView = (props) => {
         </Grid>
     }
 
-    const onValueChange = ({value, name, type = EControlType.textField}) => {
+    const onCustomSetValue = (values, isDynamic = false) => {
+        if (isDynamic === false) {
+            setValue('changeFields', { defaultData: values })
+        } else {
+            setValue('changeFields', { dynamicData: values })
+        }
+    }
+
+    const onCustomGetChangeFields = (isDynamic = false) => {
+        const changeFields = getValues('changeFields')
+        return (isDynamic === true ? changeFields?.dynamicData : changeFields?.defaultData) || []
+    }
+
+    const onValueChange = ({ value, name, type = EControlType.textField, isEntity = true, isDelete = false,
+        nameGetValue, isDynamic = false, originData }) => {
+        if (_.isNil(taskId) && _.isNil(taskEditId)) return
+
         DiffTracker.onValueChange({
-          editData: taskEditId || taskId, value, name, type, getValues,
-          setValue, eventEmitter, buttonId: 'buttonTaskSave'
+            editData: taskEditId || taskId, value, name, type, getValues,
+            setValue, eventEmitter, buttonId: buttonSaveId, isEntity, isDelete,
+            onCustomSetValue: (values) => onCustomSetValue(values, isDynamic),
+            onCustomGetChangeFields: () => onCustomGetChangeFields(isDynamic),
+            nameGetValue, originData
         })
+    }
+
+    const getOriginTaskChildIds = () => {
+        const taskChilds = _.cloneDeep(getValues('defaultData.taskChilds')) || []
+        return _.map(taskChilds, (x) => { return x.id })
+    }
+
+    const isEditTask = () => {
+        return !_.isNil(taskEditId) || !_.isNil(taskId)
+    }
+
+    const onCopyClick = async () => {
+        const url = location.href
+        const textUrl = `${data?.task?.taskType?.name} ${data?.task?.number}`
+        const text = `${data?.task?.title}`
+        const link = document.createElement('a')
+        link.href = url
+        link.textContent = textUrl
+        const clipboardText = `<a href="${url}" target="_blank" rel="noopener noreferrer">${textUrl}</a>: ${text}`;
+        // const hyperlinkFormula = `<a href="${url}" rel="noopener noreferrer" target="_blank">${textUrl}</a>: ${text}`
+        navigator.clipboard.writeText(clipboardText)
+    }
+
+    const getCopyTask = () => {
+        const textUrl = `${data?.task?.taskType?.name} ${data?.task?.number}`
+        const text = `${data?.task?.title}`
+        const clipboardText = `${textUrl}: ${text}`
+        return clipboardText
+    }
+
+    const getCopyTaskValue = () => {
+        const url = location.href
+        const textUrl = `${data?.task?.taskType?.name} ${data?.task?.number}`
+        const text = `${data?.task?.title}`
+        return { url, textUrl, text }
     }
 
     const renderTaskContent = () => {
@@ -390,7 +476,22 @@ const TaskView = (props) => {
             <Box className="task-view-container">
                 <Grid container item spacing={2} flexWrap="nowrap" direction="column">
                     <Grid item xs={12} className="flex-basis-auto">
-                        <TextInput onChange={onValueChange} autoFocus={true} focused={true} control={control} placeholder={t('Title')} name="defaultData.title" />
+                        <TextInput
+                            onChange={({ value }) => onValueChange({ value, name: 'title' })}
+                            autoFocus={!isEditTask()}
+                            focused={!isEditTask()}
+                            control={control}
+                            placeholder={t('Title')}
+                            name="defaultData.title"
+                            inputProps={{
+                                startAdornment: isEditTask() ? <InputAdornment position="start">{data?.task?.number}</InputAdornment> : '',
+                                endAdornment: isEditTask() ? <InputAdornment position="end">
+                                    <CopyToClipboard data-value={getCopyTaskValue()} data-text={getCopyTask()} data-name="task" ref={copyToClipboardRef} text={getCopyTask()}>
+                                        <ButtonIcon title={t('Copy link task and title')} type={EButtonIconType.copy} isHoverColor={true} />
+                                    </CopyToClipboard>
+                                </InputAdornment> : ''
+                            }}
+                        />
                     </Grid>
                     <Grid className="flex-container flex-basis-auto" flexWrap={'nowrap'} container gap={2} item xs={12}>
                         <Grid item xs>
@@ -400,7 +501,7 @@ const TaskView = (props) => {
                                         control={control}
                                         name={'defaultData.usersAssignId'}
                                         data={userAssign}
-                                        onChange={onValueChange}
+                                        onChange={({ value }) => onValueChange({ value, nameGetValue: 'defaultData.usersAssignId', name: 'usersAssignIds', isEntity: false, type: EControlType.multiSelect })}
                                     />
                                 </Grid>
                                 <Grid item>
@@ -408,21 +509,24 @@ const TaskView = (props) => {
                                         options={getStatus()}
                                         name={'defaultData.statusId'}
                                         control={control}
+                                        onChange={({ value }) => onValueChange({ value, nameGetValue: 'defaultData.statusId', name: 'statusId' })}
                                     />
                                 </Grid>
                                 <Grid item>
                                     <TagControl
+                                        data={tags}
                                         name={'defaultData.tags'}
                                         control={control}
                                         setValue={setValue}
                                         getValues={getValues}
+                                        onChange={({ value }) => onValueChange({ value, nameGetValue: 'defaultData.tags', name: 'tags', type: EControlType.listObject, isEntity: false })}
                                     />
                                 </Grid>
                             </Grid>
                         </Grid>
                         <Grid item>
                             <ButtonDetail
-                                id='buttonTaskSave'
+                                id={buttonSaveId}
                                 className="f-right"
                                 onClick={handleSubmit(onSubmit)}
                                 disabled={_.isNil(taskEditId) && _.isNil(taskId) ? false : true}

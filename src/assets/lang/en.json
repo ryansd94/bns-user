@@ -160,7 +160,7 @@
     "Are you sure to lock this user?": "Are you sure to lock this user?",
     "Are you sure to unlock this user?": "Are you sure to unlock this user?",
     "Enter the User Email you want to add to the system, press Enter to add more users. The system will send a confirmation email to the user\u0027s email": "Enter the User Email you want to add to the system, press Enter to add more users. The system will send a confirmation email to the user\u0027s email",
-    "Add new user": "Add new user",
+    "Add new user": "Add new users",
     "Summary": "Summary",
     "Dashboard": "Dashboard",
     "Category": "Category",
@@ -216,8 +216,15 @@
     "The status will be applied to all types of tasks": "The status will be applied to all types of tasks",
     "when the checkbox is selected, this status will automatically be added to the status list of all task types": "when the checkbox is selected, this status will automatically be added to the status list of all task types",
     "Automatically added": "Automatically added",
-    "Applied to all types of tasks":"Applied to all types of tasks",
-    "Assigned user 1":"Assigned user 1",
-    "Assigned user 2":"Assigned user 2",
-    "Assigned user 3":"Assigned user 3"
+    "Applied to all types of tasks": "Applied to all types of tasks",
+    "Assigned user 1": "Assigned user 1",
+    "Assigned user 2": "Assigned user 2",
+    "Assigned user 3": "Assigned user 3",
+    "Sign in": "Sign in",
+    "Keep me signed in": "Keep me signed in",
+    "Username": "Username",
+    "Invalid username or password": "Invalid username or password",
+    "No data displayed": "No data is available",
+    "Updated": "Updated",
+    "Copy the task link and title": "Copy the task link and title"
 }

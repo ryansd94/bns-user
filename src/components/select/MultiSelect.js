@@ -7,7 +7,7 @@ import { useSelector } from "react-redux"
 import Typography from '@mui/material/Typography'
 import Box from '@mui/material/Box'
 import { ChipControl } from "components/chip"
-import { _TemplateVariant, EVariant, _ControlSizeDefault } from 'configs'
+import { _TemplateVariant, EVariant, _ControlSizeDefault, EControlType } from 'configs'
 import { LabelControl } from 'components/label'
 import _ from 'lodash'
 
@@ -124,10 +124,10 @@ const MultiSelect = React.memo(
                     const changedValues = _.map(newValue, (item) => {
                       return item.id
                     })
-                    onChange && onChange({ value: changedValues, name })
+                    onChange && onChange({ value: changedValues, name, type: EControlType.multiSelect })
                     field.onChange(changedValues)
                   } else {
-                    onChange && onChange({ value: [], name })
+                    onChange && onChange({ value: [], name, type: EControlType.multiSelect })
                     field.onChange([])
                   }
                 }}

@@ -63,6 +63,7 @@ const ViewPermissionApply = (props) => {
                             items={users}
                             control={control}
                             setValueData={setValue}
+                            getValueData={getValues}
                             leftTitle={t('User list')}
                             rightTitle={t('List of applicable users')}
                             setValueName={'userSelectedIds'} />
@@ -81,6 +82,7 @@ const ViewPermissionApply = (props) => {
                         items={teams} 
                         control={control} 
                         setValueData={setValue} 
+                        getValueData={getValues}
                         leftTitle={t('Team list')}
                         rightTitle={t('List of applicable teams')}
                         setValueName={'teamSelectedIds'} />

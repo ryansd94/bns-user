@@ -2,21 +2,22 @@ import React from "react"
 import MenuItem from '@mui/material/MenuItem'
 import { DropdownMenu } from 'components/dropdown'
 import { useTranslation } from "react-i18next"
+import { getPathItem } from "helpers"
 import _ from 'lodash'
 
 const TaskChildAddButton = (props) => {
     const { taskId, taskTypeId } = props
     const { t } = useTranslation()
     const addNewTask = () => {
-        window.open(`/task/create/${taskTypeId}?parentId=${taskId}`)
+        window.open(getPathItem(`/task/create/${taskTypeId}?parentId=${taskId}`))
     }
 
     const genderDropdownItem = () => {
         return <div>
-            <MenuItem disabled={!_.isNil(taskId) ? false : true} key={'addNew'} onClick={() => addNewTask()}>
+            <MenuItem key={'addNew'} onClick={() => addNewTask()}>
                 {t('Add new task')}
             </MenuItem>
-            <MenuItem key={'existing'} onClick={() => addNewTask()}>
+            <MenuItem disabled={!_.isNil(taskId) ? false : true} key={'existing'} onClick={() => addNewTask()}>
                 {t('Task existing')}
             </MenuItem>
         </div >

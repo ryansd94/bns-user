@@ -16,7 +16,7 @@ const filter = createFilterOptions()
 
 const SingleAddSelect = React.memo(
   (props) => {
-    const { control, field, required, data = [], label, name, onSelectChange,
+    const { control, required, data = [], label, name, onSelectChange,
       size, disabled, fullWidth, renderOption, renderTags, renderInput,
       disableClearable = false, freeSolo = false, placeholder, width = '100%', isAddWhenNoOption = true,
       onInputChange } = props
@@ -98,7 +98,7 @@ const SingleAddSelect = React.memo(
                   } else {
                     newValue = newValue && newValue.id
                   }
-                  onSelectChange && onSelectChange(newValue, name)
+                  onSelectChange && onSelectChange({ value: newValue, name })
                   field.onChange(newValue)
                 }}
                 onInputChange={onInputChange}

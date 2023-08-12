@@ -12,7 +12,7 @@ const LabelIconControl = (props) => {
     }
 
     return (
-        <Grid className="label-icon-control-container" item container columnSpacing={2}>
+        <Grid className="label-icon-control-container" item container gap={0.5}>
             <Grid item>
                 <UploadIconImage color={color} src={icon} />
             </Grid>
