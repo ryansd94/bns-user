@@ -10,7 +10,7 @@ const CommentDeleteLabel = (props) => {
     const { icon, name, color, id } = props
     const { t } = useTranslation()
 
-    const genderTooltipContent = () => {
+    const renderTooltipContent = () => {
         return <span style={{ textOverflow: 'ellipsis' }}>{name}</span>
     }
 

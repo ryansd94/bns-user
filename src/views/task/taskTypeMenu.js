@@ -10,7 +10,7 @@ const TaskTypeMenu = (props) => {
 
     const openTaskView = (item) => {
         const projectCode = user.setting?.projectSetting?.current
-        if (_.isNil(projectCode)) {
+        if (!_.isNil(projectCode)) {
             window.open(`/${user.defaultOrganization?.code}/${projectCode}/task/create/${item.id}`)
         } else {
             window.open(`/${user.defaultOrganization?.code}/task/create/${item.id}`)

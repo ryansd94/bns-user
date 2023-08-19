@@ -4,7 +4,6 @@ import UserToolbar from "./UserToolbar"
 import { Resizable } from 'components/resizable'
 
 const User = React.memo(() => {
-  console.log("render user")
   const [filterModels, setFilterModels] = useState(null)
   const onApplyFilter = (value) => {
     setFilterModels(value)

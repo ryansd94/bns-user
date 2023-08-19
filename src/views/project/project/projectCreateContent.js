@@ -3,7 +3,7 @@ import { useTranslation } from "react-i18next"
 import _ from 'lodash'
 import { TabControl } from 'components/tab'
 import { ProjectInfoTab, ProjectSprintTab, ProjectMemberTab } from "./components"
-import { baseUrl, EProjectTypeOption } from "configs"
+import { EProjectTypeOption } from "configs"
 
 const ProjectCreateContent = (props) => {
     console.log('render ProjectCreateContent')

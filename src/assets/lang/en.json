@@ -78,7 +78,7 @@
     "Required": "Required",
     "Setting": "Setting",
     "Move left": "Move left",
-    "Move right": "Move right",
+    "Move right": "Move to right",
     "Close": "Close",
     "Enter filter name": "Enter filter name",
     "Equal": "Equal",
@@ -226,5 +226,7 @@
     "Invalid username or password": "Invalid username or password",
     "No data displayed": "No data is available",
     "Updated": "Updated",
-    "Copy the task link and title": "Copy the task link and title"
+    "Copy the task link and title": "Copy the task link and title",
+    "Users do not have team": "Users do not have team",
+    "Users in team": "Users in team"
 }

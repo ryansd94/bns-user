@@ -147,35 +147,37 @@ const TaskView = (props) => {
     }, [data])
 
     useEffect(() => {
-        if (!_.isNil(id)) {
-            fetchDataTemplate(id)
-        } else if (!_.isNil(taskTypeId)) {
-            fetchDataTemplate(taskTypeId)
+        if (!_.isNil(id) || !_.isNil(taskTypeId)) {
+            fetchDataTemplate(id || taskTypeId)
+            fetchTags()
+            fetchUsersAssign()
         }
     }, [isCreate, id, taskTypeId])
 
+    const fetchUsersAssign = async () => {
+        await get(`${baseUrl.jm_task}/user-assign`, {
+            isGetAll: true,
+            projectId: user?.setting?.projectSetting?.currentId
+        }).then((data) => {
+            setUserAssign(data && data.data && _.map(data.data.items, (item) => {
+                return { id: item.id, name: item.fullName }
+            }))
+        })
+    }
+    const fetchTags = async () => {
+        await get(`${baseUrl.jm_tag}`, {
+            isGetAll: true
+        }).then((data) => {
+            setTags(data && data.data && _.map(data.data.items, (item) => {
+                return { id: item.id, name: item.name }
+            }))
+        })
+    }
+
     useEffect(() => {
-        const fetchUsersAssign = async () => {
-            await get(`${baseUrl.jm_task}/user-assign`, {
-                isGetAll: true
-            }).then((data) => {
-                setUserAssign(data && data.data && _.map(data.data.items, (item) => {
-                    return { id: item.id, name: item.fullName }
-                }))
-            })
-        }
-        const fetchTags = async () => {
-            await get(`${baseUrl.jm_tag}`, {
-                isGetAll: true
-            }).then((data) => {
-                setTags(data && data.data && _.map(data.data.items, (item) => {
-                    return { id: item.id, name: item.name }
-                }))
-            })
-        }
-        fetchTags()
-        fetchUsersAssign()
         if (!_.isNil(taskId) || !_.isNil(taskEditId) || !_.isNil(copyTaskId)) {
+            fetchTags()
+            fetchUsersAssign()
             loadData()
         }
     }, [taskId, taskEditId, copyTaskId])

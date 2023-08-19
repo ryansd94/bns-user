@@ -130,14 +130,12 @@ const TransferList = (props) => {
 
     const renderAllItem = () => {
         return <Grid container gap={2} direction='column'>
-            <Grid item container direction='row' className="border-bottom">
-                <Grid item>
-                    <CheckBoxControl disabled={_.isEmpty(lstItemAll) ? true : false} onChange={onCheckAllItem} control={control} name='all' label={t('All')} />
-                </Grid>
+            <Grid item container direction='row' className="border-bottom padding-bottom">
+                <CheckBoxControl disabled={_.isEmpty(lstItemAll) ? true : false} onChange={onCheckAllItem} control={control} name='all' label={t('All')} />
             </Grid>
             {
-                _.map(lstItemAll, (item) => {
-                    return <Grid key={item.id} gap={1} container direction='row'>
+                _.isEmpty(lstItemAll) ? renderEmptyRow() : _.map(lstItemAll, (item) => {
+                    return <Grid key={item.id} gap={1} container direction='row' alignItems='center' className='no-wrap'>
                         <Grid item>
                             <CheckBoxControl onChange={({ value }) => onChangeSelectedItemNotApply(value, item.id)} control={control} name={item.id} />
                         </Grid>
@@ -148,16 +146,18 @@ const TransferList = (props) => {
         </Grid>
     }
 
+    const renderEmptyRow = () => {
+        return <Grid className="italic" item>{t('No data displayed')}</Grid>
+    }
+
     const renderItemApply = useCallback(() => {
         return <Grid container gap={2} direction='column'>
-            <Grid item container direction='row' className="border-bottom">
-                <Grid item>
-                    <CheckBoxControl disabled={_.isEmpty(lstItemApply) ? true : false} onChange={onCheckAllItemApply} control={control} name='all-apply' label={t('All')} />
-                </Grid>
+            <Grid item container direction='row' className="border-bottom padding-bottom">
+                <CheckBoxControl disabled={_.isEmpty(lstItemApply) ? true : false} onChange={onCheckAllItemApply} control={control} name='all-apply' label={t('All')} />
             </Grid>
             {
-                _.map(lstItemApply, (item) => {
-                    return <Grid key={item.id} gap={1} container direction='row'>
+                _.isEmpty(lstItemApply) ? renderEmptyRow() : _.map(lstItemApply, (item) => {
+                    return <Grid key={item.id} gap={1} container direction='row' alignItems='center' className='no-wrap'>
                         <Grid item>
                             <CheckBoxControl onChange={({ value }) => onChangeSelectedItemApply(value, item.id)} control={control} name={`${item.id}-apply`} />
                         </Grid>

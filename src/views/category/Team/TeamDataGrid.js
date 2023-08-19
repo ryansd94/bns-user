@@ -48,7 +48,7 @@ const TeamDataGrid = React.memo((props) => {
       width: 150,
       cellRenderer: (params) => {
         return <strong>
-          <CellButton id={params.data.id} isEditShow={false} url={baseUrl.jm_team} />
+          <CellButton id={params.data.id} url={baseUrl.jm_team} />
         </strong>
       },
       sortable: false,

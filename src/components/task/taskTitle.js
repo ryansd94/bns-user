@@ -20,8 +20,8 @@ const TaskTitle = (props) => {
     }
 
     const renderItem = () => {
-        const titleTask = <OverflowTip value={item.title} genderTooltipContent={() => renderTooltipTitleContent(item.title)} />
-        const titleTaskType = <OverflowTip disableHoverListener={false} value={item.taskType.name} genderTooltipContent={() => renderTooltipTaskTypeContent(item.taskType)} />
+        const titleTask = <OverflowTip value={item.title} renderTooltipContent={() => renderTooltipTitleContent(item.title)} />
+        const titleTaskType = <OverflowTip disableHoverListener={false} value={item.taskType.name} renderTooltipContent={() => renderTooltipTaskTypeContent(item.taskType)} />
 
         const href = getPathItem(`/task/edit/${item.id}`)
         return <Grid item container gap={1} className='label-icon-control-container' direction='row'>

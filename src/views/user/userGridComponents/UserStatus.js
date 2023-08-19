@@ -26,7 +26,7 @@ const UserStatus = (props) => {
         label = t("Temporarily locked")
     }
 
-    const genderTooltipContent = () => {
+    const renderTooltipContent = () => {
         return <span style={{ textOverflow: 'ellipsis' }}>{label}</span>
     }
 
@@ -36,7 +36,7 @@ const UserStatus = (props) => {
                 {icon2}
             </Grid>
             <Grid item xs className="of-hidden">
-                <OverflowTip value={label} genderTooltipContent={genderTooltipContent} />
+                <OverflowTip value={label} renderTooltipContent={renderTooltipContent} />
             </Grid>
         </Grid>)
 }

@@ -7,7 +7,7 @@ import _ from 'lodash'
 const LabelIconControl = (props) => {
     const { icon, name = '', color } = props
 
-    const genderTooltipContent = () => {
+    const renderTooltipContent = () => {
         return <span style={{ textOverflow: 'ellipsis' }}>{name}</span>
     }
 
@@ -18,7 +18,7 @@ const LabelIconControl = (props) => {
             </Grid>
             {
                 !_.isEmpty(name) ? <Grid item xs={12} className="label-icon-control-text">
-                    <OverflowTip value={name} genderTooltipContent={genderTooltipContent} />
+                    <OverflowTip value={name} renderTooltipContent={renderTooltipContent} />
                 </Grid> : ''
             }
         </Grid>

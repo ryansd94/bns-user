@@ -30,7 +30,7 @@ const GridData = (props) => {
     const dispatch = useDispatch()
     const { columns = [], rowHeight,
         columnVisibility, filterModels, url, onRowClicked, frameworkComponents,
-        autoGroupColumnDef, defaultFilters = [] } = props
+        autoGroupColumnDef, defaultFilters = [], isGetDataFromServer = true } = props
     const [columnsDef, setColumnsDef] = useState([...columns])
     const gridStyle = useMemo(() => ({ width: '100%', display: "flex", flexDirection: "column", flexGrow: 1 }), [])
     const [currentPage, setCurrentPage] = useState(null)
@@ -256,15 +256,17 @@ const GridData = (props) => {
 
     useEffect(async () => {
         if (sortModel != null || filterModels != null || isReload != null || currentPage != null || !_.isNil(pageSize)) {
-            const data = await fetchData()
-            setData(data)
-            if (!_.isNil(gridRef)) {
-                //reload grid
-                gridRef.current.api.applyTransaction({ update: data && data.data && data.data.items })
-            }
-            return () => {
-                if (cancelToken.current) {
-                    cancelToken.current.cancel('Component unmounted or dependencies changed')
+            if (isGetDataFromServer) {
+                const data = await fetchData()
+                setData(data)
+                if (!_.isNil(gridRef)) {
+                    //reload grid
+                    gridRef.current.api.applyTransaction({ update: data && data.data && data.data.items })
+                }
+                return () => {
+                    if (cancelToken.current) {
+                        cancelToken.current.cancel('Component unmounted or dependencies changed')
+                    }
                 }
             }
         }

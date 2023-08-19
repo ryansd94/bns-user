@@ -4,7 +4,6 @@ import _ from 'lodash'
 
 const OverflowTip = props => {
   const { disableHoverListener = null, className } = props
-  // Create Ref
   const textElementRef = useRef()
 
   const compareSize = () => {
@@ -42,7 +41,7 @@ const OverflowTip = props => {
           textOverflow: 'ellipsis'
         }}
       >
-        {props.genderTooltipContent()}
+        {props.renderTooltipContent()}
       </div>
     </Tooltip>
   )

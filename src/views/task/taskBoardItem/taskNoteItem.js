@@ -28,7 +28,7 @@ const TaskNoteItem = (props) => {
             <PopoverControl isHideWhenWithOutFocus={false} genderBody={genderPopoverControl} onClose={handlePopoverClose} anchorEl={openPopover} />
         </div >
     }
-    return <OverflowTip disableHoverListener={false} value={title} genderTooltipContent={() => genderTooltip(item)} />
+    return <OverflowTip disableHoverListener={false} value={title} renderTooltipContent={() => genderTooltip(item)} />
 
 }
 

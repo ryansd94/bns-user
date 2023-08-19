@@ -27,7 +27,7 @@ const TaskItem = (props) => {
     }
 
     const renderItem = () => {
-        const titleRemoveIcon = <OverflowTip disableHoverListener={false} className='delete-icon-root' value={t('Delete link')} genderTooltipContent={() => renderTooltipRemoveIcon(item)} />
+        const titleRemoveIcon = <OverflowTip disableHoverListener={false} className='delete-icon-root' value={t('Delete link')} renderTooltipContent={() => renderTooltipRemoveIcon(item)} />
 
         return <Grid justifyContent={'center'} className='child-task-item' container gap={1} item key={item.id} direction='column'>
             <Grid style={{ width: '100%' }} container key={item.id} gap={1} direction='column'>

@@ -28,18 +28,18 @@ const CellButton = (props) => {
     const renderButtonItems = () => {
         return <>
             {
-                isEditShow ? <Grid key={EButtonIconType.edit} item xs>
+                isEditShow ? <Grid key={EButtonIconType.edit} item>
                     <ButtonIcon onClick={onEditClick} type={EButtonIconType.edit} />
                 </Grid> : ''
             }
             {
-                isDeleteShow ? <Grid key={EButtonIconType.delete} item xs>
+                isDeleteShow ? <Grid key={EButtonIconType.delete} item>
                     <ButtonIcon onClick={onDeleteClick} type={EButtonIconType.delete} />
                 </Grid> : ''
             }
             {
                 _.map(listButton, (item) => {
-                    return <Grid key={item.type} item xs>
+                    return <Grid key={item.type} item>
                         <ButtonIcon disabled={!_.isNil(item.disabled) ? item.disabled : false} onClick={item.onClick} type={item.type} />
                     </Grid>
                 })

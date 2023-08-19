@@ -16,8 +16,8 @@ const TaskOptionItem = (props) => {
     }
 
     const renderItem = () => {
-        const titleTask = <OverflowTip value={item.title} genderTooltipContent={() => renderTooltipTitleContent(item.title)} />
-        const titleTaskType = <OverflowTip disableHoverListener={false} value={item.taskType.name} genderTooltipContent={() => renderTooltipTaskTypeContent(item.taskType)} />
+        const titleTask = <OverflowTip value={item.title} renderTooltipContent={() => renderTooltipTitleContent(item.title)} />
+        const titleTaskType = <OverflowTip disableHoverListener={false} value={item.taskType.name} renderTooltipContent={() => renderTooltipTaskTypeContent(item.taskType)} />
 
         return <Grid className='child-task-item' container item key={item.id} direction='column'>
             <Grid style={{ width: '100%' }} container direction='column'>

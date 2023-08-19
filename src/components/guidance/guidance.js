@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react"
 import Grid from "@mui/material/Grid"
 import { EPosition, EAlertType, EGuidanceContentType } from "configs"
 import { Alert } from 'components/alert'
-import { OverflowTip } from 'components/tooltip'
 import { IconInfo } from "components/icon/icon"
 import { PopoverControl } from 'components/popover'
 import _ from 'lodash'

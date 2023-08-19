@@ -9,7 +9,7 @@ const CellMuliValue = (props) => {
         return x.name
     })
 
-    const genderTooltipContent = () => {
+    const renderTooltipContent = () => {
         return <div className="cell-multi-root">
             {
                 _.map(values, (x) => {
@@ -19,7 +19,7 @@ const CellMuliValue = (props) => {
         </div>
     }
 
-    return <OverflowTip genderTooltipContent={genderTooltipContent} value={valueText.join(', ')} />
+    return <OverflowTip renderTooltipContent={renderTooltipContent} value={valueText.join(', ')} />
 }
 
 export default CellMuliValue

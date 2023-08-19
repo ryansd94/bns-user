@@ -1,10 +1,8 @@
-import { useState, useEffect } from 'react'
 import Grid from "@mui/material/Grid"
 import { useTranslation } from "react-i18next"
 import _ from 'lodash'
 import { TransferList } from 'components/transferList'
 import { AccordionControl } from 'components/accordion'
-import { EPermissionObject } from "configs"
 
 const ProjectMemberTab = (props) => {
     const { control, setValue, getValues, users, teams, onValueChange } = props

@@ -1,15 +1,10 @@
 ﻿import React, { useEffect, useState } from "react"
 import Popup from "components/popup/Popup"
-import Grid from "@mui/material/Grid"
-import SingleAddSelect from "components/select/SingleAddSelect"
 import PropTypes from "prop-types"
-import MultiSelect from "components/select/MultiSelect"
-import TextInput from "components/input/TextInput"
 import { useTranslation } from "react-i18next"
 import { useSelector, useDispatch } from "react-redux"
 import * as Yup from "yup"
 import { useForm } from "react-hook-form"
-import { yupResolver } from "@hookform/resolvers/yup"
 import { open, change_title } from "components/popup/popupSlice"
 import { openMessage } from "stores/components/snackbar"
 import {
@@ -17,21 +12,21 @@ import {
   setReload,
 } from "stores/views/master"
 import { getByID, save, get } from "services"
-import { ERROR_CODE, baseUrl } from "configs"
+import { ERROR_CODE, baseUrl, message } from "configs"
 import { loading as loadingButton } from "stores/components/button"
-import { message } from "configs"
+import { TabControl } from 'components/tab'
+import { InfoTab, MemberTab } from "./components"
+import { getCustomResolverTab } from "helpers"
+import eventEmitter from 'helpers/eventEmitter'
 
 const TeamPopup = React.memo((props) => {
+  const { dataUsers } = props
   console.log("render TeamPopup")
   const { t } = useTranslation()
   const dispatch = useDispatch()
   const editData = useSelector((state) => state.master.editData)
   const isReload = useSelector((state) => state.master.isReload)
   const [dataTeam, setDataTeam] = useState([])
-  const [dataUser, setDataUser] = useState([])
-  const validationSchema = Yup.object().shape({
-    name: Yup.string().required(t(message.error.fieldNotEmpty)),
-  })
 
   const defaultValues = {
     name: "",
@@ -67,28 +62,7 @@ const TeamPopup = React.memo((props) => {
       onEditClick()
     }
   }, [editData])
-
-  const fetchDataUser = async () => {
-    await get(`${baseUrl.jm_team}/users`, {
-      draw: 0,
-      start: 0,
-      length: 10000,
-    }).then((data) => {
-      const users =
-        data &&
-        data.data &&
-        data.data.items.map((item, index) => ({
-          name: item.email,
-          id: item.id,
-        }))
-      setDataUser(users)
-    })
-  }
-
-  useEffect(() => {
-    fetchDataUser()
-  }, [])
-
+  
   const onEditClick = async () => {
     if (!editData) return
     dispatch(change_title(t("Edit team")))
@@ -103,16 +77,24 @@ const TeamPopup = React.memo((props) => {
         "parentId",
         res.data.parentId
       )
-      if (res.data.teamMembers != null) {
-        var teamMembers = []
-        res.data.teamMembers.map((item, index) => {
-          teamMembers.push(dataUser.find((d) => d.id == item))
-        })
-        setValue("members", teamMembers)
-        //setValue("members2", teamMembers )
-      }
+      setValue("members", res.data.members)
       dispatch(setLoadingPopup(false))
     })
+  }
+
+  const validationSchemaTab = [{
+    tabIndex: 0,
+    validation: {
+      name: Yup.string().required(t(message.error.fieldNotEmpty))
+    },
+  }]
+
+  const customResolver = async (values, context) => {
+    const result = await getCustomResolverTab(values, context, validationSchemaTab)
+    if (!_.isEmpty(result.errorTab)) {
+      eventEmitter.emit('errorTabs', { errors: result.errorTab, id: 'teamTab' })
+    }
+    return result
   }
 
   const {
@@ -120,82 +102,56 @@ const TeamPopup = React.memo((props) => {
     handleSubmit,
     reset,
     setValue,
+    getValues
   } = useForm({
-    resolver: yupResolver(validationSchema),
+    resolver: customResolver,
     defaultValues: defaultValues,
   })
 
   const onSubmit = async (data) => {
+    // alert(JSON.stringify(data))
+    // return
     dispatch(loadingButton(true))
     var postData = data
     if (!editData) postData.id = editData
     if (data.parentId) postData.parentId = data.parentId
-    if (data.members)
-      postData.members = data.members.map((item, index) => item.id)
-    // alert(JSON.stringify(postData))
-    // return
     const res = await save(baseUrl.jm_team, postData)
     dispatch(loadingButton(false))
     dispatch(openMessage({ ...res }))
     if (res.errorCode == ERROR_CODE.success) {
-      //dispatch(setEditData(null))
       dispatch(setReload())
-      //dispatch(close())
     }
   }
 
-  function ModalBody() {
-    return (
-      <Grid container gap={2}>
-        <Grid item xs={12}>
-          <TextInput
-            autoFocus={true}
-            required={true}
-            control={control}
-            label={t("Team name")}
-            name="name"
-          />
-        </Grid>
-        <Grid item xs={12}>
-          <TextInput
-            control={control}
-            label={t("Description")}
-            name="description"
-          />
-        </Grid>
-        <Grid item xs={12}>
-          <SingleAddSelect
-            data={dataTeam}
-            control={control}
-            name="parentId"
-            label={t("Team parent")}
-          />
-        </Grid>
-        {/* <Grid item xs={12}>
-          <span className="text-note">
-            {t(
-              "Enter the Email of the user you want to add to the group, press Enter to add more users"
-            )}
-          </span>
-        </Grid>
-        <Grid item xs={12}>
-          <MultiSelect
-            control={control}
-            name="members"
-            data={dataUser}
-            label={t("User email")}
-            placeholder={t("Enter user email")}
-          />
-
-        </Grid> */}
-      </Grid>
-    )
+  const renderModalBody = () => {
+    return <TabControl
+      id={'teamTab'}
+      tabItems={getTabItems()} />
   }
+
+  const getTabItems = () => {
+    const data = [
+      {
+        label: t('Infomations'),
+        Content: <InfoTab dataTeam={dataTeam} control={control} />
+      },
+      {
+        label: t('Members'),
+        Content: <MemberTab
+          getValues={getValues}
+          setValue={setValue}
+          users={dataUsers}
+          control={control} />
+      }
+    ]
+    return data
+  }
+
   return (
     <div>
       <Popup
         reset={reset}
-        ModalBody={ModalBody}
+        ModalBody={renderModalBody}
         widthSize={"sm"}
         onSave={handleSubmit(onSubmit)}
       />

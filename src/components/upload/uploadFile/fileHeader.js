@@ -9,7 +9,7 @@ const FileHeader = (props) => {
     const { file, onDelete } = props
     const { t } = useTranslation()
 
-    const genderTooltipContent = () => {
+    const renderTooltipContent = () => {
         return <LinkControl title={file.file.name} href={file.url} />
     }
 
@@ -18,13 +18,13 @@ const FileHeader = (props) => {
     }
 
     const renderDeleteIcon = () => {
-        return <OverflowTip disableHoverListener={false} className='delete-icon-root' value={t('Delete file')} genderTooltipContent={() => renderTooltipRemoveIcon()} />
+        return <OverflowTip disableHoverListener={false} className='delete-icon-root' value={t('Delete file')} renderTooltipContent={() => renderTooltipRemoveIcon()} />
     }
 
     return (
         <Grid container style={{ width: '100%' }} alignItems={'center'}>
             <Grid style={{ width: 'calc(100% - 15px)' }} item>
-                <OverflowTip value={file.file.name} genderTooltipContent={() => genderTooltipContent()} />
+                <OverflowTip value={file.file.name} renderTooltipContent={() => renderTooltipContent()} />
             </Grid>
             {renderDeleteIcon()}
         </Grid>

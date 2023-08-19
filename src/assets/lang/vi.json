@@ -226,5 +226,7 @@
     "Invalid username or password": "Sai tên đăng nhập hoặc mật khẩu",
     "No data displayed": "Không có dữ liệu hiển thị",
     "Updated": "Cập nhật lúc",
-    "Copy the task link and title": "Sao chép liên kết công việc"
+    "Copy the task link and title": "Sao chép liên kết công việc",
+    "Users do not have team": "Người dùng không có nhóm",
+    "Users in team": "Người dùng trong nhóm"
 }
