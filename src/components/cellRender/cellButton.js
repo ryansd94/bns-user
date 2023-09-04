@@ -8,7 +8,7 @@ import { useDispatch } from "react-redux"
 import { open } from "components/popup/popupSlice"
 
 const CellButton = (props) => {
-    const { listButton = [], isEditShow = true, isDeleteShow = true, url, id } = props
+    const { listButton = [], isEditShow = true, isDeleteShow = true, url, id, onCustomDeleteClick } = props
     const dispatch = useDispatch()
 
     const onEditClick = (e) => {
@@ -21,8 +21,12 @@ const CellButton = (props) => {
     const onDeleteClick = (e) => {
         e.stopPropagation()
         if (_.isNil(id)) return
-        dispatch(setDeleteData({ id: id, url: url }))
-        dispatch(openAlert({ open: true }))
+        if (!_.isNil(onCustomDeleteClick)) {
+            onCustomDeleteClick(id)
+        } else {
+            dispatch(setDeleteData({ id: id, url: url }))
+            dispatch(openAlert({ open: true }))
+        }
     }
 
     const renderButtonItems = () => {
@@ -34,7 +38,7 @@ const CellButton = (props) => {
             }
             {
                 isDeleteShow ? <Grid key={EButtonIconType.delete} item>
-                    <ButtonIcon onClick={onDeleteClick} type={EButtonIconType.delete} />
+                    <ButtonIcon onClick={() => onCustomDeleteClick(id)} type={EButtonIconType.delete} />
                 </Grid> : ''
             }
             {

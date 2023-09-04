@@ -13,7 +13,7 @@ import ButtonDetail from "components/button/ButtonDetail"
 import { useSelector, useDispatch } from "react-redux"
 import { close } from "components/popup/popupSlice"
 import { setEditData } from "stores/views/master"
-import { EButtonDetailType } from "configs"
+import { EButtonDetailType, EWidth } from "configs"
 import eventEmitter from 'helpers/eventEmitter'
 import _ from 'lodash'
 
@@ -68,8 +68,8 @@ function PaperComponent(props) {
 const Popup = React.memo((props) => {
   const dispatch = useDispatch()
   const { ModalBody, open = null, title = null,
-    onSave, widthSize = "sm", reset, typeSave = EButtonDetailType.save,
-    isShowFooter = true, handleClose = null, labelSave = '', disabledSave = false, 
+    onSave, widthSize = EWidth.sm, reset, typeSave = EButtonDetailType.save,
+    isShowFooter = true, handleClose = null, labelSave = '', disabledSave = false,
     removeOnChangeDisabled = true, id } = props
   const stateOpen = !_.isNil(open) ? open : useSelector((state) => state.popup.open)
   const [openPopup, setOpen] = useState(open)
@@ -165,7 +165,5 @@ Popup.propTypes = {
   ModalBody: PropTypes.func.isRequired,
   widthSize: PropTypes.string,
 }
-Popup.defaultProps = {
-  widthSize: "sm",
-}
+
 export default Popup

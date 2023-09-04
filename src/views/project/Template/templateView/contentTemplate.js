@@ -335,7 +335,7 @@ const ContentTemplate = (props) => {
     setElementContent(listCopy)
   }
 
-  const genderPopoverControl = (item, prefix, index, isLastControl, field) => {
+  const renderPopoverControl = (item, prefix, index, isLastControl, field) => {
     return <TooltipControl
       templateColumnData={templateColumnData}
       onAddControlSubmit={onAddControlSubmit}
@@ -385,7 +385,7 @@ const ContentTemplate = (props) => {
                   <Grid key={2} item xs={12} sm={getElementControls("column3").length > 0 ? 6 : 9}>
                     <DraggableElement
                       field={field}
-                      genderPopoverControl={genderPopoverControl}
+                      renderPopoverControl={renderPopoverControl}
                       prefix={"column1"}
                       control={control}
                       controls={getElementControls("column1")}
@@ -394,7 +394,7 @@ const ContentTemplate = (props) => {
                   <Grid key={3} item xs={12} sm={3}>
                     <DraggableElement
                       field={field}
-                      genderPopoverControl={genderPopoverControl}
+                      renderPopoverControl={renderPopoverControl}
                       prefix={"column2"}
                       control={control}
                       controls={getElementControls("column2")}
@@ -402,7 +402,7 @@ const ContentTemplate = (props) => {
                   </Grid>
                   {/* <Grid key={1} item xs={12} sm={3}>
                   <DraggableElement
-                    genderPopoverControl={genderPopoverControl}
+                    renderPopoverControl={renderPopoverControl}
                     prefix={"column3"}
                     control={control}
                     controls={getElementControls("column3")}

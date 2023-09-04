@@ -224,9 +224,10 @@
     "Keep me signed in": "Keep me signed in",
     "Username": "Username",
     "Invalid username or password": "Invalid username or password",
-    "No data displayed": "No data is available",
+    "No data displayed": "No data to display",
     "Updated": "Updated",
     "Copy the task link and title": "Copy the task link and title",
     "Users do not have team": "Users do not have team",
-    "Users in team": "Users in team"
+    "Users in team": "Users in team",
+    "Add members": "Add members"
 }

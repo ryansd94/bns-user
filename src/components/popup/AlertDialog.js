@@ -5,6 +5,7 @@ import { open as openAlert } from "stores/components/alert-dialog"
 import { useSelector, useDispatch } from "react-redux"
 import { useTranslation } from "react-i18next"
 import ButtonDetail from "components/button/ButtonDetail"
+import { EButtonDetailType } from "configs"
 
 const AlertDialog = (props) => {
   const open = useSelector((state) => state.alertDialog.open)
@@ -35,7 +36,7 @@ const AlertDialog = (props) => {
             disabled={loading}
             isFloatRight={true}
             onClick={onSubmit}
-            type="Accpet"
+            type={EButtonDetailType.accept}
             autoFocus={true}
             dis
           ></ButtonDetail>

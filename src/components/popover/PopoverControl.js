@@ -13,8 +13,14 @@ const useStyles = makeStyles(theme => ({
 }))
 
 const PopoverControl = (props) => {
-  const { anchorEl, id, onClose, genderBody, anchorPosition, anchorOrigin,
-    transformOrigin, isHideWhenWithOutFocus = true, className, isCloseOnClick = false } = props
+  const { anchorEl, id, onClose, genderBody, anchorPosition, anchorOrigin = {
+    vertical: 'bottom',
+    horizontal: 'left',
+  },
+    transformOrigin = {
+      vertical: 'top',
+      horizontal: 'left',
+    }, isHideWhenWithOutFocus = true, className, isCloseOnClick = false } = props
   const classes = useStyles();
   const open = Boolean(anchorEl)
 
@@ -36,7 +42,7 @@ const PopoverControl = (props) => {
       onClick={onClick}
       anchorOrigin={anchorOrigin}
       transformOrigin={transformOrigin}
-      anchorPosition={anchorPosition}
+      // anchorPosition={anchorPosition}
       onClose={onClose}
       className={`${isHideWhenWithOutFocus ? classes.popover : ''} ${className}`}
       classes={isHideWhenWithOutFocus ? {
@@ -49,17 +55,5 @@ const PopoverControl = (props) => {
 
   return renderContent()
 }
-PopoverControl.propTypes = {
-  anchorOrigin: PropTypes.object
-}
-PopoverControl.defaultProps = {
-  anchorOrigin: {
-    vertical: 'bottom',
-    horizontal: 'left',
-  },
-  transformOrigin: {
-    vertical: 'top',
-    horizontal: 'left',
-  }
-}
+
 export default PopoverControl

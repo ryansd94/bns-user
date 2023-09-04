@@ -13,7 +13,7 @@ const TaskNoteItem = (props) => {
         setOpenPopover(null)
     }
     
-    const genderPopoverControl = () => {
+    const renderPopoverControl = () => {
         return <EditorControl isShowPlaceholder={false} className='editor-popover' readOnly={true} isFullScreen={true} value={item?.description} name={'description'} isShowAccordion={false} />
     }
 
@@ -25,7 +25,7 @@ const TaskNoteItem = (props) => {
     const genderTooltip = (item) => {
         return <div>
             <IconDescription className={'cursor-pointer'} onClick={handlePopoverOpen} />
-            <PopoverControl isHideWhenWithOutFocus={false} genderBody={genderPopoverControl} onClose={handlePopoverClose} anchorEl={openPopover} />
+            <PopoverControl isHideWhenWithOutFocus={false} genderBody={renderPopoverControl} onClose={handlePopoverClose} anchorEl={openPopover} />
         </div >
     }
     return <OverflowTip disableHoverListener={false} value={title} renderTooltipContent={() => genderTooltip(item)} />

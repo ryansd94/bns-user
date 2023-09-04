@@ -10,7 +10,7 @@ import { ClientSideRowModelModule } from '@ag-grid-community/client-side-row-mod
 import {
     setToolbarVisibility,
     setReloadNull,
-    setPageSize
+    setDeleteData
 } from "stores/views/master"
 import { Pagination } from 'components/pagination'
 import { Loading } from 'components/loading'
@@ -20,6 +20,7 @@ import { deepFind, getAllItemsWithId } from 'helpers'
 import _ from 'lodash'
 import './styles.scss'
 import axios from 'axios'
+import EmptyRow from './emptyRow'
 
 // Register the required feature modules with the Grid
 ModuleRegistry.registerModules([ClientSideRowModelModule])
@@ -30,7 +31,8 @@ const GridData = (props) => {
     const dispatch = useDispatch()
     const { columns = [], rowHeight,
         columnVisibility, filterModels, url, onRowClicked, frameworkComponents,
-        autoGroupColumnDef, defaultFilters = [], isGetDataFromServer = true } = props
+        autoGroupColumnDef, defaultFilters = [], isGetDataFromServer = true, id,
+        onSelectedRow = null, localData = [], customParams = {}, customFilterData } = props
     const [columnsDef, setColumnsDef] = useState([...columns])
     const gridStyle = useMemo(() => ({ width: '100%', display: "flex", flexDirection: "column", flexGrow: 1 }), [])
     const [currentPage, setCurrentPage] = useState(null)
@@ -44,8 +46,8 @@ const GridData = (props) => {
     const toolbarVisible = { ...useSelector((state) => state.master.toolbarVisible) }
     const isReload = useSelector((state) => state.master.isReload)
     const [data, setData] = useState(null)
+    const [pageSize, setPageSize] = useState(10)
     const loading = useSelector((state) => state.master.loading)
-    const pageSize = useSelector((state) => state.master.pageSize)
     const cancelToken = useRef(null)
 
     const defaultColDef = useMemo(() => {
@@ -68,16 +70,15 @@ const GridData = (props) => {
     }
 
     const gridOptions = {
-        loadingOverlayComponent: Loading,
-        loadingOverlayComponentParams: {
-            loadingMessage: 'One moment please...',
-        }
+        loadingOverlayComponent: isGetDataFromServer ? Loading : null,
+        noRowsOverlayComponent: EmptyRow
     }
 
     useEffect(() => {
         if (gridRef && gridRef.current.api) {
-            if (loading)
+            if (loading) {
                 gridRef.current.api.showLoadingOverlay()
+            }
             else
                 gridRef.current.api.hideOverlay()
         }
@@ -85,9 +86,9 @@ const GridData = (props) => {
 
     const onFirstDataRendered = () => {
         if (gridRef && gridRef.current.api) {
-
-            if (loading)
+            if (loading) {
                 gridRef.current.api.showLoadingOverlay()
+            }
             else
                 gridRef.current.api.hideOverlay()
 
@@ -134,13 +135,17 @@ const GridData = (props) => {
     const onSelectionChanged = (newSelection) => {
         let selectedNodes = newSelection.api.getSelectedNodes()
         let selectedData = selectedNodes.map(node => node.data)
-        if (selectedData.length > 0) {
-            toolbarVisible.function = true
+        if (!_.isNil(onSelectedRow)) {
+            onSelectedRow(selectedData)
+        } else {
+            if (selectedData.length > 0) {
+                toolbarVisible.function = true
+            }
+            else {
+                toolbarVisible.function = false
+            }
+            eventEmitter.emit('onChangeVisibleToolbar', { visibleObject: { ...toolbarVisible }, id })
         }
-        else {
-            toolbarVisible.function = false
-        }
-        dispatch(setToolbarVisibility({ ...toolbarVisible }))
     }
 
     const fetchData = async () => {
@@ -164,23 +169,21 @@ const GridData = (props) => {
             fieldSort: sortField,
             sort: sortType,
             filters: filterParams,
-            defaultFilters: !_.isEmpty(defaultFilters) ? JSON.stringify(defaultFilters) : null
-
+            defaultFilters: !_.isEmpty(defaultFilters) ? JSON.stringify(defaultFilters) : null,
+            ...customParams
         }, cancelToken).then((data) => {
             if (gridRef && gridRef.current && gridRef.current.api) {
                 gridRef.current.api.hideOverlay()
+            }
+            if (!_.isNil(customFilterData)) {
+                return customFilterData(data)
             }
             return data
         })
     }
 
-    const onGridReady = useCallback(async (params) => {
-        const data = await fetchData()
-        setData(data)
-    }, [])
-
-    const onPageLengthChange = (value) => {
-        dispatch(setPageSize(_.parseInt(_.isEmpty(value) ? 1000 : value)))
+    const onPageLengthChange = ({ value }) => {
+        setPageSize(_.parseInt(_.isNil(value) ? 1000 : value))
     }
 
     const getLevelItem = (currentData, item, level) => {
@@ -261,16 +264,48 @@ const GridData = (props) => {
                 setData(data)
                 if (!_.isNil(gridRef)) {
                     //reload grid
-                    gridRef.current.api.applyTransaction({ update: data && data.data && data.data.items })
+                    // gridRef.current.api.applyTransaction({ update: data && data.data && data.data.items })
                 }
                 return () => {
                     if (cancelToken.current) {
                         cancelToken.current.cancel('Component unmounted or dependencies changed')
                     }
                 }
+            } else {
+                if (gridRef && gridRef.current && gridRef.current.api) {
+                    gridRef.current.api.hideOverlay()
+                }
             }
         }
     }, [sortModel, filterModels, isReload, currentPage, pageSize])
+
+    useEffect(() => {
+        if (!isGetDataFromServer) {
+            setData({ data: { items: [...localData] || [] }, recordsTotal: localData?.length || 0 })
+        }
+    }, [localData])
+
+    const getRowData = () => {
+        //get data from server
+        if (isGetDataFromServer) {
+            return data && data.data && data.data.items
+        }
+        //get data from client
+        const start = currentPage ? currentPage * (_.isNil(pageSize) ? 10 : pageSize) : 0
+        const length = _.isNil(pageSize) ? 10 : pageSize
+        const items = data && data.data && data.data.items || []
+        return _.take(_.drop(items, start), length)
+    }
+
+    const getTotalCount = () => {
+        //get total row count from server
+        if (isGetDataFromServer) {
+            return data && data.recordsTotal
+        }
+        //get total row count from client
+        const items = data && data.data && data.data.items || []
+        return items.length
+    }
 
     return (
         <div style={{ width: "100%" }} className="grid-wrapper">
@@ -282,7 +317,7 @@ const GridData = (props) => {
                     style={{ display: "flex" }}
                     defaultColDef={defaultColDef}
                     enableRangeSelection={true}
-                    rowData={data && data.data && data.data.items}
+                    rowData={getRowData()}
                     // domLayout='autoHeight'
                     gridOptions={gridOptions}
                     columnDefs={columnsDef}
@@ -300,7 +335,6 @@ const GridData = (props) => {
                     suppressRowClickSelection={true}
                     suppressCellFocus={true}
                     frameworkComponents={frameworkComponents}
-                    groupSelectsChildren={true}
                     suppressAggFuncInHeader={true}
                     onSelectionChanged={onSelectionChanged}>
                 </AgGridReact>
@@ -308,7 +342,7 @@ const GridData = (props) => {
                     currentPage={currentPage ? currentPage + 1 : 1}
                     onPageChange={onPageChange}
                     onPageLengthChange={onPageLengthChange}
-                    pageSize={pageSize} totalCount={data && data.recordsTotal} className="pagination-bar" />
+                    pageSize={pageSize} totalCount={getTotalCount()} className="pagination-bar" />
             </div>
         </div>
     )

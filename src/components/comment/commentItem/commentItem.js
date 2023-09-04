@@ -98,7 +98,7 @@ const CommentItem = (props) => {
         }
     }
 
-    const genderPopoverControl = () => {
+    const renderPopoverControl = () => {
         return <Grid item container gap={2} className='box-container'>
             <Grid item>
                 {t('Do you want to delete this comment?')}
@@ -196,7 +196,7 @@ const CommentItem = (props) => {
                     type={EButtonIconType.more} />
                     : ''
             }
-            <PopoverControl className='pop-delete-comment' isHideWhenWithOutFocus={false} genderBody={genderPopoverControl} onClose={handlePopoverClose} anchorEl={openPopover} />
+            <PopoverControl className='pop-delete-comment' isHideWhenWithOutFocus={false} genderBody={renderPopoverControl} onClose={handlePopoverClose} anchorEl={openPopover} />
         </Grid>
         {
             renderListComment()

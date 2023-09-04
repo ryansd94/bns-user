@@ -17,3 +17,17 @@
         border: none !important;
     }
 }
+.ag-header {
+    min-height: $grid-header-height !important;
+}
+.ag-overlay {
+    top: $grid-header-height !important;
+    height: calc(100% - 50px) !important;
+}
+.MuiDialogContent-root,
+.MuiPopover-root {
+    .ag-root-wrapper-body.ag-layout-normal {
+        height: auto !important;
+        min-height: 96px;
+    }
+}

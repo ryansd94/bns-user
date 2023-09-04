@@ -14,7 +14,7 @@ const DragItem = styled.div`
 `;
 
 
-const ListItem = ({ id, index, control, genderPopoverControl }) => {
+const ListItem = ({ id, index, control, renderPopoverControl }) => {
   const [openPopover, setOpenPopover] = useState(null)
 
   const handlePopoverOpen = (event) => {
@@ -40,7 +40,7 @@ const ListItem = ({ id, index, control, genderPopoverControl }) => {
             {...provided.dragHandleProps}
           >
             {control}
-            {genderPopoverControl ? <PopoverControl isCLoseOnHover={true} genderBody={genderPopoverControl} onClose={handlePopoverClose} anchorEl={openPopover} /> : ''}
+            {renderPopoverControl ? <PopoverControl isCLoseOnHover={true} genderBody={renderPopoverControl} onClose={handlePopoverClose} anchorEl={openPopover} /> : ''}
           </DragItem>
         );
       }}

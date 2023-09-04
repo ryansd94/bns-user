@@ -149,7 +149,7 @@ const Filter = (props) => {
         setValue(`test[${value}].condition`, null)
     }
 
-    const genderPopoverControl = () => {
+    const renderPopoverControl = () => {
         return (
             <Grid className='box-container' flexWrap='nowrap' width="auto" container
             >
@@ -219,7 +219,7 @@ const Filter = (props) => {
                         <PopoverControl
                             anchorEl={anchorSave}
                             onClose={handleCloseSave}
-                            genderBody={genderPopoverControl}
+                            genderBody={renderPopoverControl}
                         >
 
                         </PopoverControl>

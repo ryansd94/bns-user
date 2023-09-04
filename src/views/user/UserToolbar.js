@@ -12,7 +12,7 @@ import { EControlType } from "configs"
 
 const UserToolbar = (props) => {
     console.log('UserToolbar')
-    const { onApplyFilter } = props
+    const { onApplyFilter, gridId } = props
     const { t } = useTranslation()
     const dispatch = useDispatch()
     const toolbarVisible = { ...useSelector((state) => state.master.toolbarVisible) }
@@ -46,8 +46,10 @@ const UserToolbar = (props) => {
     }
 
     return <div>
-        <ToolBar visible={toolbarVisible}
+        <ToolBar
+            visible={toolbarVisible}
             onApplyFilter={onApplyFilter}
+            gridId={gridId}
             onColumnConfigChange={handleColumnConfigChange} columnModel={columnModel}
             onAddClick={handleClickOpen} />
         <UserPopup />

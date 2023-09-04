@@ -5,17 +5,18 @@ import { Resizable } from 'components/resizable'
 
 const User = React.memo(() => {
   const [filterModels, setFilterModels] = useState(null)
+  const gridId = 'gridUser'
   const onApplyFilter = (value) => {
     setFilterModels(value)
   }
 
   const genderLeftComponent = () => {
-    return <UserGrid filterModels={filterModels} />
+    return <UserGrid id={gridId} filterModels={filterModels} />
   }
 
   return (
     <div className="body-content">
-      <UserToolbar onApplyFilter={onApplyFilter} />
+      <UserToolbar gridId={gridId} onApplyFilter={onApplyFilter} />
       <Resizable genderLeftComponent={genderLeftComponent} />
     </div>
   )

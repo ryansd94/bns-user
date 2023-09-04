@@ -12,7 +12,7 @@ const DragItem = styled.div`
   flex-direction: column;
   width: 100%;
 `
-const TaskDragItem = ({ id, index, control, genderPopoverControl }) => {
+const TaskDragItem = ({ id, index, control, renderPopoverControl }) => {
   const [openPopover, setOpenPopover] = useState(null)
 
   const handlePopoverOpen = (event) => {
@@ -38,7 +38,7 @@ const TaskDragItem = ({ id, index, control, genderPopoverControl }) => {
             {...provided.dragHandleProps}
           >
             {control}
-            {genderPopoverControl ? <PopoverControl isCLoseOnHover={true} genderBody={genderPopoverControl} onClose={handlePopoverClose} anchorEl={openPopover} /> : ''}
+            {renderPopoverControl ? <PopoverControl isCLoseOnHover={true} genderBody={renderPopoverControl} onClose={handlePopoverClose} anchorEl={openPopover} /> : ''}
           </DragItem>
         )
       }}

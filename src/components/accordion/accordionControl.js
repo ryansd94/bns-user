@@ -11,7 +11,7 @@ import { FullScreen, useFullScreenHandle } from "react-full-screen"
 
 const AccordionControl = (props) => {
     const { title, name, details, isExpand, className = 'accordion-container',
-        genderPopoverControl = null, isFullScreen = false, required } = props
+        renderPopoverControl = null, isFullScreen = false, required } = props
     const [expanded, setExpanded] = useState(isExpand ? name : '')
     const [showIcon, setShowIcon] = useState(!isExpand ? true : false)
     const [openPopover, setOpenPopover] = useState(null)
@@ -23,14 +23,14 @@ const AccordionControl = (props) => {
 
     const onMouseEnter = (event) => {
         setShowIcon(true)
-        if (genderPopoverControl) {
+        if (renderPopoverControl) {
             handlePopoverOpen(event)
         }
     }
 
     const onMouseLeave = (event) => {
         setShowIcon(expanded == '' ? true : false)
-        if (genderPopoverControl) {
+        if (renderPopoverControl) {
             handlePopoverClose(event)
         }
     }
@@ -63,7 +63,7 @@ const AccordionControl = (props) => {
                     />
                     {isFullScreen && showIcon ? <FullscreenIcon onClick={onFullScreen} /> : ''}
                     {/* {showExpandIcon ? expanded === name ? <ExpandLessIcon /> : <ExpandMoreIcon /> : ''} */}
-                    {genderPopoverControl ? <PopoverControl isCLoseOnHover={true} genderBody={genderPopoverControl} onClose={handlePopoverClose} anchorEl={openPopover} /> : ''}
+                    {renderPopoverControl ? <PopoverControl isCLoseOnHover={true} genderBody={renderPopoverControl} onClose={handlePopoverClose} anchorEl={openPopover} /> : ''}
                 </AccordionSummary>
                 <AccordionDetails>
                     {details}

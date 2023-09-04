@@ -47,7 +47,7 @@ const ButtonDetail = (props) => {
         setText(t("Cancel"))
         setColor("neutral")
         break
-      case EButtonDetailType.accpet:
+      case EButtonDetailType.accept:
         setIcon(<IconSave />)
         setText(t("Confirm"))
         setDefaultLoading(true)

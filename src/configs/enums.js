@@ -115,7 +115,7 @@ export const EButtonIconType = {
 export const EButtonDetailType = {
   save: "Save",
   undo: "Undo",
-  accpet: "Accpet",
+  accept: "Accept",
   ok: "Ok",
 }
 

@@ -13,110 +13,123 @@ import { EButtonIconType } from "configs"
 
 const UserGrid = React.memo((props) => {
   console.log("render user grid")
-  const { filterModels } = props
+  const { filterModels, id, isGetDataFromServer = true, isShowActionButton = true,
+    onSelectedRow = null, localData = [], isShowListButton = true, onCustomDeleteClick, dataUrl, customFilterData } = props
   const dispatch = useDispatch()
   const { t } = useTranslation()
   const columnVisibility = { ...useSelector((state) => state.user.columnVisibility) }
-  const [id, setId] = useState(null)
+  const [userId, setUserId] = useState(null)
   const [status, setStatus] = useState(null)
 
   const onSendMail = async (email) => {
-    const res = await post(`${baseUrl.jm_user}/add-user`,{ emails: [email] })
+    const res = await post(`${baseUrl.jm_user}/add-user`, { emails: [email] })
     if (res.errorCode == ERROR_CODE.success) {
     }
     dispatch(openMessage({ ...res }))
   }
 
-  const [columns, setColumn] = useState([
-    {
-      checkboxSelection: true,
-      resizable: false, width: 40, headerCheckboxSelection: true, pinned: 'left'
-    },
-    {
-      field: "email",
-      headerName: t("Email"),
-      pinned: 'left',
-      flex: 1,
-      cellRenderer: (params) => {
-        return <UserProfile
-          user={params.data} >
-        </UserProfile >
+  const getColumns = () => {
+    let result = [
+      {
+        checkboxSelection: true,
+        resizable: false, width: 40, headerCheckboxSelection: true, pinned: 'left'
       },
-    },
-    {
-      field: "fullName", headerName: t("Full name"),
-      flex: 1
-    },
-    {
-      field: "teamName", headerName: t("Team"),
-      width: 170,
-    },
-    {
-      field: "status",
-      width: 170,
-      headerName: t("Status"),
-      cellRenderer: (params) => {
-        return <UserStatus status={params.data.status} />
+      {
+        field: "email",
+        headerName: t("Email"),
+        pinned: 'left',
+        cellRenderer: (params) => {
+          return <UserProfile
+            user={params.data} >
+          </UserProfile >
+        },
       },
-    },
-    {
-      field: "createdDate",
-      width: 150,
-      headerName: t("Date created"),
-      cellRenderer: (params) => {
-        return formatDate(params.data.createdDate)
+      {
+        field: "fullName", headerName: t("Full name"),
+        flex: 1,
+        minWidth: 170,
       },
-    },
-    {
-      field: "edit",
-      width: 150,
-      headerName: "",
-      resizable: false,
-      cellRenderer: (params) => {
-        const onSendMailClick = (e) => {
-          if (!params) return
-          onSendMail(params.data.email)
-        }
-        const onBlockClick = (sta) => {
-          setId(params.data.id)
-          setStatus(sta)
-          dispatch(
-            openAlert({
-              open: true,
-              title: sta == EUserStatus.BLOCK ? t("Are you sure to lock this user?") : t("Are you sure to unlock this user?"),
-            })
-          )
-        }
-        const _status = params.data.status
-        const _isMainAccount = params.data.isMainAccount
-
-        const listButton = [
-          { type: EButtonIconType.email, onClick: onSendMailClick, disabled: _status == EUserStatus.WAILTING_CONFIRM_MAIL ? false : true }
-        ]
-
-        if (_status == EUserStatus.ACTIVE) {
-          listButton.push({ type: EButtonIconType.lock, onClick: () => onBlockClick(EUserStatus.BLOCK), disabled: _isMainAccount ? _isMainAccount : (_status == EUserStatus.WAILTING_CONFIRM_MAIL ? true : false) })
-        } else {
-          listButton.push({ type: EButtonIconType.unLock, onClick: () => onBlockClick(EUserStatus.ACTIVE), disabled: _isMainAccount ? _isMainAccount : (_status == EUserStatus.WAILTING_CONFIRM_MAIL ? true : false) })
-        }
-
-        return <strong>
-          <CellButton isDeleteShow={!_isMainAccount} listButton={listButton} id={params.data.userId} isEditShow={false} url={baseUrl.jm_user} />
-        </strong>
+      {
+        field: "teamName", headerName: t("Team"),
+        width: 170,
       },
-      sortable: false,
-    },
-  ])
+      {
+        field: "status",
+        width: 170,
+        headerName: t("Status"),
+        cellRenderer: (params) => {
+          return <UserStatus status={params.data.status} />
+        },
+      },
+      {
+        field: "createdDate",
+        width: 150,
+        headerName: t("Date created"),
+        cellRenderer: (params) => {
+          return formatDate(params.data.createdDate)
+        },
+      }
+    ]
 
-  return (
-    <>
-      <GridData
-        url={baseUrl.jm_user}
-        columnVisibility={columnVisibility}
-        columns={columns}
-        filterModels={filterModels}></GridData>
-    </>
-  )
+    if (isShowActionButton) {
+      result.push(
+        {
+          field: "edit",
+          width: 150,
+          headerName: "",
+          resizable: false,
+          cellRenderer: (params) => {
+            const onSendMailClick = (e) => {
+              if (!params) return
+              onSendMail(params.data.email)
+            }
+            const onBlockClick = (sta) => {
+              setUserId(params.data.id)
+              setStatus(sta)
+              dispatch(
+                openAlert({
+                  open: true,
+                  title: sta == EUserStatus.BLOCK ? t("Are you sure to lock this user?") : t("Are you sure to unlock this user?"),
+                })
+              )
+            }
+            const _status = params.data.status
+            const _isMainAccount = params.data.isMainAccount
+
+            const listButton = [
+              { type: EButtonIconType.email, onClick: onSendMailClick, disabled: _status == EUserStatus.WAILTING_CONFIRM_MAIL ? false : true }
+            ]
+
+            if (_status == EUserStatus.ACTIVE) {
+              listButton.push({ type: EButtonIconType.lock, onClick: () => onBlockClick(EUserStatus.BLOCK), disabled: _isMainAccount ? _isMainAccount : (_status == EUserStatus.WAILTING_CONFIRM_MAIL ? true : false) })
+            } else {
+              listButton.push({ type: EButtonIconType.unLock, onClick: () => onBlockClick(EUserStatus.ACTIVE), disabled: _isMainAccount ? _isMainAccount : (_status == EUserStatus.WAILTING_CONFIRM_MAIL ? true : false) })
+            }
+
+            return <strong>
+              <CellButton onCustomDeleteClick={onCustomDeleteClick} isDeleteShow={!_isMainAccount} listButton={isShowListButton ? listButton : []} id={params.data.userId} isEditShow={false} url={baseUrl.jm_user} />
+            </strong>
+          },
+          sortable: false,
+        })
+    }
+
+    return result
+  }
+
+  const [columns, setColumn] = useState(getColumns())
+
+  return <GridData
+    customFilterData={customFilterData}
+    localData={_.cloneDeep(localData)}
+    onSelectedRow={onSelectedRow}
+    isGetDataFromServer={isGetDataFromServer}
+    id={id}
+    url={dataUrl || baseUrl.jm_user}
+    columnVisibility={columnVisibility}
+    columns={columns}
+    filterModels={filterModels}>
+  </GridData>
 })
 
-export default UserGrid
+export default UserGrid                                               

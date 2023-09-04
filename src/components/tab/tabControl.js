@@ -10,7 +10,7 @@ import { IconRequire, IconBlock } from 'components/icon/icon'
 import eventEmitter from 'helpers/eventEmitter'
 
 function TabPanel(props) {
-  const { children, value, index, ...other } = props
+  const { children, value, renderAllAtFirstLoad, index, ...other } = props
 
   return (
     <div
@@ -21,14 +21,15 @@ function TabPanel(props) {
       aria-labelledby={`full-width-tab-${index}`}
       {...other}
     >
-      {value === index && (
+      {renderAllAtFirstLoad === false && value === index && (
         <div>
           {children}
         </div>
       )}
-      {/* <div>
+      
+      {renderAllAtFirstLoad === true ? <div>
         {children}
-      </div> */}
+      </div> : ''}
     </div>
   )
 }
@@ -77,7 +78,7 @@ const AntTab = styled((props) => <Tab disableRipple {...props} />)(({ theme }) =
 }))
 
 const TabControl = (props) => {
-  const { tabItems = [], classNameSwipeableView, id } = props
+  const { tabItems = [], classNameSwipeableView, id, renderAllAtFirstLoad = false } = props
   const indexDefault = _.findIndex(tabItems, (x) => x.isActive)
   const [value, setValue] = React.useState(indexDefault != -1 ? indexDefault : 0)
   const [errorTabs, setErrorTabs] = useState([])
@@ -125,7 +126,7 @@ const TabControl = (props) => {
       >
         {
           _.map(tabItems, (item, index) => {
-            return <TabPanel key={index} value={value} index={index}>
+            return <TabPanel renderAllAtFirstLoad={renderAllAtFirstLoad} key={index} value={value} index={index}>
               {item.Content}
             </TabPanel>
           })

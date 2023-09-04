@@ -12,7 +12,7 @@ import { EControlType, baseUrl } from "configs"
 
 const TeamToolbar = (props) => {
     // console.log("render TeamToolbar")
-    const { onApplyFilter, dataTeam, dataUsers } = props
+    const { onApplyFilter, dataTeam } = props
     const { t } = useTranslation()
     const dispatch = useDispatch()
     const toolbarVisible = { ...useSelector((state) => state.master.toolbarVisible) }
@@ -48,7 +48,7 @@ const TeamToolbar = (props) => {
             onApplyFilter={onApplyFilter}
             onColumnConfigChange={handleColumnConfigChange} columnModel={columnModel}
             onAddClick={handleClickOpen} />
-        <TeamPopup dataTeam={dataTeam} dataUsers={dataUsers} />
+        <TeamPopup dataTeam={dataTeam}/>
     </div>
 
 }

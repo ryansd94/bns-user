@@ -12,7 +12,7 @@ import {
   setReload,
 } from "stores/views/master"
 import { getByID, save, get } from "services"
-import { ERROR_CODE, baseUrl, message } from "configs"
+import { ERROR_CODE, baseUrl, message, EWidth } from "configs"
 import { loading as loadingButton } from "stores/components/button"
 import { TabControl } from 'components/tab'
 import { InfoTab, MemberTab } from "./components"
@@ -20,7 +20,6 @@ import { getCustomResolverTab } from "helpers"
 import eventEmitter from 'helpers/eventEmitter'
 
 const TeamPopup = React.memo((props) => {
-  const { dataUsers } = props
   console.log("render TeamPopup")
   const { t } = useTranslation()
   const dispatch = useDispatch()
@@ -62,7 +61,7 @@ const TeamPopup = React.memo((props) => {
       onEditClick()
     }
   }, [editData])
-  
+
   const onEditClick = async () => {
     if (!editData) return
     dispatch(change_title(t("Edit team")))
@@ -125,6 +124,7 @@ const TeamPopup = React.memo((props) => {
 
   const renderModalBody = () => {
     return <TabControl
+      renderAllAtFirstLoad={true}
       id={'teamTab'}
       tabItems={getTabItems()} />
   }
@@ -138,9 +138,9 @@ const TeamPopup = React.memo((props) => {
       {
         label: t('Members'),
         Content: <MemberTab
+          isAdd={_.isNil(editData)}
           getValues={getValues}
           setValue={setValue}
-          users={dataUsers}
           control={control} />
       }
     ]
@@ -152,7 +152,7 @@ const TeamPopup = React.memo((props) => {
       <Popup
         reset={reset}
         ModalBody={renderModalBody}
-        widthSize={"sm"}
+        widthSize={EWidth.xl}
         onSave={handleSubmit(onSubmit)}
       />
     </div>

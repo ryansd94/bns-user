@@ -4,7 +4,6 @@ import { usePagination, DOTS } from './usePagination'
 import './pagination.scss'
 import { NumberInput } from 'components/input'
 import { useForm } from "react-hook-form"
-import { useSelector } from "react-redux"
 import _ from 'lodash'
 
 const Pagination = props => {
@@ -14,10 +13,10 @@ const Pagination = props => {
     siblingCount = 1,
     currentPage,
     className,
-    onPageLengthChange
+    onPageLengthChange,
+    pageSize
   } = props
 
-  const pageSize = useSelector((state) => state.master.pageSize)
   const {
     control,
   } = useForm({

@@ -856,6 +856,9 @@ a:hover {
 .MuiTooltip-tooltip {
     font-size: 14px !important;
 }
-// .react-swipeable-view-container {
-//     transform: translate(0%, 0px) !important;
-// }
+.MuiPaper-root {
+    overflow: auto !important;
+}
+.MuiTooltip-popper {
+    pointer-events: none !important;
+}

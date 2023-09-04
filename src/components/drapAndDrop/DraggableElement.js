@@ -22,7 +22,7 @@ const DroppableStyles = styled.div`
 padding:0;
 `
 
-const DraggableElement = ({ prefix, columnHeader, controls = [], control, droppableClassName, genderPopoverControl, field }) => {
+const DraggableElement = ({ prefix, columnHeader, controls = [], control, droppableClassName, renderPopoverControl, field }) => {
 
   const isLastControl = (item) => {
     if (item.type === EControlType.group || item.id.indexOf('@') == -1) {
@@ -76,7 +76,7 @@ const DraggableElement = ({ prefix, columnHeader, controls = [], control, droppa
         title={item.label}
         name={item.name}
         className='task-group-container'
-        genderPopoverControl={(field) => genderPopoverControl(item, prefix, index, isLastControl(item), field)}
+        renderPopoverControl={(field) => renderPopoverControl(item, prefix, index, isLastControl(item), field)}
         details={
           <div>
             {
@@ -137,7 +137,7 @@ const DraggableElement = ({ prefix, columnHeader, controls = [], control, droppa
 
     return (
       <Grid key={index} item xs={12}>
-        <ListItem genderPopoverControl={item.type !== EControlType.group ? () => genderPopoverControl(item, prefix, index, isLastControl(item), field) : null} control={component} key={item.id} id={item.id} index={index} />
+        <ListItem renderPopoverControl={item.type !== EControlType.group ? () => renderPopoverControl(item, prefix, index, isLastControl(item), field) : null} control={component} key={item.id} id={item.id} index={index} />
       </Grid>)
   }
 

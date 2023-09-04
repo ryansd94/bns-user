@@ -4,8 +4,6 @@ import { getUserInfo } from "helpers"
 import _ from 'lodash'
 
 const initialState = {
-  page: 0,
-  pageSize: null,
   loading: false,
   data: [],
   isReload: null,
@@ -30,12 +28,6 @@ const slice = createSlice({
     },
     setLoading: (state, action) => {
       state.loading = action.payload
-    },
-    setPage: (state, action) => {
-      state.page = action.payload
-    },
-    setPageSize: (state, action) => {
-      state.pageSize = action.payload
     },
     setSort: (state, action) => {
       state.sortModel = action.payload
