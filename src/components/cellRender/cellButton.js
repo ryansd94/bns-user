@@ -38,7 +38,7 @@ const CellButton = (props) => {
             }
             {
                 isDeleteShow ? <Grid key={EButtonIconType.delete} item>
-                    <ButtonIcon onClick={() => onCustomDeleteClick(id)} type={EButtonIconType.delete} />
+                    <ButtonIcon onClick={onDeleteClick} type={EButtonIconType.delete} />
                 </Grid> : ''
             }
             {

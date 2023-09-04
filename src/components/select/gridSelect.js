@@ -13,13 +13,13 @@ import _ from 'lodash'
 
 const GridSelect = React.memo((props) => {
     console.log('render GridSelect')
-    const { id, gridDataId, isGetDataFromServer = false, actionRender, gridDataRender, onConfirm, dataSelected = [] } = props
+    const { id, gridDataId, isGetDataFromServer = false, gridDataRender, onConfirm, dataSelected = [], handleDeleteAll } = props
     const [anchorOpen, setAnchorOpen] = React.useState(null)
     const [rowsSelected, setRowsSelected] = React.useState([])
     const [rowsDataSelected, setRowsDataSelected] = React.useState([])
     const { t } = useTranslation()
 
-    const onOpenClick = (event) => {
+    const onAddClick = (event) => {
         setAnchorOpen(event.currentTarget)
     }
 
@@ -69,7 +69,9 @@ const GridSelect = React.memo((props) => {
     }
 
     const onDeleteAllClick = () => {
-
+        setRowsSelected([])
+        setRowsDataSelected([])
+        handleDeleteAll && handleDeleteAll()
     }
 
     const renderDeleteAllButton = () => {
@@ -93,7 +95,7 @@ const GridSelect = React.memo((props) => {
 
     return <Grid item container gap={2} direction='column'>
         <Grid item container gap={2}>
-            {<div onClick={onOpenClick}>{actionRender && actionRender()}</div>}
+            <ButtonFuntion onClick={onAddClick} isFloatLeft={true} type={EButtonType.add} label={t('Add members')} />
             {renderDeleteAllButton()}
         </Grid>
         <Grid item>

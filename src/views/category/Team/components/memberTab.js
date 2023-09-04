@@ -16,19 +16,11 @@ const MemberTab = React.memo((props) => {
     let [usersSelected, setUsersSelected] = useState([])
     const { t } = useTranslation()
 
-    const onAddClick = () => {
-
-    }
-
     useEffect(() => {
         if (!_.isEmpty(usersSelected)) {
             eventEmitter.emit('onRowDataChange', { rows: usersSelected, gridId: 'gridTeamUser' })
         }
     }, [usersSelected])
-
-    const renderAddMemberButton = () => {
-        return <ButtonFuntion onClick={onAddClick} isFloatLeft={true} type={EButtonType.add} label={t('Add members')} />
-    }
 
     const onSelectedRow = (rows, id) => {
         eventEmitter.emit('onSelectedRowChange', { rows, gridId: id })
@@ -64,9 +56,20 @@ const MemberTab = React.memo((props) => {
         />
     }
 
+    const handleDeleteAll = () => {
+        setUsersSelected([])
+    }
+
     const renderGridSelect = useCallback(() => {
-        return <GridSelect dataSelected={usersSelected} onConfirm={onSelectedRowsChange} gridDataId={'gridTeamUser'} id={'gridTeamUserAdd'} gridDataRender={gridDataRender} actionRender={renderAddMemberButton} />
-    }, [])
+        return <GridSelect
+            handleDeleteAll={handleDeleteAll}
+            dataSelected={usersSelected}
+            onConfirm={onSelectedRowsChange}
+            gridDataId={'gridTeamUser'}
+            id={'gridTeamUserAdd'}
+            gridDataRender={gridDataRender}
+        />
+    }, [usersSelected])
 
     return <Grid container gap={2} direction='column'>
         <Grid item>

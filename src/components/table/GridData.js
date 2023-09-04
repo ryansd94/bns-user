@@ -46,6 +46,7 @@ const GridData = (props) => {
     const toolbarVisible = { ...useSelector((state) => state.master.toolbarVisible) }
     const isReload = useSelector((state) => state.master.isReload)
     const [data, setData] = useState(null)
+    const [selectedIds, setSelectedIds] = useState([])
     const [pageSize, setPageSize] = useState(10)
     const loading = useSelector((state) => state.master.loading)
     const cancelToken = useRef(null)
@@ -84,8 +85,18 @@ const GridData = (props) => {
         }
     }, [loading])
 
+    useEffect(() => {
+        if (!_.isEmpty(localData)) {
+            gridRef.current.api.forEachNode((node) => {
+                if (node.data && node.data.year === 2012) {
+                }
+            });
+        }
+    }, [localData])
+
     const onFirstDataRendered = () => {
         if (gridRef && gridRef.current.api) {
+
             if (loading) {
                 gridRef.current.api.showLoadingOverlay()
             }
@@ -135,6 +146,7 @@ const GridData = (props) => {
     const onSelectionChanged = (newSelection) => {
         let selectedNodes = newSelection.api.getSelectedNodes()
         let selectedData = selectedNodes.map(node => node.data)
+        setSelectedIds(_.map(selectedData, (x) => { return x.id }))
         if (!_.isNil(onSelectedRow)) {
             onSelectedRow(selectedData)
         } else {
@@ -307,6 +319,31 @@ const GridData = (props) => {
         return items.length
     }
 
+    const onModelUpdated = (event) => {
+        console.log(event)
+        if (!_.isEmpty(localData) && gridRef && gridRef.current.api) {
+            const currentData = []
+            gridRef.current.api.forEachNode((node) => {
+                currentData.push(node.data)
+                if (_.includes(selectedIds, node.data?.id)) {
+                    node.setSelected(true)
+                }
+            })
+
+            if (!_.isEmpty(currentData) && !_.isEmpty(selectedIds)) {
+                const currentDataIds = _.map(currentData, (x) => { return x.id })
+                const currentSelectedIds = _.intersectionBy(currentDataIds, selectedIds)
+                setSelectedIds(currentSelectedIds)
+            }
+        } else {
+            setSelectedIds([])
+        }
+    }
+
+    const onGridReady = (event) => {
+        console.log(event)
+    }
+
     return (
         <div style={{ width: "100%" }} className="grid-wrapper">
             <div style={gridStyle} className="ag-theme-alpine">
@@ -322,7 +359,8 @@ const GridData = (props) => {
                     gridOptions={gridOptions}
                     columnDefs={columnsDef}
                     rowSelection='multiple'
-                    // onGridReady={onGridReady}
+                    onGridReady={onGridReady}
+                    onModelUpdated={onModelUpdated}
                     onRowClicked={onRowClicked}
                     onFirstDataRendered={onFirstDataRendered}
                     autoGroupColumnDef={autoGroupColumnDef}
