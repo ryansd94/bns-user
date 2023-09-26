@@ -85,15 +85,6 @@ const GridData = (props) => {
         }
     }, [loading])
 
-    useEffect(() => {
-        if (!_.isEmpty(localData)) {
-            gridRef.current.api.forEachNode((node) => {
-                if (node.data && node.data.year === 2012) {
-                }
-            });
-        }
-    }, [localData])
-
     const onFirstDataRendered = () => {
         if (gridRef && gridRef.current.api) {
 
@@ -146,7 +137,8 @@ const GridData = (props) => {
     const onSelectionChanged = (newSelection) => {
         let selectedNodes = newSelection.api.getSelectedNodes()
         let selectedData = selectedNodes.map(node => node.data)
-        setSelectedIds(_.map(selectedData, (x) => { return x.id }))
+        const selectedIds = _.map(selectedData, (x) => { return x.id })
+        setSelectedIds(selectedIds)
         if (!_.isNil(onSelectedRow)) {
             onSelectedRow(selectedData)
         } else {
@@ -156,7 +148,7 @@ const GridData = (props) => {
             else {
                 toolbarVisible.function = false
             }
-            eventEmitter.emit('onChangeVisibleToolbar', { visibleObject: { ...toolbarVisible }, id })
+            eventEmitter.emit('onChangeVisibleToolbar', { visibleObject: { ...toolbarVisible }, id, selectedIds })
         }
     }
 
@@ -165,7 +157,7 @@ const GridData = (props) => {
             gridRef.current.api.showLoadingOverlay()
         }
         const params = new URLSearchParams(window.location.search)
-        const filterParams = params.get("filters")
+        const filterParams = params.get("filters") || filterModels
         cancelToken.current = new axios.CancelToken.source()
 
         let sortField = ''
@@ -320,7 +312,6 @@ const GridData = (props) => {
     }
 
     const onModelUpdated = (event) => {
-        console.log(event)
         if (!_.isEmpty(localData) && gridRef && gridRef.current.api) {
             const currentData = []
             gridRef.current.api.forEachNode((node) => {

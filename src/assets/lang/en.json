@@ -4,7 +4,7 @@
     "Add filter": "Add filter",
     "Delete": "Delete",
     "Hide / show column": "Hide / show column",
-    "Search": "Search",
+    "Filter": "Filter",
     "Delete all": "Delete all",
     "Action": "Action",
     "Apply": "Apply",
@@ -168,7 +168,7 @@
     "Task": "Task",
     "The system does not yet have": "The system does not yet have",
     "Please add new": "Please add new",
-    "Compare": "Compare",
+    "Condition": "Condition",
     "Column": "Column",
     "Permission": "Permission",
     "Please wait a moment": "Please wait a moment",
@@ -229,5 +229,6 @@
     "Copy the task link and title": "Copy the task link and title",
     "Users do not have team": "Users do not have team",
     "Users in team": "Users in team",
-    "Add members": "Add members"
+    "Add members": "Add members",
+    "UserNotActive":"User is not activated"
 }

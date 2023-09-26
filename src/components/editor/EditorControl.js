@@ -171,8 +171,8 @@ const EditorControl = (props) => {
                 const newOffset = lengthContent?.length
                 newIndex = selection + newOffset
                 pasteData = `<a href="${dataValue?.url}" target="_blank" rel="noopener noreferrer">${dataValue?.textUrl}</a>: ${dataValue?.text}`
-
                 quill.clipboard.dangerouslyPasteHTML(selection, pasteData)
+                event.preventDefault()
             }
             else {
                 quill.clipboard.dangerouslyPasteHTML(selection, pasteDataHtml)
@@ -181,7 +181,6 @@ const EditorControl = (props) => {
 
             setTimeout(() => quill.setSelection(newIndex, 0), 1)
             quill.focus()
-            event.preventDefault()
         }
 
         const quill = quillRef.current.getEditor()
@@ -208,13 +207,6 @@ const EditorControl = (props) => {
             editor.setSelection(cursorPosition + 1)
         }
     }
-
-    const tags = [
-        { id: 1, value: 'JavaScript' },
-        { id: 2, value: 'TypeScript' },
-        { id: 3, value: 'Ruby' },
-        { id: 3, value: 'Python' },
-    ]
 
     const modules = {
         toolbar: {

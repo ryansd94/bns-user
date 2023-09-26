@@ -131,7 +131,7 @@ const ButtonFuntion = React.memo(props => {
                     setIcon("far fa-angle-up" + sizeDefault)
                 else
                     setIcon("far fa-angle-down" + sizeDefault)
-                setText(t('Search'))
+                setText(t('Filter'))
                 setFloat(' float-left')
                 setStartIcon(false)
                 break

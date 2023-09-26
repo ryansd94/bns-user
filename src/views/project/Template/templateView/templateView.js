@@ -119,7 +119,6 @@ const TemplateAdd = React.memo((props) => {
       saveData = {}
       saveData.id = id
       saveData.changeFields = data.changeFields
-      saveData.content = data.content
     }
     const res = await save2(baseUrl.jm_template, saveData)
     dispatch(loadingButton(false))

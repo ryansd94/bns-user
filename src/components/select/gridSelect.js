@@ -9,11 +9,13 @@ import ButtonDetail from "components/button/ButtonDetail"
 import { EButtonDetailType, EButtonType } from "configs"
 import eventEmitter from 'helpers/eventEmitter'
 import ButtonFuntion from "components/button/ButtonFuntion"
+import GridSelectFilter from "./components/gridSelectFilter"
 import _ from 'lodash'
 
 const GridSelect = React.memo((props) => {
     console.log('render GridSelect')
-    const { id, gridDataId, isGetDataFromServer = false, gridDataRender, onConfirm, dataSelected = [], handleDeleteAll } = props
+    const { id, gridDataId, isGetDataFromServer = false, gridDataRender, onConfirm,
+        dataSelected = [], handleDeleteMulti, columnModel, onApplyFilter, filterModels } = props
     const [anchorOpen, setAnchorOpen] = React.useState(null)
     const [rowsSelected, setRowsSelected] = React.useState([])
     const [rowsDataSelected, setRowsDataSelected] = React.useState([])
@@ -26,10 +28,6 @@ const GridSelect = React.memo((props) => {
     const handleClose = () => {
         setAnchorOpen(null)
     }
-
-    useEffect(() => {
-        console.log(rowsDataSelected)
-    }, [rowsDataSelected])
 
     const onSelectedRowChange = ({ rows, gridId }) => {
         if (_.isEqual(gridId, id)) {
@@ -69,20 +67,27 @@ const GridSelect = React.memo((props) => {
     }
 
     const onDeleteAllClick = () => {
-        setRowsSelected([])
+        // setRowsSelected([])
+        handleDeleteMulti && handleDeleteMulti(rowsDataSelected)
         setRowsDataSelected([])
-        handleDeleteAll && handleDeleteAll()
     }
 
     const renderDeleteAllButton = () => {
         return !_.isEmpty(rowsDataSelected) && !_.isEmpty(dataSelected) ? <ButtonFuntion onClick={onDeleteAllClick} isFloatLeft={true} type={EButtonType.delete} /> : ''
     }
 
-    const renderPopoverControl = () => {
+    const renderPopoverControl = useCallback(() => {
         return <ClickAwayListener onClickAway={handleClose}>
             <Grid style={{ minWidth: '500px' }} container direction='column'>
                 <DialogContent className="border-bottom">
-                    {gridDataRender && gridDataRender()}
+                    <Grid item container gap={2} direction='column'>
+                        <Grid item>
+                            <GridSelectFilter filterModels={filterModels} onApplyFilter={onApplyFilter} columnModel={columnModel} />
+                        </Grid>
+                        <Grid item>
+                            {gridDataRender && gridDataRender()}
+                        </Grid>
+                    </Grid>
                 </DialogContent>
                 <DialogActions>
                     <Grid item xs>
@@ -91,7 +96,7 @@ const GridSelect = React.memo((props) => {
                 </DialogActions>
             </Grid>
         </ClickAwayListener>
-    }
+    })
 
     return <Grid item container gap={2} direction='column'>
         <Grid item container gap={2}>

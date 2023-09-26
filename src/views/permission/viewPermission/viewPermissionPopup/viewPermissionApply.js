@@ -12,16 +12,6 @@ const ViewPermissionApply = (props) => {
     const [userSelectedIds, setUserSelectedIds] = useState([])
     const [teamSelectedIds, setTeamSelectedIds] = useState([])
 
-    useEffect(() => {
-        const objects = getValues('objects')
-        if (!_.isEmpty(objects)) {
-            const userApplys = _.map(_.filter(objects, (x) => x.objectType === EPermissionObject.user), (a) => { return a.id })
-            const teamApplys = _.map(_.filter(objects, (x) => x.objectType === EPermissionObject.team), (a) => { return a.id })
-            setUserSelectedIds(userApplys)
-            setTeamSelectedIds(teamApplys)
-        }
-    }, [])
-
     const renderUserItem = (data) => {
         return <Grid xs item container gap={2}>
             <Grid item container direction='row' gap={2}>
@@ -59,8 +49,8 @@ const ViewPermissionApply = (props) => {
                     details={
                         <TransferList
                             renderItem={(data) => renderUserItem(data)}
-                            itemApllyIds={userSelectedIds}
                             items={users}
+                            name='userSelectedIds'
                             control={control}
                             setValueData={setValue}
                             getValueData={getValues}
@@ -76,16 +66,16 @@ const ViewPermissionApply = (props) => {
                     title={t('Team')}
                     name={'teams'}
                     details={
-                        <TransferList 
-                        renderItem={(data) => renderTeamItem(data)} 
-                        itemApllyIds={teamSelectedIds} 
-                        items={teams} 
-                        control={control} 
-                        setValueData={setValue} 
-                        getValueData={getValues}
-                        leftTitle={t('Team list')}
-                        rightTitle={t('List of applicable teams')}
-                        setValueName={'teamSelectedIds'} />
+                        <TransferList
+                            renderItem={(data) => renderTeamItem(data)}
+                            items={teams}
+                            name='teamSelectedIds'
+                            control={control}
+                            setValueData={setValue}
+                            getValueData={getValues}
+                            leftTitle={t('Team list')}
+                            rightTitle={t('List of applicable teams')}
+                            setValueName={'teamSelectedIds'} />
                     }
                 />
             </Grid>

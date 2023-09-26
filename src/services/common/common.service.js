@@ -100,8 +100,8 @@ export const deleteData = async (baseUrl, id) => {
   validateUser(user)
   const services = createInstance(user.defaultOrganization)
   try {
-    let query = `${baseUrl}/${id}`
-    const res = await services.delete(query)
+    let query = `${baseUrl}`
+    const res = await services.put(query, { ids: id })
     return res
   } catch (error) {
     const { request, response } = error

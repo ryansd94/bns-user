@@ -92,12 +92,12 @@ const StatusPopup = (props) => {
         }
     }
 
-    const onStatusStartChange = (value, name) => {
+    const onStatusStartChange = ({value, name}) => {
         setStatusEndDisable(value)
         onValueChange({value, name})
     }
 
-    const onStatusEndChange = (value, name) => {
+    const onStatusEndChange = ({value, name}) => {
         setStatusStartDisable(value)
         onValueChange({value, name})
     }

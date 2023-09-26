@@ -3,9 +3,8 @@ import { useSelector, useDispatch } from "react-redux"
 import ButtonFuntion from 'components/button/ButtonFuntion'
 import PropTypes from 'prop-types'
 import { EButtonType } from 'configs/enums'
-import { ConfigColumn, DropdownMenu } from 'components/dropdown'
+import { ConfigColumn, DropdownMenu, DropDownItem } from 'components/dropdown'
 import { Filter } from 'components/filter'
-import MenuItem from '@mui/material/MenuItem'
 import { IconDelete } from "components/icon/icon"
 import {
     setReload,
@@ -13,18 +12,35 @@ import {
 import Grid from "@mui/material/Grid"
 import { VisibleDefault } from 'configs/enums'
 import eventEmitter from 'helpers/eventEmitter'
+import { useTranslation } from "react-i18next"
+import MenuItem from '@mui/material/MenuItem'
+import { isHasPermissionForButton } from "helpers"
+import { setDeleteData } from "stores/views/master"
+import { open as openAlert } from "stores/components/alert-dialog"
 
 const ToolBar = (props) => {
     const { onAddClick, visible, onDeleteClick, columnModel,
         onColumnConfigChange, onApplyFilter, component, genarateCustomButton, gridId } = props
+    const { t } = useTranslation()
     const [anchorElColumn, setAnchorElColumn] = useState(null)
     const [anchorElFilter, setAnchorElFilter] = useState(false)
-    const [visibleObject, setVisibleObject] = useState({ ...VisibleDefault })
+    const [visibleObject, setVisibleObject] = useState({ ...visible } || { ...VisibleDefault })
+    const [selectedIds, setSelectedIds] = useState([])
     const dispatch = useDispatch()
 
-    const onChangeVisibleToolbar = ({ id, visibleObject }) => {
+    const getListPermission = () => {
+        let result = []
+        if (isHasPermissionForButton(EButtonType.delete)) {
+            result.push(EButtonType.delete)
+        }
+        return result
+    }
+    const listPermission = getListPermission()
+
+    const onChangeVisibleToolbar = ({ id, visibleObject, selectedIds }) => {
         if (id === gridId) {
             setVisibleObject(visibleObject)
+            setSelectedIds(selectedIds)
         }
     }
 
@@ -48,10 +64,23 @@ const ToolBar = (props) => {
         setAnchorElFilter(!anchorElFilter)
     }
 
+    const onDeleteRowsSelectedClick = () => {
+        console.log(selectedIds)
+        if (!_.isEmpty(selectedIds)) {
+            dispatch(setDeleteData({ id: selectedIds, url: component }))
+            dispatch(openAlert({ open: true }))
+        }
+    }
+
     const genderDropdownItem = () => {
-        return <MenuItem disableRipple>
-            <IconDelete size={18} />
-        </MenuItem>
+        return <Grid container item direction={'column'}>
+            {_.includes(listPermission, EButtonType.delete) ? <MenuItem onClick={onDeleteRowsSelectedClick}>
+                <DropDownItem
+                    title={t('Delete')}
+                    icon={<IconDelete />}
+                />
+            </MenuItem> : ''}
+        </Grid>
     }
 
     const onRefreshClick = () => {
@@ -64,7 +93,7 @@ const ToolBar = (props) => {
                 <ConfigColumn onColumnConfigChange={onColumnConfigChange} columnModel={columnModel} anchorEl={anchorElColumn} handleClose={handleCloseColumn} />
                 <ButtonFuntion spacingLeft={0} visible={visibleObject.column} onClick={handleClickColumn} type={EButtonType.columnConfig} />
                 <ButtonFuntion spacingLeft={1} visible={visibleObject.column} open={anchorElFilter} onClick={handleClickFilter} type={EButtonType.filter} />
-                <DropdownMenu visible={visibleObject.function} type={EButtonType.function} genderDropdownItem={genderDropdownItem} />
+                {!_.isEmpty(listPermission) ? <DropdownMenu isShowEndIcon={false} visible={visibleObject.function} type={EButtonType.function} genderDropdownItem={genderDropdownItem} /> : ''}
                 <ButtonFuntion spacingLeft={1} visible={visibleObject.add} onClick={onAddClick} type={EButtonType.add} />
                 <ButtonFuntion spacingLeft={1} visible={visibleObject.delete} onClick={onDeleteClick} type={EButtonType.delete} />
                 <ButtonFuntion spacingLeft={1} onClick={onRefreshClick} type={EButtonType.refresh} />

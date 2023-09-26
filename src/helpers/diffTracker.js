@@ -21,20 +21,24 @@ const DiffTracker = {
       originValue = field.originValue
     }
 
-    if (type === EControlType.transferList) {
-      originValue = _.sortBy(originValue)
-    }
-
     if (_.isNumber(originValue) || _.isNumber(value)) {
       if (originValue != value) {
         isDiffernt = true
       }
     } else if (type === EControlType.transferList) {
+      originValue = _.sortBy(originValue)
       if (_.isNil(value)) {
         value = []
       }
       if (_.isNil(originValue)) {
         originValue = []
+      }
+      if (!_.isEqual(originValue, _.sortBy(value))) {
+        isDiffernt = true
+      }
+    } else if (type === EControlType.listId) {
+      if (_.isNil(field)) {
+        originValue = _.sortBy(_.map(originValue, (x) => { return x.id }))
       }
       if (!_.isEqual(originValue, _.sortBy(value))) {
         isDiffernt = true
@@ -52,13 +56,12 @@ const DiffTracker = {
         newValue = { deleteValues, addValues }
       } else if (type === EControlType.listId) {
         newValue = {}
-        const originValueIds = _.cloneDeep(_.map(originValue, (x) => { return x.id }))
+        const originValueIds = _.cloneDeep(originValue)
         const valueIds = _.cloneDeep(_.map(value, (x) => { return x.id }))
-        let deleteValues = _.difference(originValueIds, valueIds)
-        let addValues = _.difference(valueIds, originValueIds)
+        const deleteValues = _.difference(originValueIds, valueIds)
+        const addValues = _.difference(valueIds, originValueIds)
         newValue = {
-          deleteValues: _.map(deleteValues, (x) => { return { id: x } }),
-          addValues: _.map(addValues, (x) => { return { id: x } })
+          deleteValues, addValues
         }
       } else if (type === EControlType.listObject) {
         newValue = []

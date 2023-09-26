@@ -88,7 +88,8 @@ const TransferList = (props) => {
         setDisabledSwitchLeft(_.isEmpty(lstItemSelected))
     }
 
-    const onSwitchRight = () => {
+    const onSwitchRight = (event) => {
+        event.preventDefault()
         const itemSelectedIds = getValues('item-selected')
         if (!_.isEmpty(itemSelectedIds)) {
             const lstItemSelected = _.filter(lstItemAll, (x) => _.includes(itemSelectedIds, x.id))
@@ -108,7 +109,8 @@ const TransferList = (props) => {
         setValue('all', false)
     }
 
-    const onSwitchLeft = () => {
+    const onSwitchLeft = (event) => {
+        event.preventDefault()
         const itemSelectedIds = getValues('item-apply-selected')
         if (!_.isEmpty(itemSelectedIds)) {
             const lstItemSelected = _.filter(lstItemApply, (x) => _.includes(itemSelectedIds, x.id))

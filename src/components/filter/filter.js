@@ -19,8 +19,8 @@ import SingleAddSelect from 'components/select/SingleAddSelect'
 import _ from 'lodash'
 
 const Filter = (props) => {
-    console.log("render Filter")
-    const { anchorEl, onApplyFilter, columnModel, dropdownItem, component } = props
+    const { anchorEl, onApplyFilter, columnModel, dropdownItem, component,
+        isSaveFilter = true, isChangeUrlWhenApplyFilters = true, filterModels } = props
     const open = Boolean(anchorEl)
     const [anchorSave, setAnchorSave] = React.useState(null)
     const [filterData, setFilterData] = React.useState(null)
@@ -78,14 +78,21 @@ const Filter = (props) => {
     }, [])
 
     useEffect(() => {
-        const urlParams = new URLSearchParams(window.location.search)
-        const filters = urlParams.get('filters')
-        if (filters) {
-            const filterObject = JSON.parse(filters)
-            console.log(filterObject)
-            setValue('test', filterObject)
+        if (isChangeUrlWhenApplyFilters) {
+            const urlParams = new URLSearchParams(window.location.search)
+            const filters = urlParams.get('filters')
+            if (filters) {
+                const filterObject = JSON.parse(filters)
+                setValue('test', filterObject)
+            } else {
+                reset(dataFromServer)
+            }
         } else {
-            reset(dataFromServer)
+            if (!_.isEmpty(filterModels)) {
+                setValue('test', filterModels)
+            } else {
+                reset(dataFromServer)
+            }
         }
     }, [])
 
@@ -112,7 +119,7 @@ const Filter = (props) => {
                         value.push({ column: item.column, condition: item.condition, value: item.value, type: item.type, isCustom: item.isCustom })
                     }
                     else {
-                        value.push({ column: item.column, condition: item.condition, value: item.selectValue.map(e => e.id).join(','), type: item.type, isCustom: item.isCustom })
+                        value.push({ column: item.column, condition: item.condition, value: item.selectValue.map(e => e).join(','), type: item.type, isCustom: item.isCustom })
                     }
                 }
             })
@@ -122,16 +129,19 @@ const Filter = (props) => {
 
     const onSubmit = (data) => {
         const filters = getDataFilter(data)
-        const url = new URL(window.location)
-        if (_.isArray(filters) && filters.length > 0) {
-            url.searchParams.set('filters', JSON.stringify(filters))
-            window.history.pushState(null, '', url.toString())
+        // console.log(data)
+        if (isChangeUrlWhenApplyFilters) {
+            const url = new URL(window.location)
+            if (_.isArray(filters) && filters.length > 0) {
+                url.searchParams.set('filters', JSON.stringify(filters))
+                window.history.pushState(null, '', url.toString())
 
-            // const params = new URLSearchParams({ filters: JSON.stringify(value) })
-            // history.replace({ pathname: location.pathname, search: params.toString() })
-        } else {
-            url.searchParams.delete('filters')
-            window.history.pushState(null, '', url.toString())
+                // const params = new URLSearchParams({ filters: JSON.stringify(value) })
+                // history.replace({ pathname: location.pathname, search: params.toString() })
+            } else {
+                url.searchParams.delete('filters')
+                window.history.pushState(null, '', url.toString())
+            }
         }
         onApplyFilter(filters)
     }
@@ -188,20 +198,23 @@ const Filter = (props) => {
                         <Grid item>
                             <ButtonFuntion spacingLeft={0} onClick={onAdd} type={EButtonType.addFilter} />
                         </Grid>
-                        <Grid item xs={3}>
-                            <SingleAddSelect
-                                data={filterData}
-                                control={control}
-                                isAddWhenNoOption={false}
-                                name='filterId'
-                            />
-                        </Grid>
+                        {
+                            !isSaveFilter ? '' : <Grid item xs={3}>
+                                <SingleAddSelect
+                                    data={filterData}
+                                    control={control}
+                                    isAddWhenNoOption={false}
+                                    name='filterId'
+                                />
+                            </Grid>
+                        }
                     </Grid>
                     {
                         fields.map((item, index) => {
                             return (
                                 <FilterItem onClearConditionValue={onClearConditionValue}
-                                    onClearValue={onClearValue} onDeleteItem={onDeleteItem}
+                                    onClearValue={onClearValue} 
+                                    onDeleteItem={onDeleteItem}
                                     control={control}
                                     key={`item_${item.id}`}
                                     item={item}
@@ -214,15 +227,20 @@ const Filter = (props) => {
                     }
                     <Grid key="footer" style={{ display: "flex" }} item xs={12}>
                         <ButtonFuntion spacingLeft={0} onClick={onClear} type={EButtonType.clearFilter} />
-                        <ButtonFuntion spacingLeft={2} onClick={handleSubmit(onSubmit)} type={EButtonType.apply} />
-                        <ButtonFuntion style={{ marginLeft: "auto" }} onClick={handleClickSave} type={EButtonType.save} />
-                        <PopoverControl
-                            anchorEl={anchorSave}
-                            onClose={handleCloseSave}
-                            genderBody={renderPopoverControl}
-                        >
-
-                        </PopoverControl>
+                        <ButtonFuntion style={!isSaveFilter ? { marginLeft: "auto" } : {}} spacingLeft={2} onClick={handleSubmit(onSubmit)} type={EButtonType.apply} />
+                        {
+                            !isSaveFilter ? '' :
+                                <>
+                                    <ButtonFuntion style={{ marginLeft: "auto" }} onClick={handleClickSave} type={EButtonType.save} />
+                                    <PopoverControl
+                                        id='popoverFilter'
+                                        anchorEl={anchorSave}
+                                        onClose={handleCloseSave}
+                                        genderBody={renderPopoverControl}
+                                    >
+                                    </PopoverControl>
+                                </>
+                        }
                     </Grid>
                 </Grid>
             </Box>
@@ -231,7 +249,6 @@ const Filter = (props) => {
 }
 
 Filter.propTypes = {
-    anchorEl: PropTypes.bool,
     handleClose: PropTypes.func,
     onColumnConfigChange: PropTypes.func,
     dropdownItem: PropTypes.object,

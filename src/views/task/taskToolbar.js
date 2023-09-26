@@ -92,7 +92,8 @@ const TaskToolbar = (props) => {
     }
 
     return <>
-        <ToolBar component={baseUrl.jm_task}
+        <ToolBar
+            component={baseUrl.jm_task}
             visible={toolbarVisible}
             onApplyFilter={onApplyFilter}
             genarateCustomButton={genarateCustomButton()}

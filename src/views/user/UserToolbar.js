@@ -50,7 +50,8 @@ const UserToolbar = (props) => {
             visible={toolbarVisible}
             onApplyFilter={onApplyFilter}
             gridId={gridId}
-            onColumnConfigChange={handleColumnConfigChange} columnModel={columnModel}
+            onColumnConfigChange={handleColumnConfigChange}
+            columnModel={columnModel}
             onAddClick={handleClickOpen} />
         <UserPopup />
     </div>

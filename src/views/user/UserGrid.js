@@ -14,7 +14,7 @@ import { EButtonIconType } from "configs"
 const UserGrid = React.memo((props) => {
   console.log("render user grid")
   const { filterModels, id, isGetDataFromServer = true, isShowActionButton = true,
-    onSelectedRow = null, localData = [], isShowListButton = true, onCustomDeleteClick, dataUrl, customFilterData } = props
+    onSelectedRow = null, localData = [], isShowListButton = true, onCustomDeleteClick, dataUrl, customFilterData, hiddenColumns = [] } = props
   const dispatch = useDispatch()
   const { t } = useTranslation()
   const columnVisibility = { ...useSelector((state) => state.user.columnVisibility) }
@@ -112,6 +112,10 @@ const UserGrid = React.memo((props) => {
           },
           sortable: false,
         })
+    }
+
+    if (!_.isEmpty(hiddenColumns)) {
+      result = _.filter(result, (x) => !_.includes(hiddenColumns, x.field))
     }
 
     return result

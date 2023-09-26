@@ -36,7 +36,7 @@ const StatusTemplate = React.memo((props) => {
     useEffect(() => {
         if (!_.isNil(listStatusTemplate)) {
             if (!_.isNil(id)) {
-                onValueChange({ value: listStatusTemplate, name, type: EControlType.listId })
+                onValueChange({ value: listStatusTemplate, name, type: EControlType.listId, isEntity: false })
             }
             setValue(name, [...listStatusTemplate])
         }

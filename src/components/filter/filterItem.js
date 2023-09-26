@@ -211,7 +211,8 @@ const FilterItem = React.memo((props) => {
                         size={size}
                         name={`test[${index}].selectValue`}
                         label={t("Value")}
-                        data={status}></MultiSelect>
+                        data={status}>
+                    </MultiSelect>
                 )
             }
             else if (type == EControlType.datetime) {
@@ -220,7 +221,8 @@ const FilterItem = React.memo((props) => {
                     label={t("Value")}
                     control={control}
                     name={`test[${index}].value`}
-                    size="small"></DatePickerInput>)
+                    size="small">
+                    </DatePickerInput>)
             }
         }
     }, [conditionValue])
@@ -245,7 +247,7 @@ const FilterItem = React.memo((props) => {
                     onSelectChange={({ value }) => onConditionChange(value)}
                     disabled={item && item.condition != null ? false : disableCondition}
                     control={control}
-                    label={t("Compare")}
+                    label={t("Condition")}
                     name={`test[${index}].condition`}
                     isAddWhenNoOption={false}
                     data={conditionOption}>

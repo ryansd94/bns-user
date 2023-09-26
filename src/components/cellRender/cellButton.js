@@ -24,7 +24,7 @@ const CellButton = (props) => {
         if (!_.isNil(onCustomDeleteClick)) {
             onCustomDeleteClick(id)
         } else {
-            dispatch(setDeleteData({ id: id, url: url }))
+            dispatch(setDeleteData({ id: [id], url: url }))
             dispatch(openAlert({ open: true }))
         }
     }

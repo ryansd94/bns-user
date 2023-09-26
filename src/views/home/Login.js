@@ -186,7 +186,7 @@ export default function Login() {
         if (data.errorCode != ERROR_CODE.success) {
           setError({
             dirty: true,
-            msg: t('Invalid username or password'),
+            msg: t(data.errorCode),
           })
           break
         } else {

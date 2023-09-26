@@ -12,7 +12,7 @@ import {
     setReload,
 } from "stores/views/master"
 import { getByID, save } from "services"
-import { ERROR_CODE, baseUrl, EWidth } from "configs"
+import { ERROR_CODE, baseUrl, EWidth, EPermissionObject } from "configs"
 import { loading as loadingButton } from "stores/components/button"
 import { message } from "configs"
 import { EditorControl } from 'components/editor'
@@ -66,6 +66,10 @@ const ViewPermissionPopup = (props) => {
             }, {})
             setValue("permission", obj)
             setValue("objects", res.data.objects)
+            const userApplys = _.map(_.filter(res.data.objects, (x) => x.objectType === EPermissionObject.user), (a) => { return a.id })
+            const teamApplys = _.map(_.filter(res.data.objects, (x) => x.objectType === EPermissionObject.team), (a) => { return a.id })
+            setValue('userSelectedIds', userApplys)
+            setValue('teamSelectedIds', teamApplys)
             dispatch(setLoadingPopup(false))
         })
     }
