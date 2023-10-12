@@ -12,7 +12,7 @@ const Project = () => {
     setFilterModels(value)
   }
 
-  const genderLeftComponent = () => {
+  const renderLeftComponent = () => {
     return <ProjectBoard filterModels={filterModels} />
     // return <ProjectGrid filterModels={filterModels} />
   }
@@ -21,7 +21,7 @@ const Project = () => {
     // <BasicScheduler />
     <div className="body-content">
       <ProjectToolbar onApplyFilter={onApplyFilter} />
-      <Resizable className='' genderLeftComponent={genderLeftComponent} />
+      <Resizable className='' renderLeftComponent={renderLeftComponent} />
     </div>
   )
 }

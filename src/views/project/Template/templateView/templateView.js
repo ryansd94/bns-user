@@ -111,7 +111,7 @@ const TemplateAdd = React.memo((props) => {
   }
 
   const onSubmit = async (data) => {
-    // alert(JSON.stringify(data.status))
+    // alert(JSON.stringify(data.changeFields))
     // return
     let saveData = _.cloneDeep({ ...data })
     dispatch(loadingButton(true))
@@ -194,7 +194,7 @@ const TemplateAdd = React.memo((props) => {
           </Grid>
           <div className="containerNew">
             <Grid item container direction='column' xs={12} className="flex-basis-auto of-hidden">
-              <TabControl tabItems={getTabItems()} />
+              <TabControl tabItems={getTabItems()} renderAllAtFirstLoad={true} />
             </Grid>
           </div>
         </Grid>

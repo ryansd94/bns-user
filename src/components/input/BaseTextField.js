@@ -1,6 +1,6 @@
 import React from "react"
 import TextField from "@mui/material/TextField"
-import { _ControlSizeDefault } from "configs"
+import { _TemplateVariant, EVariant, _ControlSizeDefault } from "configs"
 
 const BaseTextField = (props) => {
     const {
@@ -15,26 +15,33 @@ const BaseTextField = (props) => {
         error,
         size,
         disabled,
-        value,
         fullWidth = true,
-        style
+        style,
+        onClick,
+        variant,
+        value,
+        inputRef
     } = props
     return (
         <TextField
+            inputRef={inputRef}
+            variant={variant || EVariant.outlined}
             fullWidth={fullWidth || false}
             name={name}
             style={style}
             disabled={disabled ? disabled : false}
             size={size ? size : _ControlSizeDefault}
             type={type || "text"}
-            inputProps={inputProps}
+            InputProps={inputProps}
             required={required}
             error={!!error}
+            value={value}
             helperText={error?.message}
-            label={label}
+            label={_TemplateVariant === EVariant.outlined ? label : ''}
             autoComplete="new-password"
             hidden={hidden ? true : false}
             onChange={onChange}
+            onClick={onClick}
             sx={{
                 "& .MuiInputBase-input": {
                     overflow: "hidden",

@@ -2,19 +2,14 @@ import React, { useEffect, useState } from "react"
 import PropTypes from "prop-types"
 import { styled } from "@mui/material/styles"
 import Dialog from "@mui/material/Dialog"
-import DialogTitle from "@mui/material/DialogTitle"
-import DialogContent from "@mui/material/DialogContent"
-import DialogActions from "@mui/material/DialogActions"
-import IconButton from "@mui/material/IconButton"
-import CloseIcon from "@mui/icons-material/Close"
 import Paper from "@mui/material/Paper"
 import Draggable from "react-draggable"
-import ButtonDetail from "components/button/ButtonDetail"
 import { useSelector, useDispatch } from "react-redux"
 import { close } from "components/popup/popupSlice"
 import { setEditData } from "stores/views/master"
 import { EButtonDetailType, EWidth } from "configs"
 import eventEmitter from 'helpers/eventEmitter'
+import PopupContent from "./popupContent"
 import _ from 'lodash'
 
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
@@ -26,33 +21,6 @@ const BootstrapDialog = styled(Dialog)(({ theme }) => ({
   },
 }))
 
-const BootstrapDialogTitle = (props) => {
-  const { children, onClose, ...other } = props
-
-  return (
-    <DialogTitle sx={{ m: 0, p: 2 }} {...other}>
-      {children}
-      {onClose ? (
-        <IconButton
-          aria-label="close"
-          onClick={onClose}
-          sx={{
-            position: "absolute",
-            right: 8,
-            top: 8,
-            color: (theme) => theme.palette.grey[500],
-          }}
-        >
-          <CloseIcon />
-        </IconButton>
-      ) : null}
-    </DialogTitle>
-  )
-}
-
-BootstrapDialogTitle.propTypes = {
-  children: PropTypes.node,
-}
 
 function PaperComponent(props) {
   return (
@@ -142,19 +110,16 @@ const Popup = React.memo((props) => {
         open={!_.isNil(openPopup) ? openPopup : stateOpen}
         onClose={onClose}
       >
-        <BootstrapDialogTitle
-          id="draggable-dialog-title"
+        <PopupContent
+          ModalBody={ModalBody}
+          isShowFooter={isShowFooter}
+          title={stateTitle}
           onClose={onClose}
-        >
-          {stateTitle}
-        </BootstrapDialogTitle>
-        <DialogContent dividers className="flex">
-          <ModalBody />
-        </DialogContent>
-        {isShowFooter ? <DialogActions>
-          <ButtonDetail onClick={onClose} type={EButtonDetailType.undo} />
-          <ButtonDetail id={id} disabled={disabled} label={labelSave} isFloatRight={true} onClick={handleSave} type={typeSave} />
-        </DialogActions> : ''}
+          handleSave={handleSave}
+          typeSave={typeSave}
+          disabled={disabled}
+          labelSave={labelSave}
+        />
       </BootstrapDialog>
     </div> : ''
   )

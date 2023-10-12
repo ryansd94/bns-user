@@ -164,7 +164,7 @@ const CommentItem = (props) => {
         setOpenPopover(null)
     }
 
-    const genderDropdownItem = () => {
+    const renderDropdownItem = () => {
         return <div>
             <DropDownItem
                 icon={<IconDelete className="icon-dropdown-menu" />}
@@ -190,7 +190,7 @@ const CommentItem = (props) => {
             {
                 !commentLocal.isDelete && user.userId === comment.createdUserId ? <DropdownMenu
                     classNameIcon='icon-more-comment'
-                    genderDropdownItem={genderDropdownItem}
+                    renderDropdownItem={renderDropdownItem}
                     className={`dropdown-more-comment ${!_.isNil(openPopover) ? 'dropdown-more-comment-show' : ''}`}
                     isButtonIcon={true}
                     type={EButtonIconType.more} />

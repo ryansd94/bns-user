@@ -16,6 +16,7 @@ const Task = () => {
   const [customColumns, setCustomColumn] = useState(null)
   const [id, setId] = useState(null)
   const [taskTypes, setTaskType] = useState([])
+  const [listStatus, setListStatus] = useState([])
   let user = getUserInfo()
   const [hidenRight, setHidenRight] = useState(user?.setting?.taskSetting?.isFullScreen || false)
   const [isViewList, setIsViewList] = useState(user?.setting?.taskSetting?.viewMode === EViewMode.list ? true : false)
@@ -44,16 +45,22 @@ const Task = () => {
       })
     }
 
+    const fetchStatus = async () => {
+      await get(baseUrl.jm_status, { isGetAll: true }).then((data) => {
+        setListStatus(data && data.data && data.data.items)
+      })
+    }
+    fetchStatus()
     fetchCustomColumn()
     fetchTaskType()
     return () => { mounted = false }
   }, [])
 
-  const genderLeftComponent = useCallback(() => {
-    return isViewList === true ? <TaskGrid customColumns={customColumns} onRowClicked={onRowClicked} filterModels={filterModels} /> : <TaskBoard onRowClicked={onRowClicked} />
-  }, [filterModels, isViewList])
+  const renderLeftComponent = useCallback(() => {
+    return isViewList === true ? <TaskGrid customColumns={customColumns} onRowClicked={onRowClicked} filterModels={filterModels} /> : <TaskBoard listStatus={listStatus} onRowClicked={onRowClicked} />
+  }, [filterModels, isViewList, listStatus])
 
-  const genderRightComponent = useCallback(() => {
+  const renderRightComponent = useCallback(() => {
     return <TaskView taskTypes={taskTypes} taskId={id} isCreate={false} />
   }, [id])
 
@@ -74,8 +81,16 @@ const Task = () => {
 
   return (
     <div className="body-content">
-      <TaskToolbar isViewList={isViewList} hidenRight={hidenRight} onChangeViewMode={onChangeViewMode} onFullScreen={onFullScreen} taskTypes={taskTypes} customColumns={customColumns} onApplyFilter={onApplyFilter} />
-      <Resizable hidenRight={hidenRight} genderRightComponent={genderRightComponent} genderLeftComponent={genderLeftComponent} />
+      <TaskToolbar
+        isViewList={isViewList}
+        hidenRight={hidenRight}
+        onChangeViewMode={onChangeViewMode}
+        onFullScreen={onFullScreen}
+        taskTypes={taskTypes}
+        customColumns={customColumns}
+        listStatus={listStatus}
+        onApplyFilter={onApplyFilter} />
+      <Resizable hidenRight={hidenRight} renderRightComponent={renderRightComponent} renderLeftComponent={renderLeftComponent} />
     </div>
   )
 }

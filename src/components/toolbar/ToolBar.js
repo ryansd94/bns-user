@@ -72,7 +72,7 @@ const ToolBar = (props) => {
         }
     }
 
-    const genderDropdownItem = () => {
+    const renderDropdownItem = () => {
         return <Grid container item direction={'column'}>
             {_.includes(listPermission, EButtonType.delete) ? <MenuItem onClick={onDeleteRowsSelectedClick}>
                 <DropDownItem
@@ -93,7 +93,7 @@ const ToolBar = (props) => {
                 <ConfigColumn onColumnConfigChange={onColumnConfigChange} columnModel={columnModel} anchorEl={anchorElColumn} handleClose={handleCloseColumn} />
                 <ButtonFuntion spacingLeft={0} visible={visibleObject.column} onClick={handleClickColumn} type={EButtonType.columnConfig} />
                 <ButtonFuntion spacingLeft={1} visible={visibleObject.column} open={anchorElFilter} onClick={handleClickFilter} type={EButtonType.filter} />
-                {!_.isEmpty(listPermission) ? <DropdownMenu isShowEndIcon={false} visible={visibleObject.function} type={EButtonType.function} genderDropdownItem={genderDropdownItem} /> : ''}
+                {!_.isEmpty(listPermission) ? <DropdownMenu isShowEndIcon={false} isCloseOnClick={true} visible={visibleObject.function} type={EButtonType.function} renderDropdownItem={renderDropdownItem} /> : ''}
                 <ButtonFuntion spacingLeft={1} visible={visibleObject.add} onClick={onAddClick} type={EButtonType.add} />
                 <ButtonFuntion spacingLeft={1} visible={visibleObject.delete} onClick={onDeleteClick} type={EButtonType.delete} />
                 <ButtonFuntion spacingLeft={1} onClick={onRefreshClick} type={EButtonType.refresh} />

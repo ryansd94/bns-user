@@ -123,11 +123,18 @@ const IconCollapse = ({ style, className, onClick }) => {
 const IconX = ({ style, className, onClick }) => {
   return <a className='icon'><i onClick={onClick} style={style} className={`far fa-times-circle ${className}`}></i></a>
 }
+const IconHide = ({ style, className, onClick }) => {
+  return <a className='icon'><i onClick={onClick} style={style} className={`far fa-eye-slash ${className}`}></i></a>
+}
+const IconUnhide = ({ style, className, onClick }) => {
+  return <a className='icon'><i onClick={onClick} style={style} className={`far fa-eye ${className}`}></i></a>
+}
+
 
 export {
   IconSave, IconDelete, IconEdit, IconCancel, IconEmail, IconActive, IconBlock,
   IconUnBlock, IconClean, IconApply, IconBack, IconMore, IconAdd, IconCricle, IconUp,
   IconDown, IconExpand, IconRemove, IconUpload, IconChange, IconCopy, IconComment, IconFullScreen,
   IconHour, IconDescription, IconTable, IconList, IconRequire, IconSetting, IconSwitchLeft, IconSwitchRight, IconClose,
-  IconBell, IconPlus, IconMinus, IconLeft, IconRight, IconInfo, IconRefresh, IconCollapse, IconX
+  IconBell, IconPlus, IconMinus, IconLeft, IconRight, IconInfo, IconRefresh, IconCollapse, IconX, IconHide, IconUnhide
 }

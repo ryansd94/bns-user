@@ -68,6 +68,13 @@ export const EButtonType = {
   list: "List",
   board: "Board",
   edit: "Edit",
+  setting: "Setting"
+}
+
+export const EPlacement = {
+  bottom: 'bottom',
+  left: 'left',
+  leftStart: 'left-start'
 }
 
 export const EColumnType = {
@@ -109,7 +116,9 @@ export const EButtonIconType = {
   switchRight: "SwitchRight",
   close: "Close",
   refresh: "Refresh",
-  copy: "Copy"
+  copy: "Copy",
+  hide: "Hide",
+  unhide: "Unhide"
 }
 
 export const EButtonDetailType = {

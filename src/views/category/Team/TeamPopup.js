@@ -42,7 +42,7 @@ const TeamPopup = React.memo((props) => {
       draw: 0,
       start: 0,
       length: 10000,
-      isParentChild: false
+      isParentChild: true
     }).then((data) => {
       setDataTeam(data && data.data && data.data.items)
     })
@@ -110,6 +110,8 @@ const TeamPopup = React.memo((props) => {
   })
 
   const onSubmit = async (data) => {
+    // alert(JSON.stringify(data))
+    // return
     dispatch(loadingButton(true))
     var postData = _.cloneDeep(data)
     if (!editData) {
@@ -125,10 +127,6 @@ const TeamPopup = React.memo((props) => {
         postData.members = _.map(postData.members, (x) => { return x.userId })
       }
     }
-
-    // alert(JSON.stringify(postData))
-    // return
-
     const res = await save(baseUrl.jm_team, postData)
     dispatch(loadingButton(false))
     dispatch(openMessage({ ...res }))

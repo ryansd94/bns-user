@@ -119,15 +119,11 @@ const DiffTracker = {
       }
 
       if (_.isNil(field)) {
-        if (type === EControlType.listObject) {
-          if (!_.isEmpty(newValue)) {
-            changeFields.push({ key: name, value: newValue, originValue, type, isEntity })
-          }
-        } else {
+        if (this.checkFieldChange(type, newValue)) {
           changeFields.push({ key: name, value: newValue, originValue, type, isEntity })
         }
       } else {
-        if (!_.isEmpty(newValue)) {
+        if (this.checkFieldChange(type, newValue)) {
           field.value = newValue
         } else {
           changeFields = _.filter(changeFields, (x) => x.key !== name)
@@ -139,6 +135,19 @@ const DiffTracker = {
       }
     }
     return changeFields
+  },
+  checkFieldChange: function (type, value) {
+    if (type === EControlType.listObject) {
+      if (!_.isEmpty(value)) {
+        return true
+      }
+    } else if (type === EControlType.listId) {
+      if (!_.isEmpty(value?.deleteValues) || !_.isEmpty(value?.addValues)) {
+        return true
+      }
+    } else {
+      return true
+    }
   },
   onValueChange: function ({ editData, value, name, type = EControlType.textField, isDelete = false,
     getValues, setValue, eventEmitter, buttonId, isEntity, originData = null, onCustomSetValue, onCustomGetChangeFields, nameGetValue }) {

@@ -21,7 +21,7 @@ const Status = () => {
     setFilterModels(value)
   }
 
-  const genderLeftComponent = () => {
+  const renderLeftComponent = () => {
     return <StatusGrid filterModels={filterModels} />
   }
 
@@ -57,7 +57,7 @@ const Status = () => {
     <div className="body-content">
       <StatusToolbar onApplyFilter={onApplyFilter} />
       <Alert type={EAlertType.warning} message={renderMessageStatus()} />
-      <Resizable genderLeftComponent={genderLeftComponent} />
+      <Resizable renderLeftComponent={renderLeftComponent} />
       <StatusPopup checkStatus={checkStatus} />
     </div>
   )

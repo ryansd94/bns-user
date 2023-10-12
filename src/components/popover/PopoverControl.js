@@ -20,7 +20,7 @@ const PopoverControl = (props) => {
     transformOrigin = {
       vertical: 'top',
       horizontal: 'left',
-    }, isHideWhenWithOutFocus = true, className, isCloseOnClick = false } = props
+    }, isHideWhenWithOutFocus = true, className, isCloseOnClick = false, paperProps } = props
   const classes = useStyles();
   const open = Boolean(anchorEl)
 
@@ -42,6 +42,7 @@ const PopoverControl = (props) => {
       onClick={onClick}
       anchorOrigin={anchorOrigin}
       transformOrigin={transformOrigin}
+      PaperProps={paperProps}
       // anchorPosition={anchorPosition}
       onClose={onClose}
       className={`${isHideWhenWithOutFocus ? classes.popover : ''} ${className}`}

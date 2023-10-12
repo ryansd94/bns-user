@@ -1,7 +1,7 @@
 import { useState } from "react"
 import { Draggable } from "react-beautiful-dnd"
 import styled from "styled-components"
-import { PopoverControl } from 'components/popover'
+import { PopoverControl, PopperControl } from 'components/popover'
 
 const DragItem = styled.div`
   // padding: 10px;
@@ -38,7 +38,10 @@ const TaskDragItem = ({ id, index, control, renderPopoverControl }) => {
             {...provided.dragHandleProps}
           >
             {control}
-            {renderPopoverControl ? <PopoverControl isCLoseOnHover={true} genderBody={renderPopoverControl} onClose={handlePopoverClose} anchorEl={openPopover} /> : ''}
+            {renderPopoverControl ? <PopperControl
+              anchorEl={openPopover} >
+              {renderPopoverControl()}
+            </PopperControl> : ''}
           </DragItem>
         )
       }}

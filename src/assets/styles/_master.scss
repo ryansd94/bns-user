@@ -278,7 +278,7 @@ legend {
     max-width: 250px;
 }
 .select-container {
-    min-width: 150px !important;
+    // min-width: 150px !important;
 }
 div[data-rbd-draggable-context-id] {
     // padding: 1rem 0 0 1rem !important;
@@ -861,4 +861,10 @@ a:hover {
 }
 .MuiTooltip-popper {
     pointer-events: none !important;
+}
+.MuiPopper-root {
+    z-index: 2000;
+}
+.MuiTreeItem-label {
+    line-height: 2 !important;
 }

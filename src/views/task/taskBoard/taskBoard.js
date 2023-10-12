@@ -11,23 +11,11 @@ import { getUserInfo } from "helpers"
 
 const TaskBoard = React.memo((props) => {
     console.log("render TaskBoard")
-    const { onRowClicked } = props
-    const [listStatus, setStatus] = useState([])
+    const { onRowClicked, listStatus } = props
     const [listTask, setTask] = useState([])
     const [loading, setLoading] = useState(true)
     const isReload = useSelector((state) => state.master.isReload)
     const user = getUserInfo()
-
-    useEffect(async () => {
-        let mounted = true
-        const getStatus = async () => {
-            await get(baseUrl.jm_status, { isGetAll: true }).then((data) => {
-                setStatus(data && data.data && data.data.items)
-            })
-        }
-        getStatus()
-        return () => { mounted = false }
-    }, [])
 
     useEffect(async () => {
         let mounted = true

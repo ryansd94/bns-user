@@ -23,7 +23,10 @@ const UserToolbar = (props) => {
         field: "email", isShow: true, label: t("Email"), type: EControlType.textField
     },
     {
-        field: "fullName", isShow: true, label: t("Full name"), type: EControlType.textField
+        field: "firstName", isShow: true, label: t("First name"), type: EControlType.textField
+    },
+    {
+        field: "lastName", isShow: true, label: t("Last name"), type: EControlType.textField
     },
     {
         field: "teamName", isShow: true, label: t("Team"), type: EControlType.textField

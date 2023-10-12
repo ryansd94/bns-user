@@ -12,7 +12,7 @@ const TaskChildAddButton = (props) => {
         window.open(getPathItem(`/task/create/${taskTypeId}?parentId=${taskId}`))
     }
 
-    const genderDropdownItem = () => {
+    const renderDropdownItem = () => {
         return <div>
             <MenuItem key={'addNew'} onClick={() => addNewTask()}>
                 {t('Add new task')}
@@ -24,7 +24,7 @@ const TaskChildAddButton = (props) => {
     }
     return (
         <div>
-            <DropdownMenu spacingLeft={0} isFloatLeft={true} label={t('Add child task')} isShowEndIcon={false} visible={true} genderDropdownItem={genderDropdownItem} />
+            <DropdownMenu spacingLeft={0} isFloatLeft={true} label={t('Add child task')} isShowEndIcon={false} visible={true} renderDropdownItem={renderDropdownItem} />
         </div>
     )
 }

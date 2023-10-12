@@ -13,14 +13,14 @@ const Team = React.memo(() => {
     setFilterModels(value)
   }
 
-  const genderLeftComponent = () => {
+  const renderLeftComponent = () => {
     return <TeamDataGrid filterModels={filterModels} />
   }
 
   return (
     <div className="body-content">
       <TeamToolbar onApplyFilter={onApplyFilter} />
-      <Resizable genderLeftComponent={genderLeftComponent} />
+      <Resizable renderLeftComponent={renderLeftComponent} />
     </div>
   )
 })

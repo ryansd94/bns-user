@@ -30,7 +30,7 @@ const TaskMoreButton = (props) => {
         setOpenCopyTaskPopup(false)
     }
 
-    const genderDropdownItem = () => {
+    const renderDropdownItem = () => {
         return <div>
             {
                 !_.isNil(taskId) ?
@@ -53,7 +53,7 @@ const TaskMoreButton = (props) => {
 
     return (
         <div>
-            <DropdownMenu spacingLeft={0} isTextAndIcon={false} type={EButtonIconType.more} isShowEndIcon={false} visible={true} genderDropdownItem={genderDropdownItem} />
+            <DropdownMenu spacingLeft={0} isTextAndIcon={false} type={EButtonIconType.more} isShowEndIcon={false} visible={true} renderDropdownItem={renderDropdownItem} />
             <ChangeTaskTypePopup handleClose={onCloseTaskTypePopup} open={openTaskTypePopup} {...props} />
             <CopyTaskPopup handleClose={onCloseCopyTaskPopup} open={openCopyTaskPopup} {...props} />
         </div>

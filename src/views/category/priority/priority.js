@@ -20,14 +20,14 @@ const Priority = React.memo(() => {
     setFilterModels(value)
   }
 
-  const genderLeftComponent = () => {
+  const renderLeftComponent = () => {
     return <PriorityGrid filterModels={filterModels} />
   }
 
   return (
     // <div className="body-content">
     //   <PriorityToolbar onApplyFilter={onApplyFilter} />
-    //   <Resizable genderLeftComponent={genderLeftComponent} />
+    //   <Resizable renderLeftComponent={renderLeftComponent} />
     //   <PriorityPopup checkStatus={checkStatus}/>
     // </div>
     <div className="App">

@@ -201,6 +201,11 @@ const ButtonFuntion = React.memo(props => {
                 setText(t('Tabular view'))
                 setFloat(' float-left')
                 break
+            case EButtonType.setting:
+                setIcon('far fa-cog' + sizeDefault)
+                setText(t('Setting'))
+                setFloat(' float-left')
+                break
             default:
                 break
         }

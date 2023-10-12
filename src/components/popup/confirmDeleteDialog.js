@@ -9,15 +9,18 @@ import {
 } from "stores/views/master"
 import { deleteData } from "services"
 import { ERROR_CODE } from "configs"
+import { setDeleteData } from "stores/views/master"
 
 const ConfirmDeleteDialog = (props) => {
     const dispatch = useDispatch()
     const deleteItem = useSelector((state) => state.master.deleteData)
 
     const onAcceptDelete = async () => {
+        if (!deleteItem || !deleteItem.id) return
         dispatch(loadingButton(true))
-        const res = await deleteData(deleteItem?.url, deleteItem?.id)
+        let res = await deleteData(deleteItem?.url, deleteItem?.id)
         if (res.errorCode == ERROR_CODE.success) {
+            dispatch(setDeleteData({ id: null, url: null }))
             dispatch(setReload())
         }
         dispatch(openMessage({ ...res }))

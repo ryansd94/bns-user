@@ -15,12 +15,12 @@ const StatusTemplate = React.memo((props) => {
     const { setValue, id, onValueChange, control, statusData, getValues, name } = props
     const status = _.cloneDeep(getValues(name))
     const getListStatusTemplate = () => {
+        if (_.isNil(statusData) || _.isEmpty(statusData)) return []
         return _.map(_.filter(statusData, (x) => x.isAutomaticAdd === true), (y) => { return { id: y.id } })
     }
-    const originData = !_.isNil(status) ? _.cloneDeep(status) : (statusData && statusData.length > 0 && getListStatusTemplate())
+    const originData = !_.isNil(status) ? _.cloneDeep(status) : (statusData && getListStatusTemplate())
     const [listStatusTemplate, setListStatusTemplate] = useState(originData)
     const listStatusDataIds = _.map(statusData, (x) => { return x.id })
-
 
     const getListStatusTemplateRemaining = () => {
         const currentListStatusIds = _.map(_.filter(listStatusTemplate, (item) => item.isCurrentSelected !== true), (x) => { return x.id })
@@ -32,6 +32,12 @@ const StatusTemplate = React.memo((props) => {
         control,
         name: name,
     })
+    
+    useEffect(() => {
+        if (!_.isNil(statusData) && !_.isEmpty(statusData)) {
+            setListStatusTemplate(statusData)
+        }
+    }, [statusData])
 
     useEffect(() => {
         if (!_.isNil(listStatusTemplate)) {

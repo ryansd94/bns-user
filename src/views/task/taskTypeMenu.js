@@ -2,6 +2,7 @@ import MenuItem from '@mui/material/MenuItem'
 import { DropdownMenu } from 'components/dropdown'
 import TaskTypeMenuItem from './taskTypeMenuItem'
 import { getUserInfo } from "helpers"
+import { EPlacement } from 'configs'
 import _ from 'lodash'
 
 const TaskTypeMenu = (props) => {
@@ -17,7 +18,7 @@ const TaskTypeMenu = (props) => {
         }
     }
 
-    const genderDropdownItem = () => {
+    const renderDropdownItem = () => {
         return <div>
             {taskTypes && taskTypes.map((item) => {
                 return <MenuItem key={item.id} id={item.id} onClick={() => openTaskView(item)}>
@@ -29,7 +30,7 @@ const TaskTypeMenu = (props) => {
 
     return (
         <div>
-            <DropdownMenu isShowEndIcon={false} visible={true} genderDropdownItem={genderDropdownItem} />
+            <DropdownMenu placement={EPlacement.leftStart} isShowEndIcon={false} visible={true} renderDropdownItem={renderDropdownItem} />
         </div>
     )
 }

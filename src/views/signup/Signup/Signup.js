@@ -264,8 +264,15 @@ export default function Signup() {
               autoFocus={true}
               required={true}
               control={control}
-              label={t("Full name")}
-              name="fullName"
+              label={t("First name")}
+              name="firstName"
+            />
+            <TextInput
+              autoFocus={true}
+              required={true}
+              control={control}
+              label={t("First name")}
+              name="lastName"
             />
           </Grid>
           <Grid item xs>

@@ -45,7 +45,12 @@ const UserGrid = React.memo((props) => {
         },
       },
       {
-        field: "fullName", headerName: t("Full name"),
+        field: "firstName", headerName: t("First name"),
+        flex: 1,
+        minWidth: 170,
+      },
+      {
+        field: "lastName", headerName: t("Last name"),
         flex: 1,
         minWidth: 170,
       },

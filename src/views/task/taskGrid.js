@@ -134,12 +134,12 @@ const TaskGrid = React.memo((props) => {
         // window.open(`/task/create/${data.taskTypeId}?parentId=${data.id}`)
     }
 
-    const genderDropdownItem = (data) => {
+    const renderDropdownItem = (data) => {
         return <DropDownItem onClick={() => addChildTask(data)} title={t('Create a new task')} />
     }
 
     const ActionBtnRenderer = (params) => {
-        return <ActionButton isTextAndIcon={false} type={EButtonType.more} isShowEndIcon={false} visible={true} genderDropdownItem={() => genderDropdownItem(params.data)} />
+        return <ActionButton isTextAndIcon={false} type={EButtonType.more} isShowEndIcon={false} visible={true} renderDropdownItem={() => renderDropdownItem(params.data)} />
     }
 
     const autoGroupColumnDef = useMemo(() => {

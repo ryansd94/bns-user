@@ -12,14 +12,14 @@ const Template = React.memo(() => {
     setFilterModels(value)
   }
 
-  const genderLeftComponent = () => {
+  const renderLeftComponent = () => {
     return <TemplateGrid filterModels={filterModels} />
   }
 
   return (
     <div className="body-content">
       <TemplateToolbar onApplyFilter={onApplyFilter} />
-      <Resizable genderLeftComponent={genderLeftComponent} />
+      <Resizable renderLeftComponent={renderLeftComponent} />
     </div>
   )
 })

@@ -2,17 +2,17 @@ import React from 'react'
 import ClickAwayListener from '@mui/material/ClickAwayListener'
 import ButtonFuntion from 'components/button/ButtonFuntion'
 import ButtonIcon from 'components/button/ButtonIcon'
-import { EButtonType } from 'configs/enums'
-import { PopoverControl, CustomPopoverControl } from 'components/popover'
+import { EButtonType, EPlacement } from 'configs/enums'
+import { PopoverControl, CustomPopoverControl, PopperControl } from 'components/popover'
 import { IconExpand } from 'components/icon/icon'
 import Box from '@mui/material/Box'
 import PropTypes from "prop-types"
 
 const DropdownMenu = (props) => {
-    const { genderDropdownItem, type = EButtonType.add, visible = false,
+    const { renderDropdownItem, type = EButtonType.add, visible = false,
         isShowEndIcon = true, label, isFloatLeft = false, spacingLeft = 1,
         isButtonIcon = false, className, isCloseOnClick = false, classNameIcon,
-        isTextAndIcon = true, anchorOrigin, transformOrigin } = props
+        isTextAndIcon = true, anchorOrigin, transformOrigin, placement = EPlacement.bottom } = props
     const [open, setOpen] = React.useState(false)
     const anchorRef = React.useRef(null)
 
@@ -53,7 +53,7 @@ const DropdownMenu = (props) => {
             onClick={handleToggle} />
     }
 
-    const onClick = (e) => {
+    const onItemClick = (e) => {
         if (isCloseOnClick) {
             handleClose(e)
         }
@@ -63,14 +63,15 @@ const DropdownMenu = (props) => {
             {isButtonIcon ? renderButtonIcon() : renderButtonFunction()}
             {open ? <ClickAwayListener onClickAway={handleClose}>
                 <Box>
-                    <CustomPopoverControl
-                        isCloseOnClick={isCloseOnClick}
+                    <PopperControl
+                        placement={placement}
                         id='dropdown-menu'
                         anchorEl={open ? anchorRef.current : null}
-                        onClose={handleClose}
-                        genderBody={genderDropdownItem}
                     >
-                    </CustomPopoverControl>
+                        <div onClick={onItemClick}>
+                            {renderDropdownItem()}
+                        </div>
+                    </PopperControl>
                 </Box>
             </ClickAwayListener> : ''}
         </div >

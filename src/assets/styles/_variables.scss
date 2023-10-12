@@ -206,7 +206,7 @@ $tooltip-font-size: 0.75rem;
 $tooltip-padding-y: 0.4rem;
 $tooltip-padding-x: 0.75rem;
 $tooltip-border-radius: 0.375rem;
-
+$border-width: 0.5px;
 ////////// TOOLTIP VARIABLES //////////
 
 /////////  FORMS /////////
@@ -283,8 +283,6 @@ $breadcrumb-margin-bottom: 1rem;
 $breadcrumb-font-size: $default-font-size;
 $breadcrumb-bg: transparent;
 $breadcrumb-border-color: $border-color;
-$breadcrumb-divider-color: $gray-600;
-$breadcrumb-active-color: $gray-700;
 $breadcrumb-divider: "/";
 
 // custom styles
@@ -302,7 +300,6 @@ $breadcrumb-item-bg: #dbe3e6;
 $modal-inner-padding: 15px;
 $modal-dialog-margin: 10px;
 $modal-dialog-margin-y-sm-up: 30px;
-$modal-title-line-height: $line-height-base;
 $modal-content-bg: $content-bg;
 $modal-content-box-shadow-xs: 0 3px 9px rgba($black, 0.5);
 $modal-content-box-shadow-sm-up: 0 5px 15px rgba($black, 0.5);

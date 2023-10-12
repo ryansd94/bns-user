@@ -10,10 +10,11 @@ import { EControlType, baseUrl } from "configs"
 import TaskTypeMenu from './taskTypeMenu'
 import { EButtonType } from 'configs/enums'
 import ButtonFuntion from 'components/button/ButtonFuntion'
+import TaskButtonSetting from './taskBoard/taskButtonSetting'
 import _ from 'lodash'
 
 const TaskToolbar = (props) => {
-    const { onApplyFilter, customColumns, taskTypes, onFullScreen, hidenRight, isViewList, onChangeViewMode } = props
+    const { onApplyFilter, customColumns, taskTypes, onFullScreen, hidenRight, isViewList, onChangeViewMode, listStatus } = props
     const { t } = useTranslation()
     const dispatch = useDispatch()
     const toolbarVisible = { ...useSelector((state) => state.task.toolbarVisible) }
@@ -87,6 +88,7 @@ const TaskToolbar = (props) => {
                 isViewList === true ? <ButtonFuntion onClick={() => onChangeViewMode(false)} isTextAndIcon={false} spacingLeft={1} type={EButtonType.board} />
                     : <ButtonFuntion onClick={() => onChangeViewMode(true)} isTextAndIcon={false} spacingLeft={1} type={EButtonType.list} />
             }
+            <TaskButtonSetting listStatus={listStatus} />
             <TaskTypeMenu taskTypes={taskTypes} />
         </>
     }

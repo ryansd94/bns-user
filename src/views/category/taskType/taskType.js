@@ -10,14 +10,14 @@ const TaskType = React.memo(() => {
     setFilterModels(value)
   }
 
-  const genderLeftComponent = () => {
+  const renderLeftComponent = () => {
     return <TaskTypeGrid filterModels={filterModels} />
   }
 
   return (
     <div className="body-content">
       <TaskTypeToolbar onApplyFilter={onApplyFilter} />
-      <Resizable genderLeftComponent={genderLeftComponent} />
+      <Resizable renderLeftComponent={renderLeftComponent} />
     </div>
   )
 })

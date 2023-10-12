@@ -9,6 +9,7 @@
     box-shadow: none;
     display: flex;
     flex-direction: column;
+    overflow: hidden !important;
 }
 .editor-container .MuiAccordion-root {
     .MuiButtonBase-root {

@@ -259,7 +259,7 @@ const TaskView = (props) => {
                     details={
                         <div>
                             {
-                                <Grid container item rowSpacing={2} xs={12}>
+                                <Grid container item gap={2} xs={12}>
                                     {
                                         item.items && item.items.map((x, childIndex) => {
                                             return genderElement(x, childIndex, control)

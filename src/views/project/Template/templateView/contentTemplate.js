@@ -71,7 +71,6 @@ const addToList = (list, index, id, element) => {
 }
 
 const ContentTemplate = (props) => {
-  console.log("render ContentTemplate")
   const { setValue, dataTemplate = null, templateColumnData = [],
     control, name, onValueChange, id } = props
   const theme = useTheme()
@@ -400,14 +399,6 @@ const ContentTemplate = (props) => {
                       controls={getElementControls("column2")}
                     />
                   </Grid>
-                  {/* <Grid key={1} item xs={12} sm={3}>
-                  <DraggableElement
-                    renderPopoverControl={renderPopoverControl}
-                    prefix={"column3"}
-                    control={control}
-                    controls={getElementControls("column3")}
-                  />
-                </Grid> */}
                 </Grid>
               </DragDropContext>
             </DragDropContextContainer>

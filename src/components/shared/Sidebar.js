@@ -180,12 +180,6 @@ const Sidebar = (props) => {
             defaultValue={user?.setting?.projectSetting?.currentId}
             name='projects'
         />
-        // return <Grid container item xs direction={'column'} className='no-wrap'>
-        //     <Grid container item xs gap={2} alignItems={'center'} className='box-container'>
-        //         <Grid item><AvatarControl variant={EControlVariant.rounded} name={user?.setting?.projectSetting?.current} /></Grid>
-        //         <Grid item xs className="project-title">{user?.setting?.projectSetting?.current}</Grid>
-        //     </Grid>
-        // </Grid>
     }
 
     return <div className="flex-column">

@@ -10,14 +10,14 @@ const User = React.memo(() => {
     setFilterModels(value)
   }
 
-  const genderLeftComponent = () => {
+  const renderLeftComponent = () => {
     return <UserGrid id={gridId} filterModels={filterModels} />
   }
 
   return (
     <div className="body-content">
       <UserToolbar gridId={gridId} onApplyFilter={onApplyFilter} />
-      <Resizable genderLeftComponent={genderLeftComponent} />
+      <Resizable renderLeftComponent={renderLeftComponent} />
     </div>
   )
 })

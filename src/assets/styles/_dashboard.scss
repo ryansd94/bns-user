@@ -57,7 +57,7 @@
       &:after {
         content: '';
         width: 2px;
-        height: 54px;
+        height: $navbar-height;
         position: absolute;
         left: 50%;
         top: 33px;

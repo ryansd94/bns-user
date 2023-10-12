@@ -30,7 +30,7 @@ const NotifyActionButton = (props) => {
 
     }
 
-    const genderDropdownItem = () => {
+    const renderDropdownItem = () => {
         return <>
             <DropDownItem icon={<IconActive />} onClick={onMarkAllRead} title={t('Mark all read')} />
             <DropDownItem icon={<IconDelete />} onClick={onDeleteRead} title={t('Delete read notifications')} />
@@ -49,7 +49,7 @@ const NotifyActionButton = (props) => {
             type={EButtonType.more}
             isShowEndIcon={false}
             visible={true}
-            genderDropdownItem={genderDropdownItem} />
+            renderDropdownItem={renderDropdownItem} />
     </>
 }
 

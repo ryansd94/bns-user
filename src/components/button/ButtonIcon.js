@@ -28,7 +28,9 @@ import {
   IconSwitchLeft,
   IconClose,
   IconRefresh,
-  IconCopy
+  IconCopy,
+  IconHide,
+  IconUnhide
 } from "components/icon/icon"
 import { isHasPermissionForButton } from "helpers"
 import { EColor } from 'configs/enums'
@@ -120,6 +122,12 @@ const ButtonIcon = (props) => {
       case EButtonIconType.refresh:
         setTitle(t("Reload"))
         break
+      case EButtonIconType.hide:
+        setTitle(t("Hide"))
+        break
+      case EButtonIconType.unhide:
+        setTitle(t("Unhide"))
+        break
       default:
         break
     }
@@ -193,6 +201,10 @@ const ButtonIcon = (props) => {
     icon = <IconRefresh style={styleIcon} />
   else if (type == EButtonIconType.copy)
     icon = <IconCopy style={styleIcon} isHoverColor={isHoverColor} />
+  else if (type == EButtonIconType.hide)
+    icon = <IconHide style={styleIcon}/>
+  else if (type == EButtonIconType.unhide)
+    icon = <IconUnhide style={styleIcon}/>
 
   button = (
     <IconButton

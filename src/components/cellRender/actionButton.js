@@ -3,9 +3,9 @@ import { EButtonType } from 'configs/enums'
 import { DropdownMenu } from 'components/dropdown'
 
 const ActionButton = (props) => {
-    const { genderDropdownItem } = props
+    const { renderDropdownItem } = props
 
-    return <DropdownMenu isTextAndIcon={false} type={EButtonType.more} isShowEndIcon={false} visible={true} genderDropdownItem={genderDropdownItem} />
+    return <DropdownMenu isTextAndIcon={false} type={EButtonType.more} isShowEndIcon={false} visible={true} renderDropdownItem={renderDropdownItem} />
 }
 
 export default ActionButton

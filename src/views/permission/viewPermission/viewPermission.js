@@ -31,14 +31,14 @@ const ViewPermission = () => {
     setFilterModels(value)
   }
 
-  const genderLeftComponent = () => {
+  const renderLeftComponent = () => {
     return <ViewPermissionGrid filterModels={filterModels} />
   }
 
   return (
     <div className="body-content">
       <ViewPermissionToolbar users={users} teams={teams} onApplyFilter={onApplyFilter} />
-      <Resizable className='' genderLeftComponent={genderLeftComponent} />
+      <Resizable className='' renderLeftComponent={renderLeftComponent} />
     </div>
   )
 }

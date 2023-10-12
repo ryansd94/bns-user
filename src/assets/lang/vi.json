@@ -230,5 +230,9 @@
     "Users do not have team": "Người dùng không có nhóm",
     "Users in team": "Người dùng trong nhóm",
     "Add members": "Thêm thành viên",
-    "UserNotActive": "Người dùng chưa được kích hoạt"
+    "UserNotActive": "Người dùng chưa được kích hoạt",
+    "First name": "Họ và tên lót",
+    "Last name": "Tên",
+    "Hide": "Hiển",
+    "Unhide": "Ẩn"
 }
