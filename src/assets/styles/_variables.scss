@@ -211,7 +211,7 @@ $border-width: 0.5px;
 
 /////////  FORMS /////////
 
-$default-control-height : 40px;
+$default-control-height: 40px;
 $input-bg: color(white);
 $input-border-radius: 2px;
 $input-placeholder-color: #c9c8c8;
@@ -259,8 +259,7 @@ $table-inverse-color: color(white);
 ////////// MEASUREMENT AND PROPERTY VARIABLES //////////
 $card-bg: #fff;
 $card-title-color: #001737;
-$border-property: 1px solid $border-color;
-$border-property: 1px solid $border-color;
+$border-property: 0.5px solid $border-color;
 $card-spacing-y: 1.5rem;
 $card-padding-y: 1.5rem;
 $card-padding-x: 1.5rem;
@@ -335,10 +334,12 @@ $modal-transition: transform 0.4s ease;
 $nav-tabs-border-color: #ebedf2;
 $nav-tabs-link-bg: #f6f8fa;
 $nav-tabs-link-color: #000000;
-$nav-tabs-link-hover-border-color: $nav-tabs-border-color $nav-tabs-border-color $nav-tabs-border-color;
+$nav-tabs-link-hover-border-color: $nav-tabs-border-color $nav-tabs-border-color
+  $nav-tabs-border-color;
 $nav-tabs-link-active-color: $body-color;
 $nav-tabs-link-active-bg: $white;
-$nav-tabs-link-active-border-color: $nav-tabs-border-color $nav-tabs-border-color $nav-tabs-link-active-bg;
+$nav-tabs-link-active-border-color: $nav-tabs-border-color
+  $nav-tabs-border-color $nav-tabs-link-active-bg;
 $nav-pills-custom-bg: #fcfcfd;
 $text-gray: gray;
 $circle-img-border: $white;
@@ -393,7 +394,9 @@ $scroll-bar-color: #88888855;
 $task-date-today-item: #61c31a;
 $task-date-item: #b7b7b73d;
 $task-date-late-item: #ff3021;
-$content-box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 1px 3px 1px;
+$content-box-shadow:
+  rgba(60, 64, 67, 0.3) 0px 1px 2px 0px,
+  rgba(60, 64, 67, 0.15) 0px 1px 3px 1px;
 $action-transition-rotate: 0.25s;
 $color-italic: #bebebe;
 $border_control: 1px solid rgba(234, 234, 234, 1);

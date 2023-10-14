@@ -2,8 +2,7 @@ import React, { useState } from "react"
 import ProjectGrid from "./projectGrid"
 import ProjectBoard from "./projectBoard"
 import ProjectToolbar from "./projectToolbar"
-import { Resizable } from 'components/resizable'
-import BasicScheduler from "components/scheduler/basicScheduler"
+import { Resizable } from "components/resizable"
 
 const Project = () => {
   const [filterModels, setFilterModels] = useState(null)
@@ -21,7 +20,7 @@ const Project = () => {
     // <BasicScheduler />
     <div className="body-content">
       <ProjectToolbar onApplyFilter={onApplyFilter} />
-      <Resizable className='' renderLeftComponent={renderLeftComponent} />
+      <Resizable className="" renderLeftComponent={renderLeftComponent} />
     </div>
   )
 }

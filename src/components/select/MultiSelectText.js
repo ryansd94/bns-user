@@ -28,7 +28,7 @@ const MultiSelectText = React.memo(
     const onTextChange = (e) => {
       if (e.target.value.indexOf("@") >= 0) {
         let bbbbb = e.target.value + "aaaaaaaa";
-        
+
         setText(bbbbb);
       }
       setText(e.target.value);
@@ -107,7 +107,7 @@ const MultiSelectText = React.memo(
         control={control}
       />
     );
-  }
+  },
 );
 
 // Top 100 films as rated by IMDb users. http://www.imdb.com/chart/top

@@ -1,4 +1,2 @@
-const TaskNotify = () => {
-
-}
-export default TaskNotify
+const TaskNotify = () => {};
+export default TaskNotify;

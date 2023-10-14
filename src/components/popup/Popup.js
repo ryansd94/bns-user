@@ -1,16 +1,16 @@
-import React, { useEffect, useState } from "react"
-import PropTypes from "prop-types"
-import { styled } from "@mui/material/styles"
-import Dialog from "@mui/material/Dialog"
-import Paper from "@mui/material/Paper"
-import Draggable from "react-draggable"
-import { useSelector, useDispatch } from "react-redux"
-import { close } from "components/popup/popupSlice"
-import { setEditData } from "stores/views/master"
-import { EButtonDetailType, EWidth } from "configs"
-import eventEmitter from 'helpers/eventEmitter'
-import PopupContent from "./popupContent"
-import _ from 'lodash'
+import React, { useEffect, useState } from "react";
+import PropTypes from "prop-types";
+import { styled } from "@mui/material/styles";
+import Dialog from "@mui/material/Dialog";
+import Paper from "@mui/material/Paper";
+import Draggable from "react-draggable";
+import { useSelector, useDispatch } from "react-redux";
+import { close } from "components/popup/popupSlice";
+import { setEditData } from "stores/views/master";
+import { EButtonDetailType, EWidth } from "configs";
+import eventEmitter from "helpers/eventEmitter";
+import PopupContent from "./popupContent";
+import _ from "lodash";
 
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
   "& .MuiDialogContent-root": {
@@ -19,8 +19,7 @@ const BootstrapDialog = styled(Dialog)(({ theme }) => ({
   "& .MuiDialogActions-root": {
     padding: theme.spacing(1),
   },
-}))
-
+}));
 
 function PaperComponent(props) {
   return (
@@ -30,78 +29,94 @@ function PaperComponent(props) {
     >
       <Paper {...props} />
     </Draggable>
-  )
+  );
 }
 
 const Popup = React.memo((props) => {
-  const dispatch = useDispatch()
-  const { ModalBody, open = null, title = null,
-    onSave, widthSize = EWidth.sm, reset, typeSave = EButtonDetailType.save,
-    isShowFooter = true, handleClose = null, labelSave = '', disabledSave = false,
-    removeOnChangeDisabled = true, id } = props
-  const stateOpen = !_.isNil(open) ? open : useSelector((state) => state.popup.open)
-  const [openPopup, setOpen] = useState(open)
-  const [disabled, setDisabled] = useState(disabledSave)
-  const stateTitle = !_.isNil(title) ? title : useSelector((state) => state.popup.title)
-  const editData = useSelector((state) => state.master.editData)
+  const dispatch = useDispatch();
+  const {
+    ModalBody,
+    open = null,
+    title = null,
+    onSave,
+    widthSize = EWidth.sm,
+    reset,
+    typeSave = EButtonDetailType.save,
+    isShowFooter = true,
+    handleClose = null,
+    labelSave = "",
+    disabledSave = false,
+    removeOnChangeDisabled = true,
+    id,
+  } = props;
+  const stateOpen = !_.isNil(open)
+    ? open
+    : useSelector((state) => state.popup.open);
+  const [openPopup, setOpen] = useState(open);
+  const [disabled, setDisabled] = useState(disabledSave);
+  const stateTitle = !_.isNil(title)
+    ? title
+    : useSelector((state) => state.popup.title);
+  const editData = useSelector((state) => state.master.editData);
 
   const onClose = () => {
     if (_.isNil(handleClose)) {
       if (openPopup === null) {
-        dispatch(close())
+        dispatch(close());
       } else {
-        setOpen(false)
+        setOpen(false);
       }
       if (!_.isNil(editData)) {
-        dispatch(setEditData(null))
+        dispatch(setEditData(null));
       }
     } else {
-      handleClose()
+      handleClose();
     }
-  }
+  };
 
   useEffect(() => {
-    setDisabled(disabledSave)
-  }, [disabledSave])
+    setDisabled(disabledSave);
+  }, [disabledSave]);
 
   useEffect(() => {
-    setDisabled(disabledSave)
+    setDisabled(disabledSave);
     if (!_.isNil(open)) {
-      setOpen(open)
+      setOpen(open);
     }
-  }, [open])
+  }, [open]);
 
   useEffect(() => {
     if (stateOpen === false) {
-      onClose()
-      reset && reset()
-      setDisabled(disabledSave)
+      onClose();
+      reset && reset();
+      setDisabled(disabledSave);
     }
-  }, [stateOpen])
+  }, [stateOpen]);
 
   const handleSave = () => {
-    onSave && onSave()
+    onSave && onSave();
     // if (!_.isNil(editData)) {
     //   onClose()
     // }
-  }
+  };
 
   useEffect(() => {
-    eventEmitter.on('onChangeDisabled', onChangeDisabled)
+    eventEmitter.on("onChangeDisabled", onChangeDisabled);
 
     return () => {
       if (removeOnChangeDisabled === true) {
-        eventEmitter.off('onChangeDisabled')
+        eventEmitter.off("onChangeDisabled");
       }
-    }
-  }, [])
+    };
+  }, []);
 
   const onChangeDisabled = (disabled) => {
-    setDisabled(disabled)
-  }
+    setDisabled(disabled);
+  };
 
-  return (
-    (!_.isNil(openPopup) ? (openPopup === true) : (stateOpen === true)) === true ? <div>
+  return (!_.isNil(openPopup) ? openPopup === true : stateOpen === true) ===
+    true ? (
+    <div>
       <BootstrapDialog
         maxWidth={widthSize}
         fullWidth={true}
@@ -119,16 +134,19 @@ const Popup = React.memo((props) => {
           typeSave={typeSave}
           disabled={disabled}
           labelSave={labelSave}
+          id={id}
         />
       </BootstrapDialog>
-    </div> : ''
-  )
-})
+    </div>
+  ) : (
+    ""
+  );
+});
 
 Popup.propTypes = {
   onSave: PropTypes.func.isRequired,
   ModalBody: PropTypes.func.isRequired,
   widthSize: PropTypes.string,
-}
+};
 
-export default Popup
+export default Popup;

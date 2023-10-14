@@ -9,7 +9,7 @@
       font-family: $type1;
       font-weight: 600;
       font-weight: initial;
-      i{
+      i {
         margin-left: 0.325rem;
       }
     }
@@ -29,9 +29,11 @@
       margin-bottom: 0;
     }
   }
-  &.table-borderless{
+  &.table-borderless {
     border: none;
-    tr,td,th{
+    tr,
+    td,
+    th {
       border: none;
     }
   }

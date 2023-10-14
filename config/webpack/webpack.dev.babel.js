@@ -1,9 +1,9 @@
-import webpack from 'webpack';
-import Jarvis from 'webpack-jarvis';
-import dotenv from 'dotenv';
-import $ from 'jquery';
-import paths from './paths';
-const MiniCssExtractPlugin = require('mini-css-extract-plugin')
+import webpack from "webpack";
+import Jarvis from "webpack-jarvis";
+import dotenv from "dotenv";
+import $ from "jquery";
+import paths from "./paths";
+const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 
 const env = dotenv.config().parsed;
 const envKeys = Object.keys(env || {}).reduce((prev, next) => {
@@ -12,13 +12,13 @@ const envKeys = Object.keys(env || {}).reduce((prev, next) => {
 }, {});
 
 module.exports = {
-  mode: 'development',
-  devtool: 'inline-source-map',
+  mode: "development",
+  devtool: "inline-source-map",
   output: {
-    filename: '[name].js',
+    filename: "[name].js",
     path: paths.outputPath,
-    chunkFilename: '[name].js',
-    publicPath: '/'
+    chunkFilename: "[name].js",
+    publicPath: "/",
   },
   module: {
     rules: [
@@ -26,51 +26,51 @@ module.exports = {
         test: /\.scss$/,
         use: [
           {
-            loader: 'sass-loader',
+            loader: "sass-loader",
             options: {
               sourceMap: true, // <-- !!IMPORTANT!!
-            }
+            },
           },
           {
-            loader: 'resolve-url-loader',
+            loader: "resolve-url-loader",
             options: {
               removeCR: true,
-              sourceMap: true
-            }
-          }
-        ]
+              sourceMap: true,
+            },
+          },
+        ],
       },
       {
         test: /\.css$/,
         use: [
           {
-            loader: 'sass-loader',
+            loader: "sass-loader",
             options: {
               sourceMap: true, // <-- !!IMPORTANT!!
-            }
+            },
           },
           {
-            loader: 'resolve-url-loader',
+            loader: "resolve-url-loader",
             options: {
               removeCR: true,
-              sourceMap: true
-            }
-          }
-        ]
-      }
-    ]
+              sourceMap: true,
+            },
+          },
+        ],
+      },
+    ],
   },
   performance: {
-    hints: 'warning',
+    hints: "warning",
     maxAssetSize: 20000000,
     maxEntrypointSize: 8500000,
-    assetFilter: assetFilename => {
-      return assetFilename.endsWith('.css') || assetFilename.endsWith('.js');
+    assetFilter: (assetFilename) => {
+      return assetFilename.endsWith(".css") || assetFilename.endsWith(".js");
     },
   },
   optimization: {
     splitChunks: {
-      chunks: 'all',
+      chunks: "all",
     },
   },
   devServer: {
@@ -99,8 +99,8 @@ module.exports = {
     }),
     new webpack.DefinePlugin(envKeys),
     new webpack.ProvidePlugin({
-      $: 'jquery',
-      jQuery: 'jquery',
+      $: "jquery",
+      jQuery: "jquery",
     }),
   ],
 };

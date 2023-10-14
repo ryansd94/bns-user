@@ -1,71 +1,71 @@
-import React, { useState, useEffect } from "react"
-import { useLocation } from "react-router-dom"
-import queryString from "query-string"
-import Grid from "@mui/material/Grid"
-import Box from "@mui/material/Box"
-import { useTranslation } from "react-i18next"
-import { useForm } from "react-hook-form"
-import * as Yup from "yup"
-import { validateTokenJoinTeam, signup } from "services"
-import { ERROR_CODE, EUserValidate } from "configs"
-import Alert from "@mui/material/Alert"
+import React, { useState, useEffect } from "react";
+import { useLocation } from "react-router-dom";
+import queryString from "query-string";
+import Grid from "@mui/material/Grid";
+import Box from "@mui/material/Box";
+import { useTranslation } from "react-i18next";
+import { useForm } from "react-hook-form";
+import * as Yup from "yup";
+import { validateTokenJoinTeam, signup } from "services";
+import { ERROR_CODE, EUserValidate } from "configs";
+import Alert from "@mui/material/Alert";
 
-import Spinner from "components/shared/Spinner"
-import { message } from "configs"
-import { yupResolver } from "@hookform/resolvers/yup"
-import JointeamHasAccount from "./components/JointeamHasAccount"
-import JoinTeamNoAccount from "./components/JoinTeamNoAccount"
+import Spinner from "components/shared/Spinner";
+import { message } from "configs";
+import { yupResolver } from "@hookform/resolvers/yup";
+import JointeamHasAccount from "./components/JointeamHasAccount";
+import JoinTeamNoAccount from "./components/JoinTeamNoAccount";
 
 export default function JoinTeam() {
-  const { search } = useLocation()
-  const { t } = useTranslation()
-  const { token } = queryString.parse(search)
+  const { search } = useLocation();
+  const { t } = useTranslation();
+  const { token } = queryString.parse(search);
 
-  const [error, setError] = useState(t(""))
-  const [password, setPassword] = useState("")
-  const [loading, setLoading] = useState(true)
-  const [hasMainAccount, setHasMainAccount] = useState(false)
-  const [passwordAgain, setPasswordAgain] = useState("")
-  const [passwordIsvalid, setPasswordIsvalid] = useState(false)
-  const [tokenIsvalid, setTokenIsvalid] = useState(false)
+  const [error, setError] = useState(t(""));
+  const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(true);
+  const [hasMainAccount, setHasMainAccount] = useState(false);
+  const [passwordAgain, setPasswordAgain] = useState("");
+  const [passwordIsvalid, setPasswordIsvalid] = useState(false);
+  const [tokenIsvalid, setTokenIsvalid] = useState(false);
   const [values, setValues] = React.useState({
     password: "",
     confirmPassword: "",
     fullName: "",
-  })
+  });
   function escapeRegExp(string) {
-    return string.replace(/[.*+?^${}()|[\]\\]/g, "\\$&") // $& means the whole matched string
+    return string.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"); // $& means the whole matched string
   }
 
   function replaceAll(str, find, replace) {
-    return str.replace(new RegExp(escapeRegExp(find), "g"), replace)
+    return str.replace(new RegExp(escapeRegExp(find), "g"), replace);
   }
   useEffect(() => {
     if (token) {
-      const data = replaceAll(token, " ", "+")
-      validateToken(data)
-    } else setLoading(false)
-  }, [])
+      const data = replaceAll(token, " ", "+");
+      validateToken(data);
+    } else setLoading(false);
+  }, []);
   const validateToken = async (token) => {
-    const res = await validateTokenJoinTeam({ token: token })
+    const res = await validateTokenJoinTeam({ token: token });
     if (res.errorCode == ERROR_CODE.success) {
-      setTokenIsvalid(true)
+      setTokenIsvalid(true);
       if (res.data && res.data.status == EUserValidate.IS_HAS_ACCOUNT)
-        setHasMainAccount(true)
+        setHasMainAccount(true);
     } else {
-      setError(res.title)
+      setError(res.title);
     }
-    setLoading(false)
-  }
+    setLoading(false);
+  };
   const handleChange = (prop) => (event) => {
-    setValues({ ...values, [prop]: event.target.value })
-  }
+    setValues({ ...values, [prop]: event.target.value });
+  };
   const handleClickShowPassword = () => {
     setValues({
       ...values,
       showPassword: !values.showPassword,
-    })
-  }
+    });
+  };
 
   const validationSchema = Yup.object().shape({
     fullName: Yup.string().required(t(message.error.fieldNotEmpty)),
@@ -79,15 +79,15 @@ export default function JoinTeam() {
     // confirmPassword: Yup.string()
     //   .required(t(message.error.fieldNotEmpty))
     //   .oneOf([Yup.ref("password")], t("Nhập lại mật khẩu không đúng")),
-  })
+  });
   const defaultValues = {
     fullName: "",
     password: "",
     confirmPassword: "",
-  }
+  };
   const handleMouseDownPassword = (event) => {
-    event.preventDefault()
-  }
+    event.preventDefault();
+  };
 
   const {
     register,
@@ -99,34 +99,34 @@ export default function JoinTeam() {
   } = useForm({
     resolver: yupResolver(validationSchema),
     defaultValues: defaultValues,
-  })
+  });
   const onSubmit = async (data) => {
     // alert(passwordIsvalid)
     // return
-    if (!passwordIsvalid) return
+    if (!passwordIsvalid) return;
 
-    const dataToken = replaceAll(token, " ", "+")
-    data.token = dataToken
-    const res = await signup(data)
+    const dataToken = replaceAll(token, " ", "+");
+    data.token = dataToken;
+    const res = await signup(data);
     if (res.errorCode == ERROR_CODE.success) {
-      setTokenIsvalid(true)
-      history.push(`/dashboard`)
+      setTokenIsvalid(true);
+      history.push(`/dashboard`);
     } else {
-      setTokenIsvalid(false)
+      setTokenIsvalid(false);
       setError({
         dirty: true,
         msg: res.title,
-      })
+      });
     }
     // dispatch(openMessage({ ...res }))
-  }
+  };
   const onChangePasswordAgain = (text) => {
-    setPasswordAgain(text.toLowerCase())
-  }
+    setPasswordAgain(text.toLowerCase());
+  };
 
   const onChangePassword = (text) => {
-    setPassword(text.toLowerCase())
-  }
+    setPassword(text.toLowerCase());
+  };
 
   return loading ? (
     <Spinner className={"spinnerWrapperMaster"}></Spinner>
@@ -164,5 +164,5 @@ export default function JoinTeam() {
         </div>
       </div>
     </div>
-  )
+  );
 }

@@ -1,1 +1,1 @@
-export { default as SchedulerControl } from './scheduler'
+export { default as SchedulerControl } from "./scheduler";

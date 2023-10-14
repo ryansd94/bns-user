@@ -9,8 +9,8 @@ import IconButton from "@mui/material/IconButton"
 import { SpinningCircles } from "react-loading-icons"
 import { useSelector } from "react-redux"
 import Grid from "@mui/material/Grid"
-import eventEmitter from 'helpers/eventEmitter'
-import _ from 'lodash'
+import eventEmitter from "helpers/eventEmitter"
+import _ from "lodash"
 
 const ButtonDetail = (props) => {
   const theme = createTheme({
@@ -22,20 +22,31 @@ const ButtonDetail = (props) => {
     },
   })
   const { t } = useTranslation()
-  const { type, onClick, autoFocus, disabled, className, isFloatRight = false, label, id } = props
+  const {
+    type,
+    onClick,
+    autoFocus,
+    disabled,
+    className,
+    isFloatRight = false,
+    label,
+    id,
+  } = props
   const [icon, setIcon] = useState("")
-  const [text, setText] = useState(!_.isEmpty(label) ? label : t("Save"))
+  const [text, setText] = useState(!_.isEmpty(label) ? label : '')
   const [disabledButton, setDisabledButton] = useState(disabled)
   const [color, setColor] = useState(null)
   const [defaultLoading, setDefaultLoading] = useState(false)
-  const [loading, setLoading] = useState(useSelector((state) => state.button.loading))
+  const [loading, setLoading] = useState(
+    useSelector((state) => state.button.loading),
+  )
   const lang = useSelector((state) => state.master.lang)
 
   useEffect(() => {
     switch (type) {
       case EButtonDetailType.save:
         setIcon(<IconSave />)
-        setText(t("Save"))
+        _.isEmpty(text) ? setText(t("Save")) : ''
         setDefaultLoading(true)
         break
       case EButtonDetailType.ok:
@@ -62,7 +73,6 @@ const ButtonDetail = (props) => {
     setDisabledButton(disabled)
   }, [disabled])
 
-
   const onChangeButtonDisabled = ({ buttonId, disabled }) => {
     if (id === buttonId) {
       setDisabledButton(disabled)
@@ -76,12 +86,12 @@ const ButtonDetail = (props) => {
   }
 
   useEffect(() => {
-    eventEmitter.on('onChangeButtonDisabled', onChangeButtonDisabled)
-    eventEmitter.on('onChangeButtonLoading', onChangeButtonLoading)
+    eventEmitter.on("onChangeButtonDisabled", onChangeButtonDisabled)
+    eventEmitter.on("onChangeButtonLoading", onChangeButtonLoading)
 
     return () => {
-      eventEmitter.off('onChangeButtonDisabled')
-      eventEmitter.off('onChangeButtonLoading')
+      eventEmitter.off("onChangeButtonDisabled")
+      eventEmitter.off("onChangeButtonLoading")
     }
   }, [])
 
@@ -94,14 +104,21 @@ const ButtonDetail = (props) => {
         autoFocus={autoFocus}
         variant="contained"
         disabled={(defaultLoading ? loading : false) || disabledButton}
-        className={`${className} ${isFloatRight == true ? 'f-right' : ''}`}
+        className={`${className} ${isFloatRight == true ? "f-right" : ""}`}
       >
         {text}
       </Button>
     )
-    button = defaultLoading && loading ?
-      (
-        <Grid item xs container justifyContent={isFloatRight ? 'flex-end' : 'flex-start'} direction={'row'} alignItems='center'>
+    button =
+      defaultLoading && loading ? (
+        <Grid
+          item
+          xs
+          container
+          justifyContent={isFloatRight ? "flex-end" : "flex-start"}
+          direction={"row"}
+          alignItems="center"
+        >
           <Grid item>
             <IconButton
               className="icon-loading-container"
@@ -118,25 +135,26 @@ const ButtonDetail = (props) => {
               />
             </IconButton>
           </Grid>
-          <Grid item>
-            {themeButton}
-          </Grid>
+          <Grid item>{themeButton}</Grid>
         </Grid>
-      ) : themeButton
+      ) : (
+        themeButton
+      )
   } else {
-    button = <ThemeProvider theme={theme}>
-      <Button
-        onClick={onClick}
-        color={color != null ? color : "primary"}
-        autoFocus={autoFocus}
-        className={`${className} button-detail`}
-        disabled={disabledButton}
-        // startIcon={icon}
-        variant="outlined"
-      >
-        {text}
-      </Button>
-    </ThemeProvider>
+    button = (
+      <ThemeProvider theme={theme}>
+        <Button
+          onClick={onClick}
+          color={color != null ? color : "primary"}
+          autoFocus={autoFocus}
+          className={`${className} button-detail`}
+          disabled={disabledButton}
+          variant="outlined"
+        >
+          {text}
+        </Button>
+      </ThemeProvider>
+    )
   }
   return button
 }

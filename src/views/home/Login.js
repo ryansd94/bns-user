@@ -1,45 +1,45 @@
-﻿import React, { useState, useEffect, useLayoutEffect } from "react"
-import { Link, useHistory } from "react-router-dom"
-import { Form } from "react-bootstrap"
-import Box from "@mui/material/Box"
-import Grid from "@mui/material/Grid"
-import IconButton from "@mui/material/IconButton"
-import OutlinedInput from "@mui/material/OutlinedInput"
-import InputLabel from "@mui/material/InputLabel"
-import InputAdornment from "@mui/material/InputAdornment"
-import FormControl from "@mui/material/FormControl"
-import Visibility from "@mui/icons-material/Visibility"
-import VisibilityOff from "@mui/icons-material/VisibilityOff"
+﻿import React, { useState, useEffect, useLayoutEffect } from "react";
+import { Link, useHistory } from "react-router-dom";
+import { Form } from "react-bootstrap";
+import Box from "@mui/material/Box";
+import Grid from "@mui/material/Grid";
+import IconButton from "@mui/material/IconButton";
+import OutlinedInput from "@mui/material/OutlinedInput";
+import InputLabel from "@mui/material/InputLabel";
+import InputAdornment from "@mui/material/InputAdornment";
+import FormControl from "@mui/material/FormControl";
+import Visibility from "@mui/icons-material/Visibility";
+import VisibilityOff from "@mui/icons-material/VisibilityOff";
 import {
   resetUserToken,
   setTokenLoginSucceeded,
   getAccessToken,
   getUserInfo,
   setKeepMeUser,
-  getKeepMeUser
-} from "helpers"
-import { login, loginGoogle } from "services"
-import httpStatus from "http-status"
-import Button from "@mui/material/Button"
-import { ERROR_CODE, message } from "configs"
-import firebase from "firebase/compat/app"
-import StyledFirebaseAuth from "react-firebaseui/StyledFirebaseAuth"
-import "firebase/compat/auth"
-import _ from 'lodash'
-import { setUserSetting } from "stores/views/master"
-import { useDispatch } from "react-redux"
-import { useTranslation } from "react-i18next"
-import { TextInput } from "components"
-import * as Yup from "yup"
-import { useForm } from "react-hook-form"
-import { yupResolver } from "@hookform/resolvers/yup"
-import { Alert } from "components/alert"
-import { CheckBoxControl } from 'components/checkbox'
+  getKeepMeUser,
+} from "helpers";
+import { login, loginGoogle } from "services";
+import httpStatus from "http-status";
+import Button from "@mui/material/Button";
+import { ERROR_CODE, message } from "configs";
+import firebase from "firebase/compat/app";
+import StyledFirebaseAuth from "react-firebaseui/StyledFirebaseAuth";
+import "firebase/compat/auth";
+import _ from "lodash";
+import { setUserSetting } from "stores/views/master";
+import { useDispatch } from "react-redux";
+import { useTranslation } from "react-i18next";
+import { TextInput } from "components";
+import * as Yup from "yup";
+import { useForm } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
+import { Alert } from "components/alert";
+import { CheckBoxControl } from "components/checkbox";
 
 export default function Login() {
-  const history = useHistory()
-  const dispatch = useDispatch()
-  const { t } = useTranslation()
+  const history = useHistory();
+  const dispatch = useDispatch();
+  const { t } = useTranslation();
   const [values, setValues] = React.useState({
     amount: "",
     password: "",
@@ -47,119 +47,124 @@ export default function Login() {
     username: "",
     weightRange: "",
     showPassword: false,
-    keepMe: false
-  })
-  const [isSubmitting, setIsSubmitting] = useState(false)
+    keepMe: false,
+  });
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState({
     dirty: false,
     msg: "",
-  })
+  });
 
   const validationSchema = Yup.object().shape({
     username: Yup.string().required(t(message.error.fieldNotEmpty)),
-    password: Yup.string().required(t(message.error.fieldNotEmpty))
-  })
+    password: Yup.string().required(t(message.error.fieldNotEmpty)),
+  });
 
-  const {
-    control,
-    handleSubmit,
-    reset,
-    setValue,
-    getValues
-  } = useForm({
-    resolver: yupResolver(validationSchema)
-  })
+  const { control, handleSubmit, reset, setValue, getValues } = useForm({
+    resolver: yupResolver(validationSchema),
+  });
 
   useEffect(() => {
-    const { username, password } = getKeepMeUser()
+    const { username, password } = getKeepMeUser();
     if (!_.isNil(username) && !_.isEmpty(username)) {
-      setValue('username', username)
-      setValue('password', password)
-      setValue('keepMe', true)
-      setValues({ ...values, ['username']: username, password: password, keepMe: true })
+      setValue("username", username);
+      setValue("password", password);
+      setValue("keepMe", true);
+      setValues({
+        ...values,
+        ["username"]: username,
+        password: password,
+        keepMe: true,
+      });
     }
-  }, [])
+  }, []);
 
   const handleClickShowPassword = () => {
     setValues({
       ...values,
       showPassword: !values.showPassword,
-    })
-  }
+    });
+  };
 
   const handleMouseDownPassword = (event) => {
-    event.preventDefault()
-  }
+    event.preventDefault();
+  };
 
   const onLoginGoogleSuccess = () => {
     const unregisterAuthObserver = firebase
       .auth()
       .onAuthStateChanged(async (user) => {
         if (!user) {
-          return
+          return;
         }
-        const googleToken = await user.getIdToken()
+        const googleToken = await user.getIdToken();
         const res = await loginGoogle({
           token: googleToken,
-        })
+        });
         switch (res.status) {
           case httpStatus.OK: {
-            const { data } = res && res
+            const { data } = res && res;
             if (data.errorCode == ERROR_CODE.userNotRegister) {
-              history.push(`/signup?token=${data.data.token}&googleToken=${googleToken}`)
-              break
+              history.push(
+                `/signup?token=${data.data.token}&googleToken=${googleToken}`,
+              );
+              break;
             } else if (data.errorCode != ERROR_CODE.success) {
               setError({
                 dirty: true,
-                msg: t('Invalid username or password'),
-              })
-              break
+                msg: t("Invalid username or password"),
+              });
+              break;
             } else {
-              const { data } = res && res.data
+              const { data } = res && res.data;
               const token = {
                 accessToken: data.token,
                 refreshToken: data.token,
                 shopIndex: data.shopIndex,
-              }
-              const user = { ...data, isAdmin: true, acceptScreen: [] }
+              };
+              const user = { ...data, isAdmin: true, acceptScreen: [] };
               setError({
                 dirty: false,
                 msg: "",
-              })
-              dispatch(setUserSetting({ ...user }))
-              setTokenLoginSucceeded({ token, user }, () => { history.push(`/${user.defaultOrganization?.code}/dashboard`) })
+              });
+              dispatch(setUserSetting({ ...user }));
+              setTokenLoginSucceeded({ token, user }, () => {
+                history.push(`/${user.defaultOrganization?.code}/dashboard`);
+              });
             }
-            break
+            break;
           }
           default: {
             setError({
               dirty: true,
               msg: "Đã có lỗi xảy ra. Vui lòng thử lại sau",
-            })
-            resetUserToken()
-            break
+            });
+            resetUserToken();
+            break;
           }
         }
-      })
-    return () => unregisterAuthObserver()
-  }
+      });
+    return () => unregisterAuthObserver();
+  };
 
   useLayoutEffect(() => {
-    const tokenWeb = getAccessToken()
+    const tokenWeb = getAccessToken();
     if (tokenWeb) {
-      const user = getUserInfo()
-      if (_.isNil(user)) {
-        history.push(`/${user.defaultOrganization?.code}/dashboard`)
+      const user = getUserInfo();
+      if (!_.isNil(user) && !_.isNil(user.defaultOrganization)) {
+        history.push(`/${user.defaultOrganization?.code}/dashboard`);
       }
     }
-  }, [])
+  }, []);
+
+  console.log(process.env.REACT_APP_FIREBASE_API_KEY)
 
   // Configure Firebase.
   const config = {
-    apiKey: process.env.REACT_APP_FIREBASE_API_KEY,
+    apiKey: 'AIzaSyAVvoTuwb55beJbxkPexiu84pLn84IiJws',
     authDomain: process.env.REACT_APP_FIREBASE_AUTH_DOMAIN,
-  }
-  firebase.initializeApp(config)
+  };
+  firebase.initializeApp(config);
   const uiConfig = {
     signInFlow: "redirect",
     signInSuccessUrl: "/",
@@ -167,58 +172,61 @@ export default function Login() {
     callbacks: {
       // Avoid redirects after sign-in.
       signInSuccessWithAuthResult: () => {
-        onLoginGoogleSuccess()
+        onLoginGoogleSuccess();
       },
     },
-  }
+  };
 
   async function onSignIn(data) {
-    setIsSubmitting(true)
+    setIsSubmitting(true);
     const res = await login({
       userName: data.username,
       passWord: data.password,
       remember: true,
-    })
-    setIsSubmitting(false)
+    });
+    setIsSubmitting(false);
     switch (res.status) {
       case httpStatus.OK: {
-        const { data, errors } = res && res
+        const { data, errors } = res && res;
         if (data.errorCode != ERROR_CODE.success) {
           setError({
             dirty: true,
             msg: t(data.errorCode),
-          })
-          break
+          });
+          break;
         } else {
-          const { data } = res && res.data
+          const { data } = res && res.data;
           const token = {
             accessToken: data.token,
             refreshToken: data.token,
             shopIndex: data.shopIndex,
-          }
-          const user = { ...data, isAdmin: true, acceptScreen: [] }
-          if (getValues('keepMe') === true) {
-            setKeepMeUser({ user: getValues('username'), password: getValues('password') })
+          };
+          const user = { ...data, isAdmin: true, acceptScreen: [] };
+          if (getValues("keepMe") === true) {
+            setKeepMeUser({
+              user: getValues("username"),
+              password: getValues("password"),
+            });
           } else {
-            setKeepMeUser({ user: '', password: '' })
+            setKeepMeUser({ user: "", password: "" });
           }
-          setTokenLoginSucceeded({ token, user })
-          dispatch(setUserSetting({ ...user }))
+          setTokenLoginSucceeded({ token, user });
+          dispatch(setUserSetting({ ...user }));
           setError({
             dirty: false,
             msg: "",
-          })
-          history.push(`${user.defaultOrganization?.code}/dashboard`)
+          });
+          history.push(`${user.defaultOrganization?.code}/dashboard`);
         }
-        break
+        break;
       }
       default: {
         setError({
           dirty: true,
           msg: "Đã có lỗi xảy ra. Vui lòng thử lại sau",
-        })
-        resetUserToken()
-        break
+        });
+        resetUserToken();
+        break;
       }
     }
   }
@@ -237,9 +245,9 @@ export default function Login() {
               </div>
               <h4>Hello! let's get started</h4>
               <h6 className="font-weight-light">Sign in to continue.</h6>
-              <Grid container gap={2} direction='column'>
+              <Grid container gap={2} direction="column">
                 <Grid item xs={12}>
-                  {!_.isNil(error?.msg) ? <Alert message={error?.msg} /> : ''}
+                  {!_.isNil(error?.msg) ? <Alert message={error?.msg} /> : ""}
                 </Grid>
                 <Grid item xs={12}>
                   <TextInput
@@ -273,13 +281,13 @@ export default function Login() {
                             )}
                           </IconButton>
                         </InputAdornment>
-                      )
+                      ),
                     }}
                   />
                 </Grid>
                 <Grid item xs>
                   <Button variant="contained" onClick={handleSubmit(onSignIn)}>
-                    {t('Sign in')}
+                    {t("Sign in")}
                   </Button>
                 </Grid>
               </Grid>
@@ -288,7 +296,7 @@ export default function Login() {
                 <div className="my-2 d-flex justify-content-between align-items-center">
                   <CheckBoxControl
                     control={control}
-                    label={t('Keep me signed in')}
+                    label={t("Keep me signed in")}
                     name="keepMe"
                   />
                   {/* <div className="form-check">
@@ -324,5 +332,5 @@ export default function Login() {
         </div>
       </div>
     </div>
-  )
+  );
 }

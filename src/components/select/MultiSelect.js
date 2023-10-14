@@ -1,63 +1,81 @@
-import React, { useRef } from "react"
-import Autocomplete from "@mui/material/Autocomplete"
-import TextField from "@mui/material/TextField"
-import { Controller } from "react-hook-form"
-import Skeleton from "@mui/material/Skeleton"
-import { useSelector } from "react-redux"
-import Typography from '@mui/material/Typography'
-import Box from '@mui/material/Box'
-import { ChipControl } from "components/chip"
-import { _TemplateVariant, EVariant, _ControlSizeDefault, EControlType } from 'configs'
-import { LabelControl } from 'components/label'
-import _ from 'lodash'
+import React, { useRef } from "react";
+import Autocomplete from "@mui/material/Autocomplete";
+import TextField from "@mui/material/TextField";
+import { Controller } from "react-hook-form";
+import Skeleton from "@mui/material/Skeleton";
+import { useSelector } from "react-redux";
+import Typography from "@mui/material/Typography";
+import Box from "@mui/material/Box";
+import { ChipControl } from "components/chip";
+import {
+  _TemplateVariant,
+  EVariant,
+  _ControlSizeDefault,
+  EControlType,
+} from "configs";
+import { LabelControl } from "components/label";
+import _ from "lodash";
 
 const MultiSelect = React.memo(
-  ({ control, required, data = [], label, name, placeholder, disabled, size, fullWidth, renderOption, renderTags, onChange }) => {
-    const loadingPopup = useSelector((state) => state.master.loadingPopup)
-    const [value, setValue] = React.useState([])
-    const [text, setText] = React.useState("")
-    const inputRef = useRef(null)
+  ({
+    control,
+    required,
+    data = [],
+    label,
+    name,
+    placeholder,
+    disabled,
+    size,
+    fullWidth,
+    renderOption,
+    renderTags,
+    onChange,
+  }) => {
+    const loadingPopup = useSelector((state) => state.master.loadingPopup);
+    const [value, setValue] = React.useState([]);
+    const [text, setText] = React.useState("");
+    const inputRef = useRef(null);
     const handleKeyDown = (event) => {
       switch (event.key) {
         case ",":
         case " ": {
-          event.preventDefault()
-          event.stopPropagation()
+          event.preventDefault();
+          event.stopPropagation();
           if (event.target.value.length > 0) {
-            setValue([...value, event.target.value])
+            setValue([...value, event.target.value]);
           }
-          break
+          break;
         }
         default:
       }
-    }
+    };
 
     const onTextChange = (e) => {
       if (e.target.value.indexOf("@") >= 0) {
-        let bbbbb = e.target.value + "aaaaaaaa"
+        let bbbbb = e.target.value + "aaaaaaaa";
 
-        setText(bbbbb)
+        setText(bbbbb);
       }
-      setText(e.target.value)
-    }
+      setText(e.target.value);
+    };
 
     const onTextKeypress = (e) => {
       if (e.key == "@" && e.target.value.indexOf("@") < 0) {
-        e.target.value = e.target.value + "@gmail.com"
-        setText(e.target.value + "aaaaaaaa")
-        e.preventDefault()
+        e.target.value = e.target.value + "@gmail.com";
+        setText(e.target.value + "aaaaaaaa");
+        e.preventDefault();
       }
-    }
+    };
     const handleFocus = (e) => {
-      inputRef.target.select()
-    }
+      inputRef.target.select();
+    };
 
     const getDataByDefaultValue = (value) => {
       const values = _.filter(data, function (o) {
         return _.indexOf(value, o.id, 0) >= 0;
-      })
-      return values
-    }
+      });
+      return values;
+    };
 
     return (
       <Controller
@@ -82,28 +100,40 @@ const MultiSelect = React.memo(
                 filterSelectedOptions
                 getOptionLabel={(option) => (option ? option.name : "")}
                 onChange={(event, newValue) => {
-                  onChange && onChange({ value: newValue, name })
-                  field.onChange(newValue)
+                  onChange && onChange({ value: newValue, name });
+                  field.onChange(newValue);
                 }}
                 renderInput={(params) => {
-                  params.inputProps.onKeyDown = handleKeyDown
+                  params.inputProps.onKeyDown = handleKeyDown;
                   return (
                     <TextField
                       {...params}
-                      style={{ marginTop: "0px", marginBottom: "0px", minWidth: "250px" }}
+                      style={{
+                        marginTop: "0px",
+                        marginBottom: "0px",
+                        minWidth: "250px",
+                      }}
                       variant="outlined"
                       label={label}
                       placeholder={placeholder}
                       size={size ? size : _ControlSizeDefault}
                       fullWidth
                     ></TextField>
-                  )
+                  );
                 }}
               />
             </Skeleton>
           ) : (
             <div className="containerControl">
-              {_TemplateVariant === EVariant.normal ? (label ? <LabelControl required={required} label={label} /> : '') : ''}
+              {_TemplateVariant === EVariant.normal ? (
+                label ? (
+                  <LabelControl required={required} label={label} />
+                ) : (
+                  ""
+                )
+              ) : (
+                ""
+              )}
               <Autocomplete
                 multiple={true}
                 options={data}
@@ -116,45 +146,77 @@ const MultiSelect = React.memo(
                 isOptionEqualToValue={(option, value) =>
                   option != null && value != null ? option.id === value.id : ""
                 }
-                value={field.value != null ? getDataByDefaultValue(field.value) : []}
+                value={
+                  field.value != null ? getDataByDefaultValue(field.value) : []
+                }
                 filterSelectedOptions
                 getOptionLabel={(option) => (option ? option.name : "")}
                 onChange={(event, newValue) => {
                   if (newValue.length > 0) {
                     const changedValues = _.map(newValue, (item) => {
-                      return item.id
-                    })
-                    onChange && onChange({ value: changedValues, name, type: EControlType.multiSelect })
-                    field.onChange(changedValues)
+                      return item.id;
+                    });
+                    onChange &&
+                      onChange({
+                        value: changedValues,
+                        name,
+                        type: EControlType.multiSelect,
+                      });
+                    field.onChange(changedValues);
                   } else {
-                    onChange && onChange({ value: [], name, type: EControlType.multiSelect })
-                    field.onChange([])
+                    onChange &&
+                      onChange({
+                        value: [],
+                        name,
+                        type: EControlType.multiSelect,
+                      });
+                    field.onChange([]);
                   }
                 }}
                 renderOption={(props, option) => {
-                  return renderOption ? renderOption(props, option) : (<Box component="li" sx={{ '& > img': { mr: 2, flexShrink: 0 } }} {...props}>
-                    <Typography key={option.id}>{option.name}</Typography>
-                  </Box>)
+                  return renderOption ? (
+                    renderOption(props, option)
+                  ) : (
+                    <Box
+                      component="li"
+                      sx={{ "& > img": { mr: 2, flexShrink: 0 } }}
+                      {...props}
+                    >
+                      <Typography key={option.id}>{option.name}</Typography>
+                    </Box>
+                  );
                 }}
                 renderTags={(value, getTagProps) =>
                   value.map((option, index) => {
-                    return renderTags ? renderTags(option, { ...getTagProps({ index }) })
-                      : <ChipControl label={option.name} {...getTagProps({ index })} />
+                    return renderTags ? (
+                      renderTags(option, { ...getTagProps({ index }) })
+                    ) : (
+                      <ChipControl
+                        label={option.name}
+                        {...getTagProps({ index })}
+                      />
+                    );
                   })
                 }
                 renderInput={(params) => {
-                  params.inputProps.onKeyDown = handleKeyDown
+                  params.inputProps.onKeyDown = handleKeyDown;
                   return (
                     <TextField
                       {...params}
-                      style={{ marginTop: "0px", marginBottom: "0px", minWidth: "250px" }}
-                      label={_TemplateVariant === EVariant.outlined ? label : ''}
+                      style={{
+                        marginTop: "0px",
+                        marginBottom: "0px",
+                        minWidth: "250px",
+                      }}
+                      label={
+                        _TemplateVariant === EVariant.outlined ? label : ""
+                      }
                       placeholder={placeholder}
                       margin="normal"
                       fullWidth={fullWidth || true}
                       size={size ? size : _ControlSizeDefault}
                     ></TextField>
-                  )
+                  );
                 }}
               />
             </div>
@@ -163,8 +225,8 @@ const MultiSelect = React.memo(
         defaultValue={[]}
         control={control}
       />
-    )
-  }
-)
+    );
+  },
+);
 
-export default MultiSelect
+export default MultiSelect;

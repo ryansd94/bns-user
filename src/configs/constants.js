@@ -1,3 +1,3 @@
 export const constants = {
-    view: 'View'
-}
+  view: "View",
+};

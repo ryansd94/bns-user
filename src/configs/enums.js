@@ -6,46 +6,46 @@ export const LOCAL_STORAGE_KEYS = {
   i18nextLng: "i18nextLng",
   shopIndex: "shopIndex",
   userName: "userName",
-  password: "password"
-}
+  password: "password",
+};
 
 export const VisibleDefault = {
   add: true,
   column: true,
   function: false,
-  delete: false
-}
+  delete: false,
+};
 
 export const ERROR_CODE = {
   success: "Success",
   error: "Failed",
   isExistsData: "IsExistsData",
   userNotRegister: "UserNotRegister",
-  tokenNotValid: "TokenNotValid"
-}
+  tokenNotValid: "TokenNotValid",
+};
 
 export const MODAL = {
   open: "OPEN",
   close: "CLOSE",
   change_title: "CHANGE_TITLE",
-}
+};
 
 export const EUserStatus = {
   ACTIVE: 1,
   IN_ACTIVE: 2,
   WAILTING_CONFIRM_MAIL: 3,
   BLOCK: 4,
-}
+};
 
 export const EUserValidate = {
   OK: 1,
   IS_HAS_ACCOUNT: 2,
-}
+};
 
 export const EAlertPopupType = {
   DELETE: 1,
   UPDATE_STATUS: 2,
-}
+};
 
 export const EButtonType = {
   add: "Add",
@@ -68,30 +68,28 @@ export const EButtonType = {
   list: "List",
   board: "Board",
   edit: "Edit",
-  setting: "Setting"
-}
+  setting: "Setting",
+};
 
 export const EPlacement = {
-  bottom: 'bottom',
-  left: 'left',
-  leftStart: 'left-start'
-}
+  bottom: "bottom",
+  left: "left",
+  leftStart: "left-start",
+};
 
 export const EColumnType = {
   checkbox: "Checkbox",
-  text: "Text"
-}
+  text: "Text",
+};
 
-export const EColor =
-{
-  cancel: '#86878796'
-}
+export const EColor = {
+  cancel: "#86878796",
+};
 
-export const EFormatDate =
-{
+export const EFormatDate = {
   ddmmyyyy: "dd/MM/yyyy",
-  ddmmyyyy_hhmm: "dd/MM/yyyy HH:mm"
-}
+  ddmmyyyy_hhmm: "dd/MM/yyyy HH:mm",
+};
 
 export const EButtonIconType = {
   save: "Save",
@@ -118,36 +116,36 @@ export const EButtonIconType = {
   refresh: "Refresh",
   copy: "Copy",
   hide: "Hide",
-  unhide: "Unhide"
-}
+  unhide: "Unhide",
+};
 
 export const EButtonDetailType = {
   save: "Save",
   undo: "Undo",
   accept: "Accept",
   ok: "Ok",
-}
+};
 
 export const ESize = {
   miniSmall: "miniSmall",
   small: "small",
   medium: "medium",
-  large: "large"
-}
+  large: "large",
+};
 
 export const EWidth = {
   xs: "xs",
   sm: "sm",
   md: "md",
   lg: "lg",
-  xl: "xl"
-}
+  xl: "xl",
+};
 
 export const EVariant = {
   outlined: "outlined",
   standard: "standard",
-  normal: "normal"
-}
+  normal: "normal",
+};
 
 export const EControlType = {
   typography: "Typography",
@@ -168,84 +166,84 @@ export const EControlType = {
   listId: "ListId",
   multiSelect: "MultiSelect",
   checkBox: "CheckBox",
-  other: "Other"
-}
+  other: "Other",
+};
 
 export const baseUrl = {
-  jm_template: 'jm_template',
-  jm_status: 'jm_status',
-  jm_team: 'jm_team',
-  jm_user: 'jm_user',
-  sys_filter: 'sys_filter',
-  jm_taskType: 'jm_tasktype',
-  jm_task: 'jm_task',
-  jm_taskcolumn: 'jm_taskcolumn',
-  jm_customcolumn: 'jm_customcolumn',
-  jm_comment: 'jm_comment',
-  jm_priority: 'jm_priority',
-  jm_project: 'jm_project',
-  sys_viewPermission: 'sys_viewPermission',
-  jm_notifyUser: 'jm_notifyuser',
-  account: 'account',
-  jm_tag: 'jm_tag'
-}
+  jm_template: "jm_template",
+  jm_status: "jm_status",
+  jm_team: "jm_team",
+  jm_user: "jm_user",
+  sys_filter: "sys_filter",
+  jm_taskType: "jm_tasktype",
+  jm_task: "jm_task",
+  jm_taskcolumn: "jm_taskcolumn",
+  jm_customcolumn: "jm_customcolumn",
+  jm_comment: "jm_comment",
+  jm_priority: "jm_priority",
+  jm_project: "jm_project",
+  sys_viewPermission: "sys_viewPermission",
+  jm_notifyUser: "jm_notifyuser",
+  account: "account",
+  jm_tag: "jm_tag",
+};
 
 export const EViewMode = {
   list: 0,
-  board: 1
-}
+  board: 1,
+};
 
 export const EAlertType = {
-  error: 'error',
-  warning: 'warning',
-  info: 'info'
-}
+  error: "error",
+  warning: "warning",
+  info: "info",
+};
 
 export const EControlVariant = {
-  circular: 'circular',
-  rounded: 'rounded',
-  text: 'text'
-}
+  circular: "circular",
+  rounded: "rounded",
+  text: "text",
+};
 
 export const EMenuType = {
-  group: 'Group',
-  collapse: 'Collapse',
-  action: 'Action'
-}
+  group: "Group",
+  collapse: "Collapse",
+  action: "Action",
+};
 
 export const EPermissionObject = {
   user: 0,
-  team: 1
-}
+  team: 1,
+};
 
 export const EProjectTypeOption = {
   basic: 0,
-  phase: 1
-}
+  phase: 1,
+};
 
 export const ERowStatus = {
   addNew: 0,
   update: 1,
   noChange: 2,
-  delete: 3
-}
+  delete: 3,
+};
 
 export const EPosition = {
   top: 0,
   left: 1,
   right: 2,
-  bottom: 3
-}
+  bottom: 3,
+};
 
 export const EGuidanceContentType = {
-  icon: 'Icon',
-  detail: 'Detail'
-}
+  icon: "Icon",
+  detail: "Detail",
+};
 
 export const ESortType = {
-  asc: 'asc',
-  desc: 'desc'
-}
+  asc: "asc",
+  desc: "desc",
+};
 
-export const _TemplateVariant = EVariant.normal
-export const _ControlSizeDefault = ESize.small
+export const _TemplateVariant = EVariant.normal;
+export const _ControlSizeDefault = ESize.small;

@@ -1,1 +1,1 @@
-export { default } from './viewPermission'
+export { default } from "./viewPermission";

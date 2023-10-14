@@ -103,9 +103,10 @@
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "postinstall": "npm run build",
-    "build:prod": "env-cmd -f .env.production.local npm run build",
+    "build:prod": "env-cmd -f .env.test npm run build",
     "build:test": "env-cmd -f .env.test npm run build",
-    "deploy": "gh-pages -d build"
+    "deploy": "gh-pages -d build",
+    "format": "prettier --write ."
   },
   "eslintConfig": {
     "extends": [
@@ -126,6 +127,7 @@
     ]
   },
   "devDependencies": {
-    "dotenv-cli": "^7.1.0"
+    "dotenv-cli": "^7.1.0",
+    "prettier": "3.0.3"
   }
 }

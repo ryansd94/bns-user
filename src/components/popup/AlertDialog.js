@@ -1,23 +1,28 @@
-import Dialog from "@mui/material/Dialog"
-import DialogActions from "@mui/material/DialogActions"
-import DialogTitle from "@mui/material/DialogTitle"
-import { open as openAlert } from "stores/components/alert-dialog"
-import { useSelector, useDispatch } from "react-redux"
-import { useTranslation } from "react-i18next"
-import ButtonDetail from "components/button/ButtonDetail"
-import { EButtonDetailType } from "configs"
+import Dialog from "@mui/material/Dialog";
+import DialogActions from "@mui/material/DialogActions";
+import DialogTitle from "@mui/material/DialogTitle";
+import { open as openAlert } from "stores/components/alert-dialog";
+import { useSelector, useDispatch } from "react-redux";
+import { useTranslation } from "react-i18next";
+import ButtonDetail from "components/button/ButtonDetail";
+import { EButtonDetailType } from "configs";
 
 const AlertDialog = (props) => {
-  const open = useSelector((state) => state.alertDialog.open)
-  const title = useSelector((state) => state.alertDialog.title)
-  const loading = useSelector((state) => state.button.loading)
-  const dispatch = useDispatch()
-  const { t } = useTranslation()
-  const { onSubmit } = props
+  const open = useSelector((state) => state.alertDialog.open);
+  const title = useSelector((state) => state.alertDialog.title);
+  const loading = useSelector((state) => state.button.loading);
+  const dispatch = useDispatch();
+  const { t } = useTranslation();
+  const { onSubmit } = props;
 
   const handleClose = () => {
-    dispatch(openAlert({ open: false, title: title ? title : t("Are you sure you want to delete this data?") }))
-  }
+    dispatch(
+      openAlert({
+        open: false,
+        title: title ? title : t("Are you sure you want to delete this data?"),
+      }),
+    );
+  };
 
   return (
     <div>
@@ -43,6 +48,6 @@ const AlertDialog = (props) => {
         </DialogActions>
       </Dialog>
     </div>
-  )
-}
-export default AlertDialog
+  );
+};
+export default AlertDialog;

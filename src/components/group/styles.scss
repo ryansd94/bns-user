@@ -1,0 +1,17 @@
+@import "../../assets/styles/variables";
+
+.group-content {
+    border: $border-property;
+    padding: 1rem;
+    border-radius: $group-border-radius;
+    position: relative;
+
+    .label {
+        position: absolute;
+        top: -12px;
+        background-color: white;
+        padding-left: 5px;
+        padding-right: 5px;
+        left: 5px;
+    }
+}

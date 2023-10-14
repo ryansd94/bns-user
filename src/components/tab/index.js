@@ -1,1 +1,1 @@
-export { default as TabControl } from './tabControl'
+export { default as TabControl } from "./tabControl";

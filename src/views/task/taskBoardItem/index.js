@@ -1,1 +1,1 @@
-export { default as TaskNoteItem } from './taskNoteItem'
+export { default as TaskNoteItem } from "./taskNoteItem";

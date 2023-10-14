@@ -1,1 +1,1 @@
-export { default as OverflowTip } from './overflowTip'
+export { default as OverflowTip } from "./overflowTip";

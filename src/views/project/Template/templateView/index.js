@@ -1,1 +1,1 @@
-export { default } from './templateView'
+export { default } from "./templateView";

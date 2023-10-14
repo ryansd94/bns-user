@@ -1,33 +1,33 @@
 .ag-cell {
-    // display: flex !important;
-    .ag-cell-wrapper {
-        height: 100%;
-        .cell-group-item {
-            font-weight: 400 !important;
-        }
-        .cell-group-icon {
-            cursor: pointer;
-            min-width: 10px;
-        }
+  // display: flex !important;
+  .ag-cell-wrapper {
+    height: 100%;
+    .cell-group-item {
+      font-weight: 400 !important;
     }
+    .cell-group-icon {
+      cursor: pointer;
+      min-width: 10px;
+    }
+  }
 }
 .ag-theme-alpine {
-    flex-grow: 1;
-    .ag-root-wrapper {
-        border: none !important;
-    }
+  flex-grow: 1;
+  .ag-root-wrapper {
+    border: none !important;
+  }
 }
 .ag-header {
-    min-height: $grid-header-height !important;
+  min-height: $grid-header-height !important;
 }
 .ag-overlay {
-    top: $grid-header-height !important;
-    height: calc(100% - 50px) !important;
+  top: $grid-header-height !important;
+  height: calc(100% - 50px) !important;
 }
 .MuiDialogContent-root,
 .MuiPopover-root {
-    .ag-root-wrapper-body.ag-layout-normal {
-        height: auto !important;
-        min-height: 96px;
-    }
+  .ag-root-wrapper-body.ag-layout-normal {
+    height: auto !important;
+    min-height: 96px;
+  }
 }

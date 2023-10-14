@@ -1,16 +1,16 @@
 import { useState } from "react"
 import { Draggable } from "react-beautiful-dnd"
 import styled from "styled-components"
-import { PopoverControl, PopperControl } from 'components/popover'
+import { PopperControl } from "components/popover"
 
 const DragItem = styled.div`
-  // padding: 10px;
-  background: transparent;
-  display: flex;
-  flex-wrap: nowrap;
-  gap: 1rem;
-  flex-direction: column;
-  width: 100%;
+  // padding: 10px
+  background: transparent
+  display: flex
+  flex-wrap: nowrap
+  gap: 1rem
+  flex-direction: column
+  width: 100%
 `
 const TaskDragItem = ({ id, index, control, renderPopoverControl }) => {
   const [openPopover, setOpenPopover] = useState(null)
@@ -38,10 +38,13 @@ const TaskDragItem = ({ id, index, control, renderPopoverControl }) => {
             {...provided.dragHandleProps}
           >
             {control}
-            {renderPopoverControl ? <PopperControl
-              anchorEl={openPopover} >
-              {renderPopoverControl()}
-            </PopperControl> : ''}
+            {renderPopoverControl ? (
+              <PopperControl anchorEl={openPopover}>
+                {renderPopoverControl()}
+              </PopperControl>
+            ) : (
+              ""
+            )}
           </DragItem>
         )
       }}

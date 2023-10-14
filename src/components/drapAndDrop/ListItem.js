@@ -1,8 +1,7 @@
-import { Draggable } from "react-beautiful-dnd"
-import React, { useState } from "react"
-import styled, { css } from "styled-components"
-import { PopoverControl } from 'components/popover'
-
+import { Draggable } from "react-beautiful-dnd";
+import React, { useState } from "react";
+import styled, { css } from "styled-components";
+import { PopoverControl } from "components/popover";
 
 const DragItem = styled.div`
   // padding: 10px;
@@ -13,17 +12,16 @@ const DragItem = styled.div`
   width: 100%;
 `;
 
-
 const ListItem = ({ id, index, control, renderPopoverControl }) => {
-  const [openPopover, setOpenPopover] = useState(null)
+  const [openPopover, setOpenPopover] = useState(null);
 
   const handlePopoverOpen = (event) => {
     setOpenPopover(event.currentTarget);
-  }
+  };
 
   const handlePopoverClose = () => {
     setOpenPopover(null);
-  }
+  };
 
   return (
     <Draggable draggableId={id} index={index}>
@@ -40,7 +38,16 @@ const ListItem = ({ id, index, control, renderPopoverControl }) => {
             {...provided.dragHandleProps}
           >
             {control}
-            {renderPopoverControl ? <PopoverControl isCLoseOnHover={true} genderBody={renderPopoverControl} onClose={handlePopoverClose} anchorEl={openPopover} /> : ''}
+            {renderPopoverControl ? (
+              <PopoverControl
+                isCLoseOnHover={true}
+                genderBody={renderPopoverControl}
+                onClose={handlePopoverClose}
+                anchorEl={openPopover}
+              />
+            ) : (
+              ""
+            )}
           </DragItem>
         );
       }}

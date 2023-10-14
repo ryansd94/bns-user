@@ -1,1 +1,1 @@
-export { default as Group } from 'components/layout/group'
+export { default as Group } from "components/layout/group";

@@ -2,13 +2,13 @@ import React, { useState, useEffect, useCallback } from "react"
 import TaskGrid from "./taskGrid"
 import TaskView from "./taskView"
 import TaskToolbar from "./taskToolbar"
-import { Resizable } from 'components/resizable'
+import { Resizable } from "components/resizable"
 import { get, save } from "services"
 import _ from "lodash"
 import { baseUrl } from "configs"
-import { TaskBoard } from './taskBoard'
+import { TaskBoard } from "./taskBoard"
 import { getUserInfo, setUserInfo } from "helpers"
-import { EViewMode } from 'configs/enums'
+import { EViewMode } from "configs/enums"
 
 const Task = () => {
   console.log("render Task")
@@ -17,9 +17,14 @@ const Task = () => {
   const [id, setId] = useState(null)
   const [taskTypes, setTaskType] = useState([])
   const [listStatus, setListStatus] = useState([])
-  let user = getUserInfo()
-  const [hidenRight, setHidenRight] = useState(user?.setting?.taskSetting?.isFullScreen || false)
-  const [isViewList, setIsViewList] = useState(user?.setting?.taskSetting?.viewMode === EViewMode.list ? true : false)
+  const gridId = "task-grid"
+  let userInfo = getUserInfo()
+  const [hidenRight, setHidenRight] = useState(
+    userInfo?.setting?.taskSetting?.isFullScreen || false,
+  )
+  const [isViewList, setIsViewList] = useState(
+    userInfo?.setting?.taskSetting?.viewMode === EViewMode.list ? true : false,
+  )
 
   const onApplyFilter = useCallback((value) => {
     setFilterModels(value)
@@ -53,35 +58,61 @@ const Task = () => {
     fetchStatus()
     fetchCustomColumn()
     fetchTaskType()
-    return () => { mounted = false }
+    return () => {
+      mounted = false
+    }
   }, [])
 
   const renderLeftComponent = useCallback(() => {
-    return isViewList === true ? <TaskGrid customColumns={customColumns} onRowClicked={onRowClicked} filterModels={filterModels} /> : <TaskBoard listStatus={listStatus} onRowClicked={onRowClicked} />
+    return isViewList === true ? (
+      <TaskGrid
+        gridId={gridId}
+        customColumns={customColumns}
+        onRowClicked={onRowClicked}
+        filterModels={filterModels}
+      />
+    ) : (
+      <TaskBoard listStatus={listStatus} onRowClicked={onRowClicked} />
+    )
   }, [filterModels, isViewList, listStatus])
 
   const renderRightComponent = useCallback(() => {
     return <TaskView taskTypes={taskTypes} taskId={id} isCreate={false} />
   }, [id])
 
-  const onFullScreen = useCallback((value) => {
-    setHidenRight(value)
-    save(`${baseUrl.jm_user}/me`, { id: user.userId, configs: [{ key: 'TaskSetting.IsFullScreen', value: value }] })
-    user.setting.taskSetting.isFullScreen = value
-    setUserInfo({ user: user })
-  }, [hidenRight])
+  const onFullScreen = useCallback(
+    (value) => {
+      let currentUserInfo = getUserInfo()
+      setHidenRight(value)
+      save(`${baseUrl.jm_user}/me`, {
+        id: currentUserInfo.userId,
+        configs: [{ key: "TaskSetting.IsFullScreen", value: value }],
+      })
+      currentUserInfo.setting.taskSetting.isFullScreen = value
+      setUserInfo({ user: currentUserInfo })
+    },
+    [hidenRight],
+  )
 
-  const onChangeViewMode = useCallback(async (value) => {
-    setIsViewList(value)
-    const viewMode = value === true ? EViewMode.list : EViewMode.board
-    user.setting.taskSetting.viewMode = viewMode
-    setUserInfo({ user: user })
-    save(`${baseUrl.jm_user}/me`, { id: user.userId, configs: [{ key: 'TaskSetting.ViewMode', value: viewMode }] })
-  }, [isViewList])
+  const onChangeViewMode = useCallback(
+    async (value) => {
+      let currentUserInfo = getUserInfo()
+      setIsViewList(value)
+      const viewMode = value === true ? EViewMode.list : EViewMode.board
+      currentUserInfo.setting.taskSetting.viewMode = viewMode
+      setUserInfo({ user: currentUserInfo })
+      save(`${baseUrl.jm_user}/me`, {
+        id: currentUserInfo.userId,
+        configs: [{ key: "TaskSetting.ViewMode", value: viewMode }],
+      })
+    },
+    [isViewList],
+  )
 
   return (
     <div className="body-content">
       <TaskToolbar
+        gridId={gridId}
         isViewList={isViewList}
         hidenRight={hidenRight}
         onChangeViewMode={onChangeViewMode}
@@ -89,8 +120,13 @@ const Task = () => {
         taskTypes={taskTypes}
         customColumns={customColumns}
         listStatus={listStatus}
-        onApplyFilter={onApplyFilter} />
-      <Resizable hidenRight={hidenRight} renderRightComponent={renderRightComponent} renderLeftComponent={renderLeftComponent} />
+        onApplyFilter={onApplyFilter}
+      />
+      <Resizable
+        hidenRight={hidenRight}
+        renderRightComponent={renderRightComponent}
+        renderLeftComponent={renderLeftComponent}
+      />
     </div>
   )
 }

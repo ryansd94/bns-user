@@ -1,18 +1,17 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
-    isReload: false
-}
-
+  isReload: false,
+};
 
 const slice = createSlice({
-    name: 'table',
-    initialState: initialState,
-    reducers: {
-        reload: (state, action) => {
-            state.isReload = !state.isReload;
-        }
-    }
+  name: "table",
+  initialState: initialState,
+  reducers: {
+    reload: (state, action) => {
+      state.isReload = !state.isReload;
+    },
+  },
 });
 const { reducer, actions } = slice;
 export const { reload } = actions;

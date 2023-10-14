@@ -1,82 +1,79 @@
-import React, { useEffect, useState } from "react"
-import Popup from "components/popup/Popup"
-import { useTranslation } from "react-i18next"
-import { useSelector } from "react-redux"
-import * as Yup from "yup"
-import { useForm } from "react-hook-form"
-import { yupResolver } from "@hookform/resolvers/yup"
-import { get } from "services"
-import { baseUrl, EButtonDetailType, message } from "configs"
-import _ from 'lodash'
-import TaskView from './taskView'
+import React, { useEffect, useState } from "react";
+import Popup from "components/popup/Popup";
+import { useTranslation } from "react-i18next";
+import { useSelector } from "react-redux";
+import * as Yup from "yup";
+import { useForm } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
+import { get } from "services";
+import { baseUrl, EButtonDetailType, message } from "configs";
+import _ from "lodash";
+import TaskView from "./taskView";
 
 const TaskChildPopup = React.memo((props) => {
-    const { taskParentId, taskTypeId } = props
-    const { t } = useTranslation()
-    const validationSchema = Yup.object().shape({
-        title: Yup.string().required(t(message.error.fieldNotEmpty)),
-        taskTypeId: Yup.string().nullable(true).required(t(message.error.fieldNotEmpty))
-    })
-    // const [taskTypies, setTaskType] = useState([])
-    const open = useSelector((state) => state.popup.open)
+  const { taskParentId, taskTypeId } = props;
+  const { t } = useTranslation();
+  const validationSchema = Yup.object().shape({
+    title: Yup.string().required(t(message.error.fieldNotEmpty)),
+    taskTypeId: Yup.string()
+      .nullable(true)
+      .required(t(message.error.fieldNotEmpty)),
+  });
+  // const [taskTypies, setTaskType] = useState([])
+  const open = useSelector((state) => state.popup.open);
 
-    const defaultValues = {
-        title: "",
-        taskTypeId: null,
+  const defaultValues = {
+    title: "",
+    taskTypeId: null,
+  };
+
+  const { control, handleSubmit, reset, setValue } = useForm({
+    resolver: yupResolver(validationSchema),
+    defaultValues: defaultValues,
+  });
+
+  useEffect(() => {
+    if (!_.isNil(taskTypeId)) {
+      setValue("taskTypeId", taskTypeId);
     }
+  }, [taskTypeId]);
 
-    const {
-        control,
-        handleSubmit,
-        reset,
-        setValue,
-    } = useForm({
-        resolver: yupResolver(validationSchema),
-        defaultValues: defaultValues,
-    })
+  // useEffect(() => {
+  //     if (!_.isNil(taskParentId)) {
+  //         fetchTaskType()
+  //     }
+  // }, [])
 
-    useEffect(() => {
-        if (!_.isNil(taskTypeId)) {
-            setValue('taskTypeId', taskTypeId)
-        }
-    }, [taskTypeId])
+  // const fetchTaskType = async () => {
+  //     await get(baseUrl.jm_taskType, {
+  //         isGetAll: true,
+  //     }).then((data) => {
+  //         setTaskType(data && data.data && data.data.items)
+  //     })
+  // }
 
-    // useEffect(() => {
-    //     if (!_.isNil(taskParentId)) {
-    //         fetchTaskType()
-    //     }
-    // }, [])
+  const onSubmit = async (data) => {
+    alert(JSON.stringify(data));
+  };
 
-    // const fetchTaskType = async () => {
-    //     await get(baseUrl.jm_taskType, {
-    //         isGetAll: true,
-    //     }).then((data) => {
-    //         setTaskType(data && data.data && data.data.items)
-    //     })
-    // }
+  const ModalBody = () => {
+    return <TaskView taskTypeId={taskTypeId} parentId={taskParentId} />;
+  };
 
-    const onSubmit = async (data) => {
-        alert(JSON.stringify(data))
-    }
+  return open ? (
+    <div>
+      <Popup
+        isShowFooter={false}
+        reset={reset}
+        ModalBody={ModalBody}
+        widthSize={"xl"}
+        typeSave={EButtonDetailType.ok}
+        onSave={handleSubmit(onSubmit)}
+      />
+    </div>
+  ) : (
+    ""
+  );
+});
 
-    const ModalBody = () => {
-        return (
-            <TaskView taskTypeId={taskTypeId} parentId={taskParentId} />
-        )
-    }
-
-    return (
-        open ? <div>
-            <Popup
-                isShowFooter={false}
-                reset={reset}
-                ModalBody={ModalBody}
-                widthSize={"xl"}
-                typeSave={EButtonDetailType.ok}
-                onSave={handleSubmit(onSubmit)}
-            />
-        </div> : ''
-    )
-})
-
-export default TaskChildPopup
+export default TaskChildPopup;

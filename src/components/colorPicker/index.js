@@ -1,1 +1,1 @@
-export { default as ColorPickerControl } from './colorPickerControl'
+export { default as ColorPickerControl } from "./colorPickerControl";

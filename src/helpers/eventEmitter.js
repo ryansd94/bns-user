@@ -1,5 +1,5 @@
-import EventEmitter from 'eventemitter3'
+import EventEmitter from "eventemitter3";
 
-const eventEmitter = new EventEmitter()
+const eventEmitter = new EventEmitter();
 
-export default eventEmitter
+export default eventEmitter;

@@ -1,1 +1,1 @@
-export { default as AccordionControl } from './accordionControl';
+export { default as AccordionControl } from "./accordionControl";

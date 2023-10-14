@@ -1,1 +1,1 @@
-export { default } from './priority'
+export { default } from "./priority";

@@ -1,8 +1,8 @@
-import React from "react"
-import { CheckBox } from 'components/checkbox'
+import React from "react";
+import { CheckBox } from "components/checkbox";
 
 const CheckBoxCellRender = (props) => {
-    return <CheckBox {...props} />
-}
+  return <CheckBox {...props} />;
+};
 
-export default CheckBoxCellRender
+export default CheckBoxCellRender;

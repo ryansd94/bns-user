@@ -1,1 +1,1 @@
-export { default as GridControl } from './gridControl/gridControl'
+export { default as GridControl } from "./gridControl/gridControl";

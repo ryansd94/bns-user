@@ -18,7 +18,7 @@ function ValueLabelComponent(props) {
 
 ValueLabelComponent.propTypes = {
   children: PropTypes.element.isRequired,
-  value: PropTypes.number.isRequired
+  value: PropTypes.number.isRequired,
 };
 
 const iOSBoxShadow =
@@ -38,9 +38,9 @@ const IOSSlider = styled(Slider)(({ theme }) => ({
         "0 3px 1px rgba(0,0,0,0.1),0 4px 8px rgba(0,0,0,0.3),0 0 0 1px rgba(0,0,0,0.02)",
       // Reset on touch devices, it doesn't add specificity
       "@media (hover: none)": {
-        boxShadow: iOSBoxShadow
-      }
-    }
+        boxShadow: iOSBoxShadow,
+      },
+    },
   },
   "& .MuiSlider-valueLabel": {
     fontSize: 12,
@@ -49,19 +49,19 @@ const IOSSlider = styled(Slider)(({ theme }) => ({
     backgroundColor: "unset",
     color: theme.palette.text.primary,
     "&:before": {
-      display: "none"
+      display: "none",
     },
     "& *": {
       background: "transparent",
-      color: theme.palette.mode === "dark" ? "#fff" : "#000"
-    }
+      color: theme.palette.mode === "dark" ? "#fff" : "#000",
+    },
   },
   "& .MuiSlider-track": {
-    border: "none"
+    border: "none",
   },
   "& .MuiSlider-rail": {
     opacity: 0.5,
-    backgroundColor: "#bfbfbf"
+    backgroundColor: "#bfbfbf",
   },
   "& .MuiSlider-mark": {
     backgroundColor: "#bfbfbf",
@@ -69,9 +69,9 @@ const IOSSlider = styled(Slider)(({ theme }) => ({
     width: 1,
     "&.MuiSlider-markActive": {
       opacity: 1,
-      backgroundColor: "currentColor"
-    }
-  }
+      backgroundColor: "currentColor",
+    },
+  },
 }));
 
 function AirbnbThumbComponent(props) {
@@ -87,7 +87,7 @@ function AirbnbThumbComponent(props) {
 }
 
 AirbnbThumbComponent.propTypes = {
-  children: PropTypes.node
+  children: PropTypes.node,
 };
 
 export default function SliderControl() {

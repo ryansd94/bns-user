@@ -40,7 +40,9 @@ body {
 }
 
 .main-panel {
-  transition: width $action-transition-duration $action-transition-timing-function, margin $action-transition-duration $action-transition-timing-function;
+  transition:
+    width $action-transition-duration $action-transition-timing-function,
+    margin $action-transition-duration $action-transition-timing-function;
   width: calc(100% - #{$sidebar-width-lg});
   min-height: calc(100vh - #{$navbar-height});
   @include display-flex();
@@ -55,17 +57,17 @@ body {
 }
 
 .content-wrapper {
-    background: $content-bg;
-    // padding: 1rem 1rem 0 1rem;
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-    overflow: hidden;    
-    @include flex-grow(1);
+  background: $content-bg;
+  // padding: 1rem 1rem 0 1rem;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  @include flex-grow(1);
 
-    @media (max-width: 991px) {
-        padding: 1rem 1rem 0 1rem;
-    }
+  @media (max-width: 991px) {
+    padding: 1rem 1rem 0 1rem;
+  }
 }
 
 .container-scroller {
@@ -109,7 +111,7 @@ code {
     text-align: center;
     box-shadow: 0px 3px 8.3px 0.7px rgba(163, 93, 255, 0.35);
     i {
-      font-size: .9375rem;
+      font-size: 0.9375rem;
       line-height: 36px;
     }
   }
@@ -117,7 +119,7 @@ code {
 .dropdown-toggle {
   &.hide-carret {
     &:after {
-      content: '';
+      content: "";
       display: none;
     }
   }
@@ -125,5 +127,4 @@ code {
 
 .bg-transparent {
   background: transparent;
-  
 }

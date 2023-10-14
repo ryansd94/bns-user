@@ -1,1 +1,1 @@
-export { default } from './notPermission'
+export { default } from "./notPermission";

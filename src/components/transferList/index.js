@@ -1,1 +1,1 @@
-export { default as TransferList } from './transferList'
+export { default as TransferList } from "./transferList";

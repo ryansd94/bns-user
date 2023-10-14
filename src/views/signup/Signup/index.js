@@ -1,1 +1,1 @@
-export { default } from './singup2'
+export { default } from "./singup2";

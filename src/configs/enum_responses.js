@@ -1,7 +1,7 @@
 export const EStatusResponse = {
-  unauthorized: 401
-}
+  unauthorized: 401,
+};
 
 export const EErrorCodeResponse = {
-  notPermission: 'NotPermission'
-}
+  notPermission: "NotPermission",
+};

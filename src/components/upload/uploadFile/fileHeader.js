@@ -1,34 +1,45 @@
-import Grid from "@mui/material/Grid"
-import React from 'react'
-import { OverflowTip } from 'components/tooltip'
-import { LinkControl } from 'components/link'
-import { IconDelete } from "components/icon/icon"
-import { useTranslation } from "react-i18next"
+import Grid from "@mui/material/Grid";
+import React from "react";
+import { OverflowTip } from "components/tooltip";
+import { LinkControl } from "components/link";
+import { IconDelete } from "components/icon/icon";
+import { useTranslation } from "react-i18next";
 
 const FileHeader = (props) => {
-    const { file, onDelete } = props
-    const { t } = useTranslation()
+  const { file, onDelete } = props;
+  const { t } = useTranslation();
 
-    const renderTooltipContent = () => {
-        return <LinkControl title={file.file.name} href={file.url} />
-    }
+  const renderTooltipContent = () => {
+    return <LinkControl title={file.file.name} href={file.url} />;
+  };
 
-    const renderTooltipRemoveIcon = () => {
-        return <IconDelete onClick={() => onDelete(file.id)} className='delete-icon' />
-    }
-
-    const renderDeleteIcon = () => {
-        return <OverflowTip disableHoverListener={false} className='delete-icon-root' value={t('Delete file')} renderTooltipContent={() => renderTooltipRemoveIcon()} />
-    }
-
+  const renderTooltipRemoveIcon = () => {
     return (
-        <Grid container style={{ width: '100%' }} alignItems={'center'}>
-            <Grid style={{ width: 'calc(100% - 15px)' }} item>
-                <OverflowTip value={file.file.name} renderTooltipContent={() => renderTooltipContent()} />
-            </Grid>
-            {renderDeleteIcon()}
-        </Grid>
-    )
+      <IconDelete onClick={() => onDelete(file.id)} className="delete-icon" />
+    );
+  };
 
-}
-export default FileHeader
+  const renderDeleteIcon = () => {
+    return (
+      <OverflowTip
+        disableHoverListener={false}
+        className="delete-icon-root"
+        value={t("Delete file")}
+        renderTooltipContent={() => renderTooltipRemoveIcon()}
+      />
+    );
+  };
+
+  return (
+    <Grid container style={{ width: "100%" }} alignItems={"center"}>
+      <Grid style={{ width: "calc(100% - 15px)" }} item>
+        <OverflowTip
+          value={file.file.name}
+          renderTooltipContent={() => renderTooltipContent()}
+        />
+      </Grid>
+      {renderDeleteIcon()}
+    </Grid>
+  );
+};
+export default FileHeader;

@@ -1,8 +1,8 @@
-import webpack from 'webpack';
-import HtmlWebpackPlugin from 'html-webpack-plugin';
-import $ from 'jquery';
-import paths from './paths';
-import rules from './rules';
+import webpack from "webpack";
+import HtmlWebpackPlugin from "html-webpack-plugin";
+import $ from "jquery";
+import paths from "./paths";
+import rules from "./rules";
 
 module.exports = {
   entry: paths.entryPath,
@@ -10,13 +10,13 @@ module.exports = {
     rules,
   },
   resolve: {
-    modules: ['src', 'node_modules'],
-    extensions: ['*', '.js', '.scss', '.css'],
+    modules: ["src", "node_modules"],
+    extensions: ["*", ".js", ".scss", ".css"],
   },
   plugins: [
     new webpack.ProgressPlugin(),
     new HtmlWebpackPlugin({
-      favicon: 'src/favicon.ico',
+      favicon: "src/favicon.ico",
       template: paths.templatePath,
       minify: {
         collapseInlineTagWhitespace: true,
@@ -29,7 +29,7 @@ module.exports = {
     }),
     new webpack.ProvidePlugin({
       $: "jquery",
-      jQuery: "jquery"
+      jQuery: "jquery",
     }),
   ],
 };

@@ -1,2 +1,1 @@
-
-export { default as ChipControl } from './ChipControl';
+export { default as ChipControl } from "./ChipControl";
