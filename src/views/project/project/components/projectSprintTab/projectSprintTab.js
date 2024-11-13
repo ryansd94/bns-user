@@ -1,39 +1,38 @@
-import { useState, useEffect } from "react";
-import Grid from "@mui/material/Grid";
-import { useTranslation } from "react-i18next";
-import _ from "lodash";
+import { useState, useEffect } from "react"
+import Grid from "@mui/material/Grid"
+import { useTranslation } from "react-i18next"
+import _ from "lodash"
 import {
   EButtonType,
   EButtonIconType,
   EControlType,
   ERowStatus,
-} from "configs";
-import ButtonFuntion from "components/button/ButtonFuntion";
-import ProjectSprintTabPopup from "./projectSprintTabPopup";
-import { formatDate, deepFind } from "helpers/commonFunction";
-import ButtonIcon from "components/button/ButtonIcon";
-import { Controller } from "react-hook-form";
-import { CheckBoxCellRender } from "components/cellRender";
+} from "configs"
+import ButtonFuntion from "components/button/ButtonFuntion"
+import ProjectSprintTabPopup from "./projectSprintTabPopup"
+import { formatDate, deepFind } from "helpers/commonFunction"
+import ButtonIcon from "components/button/ButtonIcon"
+import { Controller } from "react-hook-form"
+import { CheckBoxCellRender } from "components/cellRender"
 
 const ProjectSprintTab = (props) => {
-  console.log("render ProjectSprintTab");
-  const { control, getValues, setValue, name, onValueChange } = props;
-  const { t } = useTranslation();
-  const [dataPopup, setDataPopup] = useState({ open: false });
+  const { control, getValues, setValue, name, onValueChange } = props
+  const { t } = useTranslation()
+  const [dataPopup, setDataPopup] = useState({ open: false })
 
   const onEditClick = (item) => {
-    setDataPopup({ open: true, ...item });
-  };
+    setDataPopup({ open: true, ...item })
+  }
 
   const onAddChildClick = (item) => {
-    setDataPopup({ open: true, parentId: item.id });
-  };
+    setDataPopup({ open: true, parentId: item.id })
+  }
 
   const onDeleteClick = (item) => {
-    let deleteItem = _.cloneDeep(item);
-    deleteItem.rowStatus = ERowStatus.delete;
-    onSubmit(deleteItem, true);
-  };
+    let deleteItem = _.cloneDeep(item)
+    deleteItem.rowStatus = ERowStatus.delete
+    onSubmit(deleteItem, true)
+  }
 
   const renderHeader = () => {
     return (
@@ -51,13 +50,13 @@ const ProjectSprintTab = (props) => {
           {t("Active")}
         </Grid>
       </Grid>
-    );
-  };
+    )
+  }
 
   const renderSprintItem = (item, isChildItem, childLevel = 0) => {
-    let style = {};
+    let style = {}
     if (isChildItem === true) {
-      style = { paddingLeft: childLevel * 40 };
+      style = { paddingLeft: childLevel * 40 }
     }
     return (
       <Grid
@@ -103,12 +102,12 @@ const ProjectSprintTab = (props) => {
           </Grid>
         </div>
       </Grid>
-    );
-  };
+    )
+  }
 
   const renderItems = (items, isChildItem = false, childLevel = 0) => {
     if (isChildItem === true) {
-      childLevel = childLevel + 1;
+      childLevel = childLevel + 1
     }
     return _.map(items, (item) => {
       return item.rowStatus !== ERowStatus.delete ? (
@@ -125,91 +124,91 @@ const ProjectSprintTab = (props) => {
         </Grid>
       ) : (
         ""
-      );
+      )
       // return <>{renderSprintItem(item, isChildItem, childLevel)}{!_.isNil(item.childs) && !_.isEmpty(item.childs) ? renderItems(item.childs, true, childLevel) : ''}</>
-    });
-  };
+    })
+  }
 
   const onSubmit = (data, isDelete = false) => {
-    let items = _.cloneDeep(getValues(name));
+    let items = _.cloneDeep(getValues(name))
     if (isDelete === false) {
       if (data.rowStatus === ERowStatus.addNew) {
         if (!_.isEmpty(data.parentId)) {
           var sprint = deepFind(
             items,
             function (obj) {
-              return obj.id === data.parentId;
+              return obj.id === data.parentId
             },
             "childs",
-          );
+          )
           if (!_.isNil(sprint)) {
-            let childs = sprint.childs;
+            let childs = sprint.childs
             if (_.isNil(childs)) {
-              sprint.childs = [{ ...data }];
+              sprint.childs = [{ ...data }]
             } else {
-              childs.push({ ...data });
+              childs.push({ ...data })
             }
           }
         } else {
-          items.push(data);
+          items.push(data)
         }
       } else {
         let sprint = deepFind(
           items,
           function (obj) {
-            return obj.id === data.id;
+            return obj.id === data.id
           },
           "childs",
-        );
+        )
         if (!_.isNil(sprint)) {
-          _.assign(sprint, data);
+          _.assign(sprint, data)
         }
       }
     } else {
       let sprint = deepFind(
         items,
         function (obj) {
-          return obj.id === data.id;
+          return obj.id === data.id
         },
         "childs",
-      );
+      )
       if (!_.isNil(sprint)) {
         if (sprint.rowStatus === ERowStatus.addNew) {
           if (!_.isNil(sprint.parentId)) {
             let parent = deepFind(
               items,
               function (obj) {
-                return obj.id === sprint.parentId;
+                return obj.id === sprint.parentId
               },
               "childs",
-            );
+            )
             if (!_.isNil(parent)) {
               parent.childs = _.filter(
                 parent.childs,
                 (x) => x.id !== sprint.id,
-              );
+              )
             }
           } else {
-            _.remove(items, sprint);
+            _.remove(items, sprint)
           }
         } else {
-          sprint.rowStatus = ERowStatus.delete;
+          sprint.rowStatus = ERowStatus.delete
         }
       }
     }
     onValueChange &&
-      onValueChange(data, name, EControlType.listObject, isDelete, false);
-    setValue(name, [...items]);
+      onValueChange({ value: data, name: name, type: EControlType.listObject, isDelete: isDelete, isEntity: false })
+    setValue(name, [...items])
     // setOpenPopup(false)
-  };
+  }
 
   const onAddSprint = () => {
-    setDataPopup({ open: true });
-  };
+    setDataPopup({ open: true })
+  }
 
   const handleClose = () => {
-    setDataPopup({ open: false });
-  };
+    setDataPopup({ open: false })
+  }
 
   return (
     <Controller
@@ -250,7 +249,7 @@ const ProjectSprintTab = (props) => {
       name={name}
       control={control}
     />
-  );
-};
+  )
+}
 
-export default ProjectSprintTab;
+export default ProjectSprintTab

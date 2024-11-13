@@ -22,6 +22,7 @@ export const ERROR_CODE = {
   isExistsData: "IsExistsData",
   userNotRegister: "UserNotRegister",
   tokenNotValid: "TokenNotValid",
+  userWaitingConfirm: "UserWaitingConfirm"
 };
 
 export const MODAL = {
@@ -186,6 +187,7 @@ export const baseUrl = {
   jm_notifyUser: "jm_notifyuser",
   account: "account",
   jm_tag: "jm_tag",
+  jm_taskCalendar: "jm_taskCalendar",
 };
 
 export const EViewMode = {

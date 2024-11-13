@@ -164,10 +164,10 @@ export const validateResponse = (response) => {
 };
 
 export const validateUser = (user) => {
-  if (_.isEmpty(user)) {
-    window.location.href = `${process.env.REACT_APP_DOMAIN}/login`;
-    return;
-  }
+  // if (_.isEmpty(user)) {
+  //   window.location.href = `${process.env.REACT_APP_DOMAIN}/login`;
+  //   return;
+  // }
 };
 
 export const saveUserSetting = async (configs) => {

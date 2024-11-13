@@ -269,6 +269,11 @@ const GridData = (props) => {
     })
   }
 
+  const onReloadGridData = async (gridId) => {
+    if (gridId !== id) return
+    await loadData()
+  }
+
   const onExpandCollapseGroupRow = ({ id, isExpand = true }) => {
     if (!_.isNil(gridOptions) && !_.isNil(gridOptions.api)) {
       let currentData = []
@@ -311,13 +316,37 @@ const GridData = (props) => {
   useEffect(async () => {
     dispatch(setReloadNull())
     eventEmitter.on("onExpandCollapseGroupRow", onExpandCollapseGroupRow)
+    eventEmitter.on("onReloadGridData", onReloadGridData)
     return () => {
       eventEmitter.off("onExpandCollapseGroupRow")
+      eventEmitter.off("onReloadGridData")
       if (cancelToken?.current) {
         cancelToken.current.cancel()
       }
     }
   }, [])
+
+  const loadData = async () => {
+    if (isGetDataFromServer) {
+      const data = await fetchData()
+      setData(data)
+      if (!_.isNil(gridRef)) {
+        //reload grid
+        gridRef.current.api.applyTransaction({ update: data && data.data && data.data.items })
+      }
+      return () => {
+        if (cancelToken.current) {
+          cancelToken.current.cancel(
+            "Component unmounted or dependencies changed",
+          )
+        }
+      }
+    } else {
+      if (gridRef && gridRef.current && gridRef.current.api) {
+        gridRef.current.api.hideOverlay()
+      }
+    }
+  }
 
   useEffect(async () => {
     if (
@@ -327,25 +356,7 @@ const GridData = (props) => {
       currentPage != null ||
       !_.isNil(pageSize)
     ) {
-      if (isGetDataFromServer) {
-        const data = await fetchData()
-        setData(data)
-        if (!_.isNil(gridRef)) {
-          //reload grid
-          // gridRef.current.api.applyTransaction({ update: data && data.data && data.data.items })
-        }
-        return () => {
-          if (cancelToken.current) {
-            cancelToken.current.cancel(
-              "Component unmounted or dependencies changed",
-            )
-          }
-        }
-      } else {
-        if (gridRef && gridRef.current && gridRef.current.api) {
-          gridRef.current.api.hideOverlay()
-        }
-      }
+      await loadData()
     }
   }, [sortModel, filterModels, isReload, currentPage, pageSize])
 

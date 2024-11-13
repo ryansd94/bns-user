@@ -13,6 +13,7 @@ import { LabelDateControl } from "components/label"
 import { formatDateTime } from "helpers"
 import { TaskNoteItem } from "./../taskBoardItem"
 import { Loading } from "components/loading"
+import { TaskItem } from "../taskItem"
 
 const ColumnHeader = styled.div`
   text-transform: uppercase
@@ -102,13 +103,7 @@ const TaskDragElement = ({
   }
 
   const genderElement = (item, index) => {
-    const component = (
-      <Grid item container gap={2} direction="column">
-        {renderRowTitle(item)}
-        {renderRowInfo(item)}
-        {renderRowAssign(item)}
-      </Grid>
-    )
+    const component = <TaskItem item={item} />
     return (
       <Grid
         onClick={() => onTaskClick(item)}

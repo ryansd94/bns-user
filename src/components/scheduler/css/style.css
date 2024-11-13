@@ -138,7 +138,7 @@ table.scheduler-table tr:last-child td {
 }
 
 .round-all {
-  border-radius: 14px;
+  border-radius: 6px;
 }
 
 .round-head {
@@ -158,13 +158,15 @@ table.scheduler-table tr:last-child td {
 }
 
 .event-item {
-  margin: 1px 0;
-  width: 100%;
+  /* margin: 1px 0; */
+  width: 100% !important;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-  color: #fff;
-  padding-right: 20px !important;
+  /* color: #fff; */
+  display: flex !important;
+  flex-direction: column !important;
+  /* padding-right: 20px !important; */
 }
 
 .overflow-text {

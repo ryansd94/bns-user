@@ -1,16 +1,16 @@
-import { useState, useEffect } from "react";
-import { useTranslation } from "react-i18next";
-import _ from "lodash";
-import { TabControl } from "components/tab";
+import { useState, useEffect } from "react"
+import { useTranslation } from "react-i18next"
+import _ from "lodash"
+import { TabControl } from "components/tab"
 import {
   ProjectInfoTab,
   ProjectSprintTab,
   ProjectMemberTab,
-} from "./components";
-import { EProjectTypeOption } from "configs";
+} from "./components"
+import { EProjectTypeOption } from "configs"
 
 const ProjectCreateContent = (props) => {
-  console.log("render ProjectCreateContent");
+  console.log("render ProjectCreateContent")
   const {
     control,
     setValue,
@@ -21,28 +21,28 @@ const ProjectCreateContent = (props) => {
     members,
     users,
     teams,
-  } = props;
-  const { t } = useTranslation();
+  } = props
+  const { t } = useTranslation()
   const [disabledTabSprint, setDisabledTabSprint] = useState(
     type === EProjectTypeOption.phase ? false : true,
-  );
+  )
 
   useEffect(() => {
-    setTabItems(getTabItems());
-  }, [disabledTabSprint]);
+    setTabItems(getTabItems())
+  }, [disabledTabSprint])
 
   const onTypeChange = ({ value, name }) => {
     if (value == EProjectTypeOption.basic) {
-      setDisabledTabSprint(true);
+      setDisabledTabSprint(true)
     } else {
-      setDisabledTabSprint(false);
+      setDisabledTabSprint(false)
     }
-    onValueChange && onValueChange({ value, name });
-  };
+    onValueChange && onValueChange({ value, name })
+  }
 
   const onDataTabChange = (props) => {
-    onValueChange && onValueChange({ ...props, isEntity: false });
-  };
+    onValueChange && onValueChange({ ...props, isEntity: false })
+  }
 
   const getTabItems = () => {
     const data = [
@@ -84,16 +84,16 @@ const ProjectCreateContent = (props) => {
         ),
         disabled: disabledTabSprint,
       },
-    ];
-    return data;
-  };
-  const [tabItems, setTabItems] = useState(getTabItems());
+    ]
+    return data
+  }
+  const [tabItems, setTabItems] = useState(getTabItems())
 
   useEffect(() => {
-    setTabItems(getTabItems());
-  }, [users, teams]);
+    setTabItems(getTabItems())
+  }, [users, teams])
 
-  return <TabControl id={"projectTab"} tabItems={tabItems} />;
-};
+  return <TabControl id={"projectTab"} tabItems={tabItems} />
+}
 
-export default ProjectCreateContent;
+export default ProjectCreateContent

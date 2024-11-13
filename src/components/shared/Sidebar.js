@@ -282,12 +282,16 @@ const Sidebar = (props) => {
   }
 
   const renderProjectByUser = () => {
+    let currentProjectId = user?.setting?.projectSetting?.currentId
+    if (_.isNil(currentProjectId) && !_.isEmpty(user.projects)) {
+      onProjectChange({value: user.projects[0].id})
+    }
     return (
       <SelectControl
         onChange={onProjectChange}
         options={user.projects}
         control={control}
-        defaultValue={user?.setting?.projectSetting?.currentId}
+        defaultValue={currentProjectId}
         name="projects"
       />
     )

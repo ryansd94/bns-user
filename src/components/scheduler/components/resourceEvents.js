@@ -347,9 +347,9 @@ class ResourceEvents extends Component {
             : 1;
         let renderEventsMaxIndex =
           headerItem.addMore === 0 ? cellMaxEvents : headerItem.addMoreIndex;
-
+        let parentIndex = 0
         headerItem.events.forEach((evt, idx) => {
-          if (idx < renderEventsMaxIndex && evt !== undefined && evt.render) {
+          if (parentIndex < renderEventsMaxIndex && evt !== undefined && evt.render) {
             let durationStart = localeMoment(startDate);
             let durationEnd = localeMoment(endDate).add(1, "days");
             if (cellUnit === CellUnits.Hour) {
@@ -371,7 +371,7 @@ class ResourceEvents extends Component {
               evt.span * cellWidth - (index > 0 ? 5 : 6) > 0
                 ? evt.span * cellWidth - (index > 0 ? 5 : 6)
                 : 0;
-            let top = marginTop + idx * config.eventItemLineHeight;
+            let top = marginTop + parentIndex * config.eventItemLineHeight;
             let eventItem = (
               <DnDEventItem
                 {...this.props}
@@ -388,7 +388,42 @@ class ResourceEvents extends Component {
               />
             );
             eventList.push(eventItem);
+
+            // if (!_.isEmpty(evt.eventItem.childs)) {
+            //   let a = 1
+            //   _.each(evt.eventItem.childs, (child) => {
+            //     parentIndex += 1
+            //     let eventStart2 = localeMoment(child.start);
+            //     let eventEnd2 = localeMoment(child.end);
+            //     let isStart2 = eventStart2 >= durationStart;
+            //     let isEnd2 = eventEnd2 <= durationEnd;
+            //     let left2 = index * cellWidth + (index > 0 ? 2 : 3);
+            //     let width2 =
+            //       evt.span * cellWidth - (index > 0 ? 5 : 6) > 0
+            //         ? evt.span * cellWidth - (index > 0 ? 5 : 6)
+            //         : 0;
+            //     let top2 = marginTop + parentIndex * config.eventItemLineHeight;
+            //     let eventChildItem = (
+            //       <DnDEventItem
+            //         {...this.props}
+            //         key={child.id}
+            //         eventItem={child}
+            //         isStart={isStart2}
+            //         isEnd={isEnd2}
+            //         isInPopover={false}
+            //         left={left2}
+            //         width={width2}
+            //         top={top2}
+            //         leftIndex={index}
+            //         rightIndex={index + child.span}
+            //       />
+            //     );
+            //     eventList.push(eventChildItem);
+
+            //   })
+            // }
           }
+          parentIndex +=1
         });
 
         if (headerItem.addMore > 0) {

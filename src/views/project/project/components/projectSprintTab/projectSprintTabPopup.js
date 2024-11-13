@@ -1,25 +1,25 @@
-import { useState, useEffect } from "react";
-import Grid from "@mui/material/Grid";
-import { useTranslation } from "react-i18next";
-import _ from "lodash";
-import { DatePickerInput } from "components/datepicker";
-import Popup from "components/popup/Popup";
-import { useForm } from "react-hook-form";
-import TextInput from "components/input/TextInput";
-import { message, ERowStatus } from "configs";
-import { yupResolver } from "@hookform/resolvers/yup";
-import * as Yup from "yup";
-import { v4 as uuidv4 } from "uuid";
-import { CheckBoxControl } from "components/checkbox";
+import { useState, useEffect } from "react"
+import Grid from "@mui/material/Grid"
+import { useTranslation } from "react-i18next"
+import _ from "lodash"
+import { DatePickerInput } from "components/datepicker"
+import Popup from "components/popup/Popup"
+import { useForm } from "react-hook-form"
+import TextInput from "components/input/TextInput"
+import { message, ERowStatus } from "configs"
+import { yupResolver } from "@hookform/resolvers/yup"
+import * as Yup from "yup"
+import { v4 as uuidv4 } from "uuid"
+import { CheckBoxControl } from "components/checkbox"
 
 const ProjectSprintTabPopup = (props) => {
-  const { onSubmit, data = {}, handleClose } = props;
-  const [open, setOpen] = useState(data?.open);
-  const { t } = useTranslation();
+  const { onSubmit, data = {}, handleClose } = props
+  const [open, setOpen] = useState(data?.open)
+  const { t } = useTranslation()
 
   const validationSchema = Yup.object().shape({
     name: Yup.string().required(t(message.error.fieldNotEmpty)),
-  });
+  })
 
   const { control, handleSubmit, reset, setValue } = useForm({
     resolver: yupResolver(validationSchema),
@@ -29,35 +29,35 @@ const ProjectSprintTabPopup = (props) => {
       endDate: null,
       active: true,
     },
-  });
+  })
 
   useEffect(() => {
-    setOpen(data.open);
+    setOpen(data.open)
     if (data.open === true) {
-      setValue("name", data.name);
-      setValue("startDate", data.startDate);
-      setValue("endDate", data.endDate);
-      setValue("active", data.active);
+      setValue("name", data.name)
+      setValue("startDate", data.startDate)
+      setValue("endDate", data.endDate)
+      setValue("active", data.active)
     }
-  }, [data]);
+  }, [data])
 
   const onApplyClick = (item) => {
-    item.parentId = data?.parentId;
+    item.parentId = data?.parentId
     if (_.isNil(data?.id)) {
-      item.id = uuidv4();
-      item.rowStatus = ERowStatus.addNew;
+      item.id = uuidv4()
+      item.rowStatus = ERowStatus.addNew
     } else {
-      item.rowStatus = ERowStatus.update;
-      item.id = data.id;
+      item.rowStatus = ERowStatus.update
+      item.id = data.id
     }
-    onSubmit(item);
+    onSubmit(item)
     if (_.isNil(data?.id)) {
-      reset();
+      reset()
     } else {
-      handleClose();
-      setOpen(false);
+      handleClose()
+      setOpen(false)
     }
-  };
+  }
 
   const renderPopupAddContent = () => {
     return (
@@ -95,8 +95,8 @@ const ProjectSprintTabPopup = (props) => {
           />
         </Grid>
       </Grid>
-    );
-  };
+    )
+  }
 
   return (
     <>
@@ -114,7 +114,7 @@ const ProjectSprintTabPopup = (props) => {
         onSave={handleSubmit(onApplyClick)}
       />
     </>
-  );
-};
+  )
+}
 
-export default ProjectSprintTabPopup;
+export default ProjectSprintTabPopup

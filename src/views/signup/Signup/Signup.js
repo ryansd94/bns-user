@@ -1,71 +1,70 @@
-import React, { useState, useEffect } from "react";
-import { useLocation } from "react-router-dom";
-import queryString from "query-string";
-import TextInput from "components/input/TextInput";
-import Grid from "@mui/material/Grid";
-import Box from "@mui/material/Box";
-import { useTranslation } from "react-i18next";
-import { useForm } from "react-hook-form";
-import InputAdornment from "@mui/material/InputAdornment";
-import Visibility from "@mui/icons-material/Visibility";
-import VisibilityOff from "@mui/icons-material/VisibilityOff";
-import IconButton from "@mui/material/IconButton";
-import * as Yup from "yup";
-import Alert from "@mui/material/Alert";
+import React, { useState, useEffect } from "react"
+import { useLocation } from "react-router-dom"
+import queryString from "query-string"
+import TextInput from "components/input/TextInput"
+import Grid from "@mui/material/Grid"
+import Box from "@mui/material/Box"
+import { useTranslation } from "react-i18next"
+import { useForm } from "react-hook-form"
+import InputAdornment from "@mui/material/InputAdornment"
+import Visibility from "@mui/icons-material/Visibility"
+import VisibilityOff from "@mui/icons-material/VisibilityOff"
+import IconButton from "@mui/material/IconButton"
+import * as Yup from "yup"
+import Alert from "@mui/material/Alert"
 import {
   validateTokenSignup,
   registerGoogle,
   checkOrganization,
-} from "services";
-import { ERROR_CODE, message } from "configs";
-import { setTokenLoginSucceeded } from "helpers";
-import PasswordChecklist from "react-password-checklist";
-import Spinner from "components/shared/Spinner";
-import SelectControl from "components/select/SelectControl";
-import { setUserSetting } from "stores/views/master";
-import { useDispatch } from "react-redux";
-import { Finish } from "./components";
-import { StepperControl } from "components/stepper";
-import eventEmitter from "helpers/eventEmitter";
+} from "services"
+import { ERROR_CODE, message } from "configs"
+import { setTokenLoginSucceeded } from "helpers"
+import PasswordChecklist from "react-password-checklist"
+import Spinner from "components/shared/Spinner"
+import SelectControl from "components/select/SelectControl"
+import { setUserSetting } from "stores/views/master"
+import { useDispatch } from "react-redux"
+import { Finish } from "./components"
+import { StepperControl } from "components/stepper"
+import eventEmitter from "helpers/eventEmitter"
 
 export default function Signup() {
-  const { search } = useLocation();
-  const { t } = useTranslation();
-  const dispatch = useDispatch();
-  const { token, googleToken } = queryString.parse(search);
+  const { search } = useLocation()
+  const { t } = useTranslation()
+  const dispatch = useDispatch()
+  const { token, googleToken } = queryString.parse(search)
   const steps = [
     { label: t("Informations"), name: "tabInformation" },
     { label: t("Account"), name: "tabAccount" },
     { label: t("Finish"), name: "tabFinish" },
-  ];
-  const [error, setErrorToken] = useState("");
-  const [password, setPassword] = useState("");
-  const [loading, setLoading] = useState(false);
-  const [isOpenScaleSelect, setIsOpenScaleSelect] = useState(false);
-  const [passwordAgain, setPasswordAgain] = useState("");
-  const [companyName, setCompanyName] = useState(t("Personal name"));
-  const [passwordIsvalid, setPasswordIsvalid] = useState(false);
-  const [tokenIsvalid, setTokenIsvalid] = useState(true);
-  const id = "signup";
+  ]
+  const [error, setErrorToken] = useState("")
+  const [password, setPassword] = useState("")
+  const [loading, setLoading] = useState(false)
+  const [isOpenScaleSelect, setIsOpenScaleSelect] = useState(false)
+  const [passwordAgain, setPasswordAgain] = useState("")
+  const [companyName, setCompanyName] = useState(t("Personal name"))
+  const [passwordIsvalid, setPasswordIsvalid] = useState(false)
+  const [tokenIsvalid, setTokenIsvalid] = useState(true)
+  const id = "signup"
   const [values, setValues] = React.useState({
     password: "",
     confirmPassword: "",
-    fullName: "",
-  });
-  const [activeStep, setActiveStep] = React.useState(0);
+  })
+  const [activeStep, setActiveStep] = React.useState(0)
   const optionUserType = [
     { id: 1, name: t("Individual") },
     { id: 2, name: t("Team") },
     { id: 3, name: t("Company") },
     { id: 4, name: t("Organization") },
-  ];
+  ]
 
   const optionScale = [
     { id: 1, name: t("1 - 50 persons") },
     { id: 2, name: t("50 - 200 persons") },
     { id: 3, name: t("200 - 1000 persons") },
     { id: 4, name: t("1000+ persons") },
-  ];
+  ]
 
   const validationSchema = (context) => {
     if (context.activeStep === 0) {
@@ -79,13 +78,14 @@ export default function Signup() {
             /^[a-zA-Z0-9_]*$/,
             "Domain names contain only lowercase letters, uppercase letters, or numbers",
           ),
-      });
+      })
     } else if (context.activeStep === 1) {
       return Yup.object().shape({
-        fullName: Yup.string().required("Full name is required"),
-      });
+        firstName: Yup.string().required(t(message.error.fieldNotEmpty)),
+        lastName: Yup.string().required(t(message.error.fieldNotEmpty))
+      })
     }
-  };
+  }
 
   const customResolver = async (values, context) => {
     const rs = await validationSchema(context)
@@ -94,31 +94,30 @@ export default function Signup() {
         return {
           values,
           errors: {},
-        };
+        }
       })
       .catch((validationErrors) => {
         // Dữ liệu không hợp lệ, cập nhật danh sách lỗi
         const formattedErrors = validationErrors.inner.reduce((acc, error) => {
-          acc[error.path] = { message: error.message };
-          return acc;
-        }, {});
+          acc[error.path] = { message: error.message }
+          return acc
+        }, {})
 
         return {
           values,
           errors: formattedErrors,
-        };
-      });
+        }
+      })
 
-    return rs;
-  };
+    return rs
+  }
 
   const defaultValues = {
-    fullName: "",
     password: "",
     confirmPassword: "",
     organization: "",
     userType: 1,
-  };
+  }
 
   const {
     control,
@@ -131,141 +130,145 @@ export default function Signup() {
     context: { activeStep },
     mode: "onChange",
     defaultValues: defaultValues,
-  });
+  })
 
   const handleNext = async (data, activeStep) => {
     if (activeStep === 0) {
       eventEmitter.emit("onChangeButtonLoading", {
         buttonId: id,
         loading: true,
-      });
+      })
       const res = await checkOrganization({
         domain: getValues("organization"),
-      });
+      })
       eventEmitter.emit("onChangeButtonLoading", {
         buttonId: id,
         loading: false,
-      });
+      })
       if (res.data.errorCode == ERROR_CODE.success) {
         if (res.data.data.isValid === true) {
-          setActiveStep(activeStep + 1);
-          return true;
+          setActiveStep(activeStep + 1)
+          return true
         } else {
           setError("organization", {
             type: "manual",
             message: t("The domain name already exists"),
-          });
+          })
         }
       }
     } else if (activeStep === 1) {
       if (passwordIsvalid === true) {
-        await onSubmit(data);
-        return true;
+        await onSubmit(data)
+        return true
       }
     }
-  };
+  }
 
   const escapeRegExp = (string) => {
-    return string.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"); // $& means the whole matched string
-  };
+    return string.replace(/[.*+?^${}()|[\]\\]/g, "\\$&") // $& means the whole matched string
+  }
 
   const replaceAll = (str, find, replace) => {
-    return str.replace(new RegExp(escapeRegExp(find), "g"), replace);
-  };
+    return str.replace(new RegExp(escapeRegExp(find), "g"), replace)
+  }
 
   const validateToken = async (token) => {
-    const res = await validateTokenSignup({ token: token });
+    const res = await validateTokenSignup({ token: token })
     if (res.data.errorCode === ERROR_CODE.tokenNotValid) {
-      setErrorToken(t("Invalid token"));
-      setTokenIsvalid(false);
+      setErrorToken(t("Invalid token"))
+      setTokenIsvalid(false)
     }
-    setLoading(false);
-  };
+    setLoading(false)
+  }
 
   const handleClickShowPassword = () => {
     setValues({
       ...values,
       showPassword: !values.showPassword,
-    });
-  };
+    })
+  }
 
   const handleMouseDownPassword = (event) => {
-    event.preventDefault();
-  };
+    event.preventDefault()
+  }
 
   useEffect(() => {
     if (token) {
-      const data = replaceAll(token, " ", "+");
-      validateToken(data);
+      const data = replaceAll(token, " ", "+")
+      validateToken(data)
     }
-  }, []);
+  }, [])
 
-  useEffect(() => {}, [activeStep]);
+  useEffect(() => { }, [activeStep])
 
   const onSubmit = async (data) => {
     // alert(passwordIsvalid)
     // return
-    if (!passwordIsvalid) return;
+    if (!passwordIsvalid) return
 
-    eventEmitter.emit("onChangeButtonLoading", { buttonId: id, loading: true });
-    data.token = token;
-    data.googleToken = replaceAll(googleToken, " ", "+");
-    const res = await registerGoogle(data);
-    const dataResult = res && res.data;
+    eventEmitter.emit("onChangeButtonLoading", { buttonId: id, loading: true })
+    data.token = token
+    data.googleToken = replaceAll(googleToken, " ", "+")
+    const res = await registerGoogle(data)
+    const dataResult = res && res.data
     if (dataResult.errorCode == ERROR_CODE.success) {
-      const userInfo = dataResult.data;
+      const userInfo = dataResult.data
       const token = {
         accessToken: userInfo.token,
         refreshToken: userInfo.token,
         shopIndex: userInfo.shopIndex,
-      };
-      const user = { ...userInfo, isAdmin: true, acceptScreen: [] };
-      dispatch(setUserSetting({ ...user }));
-      setTokenLoginSucceeded({ token, user });
+      }
+      const user = { ...userInfo, isAdmin: true, acceptScreen: [] }
+      dispatch(setUserSetting({ ...user }))
+      setTokenLoginSucceeded({ token, user })
       eventEmitter.emit("onChangeButtonLoading", {
         buttonId: id,
         loading: false,
-      });
+      })
     }
-  };
+  }
 
   const onChangePasswordAgain = ({ value }) => {
-    setPasswordAgain(value);
-  };
+    setPasswordAgain(value)
+  }
 
   const onChangePassword = ({ value }) => {
-    setPassword(value);
-  };
+    setPassword(value)
+  }
 
-  const onUserTypeChange = (value) => {
-    switch (value) {
+  const onUserTypeChange = (data) => {
+    switch (data.value) {
       case 1:
-        setCompanyName(t("Personal name"));
-        setIsOpenScaleSelect(false);
-        break;
+        setCompanyName(t("Personal name"))
+        setIsOpenScaleSelect(false)
+        break
       case 2:
-        setCompanyName(t("Team name"));
-        setIsOpenScaleSelect(true);
-        break;
+        setCompanyName(t("Team name"))
+        setIsOpenScaleSelect(true)
+        break
       case 3:
-        setCompanyName(t("Company name"));
-        setIsOpenScaleSelect(true);
-        break;
+        setCompanyName(t("Company name"))
+        setIsOpenScaleSelect(true)
+        break
       case 4:
-        setCompanyName(t("Organization name"));
-        setIsOpenScaleSelect(true);
-        break;
+        setCompanyName(t("Organization name"))
+        setIsOpenScaleSelect(true)
+        break
     }
-  };
+  }
 
   const handleFormSubmit = async (activeStep) => {
-    setActiveStep(activeStep);
-    let returnValue;
+    setActiveStep(activeStep)
+    let returnValue
     await handleSubmit(async (data) => {
-      returnValue = await handleNext(data, activeStep);
-    })();
-    return returnValue;
-  };
+      returnValue = await handleNext(data, activeStep)
+    })()
+    return returnValue
+  }
+
+  const onChangeActiveStep = (stepIndex) => {
+    setActiveStep(stepIndex)
+  }
 
   const renderTabAccount = () => {
     return (
@@ -290,11 +293,12 @@ export default function Signup() {
                 label={t("First name")}
                 name="firstName"
               />
+            </Grid>
+            <Grid item xs>
               <TextInput
-                autoFocus={true}
                 required={true}
                 control={control}
-                label={t("First name")}
+                label={t("Last name")}
                 name="lastName"
               />
             </Grid>
@@ -307,7 +311,6 @@ export default function Signup() {
                 type={values.showPassword === true ? "text" : "password"}
                 onChange={onChangePassword}
                 inputProps={{
-                  autoComplete: "new-password",
                   form: {
                     autoComplete: "off",
                   },
@@ -373,8 +376,8 @@ export default function Signup() {
           </Grid>
         </Grid>
       </Box>
-    );
-  };
+    )
+  }
 
   const renderTabInfo = () => {
     return (
@@ -389,11 +392,6 @@ export default function Signup() {
         <Grid container rowSpacing={2}>
           <Grid container gap={2} direction="column">
             <Grid item gap={2} container xs direction={"column"}>
-              {/* <Grid item xs>
-                <span className="text-note">
-                  {`${t("organization domain name")}, Ex: ${process.env.REACT_APP_DOMAIN}/abc`}
-                </span>
-              </Grid> */}
               <Grid item xs>
                 <TextInput
                   inputProps={{
@@ -402,9 +400,8 @@ export default function Signup() {
                     ),
                   }}
                   autoFocus={true}
-                  label={`${t("organization domain name")}, Ex: ${
-                    process.env.REACT_APP_DOMAIN
-                  }/abc`}
+                  label={`${t("organization domain name")}, Ex: ${process.env.REACT_APP_DOMAIN
+                    }/abc`}
                   required={true}
                   control={control}
                   name="organization"
@@ -446,15 +443,24 @@ export default function Signup() {
           </Grid>
         </Grid>
       </Box>
-    );
-  };
+    )
+  }
 
   const renderTabFinish = () => {
-    return <Finish />;
-  };
+    return <Finish />
+  }
 
-  const renderSteps = [renderTabInfo(), renderTabAccount(), renderTabFinish()];
+  const renderSteps = [renderTabInfo(), renderTabAccount(), renderTabFinish()]
 
+  const renderTabContent = (index) => {
+    if (index === 0) {
+      return renderTabInfo()
+    } else if (index === 1) {
+      return renderTabAccount()
+    } else if (index === 2) {
+      return renderTabFinish()
+    }
+  }
   const renderContent = () => {
     return (
       <div>
@@ -471,10 +477,12 @@ export default function Signup() {
                       <Box sx={{ width: "100%" }}>
                         <StepperControl
                           id={id}
+                          renderTabContent={renderTabContent}
                           renderSteps={renderSteps}
                           handleSubmit={handleFormSubmit}
                           errors={errors}
                           steps={steps}
+                          onChangeActiveStep={onChangeActiveStep}
                         />
                       </Box>
                     </Grid>
@@ -487,12 +495,12 @@ export default function Signup() {
           </div>
         </div>
       </div>
-    );
-  };
+    )
+  }
 
   return loading ? (
     <Spinner className={"spinnerWrapperMaster"}></Spinner>
   ) : (
     renderContent()
-  );
+  )
 }

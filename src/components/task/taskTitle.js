@@ -1,40 +1,45 @@
-import React from "react";
-import _ from "lodash";
-import Grid from "@mui/material/Grid";
-import { LinkControl } from "components/link";
-import { OverflowTip } from "components/tooltip";
-import UploadIconImage from "components/upload/uploadIcon/uploadIconImage";
-import { useTranslation } from "react-i18next";
-import { getPathItem } from "helpers";
+import React from "react"
+import _ from "lodash"
+import Grid from "@mui/material/Grid"
+import { LinkControl } from "components/link"
+import { OverflowTip } from "components/tooltip"
+import UploadIconImage from "components/upload/uploadIcon/uploadIconImage"
+import { useTranslation } from "react-i18next"
+import { getPathItem } from "helpers"
 
 const TaskTitle = (props) => {
-  const { item, isRenderTaskLink = true } = props;
-  const { t } = useTranslation();
+  const { item, isRenderTaskLink = true, isShowTooltip = true } = props
+  const { t } = useTranslation()
 
   const renderTooltipTitleContent = (title) => {
-    return <span style={{ textOverflow: "ellipsis" }}>{title}</span>;
-  };
+    return <span style={{
+      textOverflow: "ellipsis",
+    }}>{title}</span>
+  }
 
   const renderTooltipTaskTypeContent = (item) => {
-    return <UploadIconImage color={item.color} src={item.icon} />;
-  };
+    return <UploadIconImage color={item.color} src={item.icon} />
+  }
 
   const renderItem = () => {
     const titleTask = (
       <OverflowTip
+        isShowTooltip={isShowTooltip}
+        webkitLineClamp={2}
         value={item.title}
         renderTooltipContent={() => renderTooltipTitleContent(item.title)}
       />
-    );
+    )
     const titleTaskType = (
       <OverflowTip
+        isShowTooltip={isShowTooltip}
         disableHoverListener={false}
         value={item.taskType.name}
         renderTooltipContent={() => renderTooltipTaskTypeContent(item.taskType)}
       />
-    );
+    )
 
-    const href = getPathItem(`/task/edit/${item.id}`);
+    const href = getPathItem(`/task/edit/${item.id}`)
     return (
       <Grid
         item
@@ -48,13 +53,13 @@ const TaskTitle = (props) => {
           {isRenderTaskLink ? (
             <LinkControl href={href} title={titleTask}></LinkControl>
           ) : (
-            <span>{titleTask}</span>
+            <>{titleTask}</>
           )}
         </Grid>
       </Grid>
-    );
-  };
-  return renderItem();
-};
+    )
+  }
+  return renderItem()
+}
 
-export default TaskTitle;
+export default TaskTitle

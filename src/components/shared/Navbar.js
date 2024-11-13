@@ -5,7 +5,6 @@ import { Trans } from "react-i18next"
 import i18n from "../../i18n"
 import { AvatarControl } from "components/avatar"
 import { resetUserToken, getUserInfo } from "helpers"
-import firebase from "firebase/compat/app"
 import "firebase/compat/auth"
 import _ from "lodash"
 import BreadCrumb from "./breadCrumb"
@@ -16,6 +15,7 @@ import { Notify } from "components/notify"
 import { get } from "services"
 import axios from "axios"
 import { baseUrl } from "configs"
+import { logOut } from "firebase"
 
 function MyComponent() {
   const [languageIcon, setLanguageIcon] = useState("flag-icon flag-icon-gb")
@@ -29,12 +29,6 @@ function MyComponent() {
   function toggleOffcanvas() {
     document.querySelector(".sidebar-offcanvas").classList.toggle("active")
   }
-  // Configure Firebase.
-  const config = {
-    apiKey: 'AIzaSyAVvoTuwb55beJbxkPexiu84pLn84IiJws',
-    authDomain: process.env.REACT_APP_FIREBASE_AUTH_DOMAIN,
-  }
-  firebase.initializeApp(config)
 
   useEffect(() => {
     i18n.changeLanguage("en")
@@ -81,9 +75,7 @@ function MyComponent() {
 
   const onLogOut = () => {
     resetUserToken()
-    if (!_.isNil(firebase)) {
-      firebase.auth().signOut()
-    }
+    logOut()
     history.push("/login")
   }
 

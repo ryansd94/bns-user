@@ -1,1 +1,1 @@
-export { default } from "./JoinTeam";
+export { default as  JoinTeam} from "./joinTeam"

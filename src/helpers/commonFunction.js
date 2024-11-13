@@ -1,139 +1,140 @@
-import { getUserInfo } from "helpers";
-import { format, formatDistance } from "date-fns";
-import { enCA, ru, vi } from "date-fns/locale";
-import _ from "lodash";
+import { getUserInfo } from "helpers"
+import { format, formatDistance } from "date-fns"
+import { enCA, ru, vi } from "date-fns/locale"
+import _ from "lodash"
 
 export const formatDistanceDate = (date, ago = false) => {
-  const localDate = new Date(date);
+  const localDate = new Date(date)
   return formatDistance(localDate, new Date(), {
     addSuffix: true,
     locale: enCA,
-  });
-};
+  })
+}
 
 export const formatDate = (value) => {
-  return _.isNil(value) ? "" : format(new Date(value), "dd-MM-yyyy");
-};
+  return _.isNil(value) ? "" : format(new Date(value), "dd-MM-yyyy")
+}
 
 export const formatDateTime = (value) => {
-  return _.isNil(value) ? "" : format(new Date(value), "dd-MM-yyyy HH:mm");
-};
+  return _.isNil(value) ? "" : format(new Date(value), "dd-MM-yyyy HH:mm")
+}
 
 export const capitalize = (str) => {
-  return str.charAt(0).toUpperCase() + str.slice(1);
-};
+  return str.charAt(0).toUpperCase() + str.slice(1)
+}
 
 export const cellFormatDate = (params) => {
-  return formatDate(params.value);
-};
+  return formatDate(params.value)
+}
 
 export const cellFormatDateTime = (params) => {
-  return formatDateTime(params.value);
-};
+  return formatDateTime(params.value)
+}
 
 export const deepFind = (arr, search, keyChildItem = "childrens") => {
   for (var obj of arr) {
     if (search(obj)) {
-      return obj;
+      return obj
     }
     if (obj[keyChildItem]) {
-      var deepResult = deepFind(obj[keyChildItem], search, keyChildItem);
+      var deepResult = deepFind(obj[keyChildItem], search, keyChildItem)
       if (deepResult) {
-        return deepResult;
+        return deepResult
       }
     }
   }
-  return null;
-};
+  return null
+}
 
 export const deepFindAll = (arr, search, keyChildItem = "childrens") => {
-  let data = [];
+  let data = []
   for (var obj of arr) {
     if (search(obj)) {
-      data.push(obj);
+      data.push(obj)
     }
     if (obj[keyChildItem]) {
-      var deepResult = deepFind(obj[keyChildItem], search, keyChildItem);
+      var deepResult = deepFind(obj[keyChildItem], search, keyChildItem)
       if (deepResult) {
-        data.push(deepResult);
+        data.push(deepResult)
       }
     }
   }
-  return data;
-};
+  return data
+}
 
 export const convertObjectToArray = (
   objectData,
   objectKeyName = "key",
   objectDataName = "value",
 ) => {
+  if (!objectData) return
   return Object.keys(objectData).map(function (name) {
-    var obj = {};
-    obj[objectKeyName] = name;
-    obj[objectDataName] = objectData[name];
-    return obj;
-  });
-};
+    var obj = {}
+    obj[objectKeyName] = name
+    obj[objectDataName] = objectData[name]
+    return obj
+  })
+}
 
 export const getLastPathUrl = () => {
-  let path = window.location.pathname;
+  let path = window.location.pathname
   if (_.includes(path, "/")) {
-    const pathSplits = path.split("/");
-    path = pathSplits[pathSplits.length - 1];
+    const pathSplits = path.split("/")
+    path = pathSplits[pathSplits.length - 1]
   }
-  return path;
-};
+  return path
+}
 
 export const getProjectPath = (path) => {
-  const user = getUserInfo();
+  const user = getUserInfo()
   if (user) {
-    const code = user?.setting?.projectSetting?.current;
-    return !_.isNil(code) ? `/${code}${path}` : path;
+    const code = user?.setting?.projectSetting?.current
+    return !_.isNil(code) ? `/${code}${path}` : path
   }
-  return path;
-};
+  return path
+}
 
 export const getPathItem = (url, isProjectPath = true) => {
-  let path = url;
+  let path = url
   if (isProjectPath === true) {
-    path = getProjectPath(path);
+    path = getProjectPath(path)
   }
-  const user = getUserInfo();
+  const user = getUserInfo()
   if (user) {
-    const defaultOrganization = user.defaultOrganization?.code;
+    const defaultOrganization = user.defaultOrganization?.code
     path = !_.isNil(defaultOrganization)
       ? `/${defaultOrganization}${path}`
-      : `${path}`;
+      : `${path}`
   }
-  return path;
-};
+  return path
+}
 
 export const setValuesData = (setValue, data) => {
   for (let key in data) {
-    setValue(key, data[key]);
+    setValue(key, data[key])
   }
-};
+}
 
 export const getAllItemsWithId = (data, targetId) => {
-  const result = [];
+  const result = []
 
   const traverse = (item, parentId) => {
     if (item.parentId === parentId) {
-      result.push(item);
+      result.push(item)
     }
 
     if (item.childs && item.childs.length > 0) {
-      item.childs.forEach(traverse);
+      item.childs.forEach(traverse)
 
       _.each(item.childs, (child) => {
-        traverse(child, item.id);
-      });
+        traverse(child, item.id)
+      })
     }
-  };
+  }
 
   _.each(data, (item) => {
-    traverse(item, targetId);
-  });
+    traverse(item, targetId)
+  })
 
-  return result;
-};
+  return result
+}

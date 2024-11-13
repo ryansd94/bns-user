@@ -95,7 +95,7 @@ const ToolBar = (props) => {
   }
 
   const onRefreshClick = () => {
-    dispatch(setReload())
+    eventEmitter.emit("onReloadGridData", gridId)
   }
 
   return (

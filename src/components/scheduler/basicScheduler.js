@@ -1,113 +1,85 @@
-import React, { useState, useMemo, Component } from "react"
+import React, { useState, useEffect } from "react"
 import { ViewTypes } from "./components/constants"
 import Scheduler from "./scheduler"
 import SchedulerData from "./components/schedulerData"
 import DemoData from "./components/demoData"
 import { DragDropContext } from "react-dnd"
 import HTML5Backend from "react-dnd-html5-backend"
-import _ from "lodash"
 
-class BasicScheduler extends Component {
-  constructor(props) {
-    super(props)
-    let schedulerData = new SchedulerData("2017-12-18", ViewTypes.Week)
+const BasicScheduler = (props) => {
+  const { data = {} } = props
+  // const data = DemoData
+
+  const getViewModel = (data) => {
+    const schedulerData = new SchedulerData("2023-12-09", ViewTypes.Week)
+    // const schedulerData = new SchedulerData("2017-12-18", ViewTypes.Week)
     schedulerData.localeMoment.locale("en")
-    schedulerData.setResources(DemoData.resources)
-    schedulerData.setEvents(DemoData.events)
-    this.state = {
-      viewModel: schedulerData,
+    schedulerData.setResources(data.resources ? [...data.resources] : [])
+    schedulerData.setEvents(data.events ? [...data.events] : [])
+    return schedulerData
+  }
+  const [viewModel, setViewModel] = useState(null)
+
+  useEffect(() => {
+    if (!_.isNil(data) && !_.isEmpty(data)) {
+      setViewModel(getViewModel(data))
     }
-  }
+  }, [data])
 
-  render() {
-    const { viewModel } = this.state
-    return (
-      <div>
-        <div>
-          <Scheduler
-            schedulerData={viewModel}
-            prevClick={this.prevClick}
-            nextClick={this.nextClick}
-            onSelectDate={this.onSelectDate}
-            onViewChange={this.onViewChange}
-            eventItemClick={this.eventClicked}
-            viewEventClick={this.ops1}
-            viewEventText="Ops 1"
-            viewEvent2Text="Ops 2"
-            viewEvent2Click={this.ops2}
-            updateEventStart={this.updateEventStart}
-            updateEventEnd={this.updateEventEnd}
-            moveEvent={this.moveEvent}
-            newEvent={this.newEvent}
-            onScrollLeft={this.onScrollLeft}
-            onScrollRight={this.onScrollRight}
-            onScrollTop={this.onScrollTop}
-            onScrollBottom={this.onScrollBottom}
-            toggleExpandFunc={this.toggleExpandFunc}
-          />
-        </div>
-      </div>
-    )
-  }
-
-  prevClick = (schedulerData) => {
+  const prevClick = (schedulerData) => {
+    if (!viewModel) return
     schedulerData.prev()
-    schedulerData.setEvents(DemoData.events)
-    this.setState({
-      viewModel: schedulerData,
-    })
+    schedulerData.setEvents(viewModel.events || [])
+    setViewModel({ ...schedulerData })
   }
 
-  nextClick = (schedulerData) => {
+  const nextClick = (schedulerData) => {
+    if (!viewModel) return
     schedulerData.next()
-    schedulerData.setEvents(DemoData.events)
-    this.setState({
-      viewModel: schedulerData,
-    })
+    schedulerData.setEvents(viewModel.events || [])
+    setViewModel({ ...schedulerData })
   }
 
-  onViewChange = (schedulerData, view) => {
+  const onViewChange = (schedulerData, view) => {
+    if (!viewModel) return
     schedulerData.setViewType(
       view.viewType,
       view.showAgenda,
-      view.isEventPerspective,
+      view.isEventPerspective
     )
-    schedulerData.setEvents(DemoData.events)
-    this.setState({
-      viewModel: schedulerData,
-    })
+    schedulerData.setEvents(viewModel.events || [])
+    setViewModel({ ...schedulerData })
   }
 
-  onSelectDate = (schedulerData, date) => {
+  const onSelectDate = (schedulerData, date) => {
+    if (!viewModel) return
     schedulerData.setDate(date)
-    schedulerData.setEvents(DemoData.events)
-    this.setState({
-      viewModel: schedulerData,
-    })
+    schedulerData.setEvents(viewModel.events || [])
+    setViewModel({ ...schedulerData })
   }
 
-  eventClicked = (schedulerData, event) => {
+  const eventClicked = (schedulerData, event) => {
     alert(
-      `You just clicked an event: {id: ${event.id}, title: ${event.title}}`,
+      `You just clicked an event: {id: ${event.id}, title: ${event.title}}`
     )
   }
 
-  ops1 = (schedulerData, event) => {
+  const ops1 = (schedulerData, event) => {
     alert(
-      `You just executed ops1 to event: {id: ${event.id}, title: ${event.title}}`,
+      `You just executed ops1 to event: {id: ${event.id}, title: ${event.title}}`
     )
   }
 
-  ops2 = (schedulerData, event) => {
+  const ops2 = (schedulerData, event) => {
     alert(
-      `You just executed ops2 to event: {id: ${event.id}, title: ${event.title}}`,
+      `You just executed ops2 to event: {id: ${event.id}, title: ${event.title}}`
     )
   }
 
-  newEvent = (schedulerData, slotId, slotName, start, end, type, item) => {
+  const newEvent = (schedulerData, slotId, slotName, start, end, type, item) => {
     if (
-      confirm(
-        `Do you want to create a new event? {slotId: ${slotId}, slotName: ${slotName}, start: ${start}, end: ${end}, type: ${type}, item: ${item}}`,
+      window.confirm(
+        `Do you want to create a new event? {slotId: ${slotId}, slotName: ${slotName}, start: ${start}, end: ${end}, type: ${type}, item: ${item}}`
       )
     ) {
       let newFreshId = 0
@@ -124,88 +96,113 @@ class BasicScheduler extends Component {
         bgColor: "purple",
       }
       schedulerData.addEvent(newEvent)
-      this.setState({
-        viewModel: schedulerData,
-      })
+      setViewModel({ ...schedulerData })
     }
   }
 
-  updateEventStart = (schedulerData, event, newStart) => {
+  const updateEventStart = (schedulerData, event, newStart) => {
     if (
-      confirm(
-        `Do you want to adjust the start of the event? {eventId: ${event.id}, eventTitle: ${event.title}, newStart: ${newStart}}`,
+      window.confirm(
+        `Do you want to adjust the start of the event? {eventId: ${event.id}, eventTitle: ${event.title}, newStart: ${newStart}}`
       )
     ) {
       schedulerData.updateEventStart(event, newStart)
     }
-    this.setState({
-      viewModel: schedulerData,
-    })
+    setViewModel(_.cloneDeep(schedulerData))
   }
 
-  updateEventEnd = (schedulerData, event, newEnd) => {
+  const updateEventEnd = (schedulerData, event, newEnd) => {
     if (
-      confirm(
-        `Do you want to adjust the end of the event? {eventId: ${event.id}, eventTitle: ${event.title}, newEnd: ${newEnd}}`,
+      window.confirm(
+        `Do you want to adjust the end of the event? {eventId: ${event.id}, eventTitle: ${event.title}, newEnd: ${newEnd}}`
       )
     ) {
       schedulerData.updateEventEnd(event, newEnd)
     }
-    this.setState({
-      viewModel: schedulerData,
-    })
+    setViewModel(_.cloneDeep(schedulerData))
   }
 
-  moveEvent = (schedulerData, event, slotId, slotName, start, end) => {
+  const moveEvent = (schedulerData, event, slotId, slotName, start, end) => {
     if (
-      confirm(
-        `Do you want to move the event? {eventId: ${event.id}, eventTitle: ${event.title}, newSlotId: ${slotId}, newSlotName: ${slotName}, newStart: ${start}, newEnd: ${end}`,
+      window.confirm(
+        `Do you want to move the event? {eventId: ${event.id}, eventTitle: ${event.title}, newSlotId: ${slotId}, newSlotName: ${slotName}, newStart: ${start}, newEnd: ${end}`
       )
     ) {
       schedulerData.moveEvent(event, slotId, slotName, start, end)
-      this.setState({
-        viewModel: schedulerData,
-      })
+      setViewModel({ ...schedulerData })
     }
   }
 
-  onScrollRight = (schedulerData, schedulerContent, maxScrollLeft) => {
+  const onScrollRight = (schedulerData, schedulerContent, maxScrollLeft) => {
+    if (!viewModel) return
     if (schedulerData.ViewTypes === ViewTypes.Day) {
       schedulerData.next()
-      schedulerData.setEvents(DemoData.events)
-      this.setState({
-        viewModel: schedulerData,
-      })
+      schedulerData.setEvents(viewModel.events || [])
+      setViewModel({ ...schedulerData })
 
       schedulerContent.scrollLeft = maxScrollLeft - 10
     }
   }
 
-  onScrollLeft = (schedulerData, schedulerContent, maxScrollLeft) => {
+  const onScrollLeft = (schedulerData, schedulerContent, maxScrollLeft) => {
+    if (!viewModel) return
     if (schedulerData.ViewTypes === ViewTypes.Day) {
       schedulerData.prev()
-      schedulerData.setEvents(DemoData.events)
-      this.setState({
-        viewModel: schedulerData,
-      })
+      schedulerData.setEvents(viewModel.events || [])
+      setViewModel({ ...schedulerData })
 
       schedulerContent.scrollLeft = 10
     }
   }
 
-  onScrollTop = (schedulerData, schedulerContent, maxScrollTop) => {
+  const onScrollTop = (schedulerData, schedulerContent, maxScrollTop) => {
     console.log("onScrollTop")
   }
 
-  onScrollBottom = (schedulerData, schedulerContent, maxScrollTop) => {
+  const onScrollBottom = (schedulerData, schedulerContent, maxScrollTop) => {
     console.log("onScrollBottom")
   }
 
-  toggleExpandFunc = (schedulerData, slotId) => {
+  const toggleExpandFunc = (schedulerData, slotId) => {
     schedulerData.toggleExpandStatus(slotId)
-    this.setState({
-      viewModel: schedulerData,
-    })
+    setViewModel({ ...schedulerData })
   }
+
+  return (
+    <div>
+      <div>
+        {viewModel ? <Scheduler
+          schedulerData={viewModel}
+          prevClick={() => prevClick(viewModel)}
+          nextClick={() => nextClick(viewModel)}
+          onSelectDate={() => onSelectDate(viewModel)}
+          onViewChange={(view) => onViewChange(viewModel, view)}
+          eventItemClick={(event) => eventClicked(viewModel, event)}
+          viewEventClick={(event) => ops1(viewModel, event)}
+          viewEventText="Ops 1"
+          viewEvent2Text="Ops 2"
+          viewEvent2Click={(event) => ops2(viewModel, event)}
+          updateEventStart={(schedulerData, event, newStart) =>
+            updateEventStart(schedulerData, event, newStart)
+          }
+          updateEventEnd={(schedulerData, event, newEnd) =>
+            updateEventEnd(schedulerData, event, newEnd)
+          }
+          moveEvent={(event, slotId, slotName, start, end) =>
+            moveEvent(viewModel, event, slotId, slotName, start, end)
+          }
+          newEvent={(slotId, slotName, start, end, type, item) =>
+            newEvent(viewModel, slotId, slotName, start, end, type, item)
+          }
+          onScrollLeft={() => onScrollLeft(viewModel)}
+          onScrollRight={() => onScrollRight(viewModel)}
+          onScrollTop={() => onScrollTop(viewModel)}
+          onScrollBottom={() => onScrollBottom(viewModel)}
+          toggleExpandFunc={(slotId) => toggleExpandFunc(viewModel, slotId)}
+        /> : ''}
+      </div>
+    </div>
+  )
 }
+
 export default DragDropContext(HTML5Backend)(BasicScheduler)

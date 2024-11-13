@@ -1,19 +1,19 @@
-import { useEffect } from "react";
-import { withRouter, useParams } from "react-router-dom";
-import "./App.scss";
-import Footer from "./components/shared/Footer";
-import Navbar from "./components/shared/Navbar";
-import Sidebar from "./components/shared/Sidebar";
-import SettingsPanel from "./components/shared/SettingsPanel";
-import { withTranslation } from "react-i18next";
-import AppRoutes from "./AppRoutes";
-import Progress from "react-progress-2";
-import { CustomizedSnackbar, NotifySnackbar } from "components/snackbar";
-import { MuiThemeProvider, createTheme } from "@material-ui/core/styles";
-import ConfirmDeleteDialog from "components/popup/confirmDeleteDialog";
-import { isHasPermissionForAction, getLastPathUrl } from "helpers";
-import { SignalRProvider } from "helpers";
-import _ from "lodash";
+import { useEffect } from "react"
+import { withRouter, useParams } from "react-router-dom"
+import "./App.scss"
+import Footer from "./components/shared/Footer"
+import Navbar from "./components/shared/Navbar"
+import Sidebar from "./components/shared/Sidebar"
+import SettingsPanel from "./components/shared/SettingsPanel"
+import { withTranslation } from "react-i18next"
+import AppRoutes from "./AppRoutes"
+import Progress from "react-progress-2"
+import { CustomizedSnackbar, NotifySnackbar } from "components/snackbar"
+import { MuiThemeProvider, createTheme } from "@material-ui/core/styles"
+import ConfirmDeleteDialog from "components/popup/confirmDeleteDialog"
+import { isHasPermissionForAction, getLastPathUrl } from "helpers"
+import { SignalRProvider } from "helpers"
+import _ from "lodash"
 
 const theme = createTheme({
   palette: {
@@ -25,46 +25,46 @@ const theme = createTheme({
       main: "#351436",
     },
   },
-});
+})
 
 const App = ({ location, history }) => {
-  const isFullPageLayoutRoutes = ["/login", "/signup/jointeam", "/signup"];
-  const pathname = location.pathname;
-  const { taskEditId } = useParams();
-  console.log("render app");
+  const isFullPageLayoutRoutes = ["/login", "/signup/jointeam", "/signup", "/jointeam"]
+  const pathname = location.pathname
+  const { taskEditId } = useParams()
+  console.log("render app")
 
   useEffect(() => {
-    onRouteChanged();
+    onRouteChanged()
 
     // Progress.hide()
     return () => {
-      Progress.hide();
-    };
-  }, [location]);
+      Progress.hide()
+    }
+  }, [location])
 
   const onRouteChanged = () => {
     if (!_.includes(isFullPageLayoutRoutes, pathname)) {
-      Progress.show();
+      Progress.show()
     }
-    window.scrollTo(0, 0);
-    const currentPath = getLastPathUrl();
+    window.scrollTo(0, 0)
+    const currentPath = getLastPathUrl()
     const notCheckPermissions = [
       "login",
       "jointeam",
       "signup",
       "access-denied",
-    ];
+    ]
 
     for (let i = 0; i < isFullPageLayoutRoutes.length; i++) {
       if (location.pathname === isFullPageLayoutRoutes[i]) {
         document
           .querySelector(".page-body-wrapper")
-          .classList.add("full-page-wrapper");
-        return;
+          .classList.add("full-page-wrapper")
+        return
       } else {
         document
           .querySelector(".page-body-wrapper")
-          .classList.remove("full-page-wrapper");
+          .classList.remove("full-page-wrapper")
       }
     }
 
@@ -78,12 +78,12 @@ const App = ({ location, history }) => {
     //     }
     // }
     if (!_.includes(isFullPageLayoutRoutes, pathname)) {
-      Progress.hide();
+      Progress.hide()
     }
-  };
+  }
 
-  const isFullPageLayout = _.includes(isFullPageLayoutRoutes, pathname);
-  const isNotify = !_.includes(isFullPageLayoutRoutes, pathname);
+  const isFullPageLayout = _.includes(isFullPageLayoutRoutes, pathname)
+  const isNotify = !_.includes(isFullPageLayoutRoutes, pathname)
 
   return (
     <div className="container-scroller">
@@ -111,7 +111,7 @@ const App = ({ location, history }) => {
         </div>
       </MuiThemeProvider>
     </div>
-  );
-};
+  )
+}
 
-export default withTranslation()(withRouter(App));
+export default withTranslation()(withRouter(App))

@@ -1,14 +1,15 @@
 import React, { Suspense, lazy } from "react"
 import { Switch, Route, Redirect } from "react-router-dom"
-import Spinner from "./components/shared/Spinner"
 
 const Dashboard = lazy(() => import("./views/dashboard/Dashboard"))
 const Team = lazy(() => import("./views/category/Team"))
 const Login = lazy(() => import("./views/home/Login"))
 const Status = lazy(() => import("./views/category/status"))
 const User = lazy(() => import("./views/user/User"))
-const JoinTeam = lazy(() => import("./views/signup/JoinTeam/JoinTeam"))
+const JoinTeam = lazy(() => import("./views/signup/JoinTeam/joinTeamEmail"))
 const Signup = lazy(() => import("./views/signup/Signup/Signup"))
+const JoinTeamWithoutEmail = lazy(() => import("./views/signup/JoinTeam/joinTeam"))
+
 const Template = lazy(() => import("./views/project/Template/Template"))
 const Task = lazy(() => import("./views/task"))
 const TaskCalendar = lazy(() => import("./views/taskCalendar"))
@@ -45,6 +46,12 @@ const AppRoutes = React.memo(() => {
           path="/signup/jointeam"
           render={(props) => <JoinTeam {...props} />}
           component={JoinTeam}
+        />
+        <Route
+          exact
+          path="/jointeam"
+          render={(props) => <JoinTeamWithoutEmail {...props} />}
+          component={JoinTeamWithoutEmail}
         />
         <Route exact path="/:organization/dashboard" component={Dashboard} />
         <Route exact path="/:organization/category/team" component={Team} />

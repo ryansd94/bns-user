@@ -1,61 +1,63 @@
-import React, { useState, useEffect } from "react";
-import Stepper from "@mui/material/Stepper";
-import Step from "@mui/material/Step";
-import StepButton from "@mui/material/StepButton";
-import Grid from "@mui/material/Grid";
-import Box from "@mui/material/Box";
-import Button from "@mui/material/Button";
-import { useTranslation } from "react-i18next";
-import ButtonDetail from "components/button/ButtonDetail";
-import _ from "lodash";
+import React, { useState, useEffect } from "react"
+import Stepper from "@mui/material/Stepper"
+import Step from "@mui/material/Step"
+import StepButton from "@mui/material/StepButton"
+import Grid from "@mui/material/Grid"
+import Box from "@mui/material/Box"
+import Button from "@mui/material/Button"
+import { useTranslation } from "react-i18next"
+import ButtonDetail from "components/button/ButtonDetail"
+import _ from "lodash"
 
 const StepperControl = (props) => {
-  const { steps, renderSteps, handleSubmit, errors, id } = props;
-  const { t } = useTranslation();
-  const [activeStep, setActiveStep] = React.useState(0);
-  const [completed, setCompleted] = React.useState({});
+  const { steps, renderSteps, renderTabContent, handleSubmit, errors, id, onChangeActiveStep } = props
+  const { t } = useTranslation()
+  const [activeStep, setActiveStep] = React.useState(0)
+  const [completed, setCompleted] = React.useState({})
 
   const handleStep = (step) => () => {
-    setActiveStep(step);
-  };
+    setActiveStep(step)
+    onChangeActiveStep && onChangeActiveStep(step)
+  }
 
-  const renderTabContent = (index) => {
-    return renderSteps[index];
-  };
+  // const renderTabContent = (index) => {
+  //   return renderSteps[index]
+  // }
 
   const handleBack = () => {
-    setActiveStep((prevActiveStep) => prevActiveStep - 1);
-  };
+    setActiveStep((prevActiveStep) => prevActiveStep - 1)
+    onChangeActiveStep && onChangeActiveStep(activeStep - 1)
+  }
 
   const onNextStep = (result) => {
     if (result === true) {
-      handleNextStep();
+      handleNextStep()
     }
-  };
+  }
 
   const totalSteps = () => {
-    return steps.length;
-  };
+    return steps.length
+  }
 
   const completedSteps = () => {
-    return Object.keys(completed).length;
-  };
+    return Object.keys(completed).length
+  }
 
   const isLastStep = () => {
-    return activeStep === totalSteps() - 1;
-  };
+    return activeStep === totalSteps() - 1
+  }
 
   const allStepsCompleted = () => {
-    return completedSteps() === totalSteps();
-  };
+    return completedSteps() === totalSteps()
+  }
 
   const handleNextStep = () => {
     const newActiveStep =
       isLastStep() && !allStepsCompleted()
         ? steps.findIndex((step, i) => !(i in completed))
-        : activeStep + 1;
-    setActiveStep(newActiveStep);
-  };
+        : activeStep + 1
+    setActiveStep(newActiveStep)
+  }
 
   return (
     <Grid container gap={2} direction="column">
@@ -103,7 +105,7 @@ const StepperControl = (props) => {
         </React.Fragment>
       </Grid>
     </Grid>
-  );
-};
+  )
+}
 
-export default StepperControl;
+export default StepperControl

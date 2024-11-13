@@ -130,7 +130,6 @@ class Scheduler extends Component {
   }
 
   render() {
-    console.log("render scheduler");
     const { schedulerData, leftCustomHeader, rightCustomHeader } = this.props;
     const { renderData, viewType, showAgenda, isEventPerspective, config } =
       schedulerData;

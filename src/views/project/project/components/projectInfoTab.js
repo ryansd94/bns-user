@@ -1,16 +1,16 @@
-import Grid from "@mui/material/Grid";
-import TextInput from "components/input/TextInput";
-import { useTranslation } from "react-i18next";
-import { UploadIcon } from "components/upload";
-import _ from "lodash";
-import { DatePickerInput } from "components/datepicker";
-import { EditorControl } from "components/editor";
-import { RadioGroupControl } from "components/radio";
-import { EProjectTypeOption } from "configs";
+import Grid from "@mui/material/Grid"
+import TextInput from "components/input/TextInput"
+import { useTranslation } from "react-i18next"
+import { UploadIcon } from "components/upload"
+import _ from "lodash"
+import { DatePickerInput } from "components/datepicker"
+import { EditorControl } from "components/editor"
+import { RadioGroupControl } from "components/radio"
+import { EProjectTypeOption } from "configs"
 
 const ProjectInfoTab = (props) => {
-  const { control, onTypeChange, onValueChange } = props;
-  const { t } = useTranslation();
+  const { control, onTypeChange, onValueChange } = props
+  const { t } = useTranslation()
   const typeOptions = [
     {
       id: EProjectTypeOption.basic,
@@ -22,7 +22,7 @@ const ProjectInfoTab = (props) => {
       label: t("Phase"),
       guidance: t("The project is divided into several different phases"),
     },
-  ];
+  ]
 
   return (
     <Grid container gap={2}>
@@ -92,7 +92,7 @@ const ProjectInfoTab = (props) => {
         />
       </Grid>
     </Grid>
-  );
-};
+  )
+}
 
-export default ProjectInfoTab;
+export default ProjectInfoTab
